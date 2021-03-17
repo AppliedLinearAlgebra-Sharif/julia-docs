@@ -3,6 +3,8 @@
 کتابچه راهنمای جولیا به فارسی
 ==========================
 
+[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=latest)](http://julia-docs.readthedocs.org/en/latest/?badge=latest)
+
 این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است.
 
 متن اصلی را می توانید در [این صفحه](http://docs.julialang.org) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/) بیابید.
