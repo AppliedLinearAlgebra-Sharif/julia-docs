@@ -8,7 +8,7 @@
 
 ```eval_rst
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: راهنما
 
    manual/getting-started
