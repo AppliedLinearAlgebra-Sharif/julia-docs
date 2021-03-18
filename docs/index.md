@@ -1,5 +1,3 @@
-<div dir="rtl">
-
 مستندات جولیا
 =====================
 
@@ -52,5 +50,3 @@
    manual/command-line-options
 
 ```
-
-</div>
