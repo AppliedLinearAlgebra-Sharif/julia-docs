@@ -30,7 +30,6 @@ help:
 	@echo "  htmlhelp   to make HTML files and a HTML help project"
 	@echo "  qthelp     to make HTML files and a qthelp project"
 	@echo "  devhelp    to make HTML files and a Devhelp project"
-	@echo "  epub       to make an epub"
 	@echo "  latex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
 	@echo "  latexpdf   to make LaTeX files and run them through pdflatex"
 	@echo "  latexpdfja to make LaTeX files and run them through platex/dvipdfmx"
@@ -106,12 +105,6 @@ devhelp:
 	@echo "# mkdir -p $$HOME/.local/share/devhelp/julia-docs"
 	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/julia-docs"
 	@echo "# devhelp"
-
-.PHONY: epub
-epub:
-	$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) $(BUILDDIR)/epub
-	@echo
-	@echo "Build finished. The epub file is in $(BUILDDIR)/epub."
 
 .PHONY: latex
 latex:
