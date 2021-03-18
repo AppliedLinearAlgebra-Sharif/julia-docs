@@ -11,7 +11,7 @@
    :maxdepth: 2
    :caption: راهنما
 
-   getting-started
+   manual/getting-started
 
 ```
 
