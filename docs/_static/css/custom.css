@@ -31,3 +31,7 @@ body {
 .fa-arrow-circle-left{
     display: none!important;
 }
+
+.wy-side-scroll{
+    padding-bottom: 0!important;
+}
