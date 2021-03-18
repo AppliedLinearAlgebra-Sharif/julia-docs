@@ -5,6 +5,7 @@ body {
 .wy-nav-side{
     left: auto!important;
     right: 0!important;
+    padding-bottom: 0!important;
 }
 
 .wy-nav-content-wrap {
@@ -30,8 +31,4 @@ body {
 
 .fa-arrow-circle-left{
     display: none!important;
-}
-
-.wy-side-scroll{
-    padding-bottom: 0!important;
 }
