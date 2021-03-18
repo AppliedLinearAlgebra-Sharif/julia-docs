@@ -57,7 +57,7 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = u'julia-docs'
+project = u'مستندات جولیا'
 copyright = u'2021, Amirhossein Nadiri'
 author = u'Amirhossein Nadiri'
 
@@ -66,7 +66,7 @@ author = u'Amirhossein Nadiri'
 # built documents.
 #
 # The short X.Y version.
-version = u'1'
+version = u'نسخه ۱.۵'
 # The full version, including alpha/beta/rc tags.
 release = u'1'
 
