@@ -11,6 +11,7 @@
    :maxdepth: 2
    :caption: راهنما
 
+   getting-started
    docs
 
 ```
