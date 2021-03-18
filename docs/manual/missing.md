@@ -1,4 +1,4 @@
-# [Missing Values](@id missing)
+# Missing Values
 
 Julia provides support for representing missing values in the statistical sense,
 that is for situations where no value is available for a variable in an observation,

@@ -1,4 +1,4 @@
-# [Modules](@id modules)
+# Modules
 
 Modules in Julia help organize code into coherent units. They are delimited syntactically inside
 `module NameOfModule ... end`, and have the following features:
@@ -44,7 +44,7 @@ end
 end
 ```
 
-## [Namespace management](@id namespace-management)
+## [Namespace management]
 
 Namespace management refers to the facilities the language offers for making names in a module
 available in other modules. We discuss the related concepts and functionality below in detail.

@@ -1,0 +1,33 @@
+body {
+    direction: rtl!important;
+}
+
+.wy-nav-side{
+    left: auto!important;
+    right: 0!important;
+}
+
+.wy-nav-content-wrap {
+    margin-left: 0!important;
+    margin-right: 300px!important;
+}
+
+.wy-breadcrumbs-aside{
+    float: left!important;
+}
+
+.btn.float-right{
+    float: left!important;
+}
+
+.btn.float-left{
+    float: right!important;
+}
+
+.fa-arrow-circle-right{
+    display: none!important;
+}
+
+.fa-arrow-circle-left{
+    display: none!important;
+}

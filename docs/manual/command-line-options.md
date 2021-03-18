@@ -1,4 +1,4 @@
-# [Command-line Options](@id command-line-options)
+# Command-line Options
 
 The following is a complete list of command-line switches available when launching julia:
 

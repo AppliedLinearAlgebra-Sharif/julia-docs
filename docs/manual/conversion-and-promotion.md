@@ -1,4 +1,4 @@
-# [Conversion and Promotion](@id conversion-and-promotion)
+# Conversion and Promotion
 
 Julia has a system for promoting arguments of mathematical operators to a common type, which has
 been mentioned in various other sections, including [Integers and Floating-Point Numbers](@ref),

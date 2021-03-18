@@ -1,4 +1,4 @@
-# [Constructors]
+# Constructors
 
 Constructors [^1] are functions that create new objects -- specifically, instances of [Composite Types](@ref).
 In Julia, type objects also serve as constructor functions: they create new instances of themselves

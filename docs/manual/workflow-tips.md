@@ -1,4 +1,4 @@
-# [Workflow Tips]
+# Workflow Tips
 
 Here are some tips for working with Julia efficiently.
 

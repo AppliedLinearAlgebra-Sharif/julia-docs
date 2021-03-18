@@ -1,4 +1,4 @@
-# [Multi-Threading]
+# Multi-Threading
 
 Visit this [blog post](https://julialang.org/blog/2019/07/multithreading/) for a presentation
 of Julia multi-threading features.

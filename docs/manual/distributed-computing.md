@@ -134,7 +134,7 @@ the same time.
 
 
 
-## [Code Availability and Loading Packages](@id code-availability)
+## [Code Availability and Loading Packages]
 
 Your code must be available on any process that runs it. For example, type the following into
 the Julia prompt:

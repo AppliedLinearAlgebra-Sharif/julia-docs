@@ -595,7 +595,7 @@ julia> a .+ [5,10]
  13  14
 ```
 
-### [Extending broadcast with custom implementations](@id extending-in-place-broadcast)
+### [Extending broadcast with custom implementations]
 
 In general, a broadcast operation is represented by a lazy `Broadcasted` container that holds onto
 the function to be applied alongside its arguments. Those arguments may themselves be more nested
@@ -638,7 +638,7 @@ For example, the following definition supports the negation of ranges:
 broadcasted(::DefaultArrayStyle{1}, ::typeof(-), r::OrdinalRange) = range(-first(r), step=-step(r), length=length(r))
 ```
 
-### [Extending in-place broadcasting](@id extending-in-place-broadcast)
+### [Extending in-place broadcasting]
 
 In-place broadcasting can be supported by defining the appropriate `copyto!(dest, bc::Broadcasted)`
 method. Because you might want to specialize either on `dest` or the specific subtype of `bc`,
@@ -676,7 +676,7 @@ ways of doing so:
 * Iterating over the `CartesianIndices` of the `axes(::Broadcasted)` and using
   indexing with the resulting `CartesianIndex` object to compute the result.
 
-### [Writing binary broadcasting rules](@id writing-binary-broadcasting-rules)
+### [Writing binary broadcasting rules]
 
 The precedence rules are defined by binary `BroadcastStyle` calls:
 

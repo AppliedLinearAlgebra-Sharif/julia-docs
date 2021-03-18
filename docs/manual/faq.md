@@ -67,7 +67,7 @@ When a file is run as the main script using `julia file.jl` one might want to ac
 functionality like command line argument handling. A way to determine that a file is run in
 this fashion is to check if `abspath(PROGRAM_FILE) == @__FILE__` is `true`.
 
-### [How do I catch CTRL-C in a script?](@id catch-ctrl-c)
+### [How do I catch CTRL-C in a script?]
 
 Running a Julia script using `julia file.jl` does not throw
 [`InterruptException`](@ref) when you try to terminate it with CTRL-C
@@ -337,7 +337,7 @@ Since Julia can't predict the return type of this function at compile-time, any 
 that uses it must be able to cope with values of both types, which makes it hard to produce
 fast machine code.
 
-### [Why does Julia give a `DomainError` for certain seemingly-sensible operations?](@id faq-domain-errors)
+### [Why does Julia give a `DomainError` for certain seemingly-sensible operations?]
 
 Certain operations make mathematical sense but result in errors:
 
@@ -403,7 +403,7 @@ This check is usually *costless*, as the compiler can elide the check for valid 
 ConstrainedType(A) = ConstrainedType(A, compute_B(A))
 ```
 
-### [Why does Julia use native machine integer arithmetic?](@id faq-integer-arithmetic)
+### [Why does Julia use native machine integer arithmetic?]
 
 Julia uses machine arithmetic for integer computations. This means that the range of `Int` values
 is bounded and wraps around at either end so that adding, subtracting and multiplying integers
@@ -744,7 +744,7 @@ all/many future usages of the other functions in module Foo that depend on calli
 
 ## Nothingness and missing values
 
-### [How does "null", "nothingness" or "missingness" work in Julia?](@id faq-nothing)
+### [How does "null", "nothingness" or "missingness" work in Julia?]
 
 Unlike many languages (for example, C and Java), Julia objects cannot be "null" by default.
 When a reference (variable, object field, or array element) is uninitialized, accessing it
@@ -819,7 +819,7 @@ Because supporting generic programming is deemed more important than potential p
 that can be achieved by other means (e.g., using explicit loops), operators like `+=` and `*=`
 work by rebinding new values.
 
-## [Asynchronous IO and concurrent synchronous writes](@id faq-async-io)
+## [Asynchronous IO and concurrent synchronous writes]
 
 ### Why do concurrent writes to the same stream result in inter-mixed output?
 

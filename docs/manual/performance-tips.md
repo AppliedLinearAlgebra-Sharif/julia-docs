@@ -1,4 +1,4 @@
-# [Performance Tips]
+# Performance Tips
 
 In the following sections, we briefly go through a few techniques that can help make your Julia
 code run as fast as possible.
@@ -141,7 +141,7 @@ its algorithmic aspects (see [Pre-allocating outputs](@ref)).
     For more serious benchmarking, consider the [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl)
     package which among other things evaluates the function multiple times in order to reduce noise.
 
-## [Tools](@id tools)
+## [Tools]
 
 Julia and its package ecosystem includes tools that may help you diagnose problems and improve
 the performance of your code:
@@ -631,7 +631,7 @@ optimize the body of the loop. There are several possible fixes:
   * Use an explicit conversion by `x = oneunit(Float64)`
   * Initialize with the first loop iteration, to `x = 1 / rand()`, then loop `for i = 2:10`
 
-## [Separate kernel functions (aka, function barriers)](@id kernel-functions)
+## [Separate kernel functions (aka, function barriers)]
 
 Many functions follow a pattern of performing some set-up work, and then running many iterations
 to perform a core computation. Where possible, it is a good idea to put these core computations
