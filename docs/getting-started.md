@@ -1,4 +1,6 @@
-# [Getting Started](@id man-getting-started)
+<div dir="rtl">
+
+# شروع به کار
 
 Julia installation is straightforward, whether using precompiled binaries or compiling from source.
 Download and install Julia by following the instructions at [https://julialang.org/downloads/](https://julialang.org/downloads/).
@@ -100,6 +102,8 @@ julia [switches] -- [programfile] [args...]
 A detailed list of all the available switches can be found at [Command-line Options](@ref
 command-line-options).
 
-## Resources
+## منابع
 
 A curated list of useful learning resources to help new users get started can be found on the [learning](https://julialang.org/learning/) page of the main Julia web site.
+
+</div>

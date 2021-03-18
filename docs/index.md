@@ -12,7 +12,6 @@
    :caption: راهنما
 
    getting-started
-   docs
 
 ```
 
