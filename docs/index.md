@@ -1,4 +1,4 @@
-مستندات جولیا
+راهنمای کار با جولیا
 =====================
 
 فهرست
@@ -7,7 +7,7 @@
 ```eval_rst
 .. toctree::
    :maxdepth: 1
-   :caption: راهنما
+   :caption: بخش‌ها
 
    manual/getting-started
    manual/variables
