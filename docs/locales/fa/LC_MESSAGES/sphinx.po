@@ -76,7 +76,7 @@ msgstr "آخرین به‌روزرسانی در %(last_updated)s."
 #: sphinx_rtd_theme/footer.html:52
 #, python-format
 msgid "Built with %(sphinx_web)s using a"
-msgstr "ساخته شده توسط %(sphinx_web)s به‌وسیله"
+msgstr "ساخته شده توسط %(sphinx_web)s با استفاده از"
 
 #. "theme" refers to a theme for Sphinx, which alters the appearance of the
 #. generated documenation
