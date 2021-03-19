@@ -1,13 +1,12 @@
 # شروع به کار
 
-Julia installation is straightforward, whether using precompiled binaries or compiling from source.
-Download and install Julia by following the instructions at [https://julialang.org/downloads/](https://julialang.org/downloads/).
+نصب جولیا ساده است و می‌توانید این کار را با استفاده از باینری‌های از پیش کامپایل شده و یا با کامپایل کد انجام دهید.با دنبال کردن دستورالعمل های [این صفحه](https://julialang.org/downloads/) جولیا را بارگیری و نصب کنید.
 
-If you are coming to Julia from one of the following languages, then you should start by reading the section on noteworthy differences from [MATLAB](@ref Noteworthy-differences-from-MATLAB), [R](@ref Noteworthy-differences-from-R), [Python](@ref Noteworthy-differences-from-Python), [C/C++](@ref Noteworthy-differences-from-C/C) or [Common Lisp](@ref Noteworthy-differences-from-Common-Lisp). This will help you avoid some common pitfalls since Julia differs from those languages in many subtle ways.
+اگر از یکی از زبان های MATLAB، R، Python، C/C++ یا Common Lisp ‌به جولیا می‌آیید، پیشنهاد می‌شود ابتدا بخش
+[تفاوت های مهم با این زبان‌ها](https://julia-docs.readthedocs.io/fa/latest/manual/noteworthy-differences.html) را مطالعه کنید. این کار به شما کمک می کند با تفاوت‌های اصلی جولیا با آن زبان‌ها آشنا شوید و از اشتباهات متداول جلوگیری می‌کند.
 
-The easiest way to learn and experiment with Julia is by starting an interactive session (also
-known as a read-eval-print loop or "REPL") by double-clicking the Julia executable or running
-`julia` from the command line:
+ساده ترین راه برای یادگیری و آزمایش کار با جولیا با شروع یک جلسه تعاملی (که به عنوان ‍‍`REPL` شناخته می شود) با دوبار کلیک کردن روی فایل اجرایی جولیا یا اجرای `julia` از خط فرمان است:
+
 
 <div dir="ltr">
 
@@ -21,8 +20,8 @@ Markdown.parse("```\n\$ julia\n\n$(banner)\njulia> 1 + 2\n3\n\njulia> ans\n3\n``
 
 </div>
 
-To exit the interactive session, type `CTRL-D` (press the Control/`^` key together with the `d` key), or type
-`exit()`. When run in interactive mode, `julia` displays a banner and prompts the user for input.
+برای خروج از اجرا، از کلید `CTRL-D` استفاده کنید یا دستور `exit()` را اجرا کنید.
+When run in interactive mode, `julia` displays a banner and prompts the user for input.
 Once the user has entered a complete expression, such as `1 + 2`, and hits enter, the interactive
 session evaluates the expression and shows its value. If an expression is entered into an interactive
 session with a trailing semicolon, its value is not shown. The variable `ans` is bound to the
