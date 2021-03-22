@@ -28,8 +28,7 @@
 <div dir="ltr">
 
 ```bash
-# نام کاربری گیت‌هاب خود را در آدرس زیر قرار دهید
-1. git clone git@github.com:[username]/julia-docs.git
+1. git clone https://github.com/AppliedLinearAlgebra-Sharif/julia-docs.git
 2. cd julia-docs
 3. git checkout latest
 # نام دلخواه شاخه خود را در دستور زیر قرار دهید
