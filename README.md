@@ -46,7 +46,7 @@
 # پیام موردنظر خود را در دستور زیر جایگزین کنید
 1. git add -A && git commit -m "[the-message]"
 # نام کاربری گیت‌هاب و نام شاخه مورد نظر باید در دستور زیر قرارگیرد
-2. git push [my-fork-name] [the-name-of-my-branch]
+2. git push latest [the-name-of-my-branch]
 ```
 
 </div>
