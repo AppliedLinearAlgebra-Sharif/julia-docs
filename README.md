@@ -15,7 +15,7 @@
 
 ما به دنبال افرادی برای کمک به ترجمه هستیم! حتی ترجمه یک قسمت کوچک نیز مورد استقبال قرار می گیرد.
 
-برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/master/CONTRIBUTING.md) مراجعه کنید.
+برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/latest/CONTRIBUTING.md) مراجعه کنید.
 
 همچنین اگر خطایی در ترجمه فعلی دیدید نیز می‌توانید آن را با ایجاد یک موضوع به اطلاع ما برسانید. [ایجاد موضوع!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
 
