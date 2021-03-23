@@ -47,6 +47,5 @@
    manual/faq
    manual/noteworthy-differences
    manual/unicode-input
-   manual/command-line-options
 
 ```

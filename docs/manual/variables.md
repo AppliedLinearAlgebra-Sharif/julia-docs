@@ -1,8 +1,7 @@
-# متغیرها
+# [Variables]
 
 A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to
 store a value (that you obtained after some math, for example) for later use. For example:
-
 
 ```julia-repl
 # Assign the value 10 to the variable x
@@ -22,11 +21,9 @@ julia> x = "Hello World!"
 "Hello World!"
 ```
 
-
 Julia provides an extremely flexible system for naming variables. Variable names are case-sensitive,
 and have no semantic meaning (that is, the language will not treat variables differently based
 on their names).
-
 
 ```jldoctest
 julia> x = 1.0
@@ -45,9 +42,7 @@ julia> UniversalDeclarationOfHumanRightsStart = "人人生而自由，在尊严�
 "人人生而自由，在尊严和权利上一律平等。"
 ```
 
-
 Unicode names (in UTF-8 encoding) are allowed:
-
 
 ```jldoctest
 julia> δ = 0.00001
@@ -57,17 +52,15 @@ julia> 안녕하세요 = "Hello"
 "Hello"
 ```
 
-
 In the Julia REPL and several other Julia editing environments, you can type many Unicode math
 symbols by typing the backslashed LaTeX symbol name followed by tab. For example, the variable
-name `δ` can be entered by typing `\delta`-*tab*, or even `α̂⁽²⁾` by `\alpha`-*tab*-`\hat`-
-*tab*-`\^(2)`-*tab*. (If you find a symbol somewhere, e.g. in someone else's code,
+name `δ` can be entered by typing `\delta`-*tab*, or even `α̂₂` by `\alpha`-*tab*-`\hat`-
+*tab*-`\_2`-*tab*. (If you find a symbol somewhere, e.g. in someone else's code,
 that you don't know how to type, the REPL help will tell you: just type `?` and
 then paste the symbol.)
 
 Julia will even let you redefine built-in constants and functions if needed (although
 this is not recommended to avoid potential confusions):
-
 
 ```jldoctest
 julia> pi = 3
@@ -80,10 +73,8 @@ julia> sqrt = 4
 4
 ```
 
-
 However, if you try to redefine a built-in constant or function already in use, Julia will give
 you an error:
-
 
 ```jldoctest
 julia> pi
@@ -99,8 +90,7 @@ julia> sqrt = 4
 ERROR: cannot assign a value to variable Base.sqrt from module Main
 ```
 
-
-## نامهای مجاز برای متغیرها
+## Allowed Variable Names
 
 Variable names must begin with a letter (A-Z or a-z), underscore, or a subset of Unicode code
 points greater than 00A0; in particular, [Unicode character categories](http://www.fileformat.info/info/unicode/category/index.htm)
@@ -116,12 +106,8 @@ will reassign it. Most of the Unicode infix operators (in category Sm), such as 
 as infix operators and are available for user-defined methods (e.g. you can use `const ⊗ = kron`
 to define `⊗` as an infix Kronecker product).  Operators can also be suffixed with modifying marks,
 primes, and sub/superscripts, e.g. `+̂ₐ″` is parsed as an infix operator with the same precedence as `+`.
-A space is required between an operator that ends with a subscript/superscript letter and a subsequent
-variable name. For example, if `+ᵃ` is an operator, then `+ᵃx` must be written as `+ᵃ x` to distinguish
-it from `+ ᵃx` where `ᵃx` is the variable name.
 
 The only explicitly disallowed names for variables are the names of the built-in [Keywords](@ref):
-
 
 ```julia-repl
 julia> else = false
@@ -131,7 +117,6 @@ julia> try = "No"
 ERROR: syntax: unexpected "="
 ```
 
-
 Some Unicode characters are considered to be equivalent in identifiers.
 Different ways of entering Unicode combining characters (e.g., accents)
 are treated as equivalent (specifically, Julia identifiers are [NFC](http://www.macchiato.com/unicode/nfc-faq)-normalized).
@@ -139,7 +124,7 @@ The Unicode characters `ɛ` (U+025B: Latin small letter open e)
 and `µ` (U+00B5: micro sign) are treated as equivalent to the corresponding
 Greek letters, because the former are easily accessible via some input methods.
 
-## قاعده و عرف‌ها
+## Stylistic Conventions
 
 While Julia imposes few restrictions on valid names, it has become useful to adopt the following
 conventions:

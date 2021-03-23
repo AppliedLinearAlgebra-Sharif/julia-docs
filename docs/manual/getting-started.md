@@ -1,11 +1,11 @@
 # شروع به کار
 
-نصب جولیا ساده است و می‌توانید این کار را با استفاده از باینری‌های از پیش کامپایل شده و یا با کامپایل کد انجام دهید.با دنبال کردن دستورالعمل های [این صفحه](https://julialang.org/downloads/) جولیا را بارگیری و نصب کنید.
+Julia installation is straightforward, whether using precompiled binaries or compiling from source.
+Download and install Julia by following the instructions at [https://julialang.org/downloads/](https://julialang.org/downloads/).
 
-اگر از یکی از زبان های `MATLAB`، `R`، `Python`، `C/C++` یا `Common Lisp` ‌به جولیا می‌آیید، پیشنهاد می‌شود ابتدا بخش
-[تفاوت های مهم با این زبان‌ها](https://julia-docs.readthedocs.io/fa/latest/manual/noteworthy-differences.html) را مطالعه کنید. این کار به شما کمک می کند با تفاوت‌های اصلی جولیا با آن زبان‌ها آشنا شوید و از اشتباهات متداول جلوگیری می‌کند.
-
-ساده ترین راه برای یادگیری و آزمایش کار با جولیا با شروع یک جلسه تعاملی (که به عنوان ‍‍`REPL` شناخته می شود) با دوبار کلیک کردن روی فایل اجرایی جولیا یا اجرای `julia` از خط فرمان است:
+The easiest way to learn and experiment with Julia is by starting an interactive session (also
+known as a read-eval-print loop or "REPL") by double-clicking the Julia executable or running
+`julia` from the command line:
 
 ```@eval
 io = IOBuffer()
@@ -15,8 +15,8 @@ import Markdown
 Markdown.parse("```\n\$ julia\n\n$(banner)\njulia> 1 + 2\n3\n\njulia> ans\n3\n```")
 ```
 
-برای خروج از اجرا، از کلید `CTRL-D` استفاده کنید یا دستور `exit()` را اجرا کنید.
-When run in interactive mode, `julia` displays a banner and prompts the user for input.
+To exit the interactive session, type `CTRL-D` (press the Control/`^` key together with the `d` key), or type
+`exit()`. When run in interactive mode, `julia` displays a banner and prompts the user for input.
 Once the user has entered a complete expression, such as `1 + 2`, and hits enter, the interactive
 session evaluates the expression and shows its value. If an expression is entered into an interactive
 session with a trailing semicolon, its value is not shown. The variable `ans` is bound to the
@@ -48,8 +48,6 @@ bar
 
 Or you could put that code into a script and run it:
 
-
-
 ```
 $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
 $ julia script.jl foo bar
@@ -58,15 +56,11 @@ foo
 bar
 ```
 
-
 The `--` delimiter can be used to separate command-line arguments intended for the script file from arguments intended for Julia:
-
-
 
 ```
 $ julia --color=yes -O -- foo.jl arg1 arg2..
 ```
-
 
 See also [Scripting](@ref man-scripting) for more information on writing Julia scripts.
 
@@ -82,8 +76,6 @@ should use to connect to this worker.
 If you have code that you want executed whenever Julia is run, you can put it in
 `~/.julia/config/startup.jl`:
 
-
-
 ```
 $ echo 'println("Greetings! 你好! 안녕하세요?")' > ~/.julia/config/startup.jl
 $ julia
@@ -92,7 +84,6 @@ Greetings! 你好! 안녕하세요?
 ...
 ```
 
-
 Note that although you should have a `~/.julia` directory once you've run Julia for the
 first time, you may need to create the `~/.julia/config` folder and the
 `~/.julia/config/startup.jl` file if you use it.
@@ -100,16 +91,50 @@ first time, you may need to create the `~/.julia/config` folder and the
 There are various ways to run Julia code and provide options, similar to those available for the
 `perl` and `ruby` programs:
 
-
-
 ```
 julia [switches] -- [programfile] [args...]
 ```
 
+|Switch                                 |Description|
+|:---                                   |:---|
+|`-v`, `--version`                      |Display version information|
+|`-h`, `--help`                         |Print command-line options (this message).|
+|`--project[={<dir>\|@.}]`              |Set <dir> as the home project/environment. The default @. option will search through parent directories until a Project.toml or JuliaProject.toml file is found.|
+|`-J`, `--sysimage <file>`              |Start up with the given system image file|
+|`-H`, `--home <dir>`                   |Set location of `julia` executable|
+|`--startup-file={yes\|no}`             |Load `~/.julia/config/startup.jl`|
+|`--handle-signals={yes\|no}`           |Enable or disable Julia's default signal handlers|
+|`--sysimage-native-code={yes\|no}`     |Use native code from system image if available|
+|`--compiled-modules={yes\|no}`         |Enable or disable incremental precompilation of modules|
+|`-e`, `--eval <expr>`                  |Evaluate `<expr>`|
+|`-E`, `--print <expr>`                 |Evaluate `<expr>` and display the result|
+|`-L`, `--load <file>`                  |Load `<file>` immediately on all processors|
+|`-t`, `--threads {N\|auto`}            |Enable N threads; `auto` currently sets N to the number of local CPU threads but this might change in the future|
+|`-p`, `--procs {N\|auto`}              |Integer value N launches N additional local worker processes; `auto` launches as many workers as the number of local CPU threads (logical cores)|
+|`--machine-file <file>`                |Run processes on hosts listed in `<file>`|
+|`-i`                                   |Interactive mode; REPL runs and `isinteractive()` is true|
+|`-q`, `--quiet`                        |Quiet startup: no banner, suppress REPL warnings|
+|`--banner={yes\|no\|auto}`             |Enable or disable startup banner|
+|`--color={yes\|no\|auto}`              |Enable or disable color text|
+|`--history-file={yes\|no}`             |Load or save history|
+|`--depwarn={yes\|no\|error}`           |Enable or disable syntax and method deprecation warnings (`error` turns warnings into errors)|
+|`--warn-overwrite={yes\|no}`           |Enable or disable method overwrite warnings|
+|`-C`, `--cpu-target <target>`          |Limit usage of CPU features up to `<target>`; set to `help` to see the available options|
+|`-O`, `--optimize={0,1,2,3}`           |Set the optimization level (default level is 2 if unspecified or 3 if used without a level)|
+|`-g`, `-g <level>`                     |Enable / Set the level of debug info generation (default level is 1 if unspecified or 2 if used without a level)|
+|`--inline={yes\|no}`                   |Control whether inlining is permitted, including overriding `@inline` declarations|
+|`--check-bounds={yes\|no}`             |Emit bounds checks always or never (ignoring declarations)|
+|`--math-mode={ieee,fast}`              |Disallow or enable unsafe floating point optimizations (overrides @fastmath declaration)|
+|`--code-coverage={none\|user\|all}`    |Count executions of source lines|
+|`--code-coverage`                      |equivalent to `--code-coverage=user`|
+|`--track-allocation={none\|user\|all}` |Count bytes allocated by each source line|
+|`--track-allocation`                   |equivalent to `--track-allocation=user`|
 
-A detailed list of all the available switches can be found at [Command-line Options](@ref
-command-line-options).
+!!! compat "Julia 1.1"
+    In Julia 1.0, the default `--project=@.` option did not search up from the root
+    directory of a Git repository for the `Project.toml` file. From Julia 1.1 forward, it
+    does.
 
-## منابع
+## Resources
 
 A curated list of useful learning resources to help new users get started can be found on the [learning](https://julialang.org/learning/) page of the main Julia web site.

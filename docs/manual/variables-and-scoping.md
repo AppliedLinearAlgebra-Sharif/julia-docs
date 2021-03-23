@@ -1,4 +1,4 @@
-# Scope of Variables
+# [Scope of Variables](@id scope-of-variables)
 
 The *scope* of a variable is the region of code within which a variable is visible. Variable scoping
 helps avoid variable naming conflicts. The concept is intuitive: two functions can both have
@@ -12,21 +12,20 @@ eligible to be the scope of some set of variables. The scope of a variable canno
 set of source lines; instead, it will always line up with one of these blocks. There are two main
 types of scopes in Julia, *global scope* and *local scope*. The latter can be nested. There is also
 a distinction in Julia between constructs which introduce a "hard scope" and those which only
-introduce a "soft scope", which affects whether
-[shadowing](https://en.wikipedia.org/wiki/Variable_shadowing)
-a global variable by the same name is allowed or not.
+introduce a "soft scope", which affects whether shadowing a global variable by the same name is
+allowed or not.
 
 ### [Scope constructs]
 
 The constructs introducing scope blocks are:
 
-| Construct | Scope type | Allowed within |
-|:----------|:-----------|:---------------|
-| [`module`](@ref), [`baremodule`](@ref) | global | global |
-| [`struct`](@ref) | local (soft) | global |
-| [`for`](@ref), [`while`](@ref), [`try`](@ref try) | local (soft) | global, local |
-| [`macro`](@ref) | local (hard) | global |
-| functions, [`do`](@ref) blocks, [`let`](@ref) blocks, comprehensions, generators | local (hard) | global, local |
+Construct | Scope type | Allowed within
+----------|------------|---------------
+[`module`](@ref), [`baremodule`](@ref) | global | global
+[`struct`](@ref) | local (soft) | global
+[`for`](@ref), [`while`](@ref), [`try`](@ref try) | local (soft) | global or local
+[`macro`](@ref) | local (hard) | global
+[`let`](@ref), functions, comprehensions, generators | local (hard) | global or local
 
 Notably missing from this table are
 [begin blocks](@ref man-compound-expressions) and [if blocks](@ref man-conditional-evaluation)
@@ -119,7 +118,7 @@ that location:
 1. **Existing local:** If `x` is *already a local variable*, then the existing local `x` is
    assigned;
 2. **Hard scope:** If `x` is *not already a local variable* and assignment occurs inside of any
-   hard scope construct (i.e. within a `let` block, function or macro body, comprehension, or
+   hard scope construct (i.e. within a let block, function or macro body, comprehension, or
    generator), a new local named `x` is created in the scope of the assignment;
 3. **Soft scope:** If `x` is *not already a local variable* and all of the scope constructs
    containing the assignment are soft scopes (loops, `try`/`catch` blocks, or `struct` blocks), the
@@ -226,11 +225,11 @@ variable `s`. We can also see that the update `s = s + i` in the `for` loop must
 through 10.
 
 Let's dig into the fact that the `for` loop body has its own scope for a second by writing a slightly
-more verbose variation which we'll call `sum_to_def`, in which we save the sum `s + i` in a variable `t`
+more verbose variation which we'll call `sum_to′`, in which we save the sum `s + i` in a variable `t`
 before updating `s`:
 
 ```jldoctest
-julia> function sum_to_def(n)
+julia> function sum_to′(n)
            s = 0 # new local
            for i = 1:n
                t = s + i # new local `t`
@@ -238,9 +237,9 @@ julia> function sum_to_def(n)
            end
            return s, @isdefined(t)
        end
-sum_to_def (generic function with 1 method)
+sum_to′ (generic function with 1 method)
 
-julia> sum_to_def(10)
+julia> sum_to′(10)
 (55, false)
 ```
 
@@ -253,7 +252,7 @@ where it appears, i.e. inside of the loop body. Even if there were a global name
 no difference—the hard scope rule isn't affected by anything in global scope.
 
 Let's move onto some more ambiguous cases covered by the soft scope rule. We'll explore this by
-extracting the bodies of the `greet` and `sum_to_def` functions into soft scope contexts. First, let's put the
+extracting the bodies of the `greet` and `sum_to′` functions into soft scope contexts. First, let's put the
 body of `greet` in a `for` loop—which is soft, rather than hard—and evaluate it in the REPL:
 
 ```jldoctest
@@ -271,7 +270,7 @@ ERROR: UndefVarError: x not defined
 
 Since the global `x` is not defined when the `for` loop is evaluated, the first clause of the soft
 scope rule applies and `x` is created as local to the `for` loop and therefore global `x` remains
-undefined after the loop executes. Next, let's consider the body of `sum_to_def` extracted into global
+undefined after the loop executes. Next, let's consider the body of `sum_to′` extracted into global
 scope, fixing its argument to `n = 10`
 
 ```julia
@@ -458,9 +457,8 @@ file, if it behaves differently than it did in the REPL, then you will get a war
 
 ### Let Blocks
 
-`let` statements create a new *hard scope* block (see above) and introduce new variable
-bindings each time they run. Whereas assignments might reassign a new value to an existing value location,
-`let` always creates a new location.
+Unlike assignments to local variables, `let` statements allocate new variable bindings each time
+they run. An assignment modifies an existing value location, and `let` creates new locations.
 This difference is usually not important, and is only detectable in the case of variables that
 outlive their scope via closures. The `let` syntax accepts a comma-separated series of assignments
 and variable names:
@@ -518,7 +516,7 @@ julia> Fs[2]()
 ```
 
 Since the `begin` construct does not introduce a new scope, it can be useful to use a zero-argument
-`let` to just introduce a new scope block without creating any new bindings immediately:
+`let` to just introduce a new scope block without creating any new bindings:
 
 ```jldoctest
 julia> let
@@ -532,16 +530,7 @@ julia> let
 ```
 
 Since `let` introduces a new scope block, the inner local `x` is a different variable than the
-outer local `x`. This particular example is equivalent to:
-
-```jldoctest
-julia> let x = 1
-           let x = 2
-           end
-           x
-       end
-1
-```
+outer local `x`.
 
 ### Loops and Comprehensions
 
@@ -652,7 +641,7 @@ julia> const z = 100
 julia> z = 100
 100
 ```
-The last rule applies to immutable objects even if the variable binding would change, e.g.:
+The last rule applies for immutable objects even if the variable binding would change, e.g.:
 ```julia-repl
 julia> const s1 = "1"
 "1"
@@ -676,12 +665,12 @@ julia> pointer.([s1, s2], 1)
 However, for mutable objects the warning is printed as expected:
 ```jldoctest
 julia> const a = [1]
-1-element Vector{Int64}:
+1-element Array{Int64,1}:
  1
 
 julia> a = [1]
 WARNING: redefinition of constant a. This may fail, cause incorrect answers, or produce other errors.
-1-element Vector{Int64}:
+1-element Array{Int64,1}:
  1
 ```
 

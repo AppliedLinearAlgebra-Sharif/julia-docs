@@ -1,15 +1,7 @@
-# Performance Tips
+# [Performance Tips]
 
 In the following sections, we briefly go through a few techniques that can help make your Julia
 code run as fast as possible.
-
-## Performance critical code should be inside a function
-
-Any code that is performance critical should be inside a function. Code inside functions tends to run much faster than top level code, due to how Julia's compiler works.
-
-The use of functions is not only important for performance: functions are more reusable and testable, and clarify what steps are being done and what their inputs and outputs are, [Write functions, not just scripts](@ref) is also a recommendation of Julia's Styleguide.
-
-The functions should take arguments, instead of operating directly on global variables, see the next point.
 
 ## Avoid global variables
 
@@ -17,6 +9,7 @@ A global variable might have its value, and therefore its type, change at any po
 it difficult for the compiler to optimize code using global variables. Variables should be local,
 or passed as arguments to functions, whenever possible.
 
+Any code that is performance critical or being benchmarked should be inside a function.
 
 We find that global names are frequently constants, and declaring them as such greatly improves
 performance:
@@ -77,7 +70,7 @@ julia> function sum_global()
        end;
 
 julia> @time sum_global()
-  0.009639 seconds (7.36 k allocations: 300.310 KiB, 98.32% compilation time)
+  0.017705 seconds (15.28 k allocations: 694.484 KiB)
 496.84883432553846
 
 julia> @time sum_global()
@@ -113,15 +106,15 @@ julia> function sum_arg(x)
        end;
 
 julia> @time sum_arg(x)
-  0.006202 seconds (4.18 k allocations: 217.860 KiB, 99.72% compilation time)
+  0.007701 seconds (821 allocations: 43.059 KiB)
 496.84883432553846
 
 julia> @time sum_arg(x)
-  0.000005 seconds (1 allocation: 16 bytes)
+  0.000006 seconds (5 allocations: 176 bytes)
 496.84883432553846
 ```
 
-The 1 allocation seen is from running the `@time` macro itself in global scope. If we instead run
+The 5 allocations seen are from running the `@time` macro itself in global scope. If we instead run
 the timing in a function, we can see that indeed no allocations are performed:
 
 ```jldoctest sumarg; filter = r"[0-9\.]+ seconds"
@@ -141,7 +134,7 @@ its algorithmic aspects (see [Pre-allocating outputs](@ref)).
     For more serious benchmarking, consider the [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl)
     package which among other things evaluates the function multiple times in order to reduce noise.
 
-## [Tools]
+## [Tools](@id tools)
 
 Julia and its package ecosystem includes tools that may help you diagnose problems and improve
 the performance of your code:
@@ -170,13 +163,13 @@ julia> a = Real[]
 Real[]
 
 julia> push!(a, 1); push!(a, 2.0); push!(a, π)
-3-element Vector{Real}:
+3-element Array{Real,1}:
  1
  2.0
  π = 3.1415926535897...
 ```
 
-Because `a` is an array of abstract type [`Real`](@ref), it must be able to hold any
+Because `a` is a an array of abstract type [`Real`](@ref), it must be able to hold any
 `Real` value. Since `Real` objects can be of arbitrary size and structure, `a` must be
 represented as an array of pointers to individually allocated `Real` objects. However, if we instead
 only allow numbers of the same type, e.g. [`Float64`](@ref), to be stored in `a` these can be stored more
@@ -187,7 +180,7 @@ julia> a = Float64[]
 Float64[]
 
 julia> push!(a, 1); push!(a, 2.0); push!(a,  π)
-3-element Vector{Float64}:
+3-element Array{Float64,1}:
  1.0
  2.0
  3.141592653589793
@@ -195,10 +188,6 @@ julia> push!(a, 1); push!(a, 2.0); push!(a,  π)
 
 Assigning numbers into `a` will now convert them to `Float64` and `a` will be stored as
 a contiguous block of 64-bit floating-point values that can be manipulated efficiently.
-
-If you cannot avoid containers with abstract value types, it is sometimes better to
-parametrize with `Any` to avoid runtime type checking. E.g. `IdDict{Any, Any}` performs
-better than `IdDict{Type, Vector}`
 
 See also the discussion under [Parametric Types](@ref).
 
@@ -367,7 +356,7 @@ MySimpleContainer{UnitRange{Int64}}
 julia> c = MySimpleContainer([1:3;]);
 
 julia> typeof(c)
-MySimpleContainer{Vector{Int64}}
+MySimpleContainer{Array{Int64,1}}
 
 julia> b = MyAmbiguousContainer(1:3);
 
@@ -464,9 +453,9 @@ annotation in this context in order to achieve type stability. This is because t
 cannot deduce the type of the return value of a function, even `convert`, unless the types of
 all the function's arguments are known.
 
-Type annotation will not enhance (and can actually hinder) performance if the type is abstract,
-or constructed at run-time. This is because the compiler cannot use the annotation to specialize
-the subsequent code, and the type-check itself takes time. For example, in the code:
+Type annotation will not enhance (and can actually hinder) performance if the type is constructed
+at run-time. This is because the compiler cannot use the annotation to specialize the subsequent
+code, and the type-check itself takes time. For example, in the code:
 
 ```julia
 function nr(a, prec)
@@ -631,7 +620,7 @@ optimize the body of the loop. There are several possible fixes:
   * Use an explicit conversion by `x = oneunit(Float64)`
   * Initialize with the first loop iteration, to `x = 1 / rand()`, then loop `for i = 2:10`
 
-## [Separate kernel functions (aka, function barriers)]
+## [Separate kernel functions (aka, function barriers)](@id kernel-functions)
 
 Many functions follow a pattern of performing some set-up work, and then running many iterations
 to perform a core computation. Where possible, it is a good idea to put these core computations
@@ -648,7 +637,7 @@ julia> function strange_twos(n)
        end;
 
 julia> strange_twos(3)
-3-element Vector{Float64}:
+3-element Array{Float64,1}:
  2.0
  2.0
  2.0
@@ -670,7 +659,7 @@ julia> function strange_twos(n)
        end;
 
 julia> strange_twos(3)
-3-element Vector{Float64}:
+3-element Array{Float64,1}:
  2.0
  2.0
  2.0
@@ -697,7 +686,7 @@ can be created like this:
 
 ```jldoctest
 julia> A = fill(5.0, (3, 3))
-3×3 Matrix{Float64}:
+3×3 Array{Float64,2}:
  5.0  5.0  5.0
  5.0  5.0  5.0
  5.0  5.0  5.0
@@ -718,7 +707,7 @@ julia> function array3(fillval, N)
 array3 (generic function with 1 method)
 
 julia> array3(5.0, 2)
-3×3 Matrix{Float64}:
+3×3 Array{Float64,2}:
  5.0  5.0  5.0
  5.0  5.0  5.0
  5.0  5.0  5.0
@@ -742,7 +731,7 @@ julia> function array3(fillval, ::Val{N}) where N
 array3 (generic function with 1 method)
 
 julia> array3(5.0, Val(2))
-3×3 Matrix{Float64}:
+3×3 Array{Float64,2}:
  5.0  5.0  5.0
  5.0  5.0  5.0
  5.0  5.0  5.0
@@ -835,12 +824,12 @@ as shown below (notice that the array is ordered `[1 3 2 4]`, not `[1 2 3 4]`):
 
 ```jldoctest
 julia> x = [1 2; 3 4]
-2×2 Matrix{Int64}:
+2×2 Array{Int64,2}:
  1  2
  3  4
 
 julia> x[:]
-4-element Vector{Int64}:
+4-element Array{Int64,1}:
  1
  3
  2
@@ -1058,10 +1047,10 @@ julia> @views fview(x) = sum(x[2:end-1]);
 julia> x = rand(10^6);
 
 julia> @time fcopy(x);
-  0.003051 seconds (3 allocations: 7.629 MB)
+  0.003051 seconds (7 allocations: 7.630 MB)
 
 julia> @time fview(x);
-  0.001020 seconds (1 allocation: 16 bytes)
+  0.001020 seconds (6 allocations: 224 bytes)
 ```
 
 Notice both the 3× speedup and the decreased memory allocation
@@ -1107,17 +1096,6 @@ julia> @time begin
 
 Provided there is enough memory for the copies, the cost of copying the view to an array is
 far outweighed by the speed boost from doing the matrix multiplication on a contiguous array.
-
-## Consider StaticArrays.jl for small fixed-size vector/matrix operations
-
-If your application involves many small (`< 100` element) arrays of fixed sizes (i.e. the size is
-known prior to execution), then you might want to consider using the [StaticArrays.jl package](https://github.com/JuliaArrays/StaticArrays.jl).
-This package allows you to represent such arrays in a way that avoids unnecessary heap allocations and allows the compiler to
-specialize code for the *size* of the array, e.g. by completely unrolling vector operations (eliminating the loops) and storing elements in CPU registers.
-
-For example, if you are doing computations with 2d geometries, you might have many computations with 2-component vectors.  By
-using the `SVector` type from StaticArrays.jl, you can use convenient vector notation and operations like `norm(3v - w)` on
-vectors `v` and `w`, while allowing the compiler to unroll the code to a minimal computation equivalent to `@inbounds hypot(3v[1]-w[1], 3v[2]-w[2])`.
 
 ## Avoid string interpolation for I/O
 
@@ -1454,7 +1432,7 @@ julia> function f(x)
 
 julia> @code_warntype f(3.2)
 Variables
-  #self#::Core.Const(f)
+  #self#::Core.Compiler.Const(f, false)
   x::Float64
   y::UNION{FLOAT64, INT64}
 
@@ -1601,7 +1579,7 @@ In the mean time, some user-contributed packages like
 [FastClosures](https://github.com/c42f/FastClosures.jl) automate the
 insertion of `let` statements as in `abmult3`.
 
-## Checking for equality with a singleton
+# Checking for equality with a singleton
 
 When checking if a value is equal to some singleton it can be
 better for performance to check for identicality (`===`) instead of

@@ -1,4 +1,4 @@
-# Conversion and Promotion
+# [Conversion and Promotion](@id conversion-and-promotion)
 
 Julia has a system for promoting arguments of mathematical operators to a common type, which has
 been mentioned in various other sections, including [Integers and Floating-Point Numbers](@ref),
@@ -60,25 +60,25 @@ julia> x = 12
 julia> typeof(x)
 Int64
 
-julia> xu = convert(UInt8, x)
+julia> convert(UInt8, x)
 0x0c
 
-julia> typeof(xu)
+julia> typeof(ans)
 UInt8
 
-julia> xf = convert(AbstractFloat, x)
+julia> convert(AbstractFloat, x)
 12.0
 
-julia> typeof(xf)
+julia> typeof(ans)
 Float64
 
 julia> a = Any[1 2 3; 4 5 6]
-2×3 Matrix{Any}:
+2×3 Array{Any,2}:
  1  2  3
  4  5  6
 
 julia> convert(Array{Float64}, a)
-2×3 Matrix{Float64}:
+2×3 Array{Float64,2}:
  1.0  2.0  3.0
  4.0  5.0  6.0
 ```
@@ -168,12 +168,13 @@ Such a definition might look like this:
 convert(::Type{MyType}, x) = MyType(x)
 ```
 
-The type of the first argument of this method is [`Type{MyType}`](@ref man-typet-type),
-the only instance of which is `MyType`. Thus, this method is only invoked
+The type of the first argument of this method is a [singleton type](@ref man-singleton-types),
+`Type{MyType}`, the only instance of which is `MyType`. Thus, this method is only invoked
 when the first argument is the type value `MyType`. Notice the syntax used for the first
 argument: the argument name is omitted prior to the `::` symbol, and only the type is given.
 This is the syntax in Julia for a function argument whose type is specified but whose value
-does not need to be referenced by name.
+does not need to be referenced by name. In this example, since the type is a singleton, we
+already know its value without referring to an argument name.
 
 All instances of some abstract types are by default considered "sufficiently similar"
 that a universal `convert` definition is provided in Julia Base.
@@ -270,10 +271,10 @@ Rational(n::Integer, d::Integer) = Rational(promote(n,d)...)
 This allows calls like the following to work:
 
 ```jldoctest
-julia> x = Rational(Int8(15),Int32(-5))
+julia> Rational(Int8(15),Int32(-5))
 -3//1
 
-julia> typeof(x)
+julia> typeof(ans)
 Rational{Int32}
 ```
 

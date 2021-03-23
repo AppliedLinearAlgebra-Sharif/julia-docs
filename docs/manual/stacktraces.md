@@ -206,7 +206,7 @@ julia> try
            catch
                for (exc, bt) in Base.catch_stack()
                    showerror(stdout, exc, bt)
-                   println(stdout)
+                   println()
                end
            end
        end
