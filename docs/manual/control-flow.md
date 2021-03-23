@@ -15,7 +15,7 @@ temporarily-suspended computations. This is a powerful construct: both exception
 cooperative multitasking are implemented in Julia using tasks. Everyday programming requires no
 direct usage of tasks, but certain problems can be solved much more easily by using tasks.
 
-## [Compound Expressions]
+## Compound Expressions
 
 Sometimes it is convenient to have a single expression which evaluates several subexpressions
 in order, returning the value of the last subexpression as its value. There are two Julia constructs
@@ -53,7 +53,7 @@ julia> (x = 1;
 3
 ```
 
-## [Conditional Evaluation]
+## Conditional Evaluation
 
 Conditional evaluation allows portions of code to be evaluated or not evaluated depending on the
 value of a boolean expression. Here is the anatomy of the `if`-`elseif`-`else` conditional syntax:
@@ -373,7 +373,7 @@ julia> false && (x = (1, 2, 3))
 false
 ```
 
-## [Repeated Evaluation: Loops]
+## Repeated Evaluation: Loops
 
 There are two constructs for repeated evaluation of expressions: the `while` loop and the `for`
 loop. Here is an example of a `while` loop:
@@ -821,7 +821,7 @@ When control leaves the `try` block (for example due to a `return`, or just fini
 continue propagating. A `catch` block may be combined with `try` and `finally` as well. In this
 case the `finally` block will run after `catch` has handled the error.
 
-## [Tasks (aka Coroutines)]
+## Tasks (aka Coroutines)
 
 Tasks are a control flow feature that allows computations to be suspended and resumed in a flexible
 manner. We mention them here only for completeness; for a full discussion see

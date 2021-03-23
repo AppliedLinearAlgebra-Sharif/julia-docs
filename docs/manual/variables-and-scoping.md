@@ -1,4 +1,4 @@
-# [Scope of Variables](@id scope-of-variables)
+# Scope of Variables
 
 The *scope* of a variable is the region of code within which a variable is visible. Variable scoping
 helps avoid variable naming conflicts. The concept is intuitive: two functions can both have
@@ -15,7 +15,7 @@ a distinction in Julia between constructs which introduce a "hard scope" and tho
 introduce a "soft scope", which affects whether shadowing a global variable by the same name is
 allowed or not.
 
-### [Scope constructs]
+### Scope constructs
 
 The constructs introducing scope blocks are:
 

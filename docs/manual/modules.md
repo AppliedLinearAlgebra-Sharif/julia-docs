@@ -1,4 +1,4 @@
-# [Modules](@id modules)
+# Modules
 
 Modules in Julia are separate variable workspaces, i.e. they introduce a new global scope. They
 are delimited syntactically, inside `module Name ... end`. Modules allow you to create top-level

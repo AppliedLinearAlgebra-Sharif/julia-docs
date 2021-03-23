@@ -610,7 +610,7 @@ julia> setprecision(40) do
 1.1000000000004
 ```
 
-## [Numeric Literal Coefficients]
+## Numeric Literal Coefficients
 
 To make common numeric formulae and expressions clearer, Julia allows variables to be immediately
 preceded by a numeric literal, implying multiplication. This makes writing polynomial expressions

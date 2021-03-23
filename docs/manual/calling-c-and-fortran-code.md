@@ -246,7 +246,7 @@ For fun, try inserting a `println("mycompare($a, $b)")` line into `mycompare`, w
 you to see the comparisons that `qsort` is performing (and to verify that it is really calling
 the Julia function that you passed to it).
 
-## [Mapping C Types to Julia](@id mapping-c-types-to-julia)
+## Mapping C Types to Julia
 
 It is critical to exactly match the declared C type with its declaration in Julia. Inconsistencies
 can cause code that works correctly on one system to fail or produce indeterminate results on
@@ -256,7 +256,7 @@ Note that no C header files are used anywhere in the process of calling C functi
 for making sure that your Julia types and call signatures accurately reflect those in the C header
 file.[^2]
 
-### [Automatic Type Conversion](@id automatic-type-conversion)
+### Automatic Type Conversion
 
 Julia automatically inserts calls to the [`Base.cconvert`](@ref) function to convert each argument
 to the specified type. For example, the following call:
@@ -298,7 +298,7 @@ First, let's review some relevant Julia type terminology:
 | `struct ...; end`             | `nothing`                                   | "Singleton" :: a Leaf Type or Struct with no fields.                                                                                                                                                                                                                        |
 | `(...)` or `tuple(...)`       | `(1, 2, 3)`                                 | "Tuple" :: an immutable data-structure similar to an anonymous struct type, or a constant array. Represented as either an array or a struct.                                                                                                                                |
 
-### [Bits Types]
+### Bits Types
 
 There are several special types to be aware of, as no other type can be defined to behave the
 same:

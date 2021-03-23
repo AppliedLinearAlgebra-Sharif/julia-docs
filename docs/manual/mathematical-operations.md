@@ -142,7 +142,7 @@ The updating versions of all the binary arithmetic and bitwise operators are:
     Int64
     ```
 
-## [Vectorized "dot" operators]
+## Vectorized "dot" operators
 
 For *every* binary operation like `^`, there is a corresponding
 "dot" operation `.^` that is *automatically* defined

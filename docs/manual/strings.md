@@ -1,4 +1,4 @@
-# [Strings]
+# Strings
 
 Strings are finite sequences of characters. Of course, the real trouble comes when one asks what
 a character is. The characters that English speakers are familiar with are the letters `A`, `B`,
@@ -40,7 +40,7 @@ There are a few noteworthy high-level features about Julia's strings:
     index, which cannot be implemented both efficiently and simply for variable-width encodings of
     Unicode strings.
 
-## [Characters]
+## Characters
 
 A `Char` value represents a single character: it is just a 32-bit primitive type with a special literal
 representation and appropriate arithmetic behaviors, and which can be converted
@@ -451,7 +451,7 @@ further discussion of UTF-8 encoding issues, see the section below on [byte arra
 The [`transcode`](@ref) function is provided to convert data between the various UTF-xx encodings,
 primarily for working with external data and libraries.
 
-## [Concatenation]
+## Concatenation
 
 One of the most common and useful string operations is concatenation:
 
@@ -518,7 +518,7 @@ of this set is the empty string, `""`. Whenever a free monoid is not commutative
 typically represented as `\cdot`, `*`, or a similar symbol, rather than `+`, which as stated usually
 implies commutativity.
 
-## [Interpolation](@id string-interpolation)
+## Interpolation
 
 Constructing strings using concatenation can become a bit cumbersome, however. To reduce the need for these
 verbose calls to [`string`](@ref) or repeated multiplications, Julia allows interpolation into string literals
@@ -736,7 +736,7 @@ Some other useful functions include:
   * [`nextind(str, i, n=1)`](@ref) find the start of the `n`th character starting after index `i`.
   * [`prevind(str, i, n=1)`](@ref) find the start of the `n`th character starting before index `i`.
 
-## [Non-Standard String Literals](@id non-standard-string-literals)
+## Non-Standard String Literals
 
 There are situations when you want to construct a string or use string semantics, but the behavior
 of the standard string construct is not quite what is needed. For these kinds of situations, Julia
@@ -1013,7 +1013,7 @@ julia> match(regex_name,"[Jon]") === nothing
 true
 ```
 
-## [Byte Array Literals]
+## Byte Array Literals
 
 Another useful non-standard string literal is the byte-array string literal: `b"..."`. This
 form lets you use string notation to express read only literal byte arrays -- i.e. arrays of
@@ -1105,7 +1105,7 @@ Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-soft
 It's an excellent introduction to Unicode and UTF-8, and may help alleviate
 some confusion regarding the matter.
 
-## [Version Number Literals]
+## Version Number Literals
 
 Version numbers can easily be expressed with non-standard string literals of the form [`v"..."`](@ref @v_str).
 Version number literals create [`VersionNumber`](@ref) objects which follow the
@@ -1147,7 +1147,7 @@ scheme.
 Besides being used for the [`VERSION`](@ref) constant, `VersionNumber` objects are widely used
 in the `Pkg` module, to specify packages versions and their dependencies.
 
-## [Raw String Literals]
+## Raw String Literals
 
 Raw strings without interpolation or unescaping can be expressed with
 non-standard string literals of the form `raw"..."`. Raw string literals create

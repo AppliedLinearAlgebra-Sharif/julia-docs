@@ -66,7 +66,7 @@ author = u'Amirhossein Nadiri'
 # built documents.
 #
 # The short X.Y version.
-version = u'نسخه ۱.۵'
+version = u'نسخه ۱.۵.۴'
 # The full version, including alpha/beta/rc tags.
 release = u'1'
 

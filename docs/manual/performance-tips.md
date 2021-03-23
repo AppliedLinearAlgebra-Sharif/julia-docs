@@ -1,4 +1,4 @@
-# [Performance Tips]
+# Performance Tips
 
 In the following sections, we briefly go through a few techniques that can help make your Julia
 code run as fast as possible.
@@ -134,7 +134,7 @@ its algorithmic aspects (see [Pre-allocating outputs](@ref)).
     For more serious benchmarking, consider the [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl)
     package which among other things evaluates the function multiple times in order to reduce noise.
 
-## [Tools](@id tools)
+## Tools
 
 Julia and its package ecosystem includes tools that may help you diagnose problems and improve
 the performance of your code:
@@ -151,7 +151,7 @@ the performance of your code:
   * `@code_warntype` generates a representation of your code that can be helpful in finding expressions
     that result in type uncertainty. See [`@code_warntype`](@ref) below.
 
-## [Avoid containers with abstract type parameters]
+## Avoid containers with abstract type parameters
 
 When working with parameterized types, including arrays, it is best to avoid parameterizing with
 abstract types where possible.
@@ -620,7 +620,7 @@ optimize the body of the loop. There are several possible fixes:
   * Use an explicit conversion by `x = oneunit(Float64)`
   * Initialize with the first loop iteration, to `x = 1 / rand()`, then loop `for i = 2:10`
 
-## [Separate kernel functions (aka, function barriers)](@id kernel-functions)
+## Separate kernel functions (aka, function barriers)
 
 Many functions follow a pattern of performing some set-up work, and then running many iterations
 to perform a core computation. Where possible, it is a good idea to put these core computations
@@ -679,7 +679,7 @@ or the [`fill!`](@ref) function, which we could have used instead of writing our
 Functions like `strange_twos` occur when dealing with data of uncertain type, for example data
 loaded from an input file that might contain either integers, floats, strings, or something else.
 
-## [Types with values-as-parameters]
+## Types with values-as-parameters
 
 Let's say you want to create an `N`-dimensional array that has size 3 along each axis. Such arrays
 can be created like this:
@@ -816,7 +816,7 @@ or thousands of variants compiled for it. Each of these increases the size of th
 code, the length of internal lists of methods, etc. Excess enthusiasm for values-as-parameters
 can easily waste enormous resources.
 
-## [Access arrays in memory order, along columns]
+## Access arrays in memory order, along columns
 
 Multidimensional arrays in Julia are stored in column-major order. This means that arrays are
 stacked one column at a time. This can be verified using the `vec` function or the syntax `[:]`
@@ -1019,7 +1019,7 @@ example, but in many contexts it is more convenient to just sprinkle
 some dots in your expressions rather than defining a separate function
 for each vectorized operation.)
 
-## [Consider using views for slices]
+## Consider using views for slices
 
 In Julia, an array "slice" expression like `array[1:5, :]` creates
 a copy of that data (except on the left-hand side of an assignment,
@@ -1174,7 +1174,7 @@ These are some minor points that might help in tight inner loops.
   * Use [`div(x,y)`](@ref) for truncating division of integers instead of [`trunc(x/y)`](@ref), [`fld(x,y)`](@ref)
     instead of [`floor(x/y)`](@ref), and [`cld(x,y)`](@ref) instead of [`ceil(x/y)`](@ref).
 
-## [Performance Annotations]
+## Performance Annotations
 
 Sometimes you can enable better optimization by promising certain program properties.
 
@@ -1417,7 +1417,7 @@ In some applications, an alternative to zeroing subnormal numbers is to inject a
 a = rand(Float32,1000) * 1.f-9
 ```
 
-## [[`@code_warntype`](@ref)]
+## [`@code_warntype`](@ref)
 
 The macro [`@code_warntype`](@ref) (or its function variant [`code_warntype`](@ref)) can sometimes
 be helpful in diagnosing type-related problems. Here's an example:
@@ -1497,7 +1497,7 @@ The following examples may help you interpret expressions marked as containing n
       * Suggestion: use concrete types like `Array{T,3}` or `Array{T,N}`, where `N` is now a parameter
         of `ArrayContainer`
 
-## [Performance of captured variable]
+## Performance of captured variable
 
 Consider the following example that defines an inner function:
 ```julia

@@ -1,4 +1,4 @@
-# [Constructors]
+# Constructors
 
 Constructors [^1] are functions that create new objects -- specifically, instances of [Composite Types](@ref).
 In Julia, type objects also serve as constructor functions: they create new instances of themselves
@@ -38,7 +38,7 @@ addresses all of these cases and more.
     is used to mean "constructor method" rather than "constructor function", especially as it is often
     used in the sense of singling out a particular method of the constructor from all of the others.
 
-## [Outer Constructor Methods]
+## Outer Constructor Methods
 
 A constructor is just like any other function in Julia in that its overall behavior is defined
 by the combined behavior of its methods. Accordingly, you can add functionality to a constructor
@@ -71,7 +71,7 @@ become clear very shortly, additional constructor methods declared as normal met
 are called *outer* constructor methods. Outer constructor methods can only ever create a new instance
 by calling another constructor method, such as the automatically provided default ones.
 
-## [Inner Constructor Methods]
+## Inner Constructor Methods
 
 While outer constructor methods succeed in addressing the problem of providing additional convenience
 methods for constructing objects, they fail to address the other two use cases mentioned in the

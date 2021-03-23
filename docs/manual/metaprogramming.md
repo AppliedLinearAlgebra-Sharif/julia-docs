@@ -199,7 +199,7 @@ julia> typeof(ex)
 Expr
 ```
 
-### [Interpolation]
+### Interpolation
 
 Direct construction of [`Expr`](@ref) objects with value arguments is powerful, but `Expr` constructors
 can be tedious compared to "normal" Julia syntax. As an alternative, Julia allows *interpolation* of
@@ -311,7 +311,7 @@ The intuition behind this behavior is that `x` is evaluated once for each $:
 one $ works similarly to `eval(:x)`, giving `x`'s value, while two $s do the
 equivalent of `eval(eval(:x))`.
 
-### [QuoteNode]
+### QuoteNode
 
 The usual representation of a `quote` form in an AST is an [`Expr`](@ref) with head `:quote`:
 
@@ -464,7 +464,7 @@ julia> eval(ex)
 42
 ```
 
-## [Macros]
+## Macros
 
 Macros provide a method to include generated code in the final body of a program. A macro maps
 a tuple of arguments to a returned *expression*, and the resulting expression is compiled directly

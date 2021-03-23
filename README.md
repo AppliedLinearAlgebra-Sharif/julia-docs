@@ -3,7 +3,11 @@
 کتابچه راهنمای جولیا به فارسی
 ==========================
 
-[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.5.4)](http://julia-docs.readthedocs.org/fa/v1.5.4/?badge=v1.5.4)
+[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.5.4&style=for-the-badge)](http://julia-docs.readthedocs.org/fa/v1.5.4/)
+[![Julia](https://img.shields.io/badge/Version-1.5.4-brightgreen?style=for-the-badge&color=brightgreen)](https://github.com/JuliaLang/julia/tree/v1.5.4)
+[![Contributors](https://img.shields.io/github/contributors/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/graphs/contributors)
+[![License](https://img.shields.io/github/license/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.5.4/LICENSE)
+<!-- [![Stars](https://img.shields.io/github/stars/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/stargazers) -->
 
 این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، [نسخه 1.5.4](https://github.com/JuliaLang/julia/tree/v1.5.4) است.
 

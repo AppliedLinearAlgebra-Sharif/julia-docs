@@ -134,7 +134,7 @@ the same time.
 
 
 
-## [Code Availability and Loading Packages](@id code-availability)
+## Code Availability and Loading Packages
 
 Your code must be available on any process that runs it. For example, type the following into
 the Julia prompt:
@@ -731,7 +731,7 @@ will always operate on copies of arguments.
 
 
 
-## [Shared Arrays]
+## Shared Arrays
 
 Shared Arrays use system shared memory to map the same array across many processes. While there
 are some similarities to a [`DArray`](https://github.com/JuliaParallel/DistributedArrays.jl), the
@@ -1203,7 +1203,7 @@ requirements for the inbuilt `LocalManager` and `SSHManager`:
     connection is used. Note that bandwidth may be limited if you create multiple processes on a node
     and enable multiplexing, because in that case processes share a single multiplexing TCP connection.
 
-### [Cluster Cookie]
+### Cluster Cookie
 
 All processes in a cluster share the same cookie which, by default, is a randomly generated string
 on the master process:

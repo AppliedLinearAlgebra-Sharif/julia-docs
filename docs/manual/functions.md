@@ -1,4 +1,4 @@
-# [Functions]
+# Functions
 
 In Julia, a function is an object that maps a tuple of argument values to a return value. Julia
 functions are not pure mathematical functions, because they can alter and be affected
@@ -214,7 +214,7 @@ A few special expressions correspond to calls to functions with non-obvious name
 | `A.n`             | [`getproperty`](@ref Base.getproperty) |
 | `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
 
-## [Anonymous Functions]
+## Anonymous Functions
 
 Functions in Julia are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen):
 they can be assigned to variables, and called using the standard function call syntax from the
@@ -781,7 +781,7 @@ julia> ["a", "list", "of", "strings"] .|> [uppercase, reverse, titlecase, length
  7
 ```
 
-## [Dot Syntax for Vectorizing Functions]
+## Dot Syntax for Vectorizing Functions
 
 In technical-computing languages, it is common to have "vectorized" versions of functions, which
 simply apply a given function `f(x)` to each element of an array `A` to yield a new array via

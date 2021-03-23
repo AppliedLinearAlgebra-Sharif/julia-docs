@@ -1,4 +1,4 @@
-# [Asynchronous Programming]
+# Asynchronous Programming
 
 When a program needs to interact with the outside world, for example communicating
 with another machine over the internet, operations in the program may need to

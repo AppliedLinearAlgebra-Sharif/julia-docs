@@ -1,4 +1,4 @@
-# [Types]
+# Types
 
 Type systems have traditionally fallen into two quite different camps: static type systems, where
 every program expression must have a type computable before the execution of the program, and
@@ -125,7 +125,7 @@ end
 Returning from this function behaves just like an assignment to a variable with a declared type:
 the value is always converted to `Float64`.
 
-## [Abstract Types]
+## Abstract Types
 
 Abstract types cannot be instantiated, and serve only as nodes in the type graph, thereby describing
 sets of related concrete types: those concrete types which are their descendants. We begin with
@@ -961,7 +961,7 @@ julia> NamedTuple{(:a, :b)}((1,""))
 If field types are specified, the arguments are converted. Otherwise the types of the arguments
 are used directly.
 
-### [Singleton Types]
+### Singleton Types
 
 There is a special kind of abstract parametric type that must be mentioned here: singleton types.
 For each type, `T`, the "singleton type" `Type{T}` is an abstract type whose only instance is
@@ -1219,7 +1219,7 @@ Closest candidates are:
 [...]
 ```
 
-## [Custom pretty-printing]
+## Custom pretty-printing
 
 Often, one wants to customize how instances of a type are displayed.  This is accomplished by
 overloading the [`show`](@ref) function.  For example, suppose we define a type to represent

@@ -223,7 +223,7 @@ Multiple dispatch together with the flexible parametric type system give Julia i
 abstractly express high-level algorithms decoupled from implementation details, yet generate efficient,
 specialized code to handle each case at run time.
 
-## [Method Ambiguities]
+## Method Ambiguities
 
 It is possible to define a set of function methods such that there is no unique most specific
 method applicable to some combinations of arguments:
@@ -885,7 +885,7 @@ function emptyfunc
 end
 ```
 
-## [Method design and the avoidance of ambiguities]
+## Method design and the avoidance of ambiguities
 
 Julia's method polymorphism is one of its most powerful features, yet
 exploiting this power can pose design challenges.  In particular, in
@@ -940,7 +940,7 @@ f(x::NTuple{N,Int}) where {N} = 1           # this is the fallback
 f(x::Tuple{Float64, Vararg{Float64}}) = 2   # this requires at least one Float64
 ```
 
-### [Orthogonalize your design]
+### Orthogonalize your design
 
 When you might be tempted to dispatch on two or more arguments,
 consider whether a "wrapper" function might make for a simpler

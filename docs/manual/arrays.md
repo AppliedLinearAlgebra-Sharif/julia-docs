@@ -1,4 +1,4 @@
-# [Multi-dimensional Arrays]
+# Multi-dimensional Arrays
 
 Julia, like most technical computing languages, provides a first-class array implementation. Most
 technical computing languages pay a lot of attention to their array implementation at the expense
@@ -92,7 +92,7 @@ julia> zeros((2, 3))
 ```
 Here, `(2, 3)` is a [`Tuple`](@ref) and the first argument — the element type — is optional, defaulting to `Float64`.
 
-## [Array literals]
+## Array literals
 
 Arrays can also be directly constructed with square braces; the syntax `[A, B, C, ...]`
 creates a one dimensional array (i.e., a vector) containing the comma-separated arguments as
@@ -124,7 +124,7 @@ julia> []
 Any[]
 ```
 
-### [Concatenation]
+### Concatenation
 
 If the arguments inside the square brackets are separated by semicolons (`;`) or newlines
 instead of commas, then their contents are _vertically concatenated_ together instead of
@@ -220,7 +220,7 @@ julia> Int8[[1 2] [3 4]]
  1  2  3  4
 ```
 
-## [Comprehensions]
+## Comprehensions
 
 Comprehensions provide a general and powerful way to construct arrays. Comprehension syntax is
 similar to set construction notation in mathematics:
@@ -331,7 +331,7 @@ julia> [(i,j) for i=1:3 for j=1:i if i+j == 4]
  (3, 1)
 ```
 
-## [Indexing]
+## Indexing
 
 The general syntax for indexing into an n-dimensional array `A` is:
 
@@ -451,7 +451,7 @@ julia> x[1, [2 3; 4 1]]
  13  1
 ```
 
-## [Indexed Assignment]
+## Indexed Assignment
 
 The general syntax for assigning values in an n-dimensional array `A` is:
 
@@ -512,7 +512,7 @@ julia> x
   3   6  -9
 ```
 
-## [Supported index types]
+## Supported index types
 
 In the expression `A[I_1, I_2, ..., I_n]`, each `I_k` may be a scalar index, an
 array of scalar indices, or an object that represents an array of scalar
@@ -852,7 +852,7 @@ Base.IndexStyle(::Type{<:MyArray}) = IndexLinear()
 This setting will cause `eachindex` iteration over a `MyArray` to use integers. If you don't
 specify this trait, the default value `IndexCartesian()` is used.
 
-## [Array and Vectorized Operators and Functions]
+## Array and Vectorized Operators and Functions
 
 The following operators are supported for arrays:
 
