@@ -3,7 +3,6 @@
 A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to
 store a value (that you obtained after some math, for example) for later use. For example:
 
-<div dir="ltr">
 
 ```julia-repl
 # Assign the value 10 to the variable x
@@ -23,13 +22,11 @@ julia> x = "Hello World!"
 "Hello World!"
 ```
 
-</div>
 
 Julia provides an extremely flexible system for naming variables. Variable names are case-sensitive,
 and have no semantic meaning (that is, the language will not treat variables differently based
 on their names).
 
-<div dir="ltr">
 
 ```jldoctest
 julia> x = 1.0
@@ -48,11 +45,9 @@ julia> UniversalDeclarationOfHumanRightsStart = "人人生而自由，在尊严�
 "人人生而自由，在尊严和权利上一律平等。"
 ```
 
-</div>
 
 Unicode names (in UTF-8 encoding) are allowed:
 
-<div dir="ltr">
 
 ```jldoctest
 julia> δ = 0.00001
@@ -62,7 +57,6 @@ julia> 안녕하세요 = "Hello"
 "Hello"
 ```
 
-</div>
 
 In the Julia REPL and several other Julia editing environments, you can type many Unicode math
 symbols by typing the backslashed LaTeX symbol name followed by tab. For example, the variable
@@ -74,7 +68,6 @@ then paste the symbol.)
 Julia will even let you redefine built-in constants and functions if needed (although
 this is not recommended to avoid potential confusions):
 
-<div dir="ltr">
 
 ```jldoctest
 julia> pi = 3
@@ -87,12 +80,10 @@ julia> sqrt = 4
 4
 ```
 
-</div>
 
 However, if you try to redefine a built-in constant or function already in use, Julia will give
 you an error:
 
-<div dir="ltr">
 
 ```jldoctest
 julia> pi
@@ -108,7 +99,6 @@ julia> sqrt = 4
 ERROR: cannot assign a value to variable Base.sqrt from module Main
 ```
 
-</div>
 
 ## نامهای مجاز برای متغیرها
 
@@ -132,7 +122,6 @@ it from `+ ᵃx` where `ᵃx` is the variable name.
 
 The only explicitly disallowed names for variables are the names of the built-in [Keywords](@ref):
 
-<div dir="ltr">
 
 ```julia-repl
 julia> else = false
@@ -142,7 +131,6 @@ julia> try = "No"
 ERROR: syntax: unexpected "="
 ```
 
-</div>
 
 Some Unicode characters are considered to be equivalent in identifiers.
 Different ways of entering Unicode combining characters (e.g., accents)
