@@ -3,11 +3,11 @@
 کتابچه راهنمای جولیا به فارسی
 ==========================
 
-[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=latest)](http://julia-docs.readthedocs.org/fa/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.5.4)](http://julia-docs.readthedocs.org/fa/v1.5.4/?badge=v1.5.4)
 
 این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، [نسخه 1.5.4](https://github.com/JuliaLang/julia/tree/v1.5.4) است.
 
-متن اصلی را می توانید در [این صفحه](https://docs.julialang.org/en/v1.5.4/) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/fa/latest/) بیابید.
+متن اصلی را می توانید در [این صفحه](https://docs.julialang.org/en/v1.5.4/) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/fa/v1.5.4/) بیابید.
 
 اسناد با استفاده از [Read The Docs](https://readthedocs.org/projects/julia-docs) منتشر می شود.
 
@@ -15,7 +15,7 @@
 
 ما به دنبال افرادی برای کمک به ترجمه هستیم! حتی ترجمه یک قسمت کوچک نیز مورد استقبال قرار می گیرد.
 
-برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/latest/CONTRIBUTING.md) مراجعه کنید.
+برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.5.4/CONTRIBUTING.md) مراجعه کنید.
 
 همچنین اگر خطایی در ترجمه فعلی دیدید نیز می‌توانید آن را با ایجاد یک موضوع به اطلاع ما برسانید. [ایجاد موضوع!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
 

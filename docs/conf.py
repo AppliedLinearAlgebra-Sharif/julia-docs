@@ -284,7 +284,7 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # app setup hook
-github_doc_root = 'https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/tree/latest/docs/'
+github_doc_root = 'https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/tree/v1.5.4/docs/'
 def setup(app):
     app.add_config_value('recommonmark_config', {
             'url_resolver': lambda url: github_doc_root + url,

@@ -23,8 +23,8 @@
 1. git clone https://github.com/YOUR-USERNAME/julia-docs.git
 2. cd julia-docs
 3. git remote add upstream https://github.com/PokeAPI/pokeapi.co
-4. git pull upstream latest
-5. git checkout latest
+4. git pull upstream v1.5.4
+5. git checkout v1.5.4
 # نام دلخواه شاخه خود را در دستور زیر قرار دهید
 6. git checkout -b [the-name-of-my-branch]
 ```
@@ -33,7 +33,7 @@
 
 حال تغییرات مورد نظر خود را اعمال کنید.  مستنداتی که نیاز به ترجمه دارند در پوشه *docs/manual/* قرار دارند.
 
-لطفا قبل از شروع به نوشتن، [واژه‌نامه](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/latest/TRANSLATION.md) را نیز مطالعه کنید.
+لطفا قبل از شروع به نوشتن، [واژه‌نامه](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.5.4/TRANSLATION.md) را نیز مطالعه کنید.
 
 <div dir="ltr">
 
