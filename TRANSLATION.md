@@ -579,5 +579,5 @@
   </tbody>
 </table>
 <p dir="rtl">
-اگر فکر می‌کنید چیزی فراموش شده‌است یا نیاز به تصحیح دارد، حتما <a href="https://github.com/amir-ni/julia-docs/issues/new">نظر خود را با ما درمیان بگذارید</a>.
+اگر فکر می‌کنید چیزی فراموش شده‌است یا نیاز به تصحیح دارد، حتما <a href="https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/2">نظر خود را با ما درمیان بگذارید</a>.
 </p>

@@ -5,7 +5,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=latest)](http://julia-docs.readthedocs.org/fa/latest/?badge=latest)
 
-این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، 1.7 است.
+این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، [نسخه 1.5.4](https://github.com/JuliaLang/julia/tree/v1.5.4) است.
 
 متن اصلی را می توانید در [این صفحه](http://docs.julialang.org) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/) بیابید.
 
@@ -15,46 +15,9 @@
 
 ما به دنبال افرادی برای کمک به ترجمه هستیم! حتی ترجمه یک قسمت کوچک نیز مورد استقبال قرار می گیرد.
 
-برای اینکار نیاز به دانش برنامه‌نویسی ندارید و صرفا لازم است تا متون مستندات را ترجمه کنید.
-فرمت فایل‌های مستندات *markdown* است.
+برای شروع می‌توانید به [این لینک](https://github.com/reactjs/julia-docs/blob/master/CONTRIBUTING.md) مراجعه کنید.
 
-همچنین اگر خطایی در ترجمه فعلی دیدید نیز می‌توانید آن را با ایجاد یک موضوع به اطلاع ما برسانید. [ایجاد موضوع!](https://github.com/amir-ni/julia-docs/issues/new)
-
-## نحوه مشارکت
-
-ابتدا این مخزن را "Fork" کنید، در مخزن خود ترجمه و ویرایش را انجام دهید و آن را به عنوان "Pull Request" ثبت کنید. ما آن بررسی و سپس وارد خواهیم کرد.
-
-این کارها را می‌توانید با دستورات زیر انجام دهید.
-<div dir="ltr">
-
-```bash
-1. git clone https://github.com/AppliedLinearAlgebra-Sharif/julia-docs.git
-2. cd julia-docs
-3. git checkout latest
-# نام دلخواه شاخه خود را در دستور زیر قرار دهید
-4. git checkout -b [the-name-of-my-branch]
-```
-
-</div>
-
-حال تغییرات مورد نظر خود را اعمال کنید.  مستنداتی که نیاز به ترجمه دارند در پوشه *julia-docs/docs/manual/* قرار دارند.
-
-لطفا قبل از شروع به نوشتن، [واژه‌نامه](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/latest/TRANSLATION.md) را نیز مطالعه کنید.
-
-<div dir="ltr">
-
-```bash
-# پیام موردنظر خود را در دستور زیر جایگزین کنید
-1. git add -A && git commit -m "[the-message]"
-# نام شاخه خود را که در مراحل قبلی انتخاب کردید، در دستور زیر قرار دهید
-2. git push latest [the-name-of-my-branch]
-```
-
-</div>
-
-در انتها با ورود به صفحه مخزن ایجاد شده، با کلیک بر روی گزینه "Compare & pull request" و وارد کردن توضیحات مورد نیاز، ویرایش‌های خود را به ما ارسال کنید.
-
-تغییرات شما باید توسط حداقل یک نفر از نگاه‌دارندگان بررسی و تایید شود. آن‌ها در این مرحله نظر خود را با شما در میان می‌گذارند. در صورت وجود مشکل، با همکاری آن‌ها مشکل برطرف و تغییرات با شاخه latest ادغام خواهد شد.
+همچنین اگر خطایی در ترجمه فعلی دیدید نیز می‌توانید آن را با ایجاد یک موضوع به اطلاع ما برسانید. [ایجاد موضوع!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
 
 ## مشارکت‌کنندگان
 
@@ -66,6 +29,6 @@
   </tr>
 </table>
 
-اسم شما فراموش شده‌است؟‌[به ما تذکر دهید!](https://github.com/amir-ni/julia-docs/issues/new)
+اسم شما فراموش شده‌است؟‌[به ما تذکر دهید!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
 
 </div>
