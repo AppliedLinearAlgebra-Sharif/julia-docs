@@ -580,6 +580,6 @@
   </tbody>
 </table>
 
-اگر فکر می‌کنید چیزی فراموش شده‌است یا نیاز به تصحیح دارد، حتما <a href="https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/2">نظر خود را با ما درمیان بگذارید</a>.
+اگر فکر می‌کنید چیزی فراموش شده‌است یا نیاز به تصحیح دارد، حتما <a href="https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/3">نظر خود را با ما درمیان بگذارید</a>.
 
 </div>
