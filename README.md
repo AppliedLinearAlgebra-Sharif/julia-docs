@@ -7,7 +7,7 @@
 
 این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، [نسخه 1.5.4](https://github.com/JuliaLang/julia/tree/v1.5.4) است.
 
-متن اصلی را می توانید در [این صفحه](http://docs.julialang.org) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/) بیابید.
+متن اصلی را می توانید در [این صفحه](http://docs.julialang.org) و ترجمه فارسی را می توانید در [این صفحه](https://docs.julialang.org/en/v1.5.4/) بیابید.
 
 اسناد با استفاده از [Read The Docs](https://readthedocs.org/projects/julia-docs) منتشر می شود.
 
