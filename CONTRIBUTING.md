@@ -12,18 +12,21 @@
 
 ## نحوه مشارکت
 
-یک انشعاب از مخزن اصلی بگیرید و سپس با استفاده از دستورات زیر ابتدا آن را بر روی سیستم خود کپی کنید و سپس شاخه جدید با نام دلخواه بسازید.
+یک انشعاب از مخزن اصلی بگیرید.
 
-این کارها را می‌توانید با دستورات زیر انجام دهید.
+سپس با استفاده از دستورات زیر ابتدا آن را بر روی سیستم خود کپی کنید و سپس شاخه جدید با نام دلخواه بسازید.
+
 <div dir="ltr">
 
 ```bash
 # نام کاربری گیت‌هاب خود را در آدرس زیر قرار دهید
 1. git clone https://github.com/YOUR-USERNAME/julia-docs.git
 2. cd julia-docs
-3. git checkout latest
+3. git remote add upstream https://github.com/PokeAPI/pokeapi.co
+4. git pull upstream latest
+5. git checkout latest
 # نام دلخواه شاخه خود را در دستور زیر قرار دهید
-4. git checkout -b [the-name-of-my-branch]
+6. git checkout -b [the-name-of-my-branch]
 ```
 
 </div>
@@ -35,10 +38,11 @@
 <div dir="ltr">
 
 ```bash
+1. git add -A
 # پیام موردنظر خود را در دستور زیر جایگزین کنید
-1. git add -A && git commit -m "[the-message]"
-# نام شاخه خود را که در مراحل قبلی انتخاب کردید، در دستور زیر قرار دهید
-2. git push latest [the-name-of-my-branch]
+2. git commit -m "[the-message]"
+# نام کاربری گیت‌هاب و نام شاخه مورد نظر باید در دستور زیر قرارگیرد
+3. git push [my-fork-name] [the-name-of-my-branch]
 ```
 
 </div>
