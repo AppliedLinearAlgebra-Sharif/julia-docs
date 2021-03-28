@@ -56,6 +56,14 @@
     </tr>
     <tr>
       <td dir="ltr">
+        built-in
+      </td>
+      <td>
+        درون-ساخت
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr">
         class
       </td>
       <td>
@@ -168,10 +176,26 @@
     </tr>
     <tr>
       <td dir="ltr">
+        identifier
+      </td>
+      <td>
+        شناسه
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr">
         inline
       </td>
       <td>
         درخط
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr">
+        interactive
+      </td>
+      <td>
+        تعاملی
       </td>
     </tr>
     <tr>
