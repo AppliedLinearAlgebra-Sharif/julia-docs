@@ -22,7 +22,7 @@
 # نام کاربری گیت‌هاب خود را در آدرس زیر قرار دهید
 1. git clone https://github.com/YOUR-USERNAME/julia-docs.git
 2. cd julia-docs
-3. git remote add upstream https://github.com/PokeAPI/pokeapi.co
+3. git remote add upstream https://github.com/AppliedLinearAlgebra-Sharif/julia-docs.git
 4. git checkout v1.5.4
 5. git pull upstream v1.5.4
 # نام دلخواه شاخه خود را در دستور زیر قرار دهید
