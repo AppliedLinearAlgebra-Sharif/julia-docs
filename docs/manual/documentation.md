@@ -1,7 +1,7 @@
-# Documentation
+# [Documentation](@id man-documentation)
 
 Julia enables package developers and users to document functions, types and other objects easily
-via a built-in documentation system since Julia 0.4.
+via a built-in documentation system.
 
 The basic syntax is simple: any string appearing at the toplevel right before an object
 (function, macro, type or instance) will be interpreted as documenting it (these are called
@@ -29,8 +29,9 @@ Here is a more complex example, still using Markdown:
 """
     bar(x[, y])
 
-Compute the Bar index between `x` and `y`. If `y` is missing, compute
-the Bar index between all pairs of columns of `x`.
+Compute the Bar index between `x` and `y`.
+
+If `y` is unspecified, compute the Bar index between all pairs of columns of `x`.
 
 # Examples
 ```julia-repl
@@ -318,7 +319,7 @@ will add documentation to `f(x)` when `condition()` is `true`. Note that even if
 out of scope at the end of the block, its documentation will remain.
 
 It is possible to make use of metaprogramming to assist in the creation of documentation.
-When using string-interpolation within the docstring you will need to use an extra $ as
+When using string-interpolation within the docstring you will need to use an extra ` $ ` as
 shown with `$($name)`:
 
 ```julia
@@ -361,9 +362,9 @@ constructs for which providing documentation is possible.
 
 In the following examples `"..."` is used to illustrate an arbitrary docstring.
 
-### $ and `\` characters
+### ` $ ` and `\` characters
 
-The $ and `\` characters are still parsed as string interpolation or start of an escape sequence
+The ` $ ` and `\` characters are still parsed as string interpolation or start of an escape sequence
 in docstrings too. The `raw""` string macro together with the `@doc` macro can be used to avoid
 having to escape them. This is handy when the docstrings include LaTeX or Julia source code examples
 containing interpolation:

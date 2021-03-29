@@ -1,4 +1,4 @@
-# Multi-Threading
+# [Multi-Threading](@id man-multithreading)
 
 Visit this [blog post](https://julialang.org/blog/2019/07/multithreading/) for a presentation
 of Julia multi-threading features.
@@ -76,24 +76,25 @@ can be observed from multiple threads. For example, in most cases you should
 use the following code pattern:
 
 ```julia-repl
-julia> lock(a) do
+julia> lock(lk) do
            use(a)
        end
 
 julia> begin
-           lock(a)
+           lock(lk)
            try
                use(a)
            finally
-               unlock(a)
+               unlock(lk)
            end
        end
 ```
+where `lk` is a lock (e.g. `ReentrantLock()`) and `a` data.
 
 Additionally, Julia is not memory safe in the presence of a data race. Be very
-careful about reading a global variable (or closure variable) if another thread
-might write to it! Instead, always use the lock pattern above when changing any
-data (such as assigning to a global) visible to multiple threads.
+careful about reading _any_ data if another thread might write to it!
+Instead, always use the lock pattern above when changing data (such as assigning
+to a global or closure variable) accessed by other threads.
 
 ```julia
 Thread 1:
@@ -103,11 +104,11 @@ global b = true
 
 Thread 2:
 while !b; end
-bad(a) # it is NOT safe to access `a` here!
+bad_read1(a) # it is NOT safe to access `a` here!
 
 Thread 3:
 while !@isdefined(a); end
-use(a) # it is NOT safe to access `a` here
+bad_read2(a) # it is NOT safe to access `a` here
 ```
 
 ## The `@threads` Macro
@@ -116,7 +117,7 @@ Let's work a simple example using our native threads. Let us create an array of 
 
 ```jldoctest
 julia> a = zeros(10)
-10-element Array{Float64,1}:
+10-element Vector{Float64}:
  0.0
  0.0
  0.0
@@ -315,7 +316,7 @@ There are a few approaches to dealing with this problem:
    The following example demonstrates how this strategy could be applied to
    `Distributed.finalize_ref`:
 
-   ```
+   ```julia
    function finalize_ref(r::AbstractRemoteRef)
        if r.where > 0 # Check if the finalizer is already run
            if islocked(client_refs) || !trylock(client_refs)

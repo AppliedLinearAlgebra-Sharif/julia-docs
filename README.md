@@ -5,16 +5,16 @@
 
 <div align="center">
 
-[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.5.4&style=for-the-badge)](http://julia-docs.readthedocs.org/fa/v1.5.4/)
-[![Julia](https://img.shields.io/badge/Version-1.5.4-brightgreen?style=for-the-badge&color=brightgreen)](https://github.com/JuliaLang/julia/tree/v1.5.4)
+[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.6.0&style=for-the-badge)](http://julia-docs.readthedocs.org/fa/v1.6.0/)
+[![Julia](https://img.shields.io/badge/Version-1.6.0-brightgreen?style=for-the-badge&color=brightgreen)](https://github.com/JuliaLang/julia/tree/v1.6.0)
 [![Contributors](https://img.shields.io/github/contributors/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/graphs/contributors)
-[![License](https://img.shields.io/github/license/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.5.4/LICENSE)
+[![License](https://img.shields.io/github/license/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.6.0/LICENSE)
 <!-- [![Stars](https://img.shields.io/github/stars/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/stargazers) -->
 </div>
 
-این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، [نسخه 1.5.4](https://github.com/JuliaLang/julia/tree/v1.5.4) است.
+این یک پروژه ترجمه فارسی برای سند رسمی زبان برنامه نویسی "جولیا" است. آخرین نسخه پایدار جولیا در زمان نوشته شدن این مستند، [نسخه 1.6.0](https://github.com/JuliaLang/julia/tree/v1.6.0) است.
 
-متن اصلی را می توانید در [این صفحه](https://docs.julialang.org/en/v1.5.4/) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/fa/v1.5.4/) بیابید.
+متن اصلی را می توانید در [این صفحه](https://docs.julialang.org/en/v1.6.0/) و ترجمه فارسی را می توانید در [این صفحه](https://julia-docs.readthedocs.io/fa/v1.6.0/) بیابید.
 
 اسناد با استفاده از [Read The Docs](https://readthedocs.org/projects/julia-docs) منتشر می شود.
 
@@ -22,7 +22,7 @@
 
 ما به دنبال افرادی برای کمک به ترجمه هستیم! حتی ترجمه یک قسمت کوچک نیز مورد استقبال قرار می گیرد.
 
-برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.5.4/CONTRIBUTING.md) مراجعه کنید.
+برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.6.0/CONTRIBUTING.md) مراجعه کنید.
 
 همچنین اگر خطایی در ترجمه فعلی دیدید نیز می‌توانید آن را با ایجاد یک موضوع به اطلاع ما برسانید. [ایجاد موضوع!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
 

@@ -1,9 +1,13 @@
-# شروع به کار
+# [Getting Started](@id man-getting-started)
 
-نصب جولیا ساده است و می‌توانید این کار را با استفاده از باینری‌های از پیش کامپایل شده و یا با کامپایل کد انجام دهید.
-با دنبال کردن دستورالعمل های [این صفحه](https://julialang.org/downloads/) جولیا را بارگیری و نصب کنید.
+Julia installation is straightforward, whether using precompiled binaries or compiling from source.
+Download and install Julia by following the instructions at [https://julialang.org/downloads/](https://julialang.org/downloads/).
 
-ساده ترین راه برای یادگیری و آزمایش کار با جولیا، اجرای خود جولیا REPL (مخفف: read-eval-print loop) است. برای اجرای آن یا بر روی آن دابل کلیک کنید و یا از خط فرمان سیستم `julia` را صدا بزنید.
+If you are coming to Julia from one of the following languages, then you should start by reading the section on noteworthy differences from [MATLAB](@ref Noteworthy-differences-from-MATLAB), [R](@ref Noteworthy-differences-from-R), [Python](@ref Noteworthy-differences-from-Python), [C/C++](@ref Noteworthy-differences-from-C/C) or [Common Lisp](@ref Noteworthy-differences-from-Common-Lisp). This will help you avoid some common pitfalls since Julia differs from those languages in many subtle ways.
+
+The easiest way to learn and experiment with Julia is by starting an interactive session (also
+known as a read-eval-print loop or "REPL") by double-clicking the Julia executable or running
+`julia` from the command line:
 
 ```@eval
 io = IOBuffer()
@@ -12,17 +16,30 @@ banner = String(take!(io))
 import Markdown
 Markdown.parse("```\n\$ julia\n\n$(banner)\njulia> 1 + 2\n3\n\njulia> ans\n3\n```")
 ```
-برای خروج از این محیط تعاملی می‌توانید از ترکیب `CTRL-D`(گرفتن کلید کنترل و سپس فشردن کلید `D`) یا فرمان `()exit` را وارد کنید. جولیا پس از اجرا شدن در محیط تعاملی یک بنر را نمایش می‌دهد و در پایین آن منتظر ورودی کاربر می‌شود. زمانی که کاربر یک دستور کامل را به جولیا بدهد(مثل `2+1`) و سپس کلید `enter` را فشار دهد، محیط تعاملی آن را بررسی کرده و مقدار آن را نمایش می‌دهد. اگر در محیط تعاملی پس از دستور خود سمیکالن `;` بگذارید و کلید `enter` را بفشارید، مقدار کد شما(خروجی بیان) نمایش داده نمی‌شود. متغیر `ans` مقدار آخرین دستور شما را نشان می‌دهد و فرقی ندارد که قبلا نمایش داده شده یا از نمایش آن بوسیله `;` جلوگیری شده است. متغیر `ans` فقط در محیط تعاملی کار می‌کند و در صورت های دیگری که کد جولیا را اجرا می‌کنید کارایی ندارد.
 
-برای ارزیابی عملکرد یک سورس کد در فایلی با نام `file.jl` باید `include("file.jl")` را بنویسید.
+To exit the interactive session, type `CTRL-D` (press the Control/`^` key together with the `d` key), or type
+`exit()`. When run in interactive mode, `julia` displays a banner and prompts the user for input.
+Once the user has entered a complete expression, such as `1 + 2`, and hits enter, the interactive
+session evaluates the expression and shows its value. If an expression is entered into an interactive
+session with a trailing semicolon, its value is not shown. The variable `ans` is bound to the
+value of the last evaluated expression whether it is shown or not. The `ans` variable is only
+bound in interactive sessions, not when Julia code is run in other ways.
 
-اگر می‌خواهید کد درون فایل را به صورت غیر تعاملی اجرا کنید باید در خط فرمان خود فایل را به عنوان اولین آرگومان(ورودی) دستور `julia` قرار دهید:
+To evaluate expressions written in a source file `file.jl`, write `include("file.jl")`.
+
+To run code in a file non-interactively, you can give it as the first argument to the `julia`
+command:
 
 ```
 $ julia script.jl arg1 arg2...
 ```
 
-همانطور که در مثال بالا مشاهده می‌کنید، آرگومان‌های بعدی خط فرمان به عنوان آرگومان‌های برنامه `script.jl` تفسیر می‌شوند و  به ثابت جهانی `ARGS` پاس داده می‌شوند. نام اسکریپت نیز خودش به عنوان ثابت جهانی `PROGRAM_FILE` پاس داده می‌شود. توجه داشته باشید زمانی که دستور `julia` در خط فرمان با عبارت `e-` اجرا می‌شود نیز `ARGS` مقداردهی می‌شود اما مقدار `PROGRAM_FILE` خالی می‌ماند. به عنوان مثال، برای فقط چاپ آرگومان‌های داده شده به یک اسکریپت، شما می‌توانید این کار را انجام دهید:
+As the example implies, the following command-line arguments to `julia` are interpreted as
+command-line arguments to the program `script.jl`, passed in the global constant `ARGS`. The
+name of the script itself is passed in as the global `PROGRAM_FILE`. Note that `ARGS` is
+also set when a Julia expression is given using the `-e` option on the command line (see the
+`julia` help output below) but `PROGRAM_FILE` will be empty. For example, to just print the
+arguments given to a script, you could do this:
 
 ```
 $ julia -e 'println(PROGRAM_FILE); for x in ARGS; println(x); end' foo bar
@@ -31,7 +48,7 @@ foo
 bar
 ```
 
-یا می‌توانید کد را درون اسکریپتی قرار داده سپس آن را اجرا کنید:
+Or you could put that code into a script and run it:
 
 ```
 $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
@@ -41,17 +58,25 @@ foo
 bar
 ```
 
-نماد `--` می‌تواند میان آرگومان های اختصاص داده شده به اسکریپت و آرگومان های اختصاص داده شده به جولیا تفاوت ایجاد کند:
+The `--` delimiter can be used to separate command-line arguments intended for the script file from arguments intended for Julia:
 
 ```
 $ julia --color=yes -O -- foo.jl arg1 arg2..
 ```
 
-برای اطلاعات بیشتر درباره نوشتن اسکریپت‌های جولیا به [اسکریپت نویسی](faq.html#scripting) مراجعه کنید.
+See also [Scripting](@ref man-scripting) for more information on writing Julia scripts.
 
-جولیا با هر دو آرگومان `p-` یا `machine-file--` می‌تواند در حالت پردازش موازی شروع به کار کند. `p n-` به اندازه `n‍` کارگر اضافه اجرا می‌کند در حالی که `machine-file file--` به ازای هر خط از فایل `file` یک کارگر را اجرا می‌کند. ماشین های تعریف شده برای `file` باید از طریق یک ورود `ssh` بدون نیاز به رمز در دسترس قرار داشته باشند که جولیا نیز باید در همان مکان به عنوان میزبان فعلی نصب شده باشد. هر ماشینی که تعریف می‌شود فرم `[count*][user@]host[:port] [bind_addr[:port]]` را می‌گیرد. پیش فرض `user` همان کاربر جاری سیستم و `port` همان پورت استاندارد ssh است. `count` میزان کارگرهایی است که بر روی گره ایجاد می‌شوند که مقدار پیشفرض آن یک است. آرگومان اختیاری `bind-to bind_addr[:port]` آدرس آی پی و پورت دیگر کارگرها برای ارتباط با این کارگر را مشخص می‌کند.
+Julia can be started in parallel mode with either the `-p` or the `--machine-file` options. `-p n`
+will launch an additional `n` worker processes, while `--machine-file file` will launch a worker
+for each line in file `file`. The machines defined in `file` must be accessible via a password-less
+`ssh` login, with Julia installed at the same location as the current host. Each machine definition
+takes the form `[count*][user@]host[:port] [bind_addr[:port]]`. `user` defaults to current user,
+`port` to the standard ssh port. `count` is the number of workers to spawn on the node, and defaults
+to 1. The optional `bind-to bind_addr[:port]` specifies the IP address and port that other workers
+should use to connect to this worker.
 
-اگر کدی دارید که می‌خواهید هر زمان که جولیا اجرا می‌شود آن هم اجرا شود، کافیست آن را در `julia/config/startup.jl./~` قرار دهید:
+If you have code that you want executed whenever Julia is run, you can put it in
+`~/.julia/config/startup.jl`:
 
 ```
 $ echo 'println("Greetings! 你好! 안녕하세요?")' > ~/.julia/config/startup.jl
@@ -61,56 +86,20 @@ Greetings! 你好! 안녕하세요?
 ...
 ```
 
-توجه داشته باشید که اگرچه زمانی که برای اولین بار جولیا را اجرا کنید باید یک دایرکتوری `~/.julia` ایجاد شده باشد، ممکن است لازم باشد که پوشه `~/.julia/config` و فایل `~/.julia/config/startup.jl` را خودتان ایجاد کنید تا بتوانید از آن‌ها استفاده کنید.
+Note that although you should have a `~/.julia` directory once you've run Julia for the
+first time, you may need to create the `~/.julia/config` folder and the
+`~/.julia/config/startup.jl` file if you use it.
 
-راه های مختلفی برای اجرای کد جولیا وجود دارد و شبیه گزینه هایی هستند که برای برنامه های پرل(`perl`) و روبی(`ruby`) ارائه شده اند:
+There are various ways to run Julia code and provide options, similar to those available for the
+`perl` and `ruby` programs:
 
 ```
 julia [switches] -- [programfile] [args...]
 ```
 
-|سوئیچ                                 |توضیحات|
-|:---                                   |:---|
-|&lrm;`-v`, `--version`                 |اطلاعات نسخه را نمایش می‌دهد|
-|&lrm;`-h`, `--help`                          |گزینه‌های خط فرمان را نمایش می‌دهد|
-|&lrm;`--project[={<dir>\|@.}]`              |Set <dir\> as the home project/environment. The default @. option will search through parent directories until a Project.toml or JuliaProject.toml file is found.|
-|&lrm;`-J`, `--sysimage <file>`&lrm;             |Start up with the given system image file|
-|&lrm;`-H`, `--home <dir>`&lrm;                   |Set location of `julia` executable|
-|&lrm;`--startup-file={yes\|no}`             |Load `~/.julia/config/startup.jl`|
-|&lrm;`--handle-signals={yes\|no}`           |Enable or disable Julia's default signal handlers|
-|&lrm;`--sysimage-native-code={yes\|no}`     |Use native code from system image if available|
-|&lrm;`--compiled-modules={yes\|no}`         |Enable or disable incremental precompilation of modules|
-|&lrm;`-e`, `--eval <expr>`&lrm;                  |مقدار &lrm;`<expr>`&lrm; را محاسبه می‌کند|
-|&lrm;`-E`, `--print <expr>`&lrm;                 |Evaluate `<expr>`&lrm; and display the result|
-|&lrm;`-L`, `--load <file>`&lrm;                  |Load `<file>`&lrm; immediately on all processors|
-|&lrm;`-t`, `--threads {N\|auto}`            |Enable N threads; `auto` currently sets N to the number of local CPU threads but this might change in the future|
-|&lrm;`-p`, `--procs {N\|auto}`              |Integer value N launches N additional local worker processes; `auto` launches as many workers as the number of local CPU threads (logical cores)|
-|&lrm;`--machine-file <file>`&lrm;                |Run processes on hosts listed in `<file>`&lrm;|
-|&lrm;`-i`                                   |Interactive mode; REPL runs and `isinteractive()` is true|
-|&lrm;`-q`, `--quiet`                        |Quiet startup: no banner, suppress REPL warnings|
-|&lrm;`--banner={yes\|no\|auto}`             |Enable or disable startup banner|
-|&lrm;`--color={yes\|no\|auto}`              |Enable or disable color text|
-|&lrm;`--history-file={yes\|no}`             |Load or save history|
-|&lrm;`--depwarn={yes\|no\|error}`           |Enable or disable syntax and method deprecation warnings (`error` turns warnings into errors)|
-|&lrm;`--warn-overwrite={yes\|no}`           |Enable or disable method overwrite warnings|
-|&lrm;`-C`, `--cpu-target <target>`&lrm;          |Limit usage of CPU features up to `<target>`&lrm;; set to `help` to see the available options|
-|&lrm;`-O`, `--optimize={0,1,2,3}`           |Set the optimization level (default level is 2 if unspecified or 3 if used without a level)|
-|&lrm;`-g`, `-g <level>`&lrm;                     |Enable / Set the level of debug info generation (default level is 1 if unspecified or 2 if used without a level)|
-|&lrm;`--inline={yes\|no}`                   |Control whether inlining is permitted, including overriding `@inline` declarations|
-|&lrm;`--check-bounds={yes\|no}`             |Emit bounds checks always or never (ignoring declarations)|
-|&lrm;`--math-mode={ieee,fast}`              |Disallow or enable unsafe floating point optimizations (overrides @fastmath declaration)|
-|&lrm;`--code-coverage={none\|user\|all}`    |Count executions of source lines|
-|&lrm;`--code-coverage`                      |equivalent to `--code-coverage=user`|
-|&lrm;`--track-allocation={none\|user\|all}` |Count bytes allocated by each source line|
-|&lrm;`--track-allocation`                   |equivalent to `--track-allocation=user`|
+A detailed list of all the available switches can be found at [Command-line Options](@ref
+command-line-options).
 
----
-**سازگاری Julia 1.1**
+## Resources
 
-در جولیا 1.0 ، گزینه پیش فرض `--project=@.` از پوشه root مخزن Git برای فایل `Project.toml` جستجو نمی‌کرد. از جولیا 1.1 به بعد، می‌کند.
-
----
-
-## منابع
-
-لیستی از منابع یادگیری مفید برای کمک به کاربران جدید را می توانید در صفحه [یادگیری](https://julialang.org/learning/) وب سایت اصلی جولیا بیابید.
+A curated list of useful learning resources to help new users get started can be found on the [learning](https://julialang.org/learning/) page of the main Julia web site.
