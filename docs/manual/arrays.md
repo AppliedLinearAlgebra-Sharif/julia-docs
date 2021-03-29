@@ -1,16 +1,16 @@
-# [Multi-dimensional Arrays](@id man-multi-dim-arrays)
+# Multi-dimensional Arrays
 
 Julia, like most technical computing languages, provides a first-class array implementation. Most
 technical computing languages pay a lot of attention to their array implementation at the expense
 of other containers. Julia does not treat arrays in any special way. The array library is implemented
 almost completely in Julia itself, and derives its performance from the compiler, just like any
 other code written in Julia. As such, it's also possible to define custom array types by inheriting
-from [`AbstractArray`](@ref). See the [manual section on the AbstractArray interface](@ref man-interface-array) for more details
+from `AbstractArray`. See the [manual section on the AbstractArray interface](@ref man-interface-array) for more details
 on implementing a custom array type.
 
 An array is a collection of objects stored in a multi-dimensional grid. In the most general case,
-an array may contain objects of type [`Any`](@ref). For most computational purposes, arrays should contain
-objects of a more specific type, such as [`Float64`](@ref) or [`Int32`](@ref).
+an array may contain objects of type `Any`. For most computational purposes, arrays should contain
+objects of a more specific type, such as `Float64` or `Int32`.
 
 In general, unlike many other technical computing languages, Julia does not expect programs to
 be written in a vectorized style for performance. Julia's compiler uses type inference and generates
@@ -23,7 +23,7 @@ sharing](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing)
 while this prevents accidental modification by callees of a value in the caller,
 it makes avoiding unwanted copying of arrays difficult. By convention, a
 function name ending with a `!` indicates that it will mutate or destroy the
-value of one or more of its arguments (compare, for example, [`sort`](@ref) and [`sort!`](@ref)).
+value of one or more of its arguments (compare, for example, `sort` and `sort!`).
 Callees must make explicit copies to ensure that they don't modify inputs that
 they don't intend to change. Many non- mutating functions are implemented by
 calling a function of the same name with an added `!` at the end on an explicit
@@ -33,16 +33,16 @@ copy of the input, and returning that copy.
 
 | Function               | Description                                                                      |
 |:---------------------- |:-------------------------------------------------------------------------------- |
-| [`eltype(A)`](@ref)    | the type of the elements contained in `A`                                        |
-| [`length(A)`](@ref)    | the number of elements in `A`                                                    |
-| [`ndims(A)`](@ref)     | the number of dimensions of `A`                                                  |
-| [`size(A)`](@ref)      | a tuple containing the dimensions of `A`                                         |
-| [`size(A,n)`](@ref)    | the size of `A` along dimension `n`                                              |
-| [`axes(A)`](@ref)      | a tuple containing the valid indices of `A`                                      |
-| [`axes(A,n)`](@ref)    | a range expressing the valid indices along dimension `n`                         |
-| [`eachindex(A)`](@ref) | an efficient iterator for visiting each position in `A`                          |
-| [`stride(A,k)`](@ref)  | the stride (linear index distance between adjacent elements) along dimension `k` |
-| [`strides(A)`](@ref)   | a tuple of the strides in each dimension                                         |
+| `eltype(A)`    | the type of the elements contained in `A`                                        |
+| `length(A)`    | the number of elements in `A`                                                    |
+| `ndims(A)`     | the number of dimensions of `A`                                                  |
+| `size(A)`      | a tuple containing the dimensions of `A`                                         |
+| `size(A,n)`    | the size of `A` along dimension `n`                                              |
+| `axes(A)`      | a tuple containing the valid indices of `A`                                      |
+| `axes(A,n)`    | a range expressing the valid indices along dimension `n`                         |
+| `eachindex(A)` | an efficient iterator for visiting each position in `A`                          |
+| `stride(A,k)`  | the stride (linear index distance between adjacent elements) along dimension `k` |
+| `strides(A)`   | a tuple of the strides in each dimension                                         |
 
 ## Construction and Initialization
 
@@ -50,26 +50,26 @@ Many functions for constructing and initializing arrays are provided. In the fol
 such functions, calls with a `dims...` argument can either take a single tuple of dimension sizes
 or a series of dimension sizes passed as a variable number of arguments. Most of these functions
 also accept a first input `T`, which is the element type of the array. If the type `T` is
-omitted it will default to [`Float64`](@ref).
+omitted it will default to `Float64`.
 
 | Function                           | Description                                                                                                                                                                                                                                  |
 |:---------------------------------- |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`Array{T}(undef, dims...)`](@ref)             | an uninitialized dense [`Array`](@ref)                                                                                                                                                                                                              |
-| [`zeros(T, dims...)`](@ref)                    | an `Array` of all zeros                                                                                                                                                                                                                      |
-| [`ones(T, dims...)`](@ref)                     | an `Array` of all ones                                                                                                                                                                                                                       |
-| [`trues(dims...)`](@ref)                       | a [`BitArray`](@ref) with all values `true`                                                                                                                                                                                                  |
-| [`falses(dims...)`](@ref)                      | a `BitArray` with all values `false`                                                                                                                                                                                                         |
-| [`reshape(A, dims...)`](@ref)                  | an array containing the same data as `A`, but with different dimensions                                                                                                                                                                      |
-| [`copy(A)`](@ref)                              | copy `A`                                                                                                                                                                                                                                     |
-| [`deepcopy(A)`](@ref)                          | copy `A`, recursively copying its elements                                                                                                                                                                                                   |
-| [`similar(A, T, dims...)`](@ref)               | an uninitialized array of the same type as `A` (dense, sparse, etc.), but with the specified element type and dimensions. The second and third arguments are both optional, defaulting to the element type and dimensions of `A` if omitted. |
-| [`reinterpret(T, A)`](@ref)                    | an array with the same binary data as `A`, but with element type `T`                                                                                                                                                                         |
-| [`rand(T, dims...)`](@ref)                     | an `Array` with random, iid [^1] and uniformly distributed values in the half-open interval ``[0, 1)``                                                                                                                                       |
-| [`randn(T, dims...)`](@ref)                    | an `Array` with random, iid and standard normally distributed values                                                                                                                                                                         |
-| [`Matrix{T}(I, m, n)`](@ref)                   | `m`-by-`n` identity matrix. Requires `using LinearAlgebra` for [`I`](@ref).                                                                                                                                                                                                                   |
-| [`range(start, stop=stop, length=n)`](@ref)    | range of `n` linearly spaced elements from `start` to `stop`                                                                                                                                                                                 |
-| [`fill!(A, x)`](@ref)                          | fill the array `A` with the value `x`                                                                                                                                                                                                        |
-| [`fill(x, dims...)`](@ref)                     | an `Array` filled with the value `x`                                                                                                                                                                                                         |
+| `Array{T}(undef, dims...)`             | an uninitialized dense `Array`                                                                                                                                                                                                              |
+| `zeros(T, dims...)`                    | an `Array` of all zeros                                                                                                                                                                                                                      |
+| `ones(T, dims...)`                     | an `Array` of all ones                                                                                                                                                                                                                       |
+| `trues(dims...)`                       | a `BitArray` with all values `true`                                                                                                                                                                                                  |
+| `falses(dims...)`                      | a `BitArray` with all values `false`                                                                                                                                                                                                         |
+| `reshape(A, dims...)`                  | an array containing the same data as `A`, but with different dimensions                                                                                                                                                                      |
+| `copy(A)`                              | copy `A`                                                                                                                                                                                                                                     |
+| `deepcopy(A)`                          | copy `A`, recursively copying its elements                                                                                                                                                                                                   |
+| `similar(A, T, dims...)`               | an uninitialized array of the same type as `A` (dense, sparse, etc.), but with the specified element type and dimensions. The second and third arguments are both optional, defaulting to the element type and dimensions of `A` if omitted. |
+| `reinterpret(T, A)`                    | an array with the same binary data as `A`, but with element type `T`                                                                                                                                                                         |
+| `rand(T, dims...)`                     | an `Array` with random, iid [^1] and uniformly distributed values in the half-open interval ``[0, 1)``                                                                                                                                       |
+| `randn(T, dims...)`                    | an `Array` with random, iid and standard normally distributed values                                                                                                                                                                         |
+| `Matrix{T}(I, m, n)`                   | `m`-by-`n` identity matrix. Requires `using LinearAlgebra` for `I`.                                                                                                                                                                                                                   |
+| `range(start, stop=stop, length=n)`    | range of `n` linearly spaced elements from `start` to `stop`                                                                                                                                                                                 |
+| `fill!(A, x)`                          | fill the array `A` with the value `x`                                                                                                                                                                                                        |
+| `fill(x, dims...)`                     | an `Array` filled with the value `x`                                                                                                                                                                                                         |
 
 [^1]: *iid*, independently and identically distributed.
 
@@ -90,17 +90,17 @@ julia> zeros((2, 3))
  0.0  0.0  0.0
  0.0  0.0  0.0
 ```
-Here, `(2, 3)` is a [`Tuple`](@ref) and the first argument — the element type — is optional, defaulting to `Float64`.
+Here, `(2, 3)` is a `Tuple` and the first argument — the element type — is optional, defaulting to `Float64`.
 
-## [Array literals](@id man-array-literals)
+## Array literals
 
 Arrays can also be directly constructed with square braces; the syntax `[A, B, C, ...]`
 creates a one dimensional array (i.e., a vector) containing the comma-separated arguments as
-its elements. The element type ([`eltype`](@ref)) of the resulting array is automatically
+its elements. The element type (`eltype`) of the resulting array is automatically
 determined by the types of the arguments inside the braces. If all the arguments are the
 same type, then that is its `eltype`. If they all have a common
 [promotion type](@ref conversion-and-promotion) then they get converted to that type using
-[`convert`](@ref) and that type is the array's `eltype`. Otherwise, a heterogeneous array
+`convert` and that type is the array's `eltype`. Otherwise, a heterogeneous array
 that can hold anything — a `Vector{Any}` — is constructed; this includes the literal `[]`
 where no arguments are given.
 
@@ -124,7 +124,7 @@ julia> []
 Any[]
 ```
 
-### [Concatenation](@id man-array-concatenation)
+### Concatenation
 
 If the arguments inside the square brackets are separated by semicolons (`;`) or newlines
 instead of commas, then their contents are _vertically concatenated_ together instead of
@@ -191,15 +191,15 @@ julia> [zeros(Int, 2, 2) [1; 2]
  3  4  5
 ```
 
-More generally, concatenation can be accomplished through the [`cat`](@ref) function.
+More generally, concatenation can be accomplished through the `cat` function.
 These syntaxes are shorthands for function calls that themselves are convenience functions:
 
 | Syntax            | Function        | Description                                        |
 |:----------------- |:--------------- |:-------------------------------------------------- |
-|                   | [`cat`](@ref)   | concatenate input arrays along dimension(s) `k`    |
-| `[A; B; C; ...]`  | [`vcat`](@ref)  | shorthand for `cat(A...; dims=1)                   |
-| `[A B C ...]`     | [`hcat`](@ref)  | shorthand for `cat(A...; dims=2)                   |
-| `[A B; C D; ...]` | [`hvcat`](@ref) | simultaneous vertical and horizontal concatenation |
+|                   | `cat`   | concatenate input arrays along dimension(s) `k`    |
+| `A; B; C; ...]`  | [`vcat`  | shorthand for `cat(A...; dims=1)                   |
+| `A B C ...]`     | [`hcat`  | shorthand for `cat(A...; dims=2)                   |
+| `A B; C D; ...]` | [`hvcat` | simultaneous vertical and horizontal concatenation |
 
 ### Typed array literals
 
@@ -220,7 +220,7 @@ julia> Int8[[1 2] [3 4]]
  1  2  3  4
 ```
 
-## [Comprehensions](@id man-comprehensions)
+## Comprehensions
 
 Comprehensions provide a general and powerful way to construct arrays. Comprehension syntax is
 similar to set construction notation in mathematics:
@@ -272,7 +272,7 @@ Float32[ 0.25*x[i-1] + 0.5*x[i] + 0.25*x[i+1] for i=2:length(x)-1 ]
 
 Comprehensions can also be written without the enclosing square brackets, producing an object
 known as a generator. This object can be iterated to produce values on demand, instead of allocating
-an array and storing them in advance (see [Iteration](@ref)). For example, the following expression
+an array and storing them in advance (see Iteration). For example, the following expression
 sums a series without allocating memory:
 
 ```jldoctest
@@ -289,7 +289,7 @@ ERROR: syntax: invalid iteration specification
 ```
 
 All comma-separated expressions after `for` are interpreted as ranges. Adding parentheses lets
-us add a third argument to [`map`](@ref):
+us add a third argument to `map`:
 
 ```jldoctest
 julia> map(tuple, (1/(i+j) for i=1:2, j=1:2), [1 3; 2 4])
@@ -331,7 +331,7 @@ julia> [(i,j) for i=1:3 for j=1:i if i+j == 4]
  (3, 1)
 ```
 
-## [Indexing](@id man-array-indexing)
+## Indexing
 
 The general syntax for indexing into an n-dimensional array `A` is:
 
@@ -341,7 +341,7 @@ X = A[I_1, I_2, ..., I_n]
 
 where each `I_k` may be a scalar integer, an array of integers, or any other
 [supported index](@ref man-supported-index-types). This includes
-[`Colon`](@ref) (`:`) to select all indices within the entire dimension,
+`Colon` (`:`) to select all indices within the entire dimension,
 ranges of the form `a:c` or `a:b:c` to select contiguous or strided
 subsections, and arrays of booleans to select elements at their `true` indices.
 
@@ -424,7 +424,7 @@ array with size `size(J)`. Its `j`th element is populated by `A[2, J[j], 3]`.
 
 As a special part of this syntax, the `end` keyword may be used to represent the last index of
 each dimension within the indexing brackets, as determined by the size of the innermost array
-being indexed. Indexing syntax without the `end` keyword is equivalent to a call to [`getindex`](@ref):
+being indexed. Indexing syntax without the `end` keyword is equivalent to a call to `getindex`:
 
 ```
 X = getindex(A, I_1, I_2, ..., I_n)
@@ -451,7 +451,7 @@ julia> x[1, [2 3; 4 1]]
  13  1
 ```
 
-## [Indexed Assignment](@id man-indexed-assignment)
+## Indexed Assignment
 
 The general syntax for assigning values in an n-dimensional array `A` is:
 
@@ -461,13 +461,13 @@ A[I_1, I_2, ..., I_n] = X
 
 where each `I_k` may be a scalar integer, an array of integers, or any other
 [supported index](@ref man-supported-index-types). This includes
-[`Colon`](@ref) (`:`) to select all indices within the entire dimension,
+`Colon` (`:`) to select all indices within the entire dimension,
 ranges of the form `a:c` or `a:b:c` to select contiguous or strided
 subsections, and arrays of booleans to select elements at their `true` indices.
 
 If all indices `I_k` are integers, then the value in location `I_1, I_2, ..., I_n` of `A` is
-overwritten with the value of `X`, [`convert`](@ref)ing to the
-[`eltype`](@ref) of `A` if necessary.
+overwritten with the value of `X`, `convert`ing to the
+`eltype` of `A` if necessary.
 
 
 If any index `I_k` selects more than one location, then the right hand side `X` must be an
@@ -486,7 +486,7 @@ Just as in [Indexing](@ref man-array-indexing), the `end` keyword may be used
 to represent the last index of each dimension within the indexing brackets, as
 determined by the size of the array being assigned into. Indexed assignment
 syntax without the `end` keyword is equivalent to a call to
-[`setindex!`](@ref):
+`setindex!`:
 
 ```
 setindex!(A, X, I_1, I_2, ..., I_n)
@@ -512,23 +512,23 @@ julia> x
   3   6  -9
 ```
 
-## [Supported index types](@id man-supported-index-types)
+## Supported index types
 
 In the expression `A[I_1, I_2, ..., I_n]`, each `I_k` may be a scalar index, an
 array of scalar indices, or an object that represents an array of scalar
-indices and can be converted to such by [`to_indices`](@ref):
+indices and can be converted to such by `to_indices`:
 
 1. A scalar index. By default this includes:
     * Non-boolean integers
-    * [`CartesianIndex{N}`](@ref)s, which behave like an `N`-tuple of integers spanning multiple dimensions (see below for more details)
+    * `CartesianIndex{N}`s, which behave like an `N`-tuple of integers spanning multiple dimensions (see below for more details)
 2. An array of scalar indices. This includes:
     * Vectors and multidimensional arrays of integers
     * Empty arrays like `[]`, which select no elements
     * Ranges like `a:c` or `a:b:c`, which select contiguous or strided subsections from `a` to `c` (inclusive)
     * Any custom array of scalar indices that is a subtype of `AbstractArray`
     * Arrays of `CartesianIndex{N}` (see below for more details)
-3. An object that represents an array of scalar indices and can be converted to such by [`to_indices`](@ref). By default this includes:
-    * [`Colon()`](@ref) (`:`), which represents all indices within an entire dimension or across the entire array
+3. An object that represents an array of scalar indices and can be converted to such by `to_indices`. By default this includes:
+    * `Colon()` (`:`), which represents all indices within an entire dimension or across the entire array
     * Arrays of booleans, which select elements at their `true` indices (see below for more details)
 
 Some examples:
@@ -594,7 +594,7 @@ Considered alone, this may seem relatively trivial; `CartesianIndex` simply
 gathers multiple integers together into one object that represents a single
 multidimensional index. When combined with other indexing forms and iterators
 that yield `CartesianIndex`es, however, this can produce very elegant
-and efficient code. See [Iteration](@ref) below, and for some more advanced
+and efficient code. See Iteration below, and for some more advanced
 examples, see [this blog post on multidimensional algorithms and
 iteration](https://julialang.org/blog/2016/02/iteration).
 
@@ -643,24 +643,27 @@ julia> A[CartesianIndex.(axes(A, 1), axes(A, 2)), :]
  16  32
 ```
 
-!!! warning
+```eval_rst
+
+.. warning::
 
     `CartesianIndex` and arrays of `CartesianIndex` are not compatible with the
     `end` keyword to represent the last index of a dimension. Do not use `end`
     in indexing expressions that may contain either `CartesianIndex` or arrays thereof.
+```
 
 ### Logical indexing
 
 Often referred to as logical indexing or indexing with a logical mask, indexing
 by a boolean array selects elements at the indices where its values are `true`.
 Indexing by a boolean vector `B` is effectively the same as indexing by the
-vector of integers that is returned by [`findall(B)`](@ref). Similarly, indexing
+vector of integers that is returned by `findall(B)`. Similarly, indexing
 by a `N`-dimensional boolean array is effectively the same as indexing by the
 vector of `CartesianIndex{N}`s where its values are `true`. A logical index
 must be a vector of the same length as the dimension it indexes into, or it
 must be the only index provided and match the size and dimensionality of the
 array it indexes into. It is generally more efficient to use boolean arrays as
-indices directly instead of first calling [`findall`](@ref).
+indices directly instead of first calling `findall`.
 
 ```jldoctest
 julia> x = reshape(1:16, 4, 4)
@@ -706,7 +709,7 @@ When exactly one index `i` is provided, that index no longer represents a locati
 particular dimension of the array. Instead, it selects the `i`th element using the
 column-major iteration order that linearly spans the entire array. This is known as _linear
 indexing_. It essentially treats the array as though it had been reshaped into a
-one-dimensional vector with [`vec`](@ref).
+one-dimensional vector with `vec`.
 
 ```jldoctest linindexing
 julia> A = [2 6; 4 7; 3 1]
@@ -723,9 +726,9 @@ julia> vec(A)[5]
 ```
 
 A linear index into the array `A` can be converted to a `CartesianIndex` for cartesian
-indexing with `CartesianIndices(A)[i]` (see [`CartesianIndices`](@ref)), and a set of
+indexing with `CartesianIndices(A)i]` (see [`CartesianIndices`), and a set of
 `N` cartesian indices can be converted to a linear index with
-`LinearIndices(A)[i_1, i_2, ..., i_N]` (see [`LinearIndices`](@ref)).
+`LinearIndices(A)i_1, i_2, ..., i_N]` (see [`LinearIndices`).
 
 ```jldoctest linindexing
 julia> CartesianIndices(A)[5]
@@ -739,12 +742,12 @@ It's important to note that there's a very large assymmetry in the performance
 of these conversions. Converting a linear index to a set of cartesian indices
 requires dividing and taking the remainder, whereas going the other way is just
 multiplies and adds. In modern processors, integer division can be 10-50 times
-slower than multiplication. While some arrays — like [`Array`](@ref) itself —
+slower than multiplication. While some arrays — like `Array` itself —
 are implemented using a linear chunk of memory and directly use a linear index
-in their implementations, other arrays — like [`Diagonal`](@ref) — need the
-full set of cartesian indices to do their lookup (see [`IndexStyle`](@ref) to
+in their implementations, other arrays — like `Diagonal` — need the
+full set of cartesian indices to do their lookup (see `IndexStyle` to
 introspect which is which). As such, when iterating over an entire array, it's
-much better to iterate over [`eachindex(A)`](@ref) instead of `1:length(A)`.
+much better to iterate over `eachindex(A)` instead of `1:length(A)`.
 Not only will the former be much faster in cases where `A` is `IndexCartesian`,
 but it will also support OffsetArrays, too.
 
@@ -838,12 +841,12 @@ i = CartesianIndex(2, 2)
 i = CartesianIndex(3, 2)
 ```
 
-In contrast with `for i = 1:length(A)`, iterating with [`eachindex`](@ref) provides an efficient way to
+In contrast with `for i = 1:length(A)`, iterating with `eachindex` provides an efficient way to
 iterate over any array type.
 
 ## Array traits
 
-If you write a custom [`AbstractArray`](@ref) type, you can specify that it has fast linear indexing using
+If you write a custom `AbstractArray` type, you can specify that it has fast linear indexing using
 
 ```julia
 Base.IndexStyle(::Type{<:MyArray}) = IndexLinear()
@@ -852,18 +855,18 @@ Base.IndexStyle(::Type{<:MyArray}) = IndexLinear()
 This setting will cause `eachindex` iteration over a `MyArray` to use integers. If you don't
 specify this trait, the default value `IndexCartesian()` is used.
 
-## [Array and Vectorized Operators and Functions](@id man-array-and-vectorized-operators-and-functions)
+## Array and Vectorized Operators and Functions
 
 The following operators are supported for arrays:
 
 1. Unary arithmetic -- `-`, `+`
 2. Binary arithmetic -- `-`, `+`, `*`, `/`, `\`, `^`
-3. Comparison -- `==`, `!=`, `≈` ([`isapprox`](@ref)), `≉`
+3. Comparison -- `==`, `!=`, `≈` (`isapprox`), `≉`
 
 To enable convenient vectorization of mathematical and other operations,
 Julia [provides the dot syntax](@ref man-vectorized) `f.(args...)`, e.g. `sin.(x)`
 or `min.(x,y)`, for elementwise operations over arrays or mixtures of arrays and
-scalars (a [Broadcasting](@ref) operation); these have the additional advantage of
+scalars (a Broadcasting operation); these have the additional advantage of
 "fusing" into a single loop when combined with other dot calls, e.g. `sin.(cos.(x))`.
 
 Also, *every* binary operator supports a [dot version](@ref man-dot-operators)
@@ -874,8 +877,8 @@ Note that comparisons such as `==` operate on whole arrays, giving a single bool
 answer. Use dot operators like `.==` for elementwise comparisons. (For comparison
 operations like `<`, *only* the elementwise `.<` version is applicable to arrays.)
 
-Also notice the difference between `max.(a,b)`, which [`broadcast`](@ref)s [`max`](@ref)
-elementwise over `a` and `b`, and [`maximum(a)`](@ref), which finds the largest value within
+Also notice the difference between `max.(a,b)`, which `broadcast`s `max`
+elementwise over `a` and `b`, and `maximum(a)`, which finds the largest value within
 `a`. The same relationship holds for `min.(a,b)` and `minimum(a)`.
 
 ## Broadcasting
@@ -893,7 +896,7 @@ julia> repeat(a,1,3)+A
  1.56851  1.86401  1.67846
 ```
 
-This is wasteful when dimensions get large, so Julia provides [`broadcast`](@ref), which expands
+This is wasteful when dimensions get large, so Julia provides `broadcast`, which expands
 singleton dimensions in array arguments to match the corresponding dimension in the other array
 without using extra memory, and applies the given function elementwise:
 
@@ -915,13 +918,13 @@ julia> broadcast(+, a, b)
 
 [Dotted operators](@ref man-dot-operators) such as `.+` and `.*` are equivalent
 to `broadcast` calls (except that they fuse, as [described above](@ref man-array-and-vectorized-operators-and-functions)). There is also a
-[`broadcast!`](@ref) function to specify an explicit destination (which can also
+`broadcast!` function to specify an explicit destination (which can also
 be accessed in a fusing fashion by `.=` assignment). In fact, `f.(args...)`
 is equivalent to `broadcast(f, args...)`, providing a convenient syntax to broadcast any function
 ([dot syntax](@ref man-vectorized)). Nested "dot calls" `f.(...)` (including calls to `.+` etcetera)
 [automatically fuse](@ref man-dot-operators) into a single `broadcast` call.
 
-Additionally, [`broadcast`](@ref) is not limited to arrays (see the function documentation);
+Additionally, `broadcast` is not limited to arrays (see the function documentation);
 it also handles scalars, tuples and other collections.  By default, only some argument types are
 considered scalars, including (but not limited to) `Number`s, `String`s, `Symbol`s, `Type`s, `Function`s
 and some common singletons like `missing` and `nothing`. All other arguments are
@@ -947,7 +950,7 @@ julia> string.(1:3, ". ", ["First", "Second", "Third"])
 
 Sometimes, you want a container (like an array) that would normally participate in broadcast to be "protected"
 from broadcast's behavior of iterating over all of its elements. By placing it inside another container
-(like a single element [`Tuple`](@ref)) broadcast will treat it as a single value.
+(like a single element `Tuple`) broadcast will treat it as a single value.
 ```jldoctest
 julia> ([1, 2, 3], [4, 5, 6]) .+ ([1, 2, 3],)
 ([2, 4, 6], [5, 7, 9])
@@ -958,8 +961,8 @@ julia> ([1, 2, 3], [4, 5, 6]) .+ tuple([1, 2, 3])
 
 ## Implementation
 
-The base array type in Julia is the abstract type [`AbstractArray{T,N}`](@ref). It is parameterized by
-the number of dimensions `N` and the element type `T`. [`AbstractVector`](@ref) and [`AbstractMatrix`](@ref) are
+The base array type in Julia is the abstract type `AbstractArray{T,N}`. It is parameterized by
+the number of dimensions `N` and the element type `T`. `AbstractVector` and `AbstractMatrix` are
 aliases for the 1-d and 2-d cases. Operations on `AbstractArray` objects are defined using higher
 level operators and functions, in a way that is independent of the underlying storage. These operations
 generally work correctly as a fallback for any specific array implementation.
@@ -967,43 +970,43 @@ generally work correctly as a fallback for any specific array implementation.
 The `AbstractArray` type includes anything vaguely array-like, and implementations of it might
 be quite different from conventional arrays. For example, elements might be computed on request
 rather than stored. However, any concrete `AbstractArray{T,N}` type should generally implement
-at least [`size(A)`](@ref) (returning an `Int` tuple), [`getindex(A,i)`](@ref) and [`getindex(A,i1,...,iN)`](@ref getindex);
-mutable arrays should also implement [`setindex!`](@ref). It is recommended that these operations
+at least `size(A)` (returning an `Int` tuple), `getindex(A,i)` and [`getindex(A,i1,...,iN)`](@ref getindex);
+mutable arrays should also implement `setindex!`. It is recommended that these operations
 have nearly constant time complexity, as otherwise some array
-functions may be unexpectedly slow. Concrete types should also typically provide a [`similar(A,T=eltype(A),dims=size(A))`](@ref)
-method, which is used to allocate a similar array for [`copy`](@ref) and other out-of-place
+functions may be unexpectedly slow. Concrete types should also typically provide a `similar(A,T=eltype(A),dims=size(A))`
+method, which is used to allocate a similar array for `copy` and other out-of-place
 operations. No matter how an `AbstractArray{T,N}` is represented internally, `T` is the type of
 object returned by *integer* indexing (`A[1, ..., 1]`, when `A` is not empty) and `N` should be
-the length of the tuple returned by [`size`](@ref). For more details on defining custom
+the length of the tuple returned by `size`. For more details on defining custom
 `AbstractArray` implementations, see the [array interface guide in the interfaces chapter](@ref man-interface-array).
 
 `DenseArray` is an abstract subtype of `AbstractArray` intended to include all arrays where
 elements are stored contiguously in column-major order (see [additional notes in
-Performance Tips](@ref man-performance-column-major)). The [`Array`](@ref) type is a specific instance
-of `DenseArray`;  [`Vector`](@ref) and [`Matrix`](@ref) are aliases for the 1-d and 2-d cases.
+Performance Tips](@ref man-performance-column-major)). The `Array` type is a specific instance
+of `DenseArray`;  `Vector` and `Matrix` are aliases for the 1-d and 2-d cases.
 Very few operations are implemented specifically for `Array` beyond those that are required
 for all `AbstractArray`s; much of the array library is implemented in a generic
 manner that allows all custom arrays to behave similarly.
 
 `SubArray` is a specialization of `AbstractArray` that performs indexing by
 sharing memory with the original array rather than by copying it. A `SubArray`
-is created with the [`view`](@ref) function, which is called the same way as
-[`getindex`](@ref) (with an array and a series of index arguments). The result
-of [`view`](@ref) looks the same as the result of [`getindex`](@ref), except the
-data is left in place. [`view`](@ref) stores the input index vectors in a
+is created with the `view` function, which is called the same way as
+`getindex` (with an array and a series of index arguments). The result
+of `view` looks the same as the result of `getindex`, except the
+data is left in place. `view` stores the input index vectors in a
 `SubArray` object, which can later be used to index the original array
-indirectly.  By putting the [`@views`](@ref) macro in front of an expression or
+indirectly.  By putting the `@views` macro in front of an expression or
 block of code, any `array[...]` slice in that expression will be converted to
 create a `SubArray` view instead.
 
-[`BitArray`](@ref)s are space-efficient "packed" boolean arrays, which store one bit per boolean value.
+`BitArray`s are space-efficient "packed" boolean arrays, which store one bit per boolean value.
 They can be used similarly to `Array{Bool}` arrays (which store one byte per boolean value),
 and can be converted to/from the latter via `Array(bitarray)` and `BitArray(array)`, respectively.
 
 An array is "strided" if it is stored in memory with well-defined spacings (strides) between
 its elements. A strided array with a supported element type may be passed to an external
-(non-Julia) library like BLAS or LAPACK by simply passing its [`pointer`](@ref) and the
-stride for each dimension. The [`stride(A, d)`](@ref) is the distance between elements along
+(non-Julia) library like BLAS or LAPACK by simply passing its `pointer` and the
+stride for each dimension. The `stride(A, d)` is the distance between elements along
 dimension `d`. For example, the builtin `Array` returned by `rand(5,7,2)` has its elements
 arranged contiguously in column major order. This means that the stride of the first
 dimension — the spacing between elements in the same column — is `1`:
@@ -1017,7 +1020,7 @@ julia> stride(A,1)
 
 The stride of the second dimension is the spacing between elements in the same row, skipping
 as many elements as there are in a single column (`5`). Similarly, jumping between the two
-"pages" (in the third dimension) requires skipping `5*7 == 35` elements.  The [`strides`](@ref)
+"pages" (in the third dimension) requires skipping `5*7 == 35` elements.  The `strides`
 of this array is the tuple of these three numbers together:
 
 ```julia-repl
@@ -1061,11 +1064,11 @@ julia> stride(V, 3)
 This means that the `pointer` for `V` is actually pointing into the middle of `A`'s memory
 block, and it refers to elements both backwards and forwards in memory. See the
 [interface guide for strided arrays](@ref man-interface-strided-arrays) for more details on
-defining your own strided arrays. [`StridedVector`](@ref) and [`StridedMatrix`](@ref) are
+defining your own strided arrays. `StridedVector` and `StridedMatrix` are
 convenient aliases for many of the builtin array types that are considered strided arrays,
 allowing them to dispatch to select specialized implementations that call highly tuned and
 optimized BLAS and LAPACK functions using just the pointer and strides.
 
 It is worth emphasizing that strides are about offsets in memory rather than indexing. If
 you are looking to convert between linear (single-index) indexing and cartesian
-(multi-index) indexing, see [`LinearIndices`](@ref) and [`CartesianIndices`](@ref).
+(multi-index) indexing, see `LinearIndices` and `CartesianIndices`.

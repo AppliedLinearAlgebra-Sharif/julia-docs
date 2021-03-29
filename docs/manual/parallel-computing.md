@@ -6,8 +6,8 @@ Julia supports these four categories of concurrent and parallel programming:
 
     Julia Tasks allow suspending and resuming computations
     for I/O, event handling, producer-consumer processes, and similar patterns.
-    Tasks can synchronize through operations like [`wait`](@ref) and [`fetch`](@ref), and
-    communicate via [`Channel`](@ref)s. While strictly not parallel computing by themselves,
+    Tasks can synchronize through operations like `wait` and `fetch`, and
+    communicate via `Channel`s. While strictly not parallel computing by themselves,
     Julia lets you schedule `Task`s on several threads.
 
 2. **Multi-threading**:

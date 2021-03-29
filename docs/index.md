@@ -1,13 +1,6 @@
 ```eval_rst
 
 .. toctree::
-   :maxdepth: 0
-   :caption: مستندات جولیا
-   :hidden:
-
-   self
-
-.. toctree::
    :maxdepth: 1
    :caption: راهنما
    :hidden:
@@ -51,38 +44,13 @@
    manual/noteworthy-differences
    manual/unicode-input
    manual/command-line-options
-
-.. toctree::
-   :maxdepth: 1
-   :caption: پایه‌ها
-   :hidden:
-
-   base/base
-   base/collections
-   base/math
-   base/numbers
-   base/strings
-   base/arrays
-   base/parallel
-   base/multi-threading
-   base/constants
-   base/file
-   base/io-network
-   base/punctuation
-   base/sort
-   base/iterators
-   base/c
-   base/libc
-   base/stacktraces
-   base/simd-types
-
 ```
 
 # Julia 1.6 Documentation
 
 Welcome to the documentation for Julia 1.6.
 
-### [Introduction](@id man-introduction)
+### Introduction
 
 Scientific computing has traditionally required the highest performance, yet domain experts have
 largely moved to slower dynamic languages for daily work. We believe there are many good reasons

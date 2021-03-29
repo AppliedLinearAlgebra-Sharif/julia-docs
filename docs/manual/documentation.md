@@ -1,4 +1,4 @@
-# [Documentation](@id man-documentation)
+# Documentation
 
 Julia enables package developers and users to document functions, types and other objects easily
 via a built-in documentation system.
@@ -18,10 +18,13 @@ use indentation and code fences to delimit code examples from text. Technically,
 be associated with any other as metadata; Markdown happens to be the default, but one can construct
 other string macros and pass them to the `@doc` macro just as well.
 
-!!! note
+```eval_rst
+
+.. note::
     Markdown support is implemented in the `Markdown` standard library
     and for a full list of supported syntax see the
     [documentation](@ref markdown_stdlib).
+```
 
 Here is a more complex example, still using Markdown:
 
@@ -94,18 +97,20 @@ As in the example above, we recommend following some simple conventions when wri
    a short list of these in a `See also:` paragraph.
 
    ```
-   See also: [`bar!`](@ref), [`baz`](@ref), [`baaz`](@ref)
+   See also: `bar!`, `baz`, `baaz`
    ```
 6. Include any code examples in an `# Examples` section.
 
    Examples should, whenever possible, be written as *doctests*. A *doctest* is a fenced code block
-   (see [Code blocks](@ref)) starting with ````` ```jldoctest````` and contains any number of `julia>`
+   (see Code blocks) starting with ````` ```jldoctest````` and contains any number of `julia>`
    prompts together with inputs and expected outputs that mimic the Julia REPL.
 
-   !!! note
+   ```eval_rst
+   .. note::
        Doctests are enabled by [`Documenter.jl`](https://github.com/JuliaDocs/Documenter.jl).
        For more detailed documentation see Documenter's
        [manual](https://juliadocs.github.io/Documenter.jl/).
+   ```
 
    For example in the following docstring a variable `a` is defined and the expected result, as printed
    in a Julia REPL, appears afterwards:
@@ -124,18 +129,21 @@ As in the example above, we recommend following some simple conventions when wri
    """
    ````
 
-   !!! warning
+   ```eval_rst
+
+   .. warning::
        Calling `rand` and other RNG-related functions should be avoided in doctests since they will not
        produce consistent outputs during different Julia sessions. If you would like to show some random
        number generation related functionality, one option is to explicitly construct and seed your own
-       [`MersenneTwister`](@ref) (or other pseudorandom number generator) and pass it to the functions you are
+       `MersenneTwister` (or other pseudorandom number generator) and pass it to the functions you are
        doctesting.
 
-       Operating system word size ([`Int32`](@ref) or [`Int64`](@ref)) as well as path separator differences
+       Operating system word size (`Int32` or `Int64`) as well as path separator differences
        (`/` or `\`) will also affect the reproducibility of some doctests.
 
        Note that whitespace in your doctest is significant! The doctest will fail if you misalign the
        output of pretty-printing an array, for example.
+   ```
 
    You can then run `make -C doc doctest=true` to run all the doctests in the Julia Manual and API
    documentation, which will ensure that your example works.
@@ -157,9 +165,13 @@ As in the example above, we recommend following some simple conventions when wri
    Examples that are untestable should be written within fenced code blocks starting with ````` ```julia`````
    so that they are highlighted correctly in the generated documentation.
 
-   !!! tip
+   ```eval_rst
+
+   .. tip::
        Wherever possible examples should be **self-contained** and **runnable** so that readers are able
        to try them out without having to include any dependencies.
+   ```
+
 7. Use backticks to identify code and equations.
 
    Julia identifiers and code excerpts should always appear between backticks ``` ` ``` to enable
@@ -319,7 +331,7 @@ will add documentation to `f(x)` when `condition()` is `true`. Note that even if
 out of scope at the end of the block, its documentation will remain.
 
 It is possible to make use of metaprogramming to assist in the creation of documentation.
-When using string-interpolation within the docstring you will need to use an extra ` $ ` as
+When using string-interpolation within the docstring you will need to use an extra `$` as
 shown with `$($name)`:
 
 ```julia
@@ -362,9 +374,9 @@ constructs for which providing documentation is possible.
 
 In the following examples `"..."` is used to illustrate an arbitrary docstring.
 
-### ` $ ` and `\` characters
+### `$` and `\` characters
 
-The ` $ ` and `\` characters are still parsed as string interpolation or start of an escape sequence
+The `$` and `\` characters are still parsed as string interpolation or start of an escape sequence
 in docstrings too. The `raw""` string macro together with the `@doc` macro can be used to avoid
 having to escape them. This is handy when the docstrings include LaTeX or Julia source code examples
 containing interpolation:
@@ -516,7 +528,9 @@ Adds docstring `"..."` to the `Binding`s `a`, `b`, and `c`.
 `Binding`s are used to store a reference to a particular `Symbol` in a `Module` without storing
 the referenced value itself.
 
-!!! note
+```eval_rst
+
+.. note::
     When a `const` definition is only used to define an alias of another definition, such as is the
     case with the function `div` and its alias `÷` in `Base`, do not document the alias and instead
     document the actual function.
@@ -539,6 +553,7 @@ the referenced value itself.
     "..."
     const alias = f
     ```
+```
 
 ```julia
 "..."
@@ -584,7 +599,7 @@ Macro authors should take note that only macros that generate a single expressio
 support docstrings. If a macro returns a block containing multiple subexpressions then the subexpression
 that should be documented must be marked using the [`@__doc__`](@ref Core.@__doc__) macro.
 
-The [`@enum`](@ref) macro makes use of `@__doc__` to allow for documenting [`Enum`](@ref)s.
+The `@enum` macro makes use of `@__doc__` to allow for documenting `Enum`s.
 Examining its definition
 should serve as an example of how to use `@__doc__` correctly.
 

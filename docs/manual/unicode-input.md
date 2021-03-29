@@ -7,13 +7,16 @@ type a symbol by entering it in the REPL help, i.e. by typing `?` and then
 entering the symbol in the REPL (e.g., by copy-paste from somewhere you saw
 the symbol).
 
-!!! warning
+```eval_rst
+
+.. warning::
 
     This table may appear to contain missing characters in the second column, or even
     show characters that are inconsistent with the characters as they are rendered in
     the Julia REPL. In these cases, users are strongly advised to check their choice
     of fonts in their browser and REPL environment, as there are known issues with
     glyphs in many fonts.
+```
 
 ```@eval
 #

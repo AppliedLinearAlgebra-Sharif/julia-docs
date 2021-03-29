@@ -40,11 +40,14 @@ for structuring and organizing programs.
     an explicit method argument. When the current `this` object is the receiver of a method call,
     it can be omitted altogether, writing just `meth(arg1,arg2)`, with `this` implied as the receiving
     object.
-!!! note
+```eval_rst
+
+.. note::
     All the examples in this chapter assume that you are defining modules for a function in the *same*
     module. If you want to add methods to a function in *another* module, you have to `import` it or
     use the name qualified with module names. See the section on [namespace management](@ref
     namespace-management).
+```
 
 ## Defining Methods
 
@@ -56,7 +59,7 @@ have many methods defining their behavior over various possible combinations of 
 and count.
 
 When defining a function, one can optionally constrain the types of parameters it is applicable
-to, using the `::` type-assertion operator, introduced in the section on [Composite Types](@ref):
+to, using the `::` type-assertion operator, introduced in the section on Composite Types:
 
 ```jldoctest fofxy
 julia> f(x::Float64, y::Float64) = 2x + y
@@ -64,14 +67,14 @@ f (generic function with 1 method)
 ```
 
 This function definition applies only to calls where `x` and `y` are both values of type
-[`Float64`](@ref):
+`Float64`:
 
 ```jldoctest fofxy
 julia> f(2.0, 3.0)
 7.0
 ```
 
-Applying it to any other types of arguments will result in a [`MethodError`](@ref):
+Applying it to any other types of arguments will result in a `MethodError`:
 
 ```jldoctest fofxy
 julia> f(2.0, 3)
@@ -93,7 +96,7 @@ julia> f("2.0", "3.0")
 ERROR: MethodError: no method matching f(::String, ::String)
 ```
 
-As you can see, the arguments must be precisely of type [`Float64`](@ref). Other numeric
+As you can see, the arguments must be precisely of type `Float64`. Other numeric
 types, such as integers or 32-bit floating-point values, are not automatically converted
 to 64-bit floating-point, nor are strings parsed as numbers. Because `Float64` is a concrete
 type and concrete types cannot be subclassed in Julia, such a definition can only be applied
@@ -108,7 +111,7 @@ julia> f(2.0, 3)
 1.0
 ```
 
-This method definition applies to any pair of arguments that are instances of [`Number`](@ref).
+This method definition applies to any pair of arguments that are instances of `Number`.
 They need not be of the same type, so long as they are each numeric values. The problem of
 handling disparate numeric types is delegated to the arithmetic operations in the
 expression `2x - y`.
@@ -119,7 +122,7 @@ function object, and subsequent method definitions add new methods to the existi
 The most specific method definition matching the number and types of the arguments will be executed
 when the function is applied. Thus, the two method definitions above, taken together, define the
 behavior for `f` over all pairs of instances of the abstract type `Number` -- but with a different
-behavior specific to pairs of [`Float64`](@ref) values. If one of the arguments is a 64-bit
+behavior specific to pairs of `Float64` values. If one of the arguments is a 64-bit
 float but the other one is not, then the `f(Float64,Float64)` method cannot be called and
 the more general `f(Number,Number)` method must be used:
 
@@ -144,7 +147,7 @@ however, shows how clever application of sufficiently advanced technology can be
 from magic. [^Clarke61]
 
 For non-numeric values, and for fewer or more than two arguments, the function `f` remains undefined,
-and applying it will still result in a [`MethodError`](@ref):
+and applying it will still result in a `MethodError`:
 
 ```jldoctest fofxy
 julia> f("foo", 3)
@@ -168,7 +171,7 @@ f (generic function with 2 methods)
 ```
 
 This output tells us that `f` is a function object with two methods. To find out what the signatures
-of those methods are, use the [`methods`](@ref) function:
+of those methods are, use the `methods` function:
 
 ```jldoctest fofxy
 julia> methods(f)
@@ -237,7 +240,7 @@ Multiple dispatch together with the flexible parametric type system give Julia i
 abstractly express high-level algorithms decoupled from implementation details, yet generate efficient,
 specialized code to handle each case at run time.
 
-## [Method Ambiguities](@id man-ambiguities)
+## Method Ambiguities
 
 It is possible to define a set of function methods such that there is no unique most specific
 method applicable to some combinations of arguments:
@@ -264,7 +267,7 @@ Possible fix, define
 ```
 
 Here the call `g(2.0, 3.0)` could be handled by either the `g(Float64, Any)` or the `g(Any, Float64)`
-method, and neither is more specific than the other. In such cases, Julia raises a [`MethodError`](@ref)
+method, and neither is more specific than the other. In such cases, Julia raises a `MethodError`
 rather than arbitrarily picking a method. You can avoid method ambiguities by specifying an appropriate
 method for the intersection case:
 
@@ -326,7 +329,7 @@ false
 ```
 
 Such definitions correspond to methods whose type signatures are `UnionAll` types
-(see [UnionAll Types](@ref)).
+(see UnionAll Types).
 
 This kind of definition of function behavior by dispatch is quite common -- idiomatic, even --
 in Julia. Method type parameters are not restricted to being used as the types of arguments:
@@ -368,7 +371,7 @@ Stacktrace:
 ```
 
 As you can see, the type of the appended element must match the element type of the vector it
-is appended to, or else a [`MethodError`](@ref) is raised. In the following example, the method type parameter
+is appended to, or else a `MethodError` is raised. In the following example, the method type parameter
 `T` is used as the return value:
 
 ```jldoctest
@@ -382,7 +385,7 @@ julia> mytypeof(1.0)
 Float64
 ```
 
-Just as you can put subtype constraints on type parameters in type declarations (see [Parametric Types](@ref)),
+Just as you can put subtype constraints on type parameters in type declarations (see Parametric Types),
 you can also constrain type parameters of methods:
 
 ```jldoctest
@@ -418,7 +421,7 @@ The `same_type_numeric` function behaves much like the `same_type` function defi
 is only defined for pairs of numbers.
 
 Parametric methods allow the same syntax as `where` expressions used to write types
-(see [UnionAll Types](@ref)).
+(see UnionAll Types).
 If there is only a single parameter, the enclosing curly braces (in `where {T}`) can be omitted,
 but are often preferred for clarity.
 Multiple parameters can be separated with commas, e.g. `where {T, S<:Real}`, or written using
@@ -478,7 +481,7 @@ In the example above, we see that the "current world" (in which the method `newf
 is one greater than the task-local "runtime world" that was fixed when the execution of `tryeval` started.
 
 Sometimes it is necessary to get around this (for example, if you are implementing the above REPL).
-Fortunately, there is an easy solution: call the function using [`Base.invokelatest`](@ref):
+Fortunately, there is an easy solution: call the function using `Base.invokelatest`:
 
 ```jldoctest
 julia> function tryeval2()
@@ -622,8 +625,8 @@ output = similar(input, Eltype)
 
 As an extension of this, in cases where the algorithm needs a copy of
 the input array,
-[`convert`](@ref) is insufficient as the return value may alias the original input.
-Combining [`similar`](@ref) (to make the output array) and [`copyto!`](@ref) (to fill it with the input data)
+`convert` is insufficient as the return value may alias the original input.
+Combining `similar` (to make the output array) and `copyto!` (to fill it with the input data)
 is a generic way to express the requirement for a mutable copy of the input argument:
 
 ```julia
@@ -672,10 +675,10 @@ function arguments may belong to.  If this function is pure there is
 no impact on performance compared to normal dispatch.
 
 The example in the previous section glossed over the implementation details of
-[`map`](@ref) and [`promote`](@ref), which both operate in terms of these traits.
+`map` and `promote`, which both operate in terms of these traits.
 When iterating over a matrix, such as in the implementation of `map`,
 one important question is what order to use to traverse the data.
-When `AbstractArray` subtypes implement the [`Base.IndexStyle`](@ref) trait,
+When `AbstractArray` subtypes implement the `Base.IndexStyle` trait,
 other functions such as `map` can dispatch on this information to pick
 the best algorithm (see [Abstract Array Interface](@ref man-interface-array)).
 This means that each subtype does not need to implement a custom version of `map`,
@@ -690,9 +693,9 @@ map(::Base.IndexCartesian, f, a::AbstractArray, b::AbstractArray) = ...
 map(::Base.IndexLinear, f, a::AbstractArray, b::AbstractArray) = ...
 ```
 
-This trait-based approach is also present in the [`promote`](@ref)
+This trait-based approach is also present in the `promote`
 mechanism employed by the scalar `+`.
-It uses [`promote_type`](@ref), which returns the optimal common type to
+It uses `promote_type`, which returns the optimal common type to
 compute the operation given the two types of the operands.
 This makes it possible to reduce the problem of implementing every function for every pair of possible type arguments,
 to the much smaller problem of implementing a conversion operation from each type to a common type,
@@ -705,7 +708,7 @@ The discussion of trait-based promotion provides a transition into our next desi
 computing the output element type for a matrix operation.
 
 For implementing primitive operations, such as addition,
-we use the [`promote_type`](@ref) function to compute the desired output type.
+we use the `promote_type` function to compute the desired output type.
 (As before, we saw this at work in the `promote` call in the call to `+`).
 
 For more complex functions on matrices, it may be necessary to compute the expected return
@@ -783,7 +786,7 @@ matmul(a, b) = matmul(promote(a, b)...)
 ## Parametrically-constrained Varargs methods
 
 Function parameters can also be used to constrain the number of arguments that may be supplied
-to a "varargs" function ([Varargs Functions](@ref)).  The notation `Vararg{T,N}` is used to indicate
+to a "varargs" function (Varargs Functions).  The notation `Vararg{T,N}` is used to indicate
 such a constraint.  For example:
 
 ```jldoctest
@@ -902,7 +905,7 @@ without a tuple of arguments:
 function emptyfunc end
 ```
 
-## [Method design and the avoidance of ambiguities](@id man-method-design-ambiguities)
+## Method design and the avoidance of ambiguities
 
 Julia's method polymorphism is one of its most powerful features, yet
 exploiting this power can pose design challenges.  In particular, in
@@ -957,7 +960,7 @@ f(x::NTuple{N,Int}) where {N} = 1           # this is the fallback
 f(x::Tuple{Float64, Vararg{Float64}}) = 2   # this requires at least one Float64
 ```
 
-### [Orthogonalize your design](@id man-methods-orthogonalize)
+### Orthogonalize your design
 
 When you might be tempted to dispatch on two or more arguments,
 consider whether a "wrapper" function might make for a simpler

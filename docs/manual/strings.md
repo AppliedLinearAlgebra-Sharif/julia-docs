@@ -1,4 +1,4 @@
-# [Strings](@id man-strings)
+# Strings
 
 Strings are finite sequences of characters. Of course, the real trouble comes when one asks what
 a character is. The characters that English speakers are familiar with are the letters `A`, `B`,
@@ -20,16 +20,16 @@ corrupt results. When this happens, modifying the code to handle non-ASCII data 
 
 There are a few noteworthy high-level features about Julia's strings:
 
-  * The built-in concrete type used for strings (and string literals) in Julia is [`String`](@ref).
+  * The built-in concrete type used for strings (and string literals) in Julia is `String`.
     This supports the full range of [Unicode](https://en.wikipedia.org/wiki/Unicode) characters via
-    the [UTF-8](https://en.wikipedia.org/wiki/UTF-8) encoding. (A [`transcode`](@ref) function is
+    the UTF-8](https://en.wikipedia.org/wiki/UTF-8) encoding. (A [`transcode` function is
     provided to convert to/from other Unicode encodings.)
   * All string types are subtypes of the abstract type `AbstractString`, and external packages define
     additional `AbstractString` subtypes (e.g. for other encodings).  If you define a function expecting
     a string argument, you should declare the type as `AbstractString` in order to accept any string
     type.
   * Like C and Java, but unlike most dynamic languages, Julia has a first-class type for representing
-    a single character, called [`AbstractChar`](@ref). The built-in [`Char`](@ref) subtype of `AbstractChar`
+    a single character, called `AbstractChar`. The built-in `Char` subtype of `AbstractChar`
     is a 32-bit primitive type that can represent any Unicode character (and which is based
     on the UTF-8 encoding).
   * As in Java, strings are immutable: the value of an `AbstractString` object cannot be changed.
@@ -40,7 +40,7 @@ There are a few noteworthy high-level features about Julia's strings:
     index, which cannot be implemented both efficiently and simply for variable-width encodings of
     Unicode strings.
 
-## [Characters](@id man-characters)
+## Characters
 
 A `Char` value represents a single character: it is just a 32-bit primitive type with a special literal
 representation and appropriate arithmetic behaviors, and which can be converted
@@ -68,7 +68,7 @@ julia> typeof(c)
 Int64
 ```
 
-On 32-bit architectures, [`typeof(c)`](@ref) will be [`Int32`](@ref). You can convert an
+On 32-bit architectures, `typeof(c)` will be `Int32`. You can convert an
 integer value back to a `Char` just as easily:
 
 ```jldoctest
@@ -78,7 +78,7 @@ julia> Char(120)
 
 Not all integer values are valid Unicode code points, but for performance, the `Char` conversion
 does not check that every character value is valid. If you want to check that each converted value
-is a valid code point, use the [`isvalid`](@ref) function:
+is a valid code point, use the `isvalid` function:
 
 ```jldoctest
 julia> Char(0x110000)
@@ -183,14 +183,14 @@ julia> str[end]
 ```
 
 Many Julia objects, including strings, can be indexed with integers. The index of the first
-element (the first character of a string) is returned by [`firstindex(str)`](@ref), and the index of the last element (character)
-with [`lastindex(str)`](@ref). The keywords `begin` and `end` can be used inside an indexing
+element (the first character of a string) is returned by `firstindex(str)`, and the index of the last element (character)
+with `lastindex(str)`. The keywords `begin` and `end` can be used inside an indexing
 operation as shorthand for the first and last indices, respectively, along the given dimension.
 String indexing, like most indexing in Julia, is 1-based: `firstindex` always returns `1` for any `AbstractString`.
 As we will see below, however, `lastindex(str)` is *not* in general the same as `length(str)` for a string,
 because some Unicode characters can occupy multiple "code units".
 
-You can perform arithmetic and other operations with [`end`](@ref), just like
+You can perform arithmetic and other operations with `end`, just like
 a normal value:
 
 ```jldoctest helloworldstring
@@ -234,7 +234,7 @@ The former is a single character value of type `Char`, while the latter is a str
 happens to contain only a single character. In Julia these are very different things.
 
 Range indexing makes a copy of the selected part of the original string.
-Alternatively, it is possible to create a view into a string using the type [`SubString`](@ref),
+Alternatively, it is possible to create a view into a string using the type `SubString`,
 for example:
 
 ```jldoctest
@@ -248,8 +248,8 @@ julia> typeof(substr)
 SubString{String}
 ```
 
-Several standard functions like [`chop`](@ref), [`chomp`](@ref) or [`strip`](@ref)
-return a [`SubString`](@ref).
+Several standard functions like `chop`, `chomp` or `strip`
+return a `SubString`.
 
 ## Unicode and UTF-8
 
@@ -293,7 +293,7 @@ julia> s[4]
 ```
 
 In this case, the character `∀` is a three-byte character, so the indices 2 and 3 are invalid
-and the next character's index is 4; this next valid index can be computed by [`nextind(s,1)`](@ref),
+and the next character's index is 4; this next valid index can be computed by `nextind(s,1)`,
 and the next index after that by `nextind(s,4)` and so on.
 
 Since `end` is always the last valid index into a collection, `end-1` references an invalid
@@ -332,8 +332,8 @@ julia> s[1:4]
 "∀ "
 ```
 
-Because of variable-length encodings, the number of characters in a string (given by [`length(s)`](@ref))
-is not always the same as the last index. If you iterate through the indices 1 through [`lastindex(s)`](@ref)
+Because of variable-length encodings, the number of characters in a string (given by `length(s)`)
+is not always the same as the last index. If you iterate through the indices 1 through `lastindex(s)`
 and index into `s`, the sequence of characters returned when errors aren't thrown is the sequence
 of characters comprising the string `s`. Thus we have the identity that `length(s) <= lastindex(s)`,
 since each character in a string must have its own index. The following is an inefficient and
@@ -373,9 +373,9 @@ x
 y
 ```
 
-If you need to obtain valid indices for a string, you can use the [`nextind`](@ref) and
-[`prevind`](@ref) functions to increment/decrement to the next/previous valid index, as mentioned above.
-You can also use the [`eachindex`](@ref) function to iterate over the valid character indices:
+If you need to obtain valid indices for a string, you can use the `nextind` and
+`prevind` functions to increment/decrement to the next/previous valid index, as mentioned above.
+You can also use the `eachindex` function to iterate over the valid character indices:
 
 ```jldoctest unicodestring
 julia> collect(eachindex(s))
@@ -389,8 +389,8 @@ julia> collect(eachindex(s))
  11
 ```
 
-To access the raw code units (bytes for UTF-8) of the encoding, you can use the [`codeunit(s,i)`](@ref)
-function, where the index `i` runs consecutively from `1` to [`ncodeunits(s)`](@ref).  The [`codeunits(s)`](@ref)
+To access the raw code units (bytes for UTF-8) of the encoding, you can use the `codeunit(s,i)`
+function, where the index `i` runs consecutively from `1` to `ncodeunits(s)`.  The `codeunits(s)`
 function returns an `AbstractVector{UInt8}` wrapper that lets you access these raw codeunits (bytes) as an array.
 
 Strings in Julia can contain invalid UTF-8 code unit sequences. This convention allows to
@@ -447,10 +447,10 @@ For example, the [LegacyStrings.jl](https://github.com/JuliaStrings/LegacyString
 implements `UTF16String` and `UTF32String` types. Additional discussion of other encodings and
 how to implement support for them is beyond the scope of this document for the time being. For
 further discussion of UTF-8 encoding issues, see the section below on [byte array literals](@ref man-byte-array-literals).
-The [`transcode`](@ref) function is provided to convert data between the various UTF-xx encodings,
+The `transcode` function is provided to convert data between the various UTF-xx encodings,
 primarily for working with external data and libraries.
 
-## [Concatenation](@id man-concatenation)
+## Concatenation
 
 One of the most common and useful string operations is concatenation:
 
@@ -493,7 +493,7 @@ julia> length.([a, b, c])
 This situation can happen only for invalid UTF-8 strings. For valid UTF-8 strings
 concatenation preserves all characters in strings and additivity of string lengths.
 
-Julia also provides [`*`](@ref) for string concatenation:
+Julia also provides `*` for string concatenation:
 
 ```jldoctest stringconcat
 julia> greet * ", " * whom * ".\n"
@@ -517,11 +517,11 @@ of this set is the empty string, `""`. Whenever a free monoid is not commutative
 typically represented as `\cdot`, `*`, or a similar symbol, rather than `+`, which as stated usually
 implies commutativity.
 
-## [Interpolation](@id string-interpolation)
+## Interpolation
 
 Constructing strings using concatenation can become a bit cumbersome, however. To reduce the need for these
-verbose calls to [`string`](@ref) or repeated multiplications, Julia allows interpolation into string literals
-using ` $ `, as in Perl:
+verbose calls to `string` or repeated multiplications, Julia allows interpolation into string literals
+using `$`, as in Perl:
 
 ```jldoctest stringconcat
 julia> "$greet, $whom.\n"
@@ -531,7 +531,7 @@ julia> "$greet, $whom.\n"
 This is more readable and convenient and equivalent to the above string concatenation -- the system
 rewrites this apparent single string literal into the call `string(greet, ", ", whom, ".\n")`.
 
-The shortest complete expression after the ` $ ` is taken as the expression whose value is to be
+The shortest complete expression after the `$` is taken as the expression whose value is to be
 interpolated into the string. Thus, you can interpolate any expression into a string using parentheses:
 
 ```jldoctest
@@ -539,9 +539,9 @@ julia> "1 + 2 = $(1 + 2)"
 "1 + 2 = 3"
 ```
 
-Both concatenation and string interpolation call [`string`](@ref) to convert objects into string
-form. However, `string` actually just returns the output of [`print`](@ref), so new types
-should add methods to [`print`](@ref) or [`show`](@ref) instead of `string`.
+Both concatenation and string interpolation call `string` to convert objects into string
+form. However, `string` actually just returns the output of `print`, so new types
+should add methods to `print` or `show` instead of `string`.
 
 Most non-`AbstractString` objects are converted to strings closely corresponding to how
 they are entered as literal expressions:
@@ -557,7 +557,7 @@ julia> "v: $v"
 "v: [1, 2, 3]"
 ```
 
-[`string`](@ref) is the identity for `AbstractString` and `AbstractChar` values, so these are interpolated
+`string` is the identity for `AbstractString` and `AbstractChar` values, so these are interpolated
 into strings as themselves, unquoted and unescaped:
 
 ```jldoctest
@@ -568,7 +568,7 @@ julia> "hi, $c"
 "hi, x"
 ```
 
-To include a literal ` $ ` in a string literal, escape it with a backslash:
+To include a literal `$` in a string literal, escape it with a backslash:
 
 ```jldoctest
 julia> print("I have \$100 in my account.\n")
@@ -667,7 +667,7 @@ true
 ```
 
 You can search for the index of a particular character using the
-[`findfirst`](@ref) and [`findlast`](@ref) functions:
+`findfirst` and `findlast` functions:
 
 ```jldoctest
 julia> findfirst(isequal('o'), "xylophone")
@@ -680,7 +680,7 @@ julia> findfirst(isequal('z'), "xylophone")
 ```
 
 You can start the search for a character at a given offset by using
-the functions [`findnext`](@ref) and [`findprev`](@ref):
+the functions `findnext` and `findprev`:
 
 ```jldoctest
 julia> findnext(isequal('o'), "xylophone", 1)
@@ -695,7 +695,7 @@ julia> findprev(isequal('o'), "xylophone", 5)
 julia> findnext(isequal('o'), "xylophone", 8)
 ```
 
-You can use the [`occursin`](@ref) function to check if a substring is found within a string:
+You can use the `occursin` function to check if a substring is found within a string:
 
 ```jldoctest
 julia> occursin("world", "Hello, world.")
@@ -711,9 +711,9 @@ julia> occursin('o', "Xylophon")
 true
 ```
 
-The last example shows that [`occursin`](@ref) can also look for a character literal.
+The last example shows that `occursin` can also look for a character literal.
 
-Two other handy string functions are [`repeat`](@ref) and [`join`](@ref):
+Two other handy string functions are `repeat` and `join`:
 
 ```jldoctest
 julia> repeat(".:Z:.", 10)
@@ -725,25 +725,25 @@ julia> join(["apples", "bananas", "pineapples"], ", ", " and ")
 
 Some other useful functions include:
 
-  * [`firstindex(str)`](@ref) gives the minimal (byte) index that can be used to index into `str` (always 1 for strings, not necessarily true for other containers).
-  * [`lastindex(str)`](@ref) gives the maximal (byte) index that can be used to index into `str`.
-  * [`length(str)`](@ref) the number of characters in `str`.
-  * [`length(str, i, j)`](@ref) the number of valid character indices in `str` from `i` to `j`.
-  * [`ncodeunits(str)`](@ref) number of [code units](https://en.wikipedia.org/wiki/Character_encoding#Terminology) in a string.
-  * [`codeunit(str, i)`](@ref) gives the code unit value in the string `str` at index `i`.
-  * [`thisind(str, i)`](@ref) given an arbitrary index into a string find the first index of the character into which the index points.
-  * [`nextind(str, i, n=1)`](@ref) find the start of the `n`th character starting after index `i`.
-  * [`prevind(str, i, n=1)`](@ref) find the start of the `n`th character starting before index `i`.
+  * `firstindex(str)` gives the minimal (byte) index that can be used to index into `str` (always 1 for strings, not necessarily true for other containers).
+  * `lastindex(str)` gives the maximal (byte) index that can be used to index into `str`.
+  * `length(str)` the number of characters in `str`.
+  * `length(str, i, j)` the number of valid character indices in `str` from `i` to `j`.
+  * `ncodeunits(str)` number of [code units](https://en.wikipedia.org/wiki/Character_encoding#Terminology) in a string.
+  * `codeunit(str, i)` gives the code unit value in the string `str` at index `i`.
+  * `thisind(str, i)` given an arbitrary index into a string find the first index of the character into which the index points.
+  * `nextind(str, i, n=1)` find the start of the `n`th character starting after index `i`.
+  * `prevind(str, i, n=1)` find the start of the `n`th character starting before index `i`.
 
-## [Non-Standard String Literals](@id non-standard-string-literals)
+## Non-Standard String Literals
 
 There are situations when you want to construct a string or use string semantics, but the behavior
 of the standard string construct is not quite what is needed. For these kinds of situations, Julia
-provides [non-standard string literals](@ref). A non-standard string literal looks like a regular
+provides non-standard string literals. A non-standard string literal looks like a regular
 double-quoted string literal, but is immediately prefixed by an identifier, and doesn't behave
 quite like a normal string literal.  Regular expressions, byte array literals and version number
 literals, as described below, are some examples of non-standard string literals. Other examples
-are given in the [Metaprogramming](@ref) section.
+are given in the Metaprogramming section.
 
 ## Regular Expressions
 
@@ -763,7 +763,7 @@ julia> typeof(re)
 Regex
 ```
 
-To check if a regex matches a string, use [`occursin`](@ref):
+To check if a regex matches a string, use `occursin`:
 
 ```jldoctest
 julia> occursin(r"^\s*(?:#|$)", "not a comment")
@@ -773,10 +773,10 @@ julia> occursin(r"^\s*(?:#|$)", "# a comment")
 true
 ```
 
-As one can see here, [`occursin`](@ref) simply returns true or false, indicating whether a
+As one can see here, `occursin` simply returns true or false, indicating whether a
 match for the given regex occurs in the string. Commonly, however, one wants to know not
 just whether a string matched, but also *how* it matched. To capture this information about
-a match, use the [`match`](@ref) function instead:
+a match, use the `match` function instead:
 
 ```jldoctest
 julia> match(r"^\s*(?:#|$)", "not a comment")
@@ -785,7 +785,7 @@ julia> match(r"^\s*(?:#|$)", "# a comment")
 RegexMatch("#")
 ```
 
-If the regular expression does not match the given string, [`match`](@ref) returns [`nothing`](@ref)
+If the regular expression does not match the given string, `match` returns `nothing`
 -- a special value that does not print anything at the interactive prompt. Other than not printing,
 it is a completely normal value and you can test for it programmatically:
 
@@ -798,7 +798,7 @@ else
 end
 ```
 
-If a regular expression does match, the value returned by [`match`](@ref) is a `RegexMatch`
+If a regular expression does match, the value returned by `match` is a `RegexMatch`
 object. These objects record how the expression matches, including the substring that the pattern
 matches and any captured substrings, if there are any. This example only captures the portion
 of the substring that matches, but perhaps we want to capture any non-blank text after the comment
@@ -809,7 +809,7 @@ julia> m = match(r"^\s*(?:#\s*(.*?)\s*$|$)", "# a comment ")
 RegexMatch("# a comment ", 1="a comment")
 ```
 
-When calling [`match`](@ref), you have the option to specify an index at which to start the
+When calling `match`, you have the option to specify an index at which to start the
 search. For example:
 
 ```jldoctest
@@ -900,7 +900,7 @@ julia> m[2]
 "45"
 ```
 
-Captures can be referenced in a substitution string when using [`replace`](@ref) by using `\n`
+Captures can be referenced in a substitution string when using `replace` by using `\n`
 to refer to the nth capture group and prefixing the substitution string with `s`. Capture group
 0 refers to the entire match object. Named capture groups can be referenced in the substitution
 with `\g<groupname>`. For example:
@@ -1012,11 +1012,11 @@ julia> match(regex_name,"[Jon]") === nothing
 true
 ```
 
-## [Byte Array Literals](@id man-byte-array-literals)
+## Byte Array Literals
 
 Another useful non-standard string literal is the byte-array string literal: `b"..."`. This
 form lets you use string notation to express read only literal byte arrays -- i.e. arrays of
-[`UInt8`](@ref) values. The type of those objects is `CodeUnits{UInt8, String}`.
+`UInt8` values. The type of those objects is `CodeUnits{UInt8, String}`.
 The rules for byte array literals are the following:
 
   * ASCII characters and ASCII escapes produce a single byte.
@@ -1104,10 +1104,10 @@ Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-soft
 It's an excellent introduction to Unicode and UTF-8, and may help alleviate
 some confusion regarding the matter.
 
-## [Version Number Literals](@id man-version-number-literals)
+## Version Number Literals
 
 Version numbers can easily be expressed with non-standard string literals of the form [`v"..."`](@ref @v_str).
-Version number literals create [`VersionNumber`](@ref) objects which follow the
+Version number literals create `VersionNumber` objects which follow the
 specifications of [semantic versioning](https://semver.org/),
 and therefore are composed of major, minor and patch numeric values, followed by pre-release and
 build alpha-numeric annotations. For example, `v"0.2.1-rc1+win64"` is broken into major version
@@ -1117,7 +1117,7 @@ is equivalent to `v"0.2.0"` (with empty pre-release/build annotations), `v"2"` i
 `v"2.0.0"`, and so on.
 
 `VersionNumber` objects are mostly useful to easily and correctly compare two (or more) versions.
-For example, the constant [`VERSION`](@ref) holds Julia version number as a `VersionNumber` object, and
+For example, the constant `VERSION` holds Julia version number as a `VersionNumber` object, and
 therefore one can define some version-specific behavior using simple statements as:
 
 ```julia
@@ -1143,16 +1143,16 @@ should always be used on upper bounds unless there's a good reason not to), but 
 be used as the actual version number of anything, as they are invalid in the semantic versioning
 scheme.
 
-Besides being used for the [`VERSION`](@ref) constant, `VersionNumber` objects are widely used
+Besides being used for the `VERSION` constant, `VersionNumber` objects are widely used
 in the `Pkg` module, to specify packages versions and their dependencies.
 
-## [Raw String Literals](@id man-raw-string-literals)
+## Raw String Literals
 
 Raw strings without interpolation or unescaping can be expressed with
 non-standard string literals of the form `raw"..."`. Raw string literals create
 ordinary `String` objects which contain the enclosed contents exactly as
 entered with no interpolation or unescaping. This is useful for strings which
-contain code or markup in other languages which use ` $ ` or `\` as special
+contain code or markup in other languages which use `$` or `\` as special
 characters.
 
 The exception is that quotation marks still must be escaped, e.g. `raw"\""` is equivalent

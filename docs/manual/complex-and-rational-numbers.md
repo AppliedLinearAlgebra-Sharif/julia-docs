@@ -1,13 +1,13 @@
 # Complex and Rational Numbers
 
 Julia includes predefined types for both complex and rational numbers, and supports
-all the standard [Mathematical Operations and Elementary Functions](@ref) on them. [Conversion and Promotion](@ref conversion-and-promotion) are defined
+all the standard Mathematical Operations and Elementary Functions on them. [Conversion and Promotion](@ref conversion-and-promotion) are defined
 so that operations on any combination of predefined numeric types, whether primitive or composite,
 behave as expected.
 
 ## Complex Numbers
 
-The global constant [`im`](@ref) is bound to the complex number *i*, representing the principal
+The global constant `im` is bound to the complex number *i*, representing the principal
 square root of -1. (Using mathematicians' `i` or engineers' `j` for this global constant were rejected since they are such popular index variable names.) Since Julia allows numeric literals to be [juxtaposed with identifiers as coefficients](@ref man-numeric-literal-coefficients),
 this binding suffices to provide convenient syntax for complex numbers, similar to the traditional
 mathematical notation:
@@ -110,10 +110,10 @@ julia> angle(1 + 2im) # phase angle in radians
 1.1071487177940904
 ```
 
-As usual, the absolute value ([`abs`](@ref)) of a complex number is its distance from zero.
-[`abs2`](@ref) gives the square of the absolute value, and is of particular use for complex
-numbers since it avoids taking a square root. [`angle`](@ref) returns the phase angle in radians
-(also known as the *argument* or *arg* function). The full gamut of other [Elementary Functions](@ref)
+As usual, the absolute value (`abs`) of a complex number is its distance from zero.
+`abs2` gives the square of the absolute value, and is of particular use for complex
+numbers since it avoids taking a square root. `angle` returns the phase angle in radians
+(also known as the *argument* or *arg* function). The full gamut of other Elementary Functions
 is also defined for complex numbers:
 
 ```jldoctest
@@ -134,7 +134,7 @@ julia> sinh(1 + 2im)
 ```
 
 Note that mathematical functions typically return real values when applied to real numbers and
-complex values when applied to complex numbers. For example, [`sqrt`](@ref) behaves differently
+complex values when applied to complex numbers. For example, `sqrt` behaves differently
 when applied to `-1` versus `-1 + 0im` even though `-1 == -1 + 0im`:
 
 ```jldoctest
@@ -156,7 +156,7 @@ julia> a = 1; b = 2; a + b*im
 1 + 2im
 ```
 
-However, this is *not* recommended. Instead, use the more efficient [`complex`](@ref) function to construct
+However, this is *not* recommended. Instead, use the more efficient `complex` function to construct
 a complex value directly from its real and imaginary parts:
 
 ```jldoctest
@@ -166,8 +166,8 @@ julia> a = 1; b = 2; complex(a, b)
 
 This construction avoids the multiplication and addition operations.
 
-[`Inf`](@ref) and [`NaN`](@ref) propagate through complex numbers in the real and imaginary parts
-of a complex number as described in the [Special floating-point values](@ref) section:
+`Inf` and `NaN` propagate through complex numbers in the real and imaginary parts
+of a complex number as described in the Special floating-point values section:
 
 ```jldoctest
 julia> 1 + Inf*im
@@ -180,7 +180,7 @@ julia> 1 + NaN*im
 ## Rational Numbers
 
 Julia has a rational number type to represent exact ratios of integers. Rationals are constructed
-using the [`//`](@ref) operator:
+using the `//` operator:
 
 ```jldoctest
 julia> 2//3
@@ -206,7 +206,7 @@ julia> -4//-12
 
 This normalized form for a ratio of integers is unique, so equality of rational values can be
 tested by checking for equality of the numerator and denominator. The standardized numerator and
-denominator of a rational value can be extracted using the [`numerator`](@ref) and [`denominator`](@ref)
+denominator of a rational value can be extracted using the `numerator` and `denominator`
 functions:
 
 ```jldoctest
@@ -276,7 +276,7 @@ julia> typeof(x)
 Rational{Int64}
 ```
 
-Trying to construct a [`NaN`](@ref) rational value, however, is invalid:
+Trying to construct a `NaN` rational value, however, is invalid:
 
 ```jldoctest
 julia> 0//0

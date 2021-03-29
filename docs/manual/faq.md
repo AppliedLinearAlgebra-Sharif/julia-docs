@@ -59,7 +59,7 @@ obj3 = MyModule.someotherfunction(obj2, c)
 ...
 ```
 
-## [Scripting](@id man-scripting)
+## Scripting
 
 ### How do I check if the current file is being run as the main script?
 
@@ -67,15 +67,15 @@ When a file is run as the main script using `julia file.jl` one might want to ac
 functionality like command line argument handling. A way to determine that a file is run in
 this fashion is to check if `abspath(PROGRAM_FILE) == @__FILE__` is `true`.
 
-### [How do I catch CTRL-C in a script?](@id catch-ctrl-c)
+### How do I catch CTRL-C in a script?
 
 Running a Julia script using `julia file.jl` does not throw
-[`InterruptException`](@ref) when you try to terminate it with CTRL-C
+`InterruptException` when you try to terminate it with CTRL-C
 (SIGINT).  To run a certain code before terminating a Julia script,
-which may or may not be caused by CTRL-C, use [`atexit`](@ref).
+which may or may not be caused by CTRL-C, use `atexit`.
 Alternatively, you can use `julia -e 'include(popfirst!(ARGS))'
 file.jl` to execute a script while being able to catch
-`InterruptException` in the [`try`](@ref) block.
+`InterruptException` in the `try` block.
 
 ### How do I pass options to `julia` using `#!/usr/bin/env`?
 
@@ -101,7 +101,9 @@ script.  Julia ignores this part since it is a multi-line comment for
 Julia.  The Julia code after `=#` is ignored by `bash` since it stops
 parsing the file once it reaches to the `exec` statement.
 
-!!! note
+```eval_rst
+
+.. note::
     In order to [catch CTRL-C](@ref catch-ctrl-c) in the script you can use
     ```julia
     #!/bin/bash
@@ -112,7 +114,8 @@ parsing the file once it reaches to the `exec` statement.
 
     @show ARGS  # put any Julia code here
     ```
-    instead. Note that with this strategy [`PROGRAM_FILE`](@ref) will not be set.
+    instead. Note that with this strategy `PROGRAM_FILE` will not be set.
+```
 
 ## Functions
 
@@ -315,7 +318,7 @@ julia> threearr()
 
 ## Types, type declarations, and constructors
 
-### [What does "type-stable" mean?](@id man-type-stability)
+### What does "type-stable" mean?
 
 It means that the type of the output is predictable from the types of the inputs.  In particular,
 it means that the type of the output cannot vary depending on the *values* of the inputs. The
@@ -332,12 +335,12 @@ julia> function unstable(flag::Bool)
 unstable (generic function with 1 method)
 ```
 
-It returns either an `Int` or a [`Float64`](@ref) depending on the value of its argument.
+It returns either an `Int` or a `Float64` depending on the value of its argument.
 Since Julia can't predict the return type of this function at compile-time, any computation
 that uses it must be able to cope with values of both types, which makes it hard to produce
 fast machine code.
 
-### [Why does Julia give a `DomainError` for certain seemingly-sensible operations?](@id faq-domain-errors)
+### Why does Julia give a `DomainError` for certain seemingly-sensible operations?
 
 Certain operations make mathematical sense but result in errors:
 
@@ -350,11 +353,11 @@ Stacktrace:
 ```
 
 This behavior is an inconvenient consequence of the requirement for type-stability.  In the case
-of [`sqrt`](@ref), most users want `sqrt(2.0)` to give a real number, and would be unhappy if
-it produced the complex number `1.4142135623730951 + 0.0im`.  One could write the [`sqrt`](@ref)
+of `sqrt`, most users want `sqrt(2.0)` to give a real number, and would be unhappy if
+it produced the complex number `1.4142135623730951 + 0.0im`.  One could write the `sqrt`
 function to switch to a complex-valued output only when passed a negative number (which is what
-[`sqrt`](@ref) does in some other languages), but then the result would not be [type-stable](@ref man-type-stability)
-and the [`sqrt`](@ref) function would have poor performance.
+`sqrt` does in some other languages), but then the result would not be [type-stable](@ref man-type-stability)
+and the `sqrt` function would have poor performance.
 
 In these and other cases, you can get the result you want by choosing an *input type* that conveys
 your willingness to accept an *output type* in which the result can be represented:
@@ -371,10 +374,10 @@ types or bits values, and the type itself chooses how it makes use of these par
 For example, `Array{Float64, 2}` is parameterized by the type `Float64` to express its
 element type and the integer value `2` to express its number of dimensions.  When
 defining your own parametric type, you can use subtype constraints to declare that a
-certain parameter must be a subtype ([`<:`](@ref)) of some abstract type or a previous
+certain parameter must be a subtype (`<:`) of some abstract type or a previous
 type parameter.  There is not, however, a dedicated syntax to declare that a parameter
 must be a _value_ of a given type — that is, you cannot directly declare that a
-dimensionality-like parameter [`isa`](@ref) `Int` within the `struct` definition, for
+dimensionality-like parameter `isa` `Int` within the `struct` definition, for
 example.  Similarly, you cannot do computations (including simple things like addition
 or subtraction) on type parameters.  Instead, these sorts of constraints and
 relationships may be expressed through additional type parameters that are computed
@@ -403,7 +406,7 @@ This check is usually *costless*, as the compiler can elide the check for valid 
 ConstrainedType(A) = ConstrainedType(A, compute_B(A))
 ```
 
-### [Why does Julia use native machine integer arithmetic?](@id faq-integer-arithmetic)
+### Why does Julia use native machine integer arithmetic?
 
 Julia uses machine arithmetic for integer computations. This means that the range of `Int` values
 is bounded and wraps around at either end so that adding, subtracting and multiplying integers
@@ -428,7 +431,7 @@ ideal for a high-level programming language to expose this to the user. For nume
 efficiency and transparency are at a premium, however, the alternatives are worse.
 
 One alternative to consider would be to check each integer operation for overflow and promote
-results to bigger integer types such as [`Int128`](@ref) or [`BigInt`](@ref) in the case of overflow.
+results to bigger integer types such as `Int128` or `BigInt` in the case of overflow.
 Unfortunately, this introduces major overhead on every integer operation (think incrementing a
 loop counter) – it requires emitting code to perform run-time overflow checks after arithmetic
 instructions and branches to handle potential overflows. Worse still, this would cause every computation
@@ -438,7 +441,7 @@ being integers, it's impossible to generate fast, simple code the way C and Fort
 do.
 
 A variation on this approach, which avoids the appearance of type instability is to merge the
-`Int` and [`BigInt`](@ref) types into a single hybrid integer type, that internally changes representation
+`Int` and `BigInt` types into a single hybrid integer type, that internally changes representation
 when a result no longer fits into the size of a machine integer. While this superficially avoids
 type-instability at the level of Julia code, it just sweeps the problem under the rug by foisting
 all of the same difficulties onto the C code implementing this hybrid integer type. This approach
@@ -490,8 +493,8 @@ than -9223372036854775808 is and integers are still represented with a fixed siz
 way that is compatible with C and Fortran. Saturated integer arithmetic, however, is deeply problematic.
 The first and most obvious issue is that this is not the way machine integer arithmetic works,
 so implementing saturated operations requires emitting instructions after each machine integer
-operation to check for underflow or overflow and replace the result with [`typemin(Int)`](@ref)
-or [`typemax(Int)`](@ref) as appropriate. This alone expands each integer operation from a single,
+operation to check for underflow or overflow and replace the result with `typemin(Int)`
+or `typemax(Int)` as appropriate. This alone expands each integer operation from a single,
 fast instruction into half a dozen instructions, probably including branches. Ouch. But it gets
 worse – saturating integer arithmetic isn't associative. Consider this Matlab computation:
 
@@ -744,12 +747,12 @@ all/many future usages of the other functions in module Foo that depend on calli
 
 ## Nothingness and missing values
 
-### [How does "null", "nothingness" or "missingness" work in Julia?](@id faq-nothing)
+### How does "null", "nothingness" or "missingness" work in Julia?
 
 Unlike many languages (for example, C and Java), Julia objects cannot be "null" by default.
 When a reference (variable, object field, or array element) is uninitialized, accessing it
 will immediately throw an error. This situation can be detected using the
-[`isdefined`](@ref) or [`isassigned`](@ref Base.isassigned) functions.
+`isdefined` or [`isassigned`](@ref Base.isassigned) functions.
 
 Some functions are used only for their side effects, and do not need to return a value. In these
 cases, the convention is to return the value `nothing`, which is just a singleton object of type
@@ -763,12 +766,12 @@ as the equivalent of [`Nullable`, `Option` or `Maybe`](https://en.wikipedia.org/
 in other languages. If the value itself can be `nothing` (notably, when `T` is `Any`),
 the `Union{Some{T}, Nothing}` type is more appropriate since `x == nothing` then indicates
 the absence of a value, and `x == Some(nothing)` indicates the presence of a value equal
-to `nothing`. The [`something`](@ref) function allows unwrapping `Some` objects and
+to `nothing`. The `something` function allows unwrapping `Some` objects and
 using a default value instead of `nothing` arguments. Note that the compiler is able to
 generate efficient code when working with `Union{T, Nothing}` arguments or fields.
 
 To represent missing data in the statistical sense (`NA` in R or `NULL` in SQL), use the
-[`missing`](@ref) object. See the [`Missing Values`](@ref missing) section for more details.
+`missing` object. See the [`Missing Values`](@ref missing) section for more details.
 
 In some languages, the empty tuple (`()`) is considered the canonical
 form of nothingness. However, in julia it is best thought of as just
@@ -819,7 +822,7 @@ Because supporting generic programming is deemed more important than potential p
 that can be achieved by other means (e.g., using explicit loops), operators like `+=` and `*=`
 work by rebinding new values.
 
-## [Asynchronous IO and concurrent synchronous writes](@id faq-async-io)
+## Asynchronous IO and concurrent synchronous writes
 
 ### Why do concurrent writes to the same stream result in inter-mixed output?
 
@@ -898,7 +901,7 @@ some ideas that might help to understand Julia's definition.
 * Zero-dimensional arrays don't natively have any dimensions into which you
   index -- they’re just `A[]`. We can apply the same "trailing one" rule for them
   as for all other array dimensionalities, so you can indeed index them as `A[1]`, `A[1,1]`, etc; see
-  [Omitted and extra indices](@ref).
+  Omitted and extra indices.
 
 It is also important to understand the differences to ordinary scalars. Scalars
 are not mutable containers (even though they are iterable and define things

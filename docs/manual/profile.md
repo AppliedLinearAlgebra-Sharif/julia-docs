@@ -102,7 +102,7 @@ In this example, we can see that the top level function called is in the file `e
 function that runs the REPL when you launch Julia. If you examine line 97 of `REPL.jl`,
 you'll see this is where the function `eval_user_input()` is called. This is the function that evaluates
 what you type at the REPL, and since we're working interactively these functions were invoked
-when we entered `@profile myfunc()`. The next line reflects actions taken in the [`@profile`](@ref)
+when we entered `@profile myfunc()`. The next line reflects actions taken in the `@profile`
 macro.
 
 The first line shows that 80 backtraces were taken at line 73 of `event.jl`, but it's not that
@@ -209,13 +209,13 @@ useful way to view the results.
 
 ## Accumulation and clearing
 
-Results from [`@profile`](@ref) accumulate in a buffer; if you run multiple pieces of code under
-[`@profile`](@ref), then [`Profile.print()`](@ref) will show you the combined results. This can
-be very useful, but sometimes you want to start fresh; you can do so with [`Profile.clear()`](@ref).
+Results from `@profile` accumulate in a buffer; if you run multiple pieces of code under
+`@profile`, then `Profile.print()` will show you the combined results. This can
+be very useful, but sometimes you want to start fresh; you can do so with `Profile.clear()`.
 
 ## Options for controlling the display of profile results
 
-[`Profile.print`](@ref) has more options than we've described so far. Let's see the full declaration:
+`Profile.print` has more options than we've described so far. Let's see the full declaration:
 
 ```julia
 function print(io::IO = stdout, data = fetch(); kwargs...)
@@ -225,7 +225,7 @@ Let's first discuss the two positional arguments, and later the keyword argument
 
   * `io` -- Allows you to save the results to a buffer, e.g. a file, but the default is to print to `stdout`
     (the console).
-  * `data` -- Contains the data you want to analyze; by default that is obtained from [`Profile.fetch()`](@ref),
+  * `data` -- Contains the data you want to analyze; by default that is obtained from `Profile.fetch()`,
     which pulls out the backtraces from a pre-allocated buffer. For example, if you want to profile
     the profiler, you could say:
 
@@ -261,7 +261,7 @@ The keyword arguments can be any combination of:
 File/function names are sometimes truncated (with `...`), and indentation is truncated with a
 `+n` at the beginning, where `n` is the number of extra spaces that would have been inserted,
 had there been room. If you want a complete profile of deeply-nested code, often a good idea is
-to save to a file using a wide `displaysize` in an [`IOContext`](@ref):
+to save to a file using a wide `displaysize` in an `IOContext`:
 
 ```julia
 open("/tmp/prof.txt", "w") do s
@@ -271,7 +271,7 @@ end
 
 ## Configuration
 
-[`@profile`](@ref) just accumulates backtraces, and the analysis happens when you call [`Profile.print()`](@ref).
+`@profile` just accumulates backtraces, and the analysis happens when you call `Profile.print()`.
 For a long-running computation, it's entirely possible that the pre-allocated buffer for storing
 backtraces will be filled. If that happens, the backtraces stop but your computation continues.
 As a consequence, you may miss some important profiling data (you will get a warning when that
@@ -298,7 +298,7 @@ on the author's laptop).
 ## Memory allocation analysis
 
 One of the most common techniques to improve performance is to reduce memory allocation. The
-total amount of allocation can be measured with [`@time`](@ref) and [`@allocated`](@ref), and
+total amount of allocation can be measured with `@time` and `@allocated`, and
 specific lines triggering allocation can often be inferred from profiling via the cost of garbage
 collection that these lines incur. However, sometimes it is more efficient to directly measure
 the amount of memory allocated by each line of code.
@@ -317,7 +317,7 @@ first line of any function directly called from the REPL will exhibit allocation
 that happen in the REPL code itself. More significantly, JIT-compilation also adds to allocation
 counts, because much of Julia's compiler is written in Julia (and compilation usually requires
 memory allocation). The recommended procedure is to force compilation by executing all the commands
-you want to analyze, then call [`Profile.clear_malloc_data()`](@ref) to reset all allocation counters.
+you want to analyze, then call `Profile.clear_malloc_data()` to reset all allocation counters.
  Finally, execute the desired commands and quit Julia to trigger the generation of the `.mem`
 files.
 

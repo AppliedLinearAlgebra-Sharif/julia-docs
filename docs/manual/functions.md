@@ -1,4 +1,4 @@
-# [Functions](@id man-functions)
+# Functions
 
 In Julia, a function is an object that maps a tuple of argument values to a return value. Julia
 functions are not pure mathematical functions, because they can alter and be affected
@@ -144,12 +144,12 @@ Int8
 ```
 
 This function will always return an `Int8` regardless of the types of `x` and `y`.
-See [Type Declarations](@ref) for more on return types.
+See Type Declarations for more on return types.
 
 ### Returning nothing
 
 For functions that do not need to return a value (functions used only for some side effects),
-the Julia convention is to return the value [`nothing`](@ref):
+the Julia convention is to return the value `nothing`:
 
 ```julia
 function printx(x)
@@ -174,7 +174,7 @@ alone is a matter of coding style.
 
 In Julia, most operators are just functions with support for special syntax. (The exceptions are
 operators with special evaluation semantics like `&&` and `||`. These operators cannot be functions
-since [Short-Circuit Evaluation](@ref) requires that their operands are not evaluated before evaluation
+since Short-Circuit Evaluation requires that their operands are not evaluated before evaluation
 of the operator.) Accordingly, you can also apply them using parenthesized argument lists, just
 as you would any other function:
 
@@ -188,7 +188,7 @@ julia> +(1,2,3)
 
 The infix form is exactly equivalent to the function application form -- in fact the former is
 parsed to produce the function call internally. This also means that you can assign and pass around
-operators such as [`+`](@ref) and [`*`](@ref) just like you would with other function values:
+operators such as `+` and `*` just like you would with other function values:
 
 ```jldoctest
 julia> f = +;
@@ -205,16 +205,16 @@ A few special expressions correspond to calls to functions with non-obvious name
 
 | Expression        | Calls                   |
 |:----------------- |:----------------------- |
-| `[A B C ...]`     | [`hcat`](@ref)          |
-| `[A; B; C; ...]`  | [`vcat`](@ref)          |
-| `[A B; C D; ...]` | [`hvcat`](@ref)         |
-| `A'`              | [`adjoint`](@ref)       |
-| `A[i]`            | [`getindex`](@ref)      |
-| `A[i] = x`        | [`setindex!`](@ref)     |
+| `A B C ...]`     | [`hcat`          |
+| `A; B; C; ...]`  | [`vcat`          |
+| `A B; C D; ...]` | [`hvcat`         |
+| `A'`              | `adjoint`       |
+| `Ai]`            | [`getindex`      |
+| `Ai] = x`        | [`setindex!`     |
 | `A.n`             | [`getproperty`](@ref Base.getproperty) |
 | `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
 
-## [Anonymous Functions](@id man-anonymous-functions)
+## Anonymous Functions
 
 Functions in Julia are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen):
 they can be assigned to variables, and called using the standard function call syntax from the
@@ -237,7 +237,7 @@ This creates a function taking one argument `x` and returning the value of the p
 name based on consecutive numbering.
 
 The primary use for anonymous functions is passing them to functions which take other functions
-as arguments. A classic example is [`map`](@ref), which applies a function to each value of
+as arguments. A classic example is `map`, which applies a function to each value of
 an array and returns a new array containing the resulting values:
 
 ```jldoctest
@@ -249,7 +249,7 @@ julia> map(round, [1.2, 3.5, 1.7])
 ```
 
 This is fine if a named function effecting the transform already exists to pass as the first argument
-to [`map`](@ref). Often, however, a ready-to-use, named function does not exist. In these
+to `map`. Often, however, a ready-to-use, named function does not exist. In these
 situations, the anonymous function construct allows easy creation of a single-use function object
 without needing a name:
 
@@ -266,7 +266,7 @@ A zero-argument anonymous function is written as `()->3`. The idea of a function
 may seem strange, but is useful for "delaying" a computation. In this usage, a block of code is
 wrapped in a zero-argument function, which is later invoked by calling it as `f`.
 
-As an example, consider this call to [`get`](@ref):
+As an example, consider this call to `get`:
 
 ```julia
 get(dict, key) do
@@ -282,7 +282,7 @@ enclosed between `do` and `end`, like so:
 get(()->time(), dict, key)
 ```
 
-The call to [`time`](@ref) is delayed by wrapping it in a 0-argument anonymous function
+The call to `time` is delayed by wrapping it in a 0-argument anonymous function
 that is called only when the requested key is absent from `dict`.
 
 ## Tuples
@@ -427,7 +427,7 @@ julia> bar(1,2,3,4,5,6)
 In all these cases, `x` is bound to a tuple of the trailing values passed to `bar`.
 
 It is possible to constrain the number of values passed as a variable argument; this will be discussed
-later in [Parametrically-constrained Varargs methods](@ref).
+later in Parametrically-constrained Varargs methods.
 
 On the flip side, it is often handy to "splat" the values contained in an iterable collection
 into a function call as individual arguments. To do this, one also uses `...` but in the function
@@ -513,7 +513,7 @@ call will fail, just as it would if too many arguments were given explicitly.
 
 It is often possible to provide sensible default values for function arguments.
 This can save users from having to pass every argument on every call.
-For example, the function [`Date(y, [m, d])`](@ref)
+For example, the function `Date(y, [m, d])`
 from `Dates` module constructs a `Date` type for a given year `y`, month `m` and day `d`.
 However, `m` and `d` arguments are optional and their default value is `1`.
 This behavior can be expressed concisely as:
@@ -546,7 +546,7 @@ julia> Date(2000)
 ```
 
 Optional arguments are actually just a convenient syntax for writing multiple method definitions
-with different numbers of arguments (see [Note on Optional and keyword Arguments](@ref)).
+with different numbers of arguments (see Note on Optional and keyword Arguments).
 This can be checked for our `Date` function example by calling `methods` function.
 
 ## Keyword Arguments
@@ -607,7 +607,7 @@ Named tuples (as well as dictionaries with keys of `Symbol`) can be passed as
 keyword arguments using a semicolon in a call, e.g. `f(x, z=1; kwargs...)`.
 
 If a keyword argument is not assigned a default value in the method definition,
-then it is *required*: an [`UndefKeywordError`](@ref) exception will be thrown
+then it is *required*: an `UndefKeywordError` exception will be thrown
 if the caller does not assign it a value:
 ```julia
 function f(x; y)
@@ -650,7 +650,7 @@ the `b` in `a=b` refers to a `b` in an outer scope, not the subsequent argument 
 
 Passing functions as arguments to other functions is a powerful technique, but the syntax for
 it is not always convenient. Such calls are especially awkward to write when the function argument
-requires multiple lines. As an example, consider calling [`map`](@ref) on a function with several
+requires multiple lines. As an example, consider calling `map` on a function with several
 cases:
 
 ```julia
@@ -681,16 +681,16 @@ end
 ```
 
 The `do x` syntax creates an anonymous function with argument `x` and passes it as the first argument
-to [`map`](@ref). Similarly, `do a,b` would create a two-argument anonymous function, and a
+to `map`. Similarly, `do a,b` would create a two-argument anonymous function, and a
 plain `do` would declare that what follows is an anonymous function of the form `() -> ...`.
 
-How these arguments are initialized depends on the "outer" function; here, [`map`](@ref) will
+How these arguments are initialized depends on the "outer" function; here, `map` will
 sequentially set `x` to `A`, `B`, `C`, calling the anonymous function on each, just as would happen
 in the syntax `map(func, [A, B, C])`.
 
 This syntax makes it easier to use functions to effectively extend the language, since calls look
-like normal code blocks. There are many possible uses quite different from [`map`](@ref), such
-as managing system state. For example, there is a version of [`open`](@ref) that runs code ensuring
+like normal code blocks. There are many possible uses quite different from `map`, such
+as managing system state. For example, there is a version of `open` that runs code ensuring
 that the opened file is eventually closed:
 
 ```julia
@@ -712,10 +712,10 @@ function open(f::Function, args...)
 end
 ```
 
-Here, [`open`](@ref) first opens the file for writing and then passes the resulting output stream
-to the anonymous function you defined in the `do ... end` block. After your function exits, [`open`](@ref)
+Here, `open` first opens the file for writing and then passes the resulting output stream
+to the anonymous function you defined in the `do ... end` block. After your function exits, `open`
 will make sure that the stream is properly closed, regardless of whether your function exited
-normally or threw an exception. (The `try/finally` construct will be described in [Control Flow](@ref).)
+normally or threw an exception. (The `try/finally` construct will be described in Control Flow.)
 
 With the `do` block syntax, it helps to check the documentation or implementation to know how
 the arguments of the user function are initialized.
@@ -781,7 +781,7 @@ julia> ["a", "list", "of", "strings"] .|> [uppercase, reverse, titlecase, length
  7
 ```
 
-## [Dot Syntax for Vectorizing Functions](@id man-vectorized)
+## Dot Syntax for Vectorizing Functions
 
 In technical-computing languages, it is common to have "vectorized" versions of functions, which
 simply apply a given function `f(x)` to each element of an array `A` to yield a new array via
@@ -813,7 +813,7 @@ in advance by the library writer.
 
 More generally, `f.(args...)` is actually equivalent to `broadcast(f, args...)`, which allows
 you to operate on multiple arrays (even of different shapes), or a mix of arrays and scalars (see
-[Broadcasting](@ref)). For example, if you have `f(x,y) = 3x + 4y`, then `f.(pi,A)` will return
+Broadcasting). For example, if you have `f(x,y) = 3x + 4y`, then `f.(pi,A)` will return
 a new array consisting of `f(pi,a)` for each `a` in `A`, and `f.(vector1,vector2)` will return
 a new vector consisting of `f(vector1[i],vector2[i])` for each index `i` (throwing an exception
 if the vectors have different length).
@@ -850,7 +850,7 @@ loops cannot be merged because of the intervening `sort` function.
 
 Finally, the maximum efficiency is typically achieved when the output array of a vectorized operation
 is *pre-allocated*, so that repeated calls do not allocate new arrays over and over again for
-the results (see [Pre-allocating outputs](@ref)). A convenient syntax for this is `X .= ...`, which
+the results (see Pre-allocating outputs). A convenient syntax for this is `X .= ...`, which
 is equivalent to `broadcast!(identity, X, ...)` except that, as above, the `broadcast!` loop is
 fused with any nested "dot" calls. For example, `X .= sin.(Y)` is equivalent to `broadcast!(sin, X, Y)`,
 overwriting `X` with `sin.(Y)` in-place. If the left-hand side is an array-indexing expression,
@@ -881,7 +881,7 @@ they are equivalent to `broadcast` calls and are fused with other nested "dot" c
  `X .+= Y` etcetera is equivalent to `X .= X .+ Y` and results in a fused in-place assignment;
  see also [dot operators](@ref man-dot-operators).
 
-You can also combine dot operations with function chaining using [`|>`](@ref), as in this example:
+You can also combine dot operations with function chaining using `|>`, as in this example:
 ```jldoctest
 julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
 5-element Vector{Real}:
@@ -898,4 +898,4 @@ We should mention here that this is far from a complete picture of defining func
 a sophisticated type system and allows multiple dispatch on argument types. None of the examples
 given here provide any type annotations on their arguments, meaning that they are applicable to
 all types of arguments. The type system is described in [Types](@ref man-types) and defining a function
-in terms of methods chosen by multiple dispatch on run-time argument types is described in [Methods](@ref).
+in terms of methods chosen by multiple dispatch on run-time argument types is described in Methods.

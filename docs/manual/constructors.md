@@ -1,6 +1,6 @@
-# [Constructors](@id man-constructors)
+# Constructors
 
-Constructors [^1] are functions that create new objects -- specifically, instances of [Composite Types](@ref).
+Constructors ^1] are functions that create new objects -- specifically, instances of [Composite Types.
 In Julia, type objects also serve as constructor functions: they create new instances of themselves
 when applied to an argument tuple as a function. This much was already mentioned briefly when
 composite types were introduced. For example:
@@ -38,7 +38,7 @@ addresses all of these cases and more.
     is used to mean "constructor method" rather than "constructor function", especially as it is often
     used in the sense of singling out a particular method of the constructor from all of the others.
 
-## [Outer Constructor Methods](@id man-outer-constructor-methods)
+## Outer Constructor Methods
 
 A constructor is just like any other function in Julia in that its overall behavior is defined
 by the combined behavior of its methods. Accordingly, you can add functionality to a constructor
@@ -71,7 +71,7 @@ become clear very shortly, additional constructor methods declared as normal met
 are called *outer* constructor methods. Outer constructor methods can only ever create a new instance
 by calling another constructor method, such as the automatically provided default ones.
 
-## [Inner Constructor Methods](@id man-inner-constructor-methods)
+## Inner Constructor Methods
 
 While outer constructor methods succeed in addressing the problem of providing additional convenience
 methods for constructing objects, they fail to address the other two use cases mentioned in the
@@ -80,7 +80,7 @@ objects. For these problems, one needs *inner* constructor methods. An inner con
 is like an outer constructor method, except for two differences:
 
 1. It is declared inside the block of a type declaration, rather than outside of it like normal methods.
-2. It has access to a special locally existent function called [`new`](@ref) that creates objects of the
+2. It has access to a special locally existent function called `new` that creates objects of the
    block's type.
 
 For example, suppose one wants to declare a type that holds a pair of real numbers, subject to
@@ -191,7 +191,7 @@ for its `obj` field? The only solution is to allow creating an incompletely init
 of `SelfReferential` with an unassigned `obj` field, and using that incomplete instance as a valid
 value for the `obj` field of another instance, such as, for example, itself.
 
-To allow for the creation of incompletely initialized objects, Julia allows the [`new`](@ref) function
+To allow for the creation of incompletely initialized objects, Julia allows the `new` function
 to be called with fewer than the number of fields that the type has, returning an object with
 the unspecified fields uninitialized. The inner constructor method can then use the incomplete
 object, finishing its initialization before returning it. Here, for example, is another attempt
@@ -274,7 +274,7 @@ be thrown immediately.
 
 ## Parametric Constructors
 
-Parametric types add a few wrinkles to the constructor story. Recall from [Parametric Types](@ref)
+Parametric types add a few wrinkles to the constructor story. Recall from Parametric Types
 that, by default, instances of parametric composite types can be constructed either with explicitly
 given type parameters or with type parameters implied by the types of the arguments given to the
 constructor. Here are some examples:
@@ -313,7 +313,7 @@ Point{Float64}(1.0, 2.0)
 
 As you can see, for constructor calls with explicit type parameters, the arguments are converted
 to the implied field types: `Point{Int64}(1,2)` works, but `Point{Int64}(1.0,2.5)` raises an
-[`InexactError`](@ref) when converting `2.5` to [`Int64`](@ref). When the type is implied
+`InexactError` when converting `2.5` to `Int64`. When the type is implied
 by the arguments to the constructor call, as in `Point(1,2)`, then the types of the
 arguments must agree -- otherwise the `T` cannot be determined -- but any pair of real
 arguments with matching type may be given to the generic `Point` constructor.
@@ -354,9 +354,9 @@ following additional outer constructor method:
 julia> Point(x::Int64, y::Float64) = Point(convert(Float64,x),y);
 ```
 
-This method uses the [`convert`](@ref) function to explicitly convert `x` to [`Float64`](@ref)
+This method uses the `convert` function to explicitly convert `x` to `Float64`
 and then delegates construction to the general constructor for the case where both arguments are
-[`Float64`](@ref). With this method definition what was previously a [`MethodError`](@ref) now
+`Float64`. With this method definition what was previously a `MethodError` now
 successfully creates a point of type `Point{Float64}`:
 
 ```jldoctest parametric2
@@ -384,9 +384,9 @@ method definition to make all calls to the general `Point` constructor work as o
 julia> Point(x::Real, y::Real) = Point(promote(x,y)...);
 ```
 
-The `promote` function converts all its arguments to a common type -- in this case [`Float64`](@ref).
+The `promote` function converts all its arguments to a common type -- in this case `Float64`.
 With this method definition, the `Point` constructor promotes its arguments the same way that
-numeric operators like [`+`](@ref) do, and works for all kinds of real numbers:
+numeric operators like `+` do, and works for all kinds of real numbers:
 
 ```jldoctest parametric2
 julia> Point(1.5,2)
@@ -408,7 +408,7 @@ defining sophisticated behavior is typically quite simple.
 
 Perhaps the best way to tie all these pieces together is to present a real world example of a
 parametric composite type and its constructor methods. To that end, we implement our own rational number type
-`OurRational`, similar to Julia's built-in [`Rational`](@ref) type, defined in
+`OurRational`, similar to Julia's built-in `Rational` type, defined in
 [`rational.jl`](https://github.com/JuliaLang/julia/blob/master/base/rational.jl):
 
 
@@ -482,9 +482,9 @@ into rationals by supplying a value of `1` as the denominator.
 
 Following the outer constructor definitions, we defined a number of methods for the `⊘`
 operator, which provides a syntax for writing rationals (e.g. `1 ⊘ 2`). Julia's `Rational`
-type uses the [`//`](@ref) operator for this purpose. Before these definitions, `⊘`
+type uses the `//` operator for this purpose. Before these definitions, `⊘`
 is a completely undefined operator with only syntax and no meaning. Afterwards, it behaves just
-as described in [Rational Numbers](@ref) -- its entire behavior is defined in these few lines.
+as described in Rational Numbers -- its entire behavior is defined in these few lines.
 The first and most basic definition just makes `a ⊘ b` construct a `OurRational` by applying the
 `OurRational` constructor to `a` and `b` when they are integers. When one of the operands of `⊘`
 is already a rational number, we construct a new rational for the resulting ratio slightly differently;
@@ -531,8 +531,8 @@ SummedArray{Int32, Int32}(Int32[1, 2, 3], 6)
 ```
 
 The problem is that we want `S` to be a larger type than `T`, so that we can sum many elements
-with less information loss. For example, when `T` is [`Int32`](@ref), we would like `S` to
-be [`Int64`](@ref). Therefore we want to avoid an interface that allows the user to construct
+with less information loss. For example, when `T` is `Int32`, we would like `S` to
+be `Int64`. Therefore we want to avoid an interface that allows the user to construct
 instances of the type `SummedArray{Int32,Int32}`. One way to do this is to provide a
 constructor only for `SummedArray`, but inside the `struct` definition block to suppress
 generation of default constructors:

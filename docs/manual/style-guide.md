@@ -17,7 +17,7 @@ are. Furthermore, code inside functions tends to run much faster than top level 
 Julia's compiler works.
 
 It is also worth emphasizing that functions should take arguments, instead of operating directly
-on global variables (aside from constants like [`pi`](@ref)).
+on global variables (aside from constants like `pi`).
 
 ## Avoid writing overly-specific types
 
@@ -36,10 +36,10 @@ complex(float(x))
 The second version will convert `x` to an appropriate type, instead of always the same type.
 
 This style point is especially relevant to function arguments. For example, don't declare an argument
-to be of type `Int` or [`Int32`](@ref) if it really could be any integer, expressed with the abstract
-type [`Integer`](@ref). In fact, in many cases you can omit the argument type altogether,
+to be of type `Int` or `Int32` if it really could be any integer, expressed with the abstract
+type `Integer`. In fact, in many cases you can omit the argument type altogether,
 unless it is needed to disambiguate from other method definitions, since a
-[`MethodError`](@ref) will be thrown anyway if a type is passed that does not support any
+`MethodError` will be thrown anyway if a type is passed that does not support any
 of the requisite operations. (This is known as
 [duck typing](https://en.wikipedia.org/wiki/Duck_typing).)
 
@@ -53,8 +53,8 @@ addone(x::Number) = x + oneunit(x)     # any numeric type
 addone(x) = x + oneunit(x)             # any type supporting + and oneunit
 ```
 
-The last definition of `addone` handles any type supporting [`oneunit`](@ref) (which returns 1 in
-the same type as `x`, which avoids unwanted type promotion) and the [`+`](@ref) function with
+The last definition of `addone` handles any type supporting `oneunit` (which returns 1 in
+the same type as `x`, which avoids unwanted type promotion) and the `+` function with
 those arguments. The key thing to realize is that there is *no performance penalty* to defining
 *only* the general `addone(x) = x + oneunit(x)`, because Julia will automatically compile specialized
 versions as needed. For example, the first time you call `addone(12)`, Julia will automatically
@@ -90,7 +90,7 @@ One issue here is that if a function inherently requires integers, it might be b
 the caller to decide how non-integers should be converted (e.g. floor or ceiling). Another issue
 is that declaring more specific types leaves more "space" for future method definitions.
 
-## [Append `!` to names of functions that modify their arguments](@id bang-convention)
+## Append `!` to names of functions that modify their arguments
 
 Instead of:
 
@@ -115,8 +115,8 @@ end
 ```
 
 Julia Base uses this convention throughout and contains examples of functions
-with both copying and modifying forms (e.g., [`sort`](@ref) and [`sort!`](@ref)), and others
-which are just modifying (e.g., [`push!`](@ref), [`pop!`](@ref), [`splice!`](@ref)).  It
+with both copying and modifying forms (e.g., `sort` and `sort!`), and others
+which are just modifying (e.g., `push!`, `pop!`, `splice!`).  It
 is typical for such functions to also return the modified array for convenience.
 
 ## Avoid strange type `Union`s
@@ -137,11 +137,11 @@ uses (e.g. `a[i]::Int`) than to try to pack many alternatives into one type.
 ## Use naming conventions consistent with Julia `base/`
 
   * modules and type names use capitalization and camel case: `module SparseArrays`, `struct UnitRange`.
-  * functions are lowercase ([`maximum`](@ref), [`convert`](@ref)) and, when readable, with multiple
-    words squashed together ([`isequal`](@ref), [`haskey`](@ref)). When necessary, use underscores
-    as word separators. Underscores are also used to indicate a combination of concepts ([`remotecall_fetch`](@ref)
+  * functions are lowercase (`maximum`, `convert`) and, when readable, with multiple
+    words squashed together (`isequal`, `haskey`). When necessary, use underscores
+    as word separators. Underscores are also used to indicate a combination of concepts (`remotecall_fetch`
     as a more efficient implementation of `fetch(remotecall(...))`) or as modifiers.
-  * conciseness is valued, but avoid abbreviation ([`indexin`](@ref) rather than `indxin`) as
+  * conciseness is valued, but avoid abbreviation (`indexin` rather than `indxin`) as
     it becomes difficult to remember whether and how particular words are abbreviated.
 
 If a function name requires multiple words, consider whether it might represent more than one
@@ -153,12 +153,12 @@ As a general rule, the Base library uses the following order of arguments to fun
 as applicable:
 
 1. **Function argument**.
-   Putting a function argument first permits the use of [`do`](@ref) blocks for passing
+   Putting a function argument first permits the use of `do` blocks for passing
    multiline anonymous functions.
 
 2. **I/O stream**.
    Specifying the `IO` object first permits passing the function to functions such as
-   [`sprint`](@ref), e.g. `sprint(show, x)`.
+   `sprint`, e.g. `sprint(show, x)`.
 
 3. **Input being mutated**.
    For example, in [`fill!(x, v)`](@ref fill!), `x` is the object being mutated and it
@@ -188,7 +188,7 @@ as applicable:
 9. **Varargs**.
    This refers to arguments that can be listed indefinitely at the end of a function call.
    For example, in `Matrix{T}(undef, dims)`, the dimensions can be given as a
-   [`Tuple`](@ref), e.g. `Matrix{T}(undef, (1,2))`, or as [`Vararg`](@ref)s,
+   `Tuple`, e.g. `Matrix{T}(undef, (1,2))`, or as `Vararg`s,
    e.g. `Matrix{T}(undef, 1, 2)`.
 
 10. **Keyword arguments**.
@@ -200,8 +200,8 @@ numbers merely denote the precedence that should be used for any applicable argu
 to a function.
 
 There are of course a few exceptions.
-For example, in [`convert`](@ref), the type should always come first.
-In [`setindex!`](@ref), the value comes before the indices so that the indices can be
+For example, in `convert`, the type should always come first.
+In `setindex!`, the value comes before the indices so that the indices can be
 provided as varargs.
 
 When designing APIs, adhering to this general order as much as possible is likely to give
@@ -228,7 +228,7 @@ if (a == b)
 ## Don't overuse `...`
 
 Splicing function arguments can be addictive. Instead of `[a..., b...]`, use simply `[a; b]`,
-which already concatenates arrays. [`collect(a)`](@ref) is better than `[a...]`, but since `a`
+which already concatenates arrays. `collect(a)` is better than `[a...]`, but since `a`
 is already iterable it is often even better to leave it alone, and not convert it to an array.
 
 ## Don't use unnecessary static parameters
@@ -246,11 +246,11 @@ foo(x::Real) = ...
 ```
 
 instead, especially if `T` is not used in the function body. Even if `T` is used, it can be replaced
-with [`typeof(x)`](@ref) if convenient. There is no performance difference. Note that this is
+with `typeof(x)` if convenient. There is no performance difference. Note that this is
 not a general caution against static parameters, just against uses where they are not needed.
 
 Note also that container types, specifically may need type parameters in function calls. See the
-FAQ [Avoid fields with abstract containers](@ref) for more information.
+FAQ Avoid fields with abstract containers for more information.
 
 ## Avoid confusion about whether something is an instance or a type
 
@@ -276,7 +276,7 @@ with the "values" as subtypes.
 
 Be aware of when a macro could really be a function instead.
 
-Calling [`eval`](@ref) inside a macro is a particularly dangerous warning sign; it means the
+Calling `eval` inside a macro is a particularly dangerous warning sign; it means the
 macro will only work when called at the top level. If such a macro is written as a function instead,
 it will naturally have access to the run-time values it needs.
 
@@ -348,7 +348,7 @@ higher-level, Julia-friendly API.
 
 ## Be careful with type equality
 
-You generally want to use [`isa`](@ref) and [`<:`](@ref) for testing types,
+You generally want to use `isa` and `<:` for testing types,
 not `==`. Checking types for exact equality typically only makes sense when comparing to a known
 concrete type (e.g. `T == Float64`), or if you *really, really* know what you're doing.
 
@@ -356,7 +356,7 @@ concrete type (e.g. `T == Float64`), or if you *really, really* know what you're
 
 Since higher-order functions are often called with anonymous functions, it is easy to conclude
 that this is desirable or even necessary. But any function can be passed directly, without being
-"wrapped" in an anonymous function. Instead of writing `map(x->f(x), a)`, write [`map(f, a)`](@ref).
+"wrapped" in an anonymous function. Instead of writing `map(x->f(x), a)`, write `map(f, a)`.
 
 ## Avoid using floats for numeric literals in generic code when possible
 
@@ -398,8 +398,8 @@ julia> g(1)
 
 As you can see, the second version, where we used an `Int` literal, preserved the type of the
 input argument, while the first didn't. This is because e.g. `promote_type(Int, Float64) == Float64`,
-and promotion happens with the multiplication. Similarly, [`Rational`](@ref) literals are less type disruptive
-than [`Float64`](@ref) literals, but more disruptive than `Int`s:
+and promotion happens with the multiplication. Similarly, `Rational` literals are less type disruptive
+than `Float64` literals, but more disruptive than `Int`s:
 
 ```jldoctest
 julia> h(x) = 2//1 * x

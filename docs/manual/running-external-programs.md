@@ -10,22 +10,25 @@ julia> `echo hello`
 
 differs in several aspects from the behavior in various shells, Perl, or Ruby:
 
-  * Instead of immediately running the command, backticks create a [`Cmd`](@ref) object to represent the command.
-    You can use this object to connect the command to others via pipes, [`run`](@ref) it, and [`read`](@ref) or [`write`](@ref)
+  * Instead of immediately running the command, backticks create a `Cmd` object to represent the command.
+    You can use this object to connect the command to others via pipes, `run` it, and `read` or `write`
     to it.
   * When the command is run, Julia does not capture its output unless you specifically arrange for
-    it to. Instead, the output of the command by default goes to [`stdout`](@ref) as it would using
+    it to. Instead, the output of the command by default goes to `stdout` as it would using
     `libc`'s `system` call.
   * The command is never run with a shell. Instead, Julia parses the command syntax directly, appropriately
     interpolating variables and splitting on words as the shell would, respecting shell quoting syntax.
     The command is run as `julia`'s immediate child process, using `fork` and `exec` calls.
 
 
-!!! note
+```eval_rst
+
+.. note::
     The following assumes a Posix environment as on Linux or MacOS.
     On Windows, many similar commands, such as `echo` and `dir`, are not external programs and instead are built into the shell `cmd.exe` itself.
     One option to run these commands is to invoke `cmd.exe`, for example `cmd /C echo hello`.
     Alternatively Julia can be run inside a Posix environment such as Cygwin.
+```
 
 Here's a simple example of running an external program:
 
@@ -40,11 +43,11 @@ julia> run(mycommand);
 hello
 ```
 
-The `hello` is the output of the `echo` command, sent to [`stdout`](@ref). The run method itself
-returns `nothing`, and throws an [`ErrorException`](@ref) if the external command fails to run
+The `hello` is the output of the `echo` command, sent to `stdout`. The run method itself
+returns `nothing`, and throws an `ErrorException` if the external command fails to run
 successfully.
 
-If you want to read the output of the external command, [`read`](@ref) or [`readchomp`](@ref)
+If you want to read the output of the external command, `read` or `readchomp`
 can be used instead:
 
 ```jldoctest
@@ -55,7 +58,7 @@ julia> readchomp(`echo hello`)
 "hello"
 ```
 
-More generally, you can use [`open`](@ref) to read from or write to an external command.
+More generally, you can use `open` to read from or write to an external command.
 
 ```jldoctest
 julia> open(`less`, "w", stdout) do io
@@ -80,11 +83,11 @@ julia> `echo "foo bar"`[2]
 "foo bar"
 ```
 
-## [Interpolation](@id command-interpolation)
+## Interpolation
 
 Suppose you want to do something a bit more complicated and use the name of a file in the variable
-`file` as an argument to a command. You can use ` $ ` for interpolation much as you would in a string
-literal (see [Strings](@ref)):
+`file` as an argument to a command. You can use `$` for interpolation much as you would in a string
+literal (see Strings):
 
 ```jldoctest
 julia> file = "/etc/passwd"
@@ -253,7 +256,7 @@ hello | sort
 
 This expression invokes the `echo` command with three words as arguments: `hello`, `|`, and `sort`.
 The result is that a single line is printed: `hello | sort`. How, then, does one construct a
-pipeline? Instead of using `'|'` inside of backticks, one uses [`pipeline`](@ref):
+pipeline? Instead of using `'|'` inside of backticks, one uses `pipeline`:
 
 ```jldoctest
 julia> run(pipeline(`echo hello`, `sort`));
@@ -288,7 +291,7 @@ hello
 ```
 
 The order of the output here is non-deterministic because the two `echo` processes are started
-nearly simultaneously, and race to make the first write to the [`stdout`](@ref) descriptor they
+nearly simultaneously, and race to make the first write to the `stdout` descriptor they
 share with each other and the `julia` parent process. Julia lets you pipe the output from both
 of these processes to another program:
 
@@ -318,7 +321,7 @@ For example, when reading all of the output from a command, call `read(out, Stri
 since the former will actively consume all of the data written by the process, whereas the latter
 will attempt to store the data in the kernel's buffers while waiting for a reader to be connected.
 
-Another common solution is to separate the reader and writer of the pipeline into separate [`Task`](@ref)s:
+Another common solution is to separate the reader and writer of the pipeline into separate `Task`s:
 
 ```julia
 writer = @async write(process, "data")
@@ -351,7 +354,7 @@ generates lines with the numbers 0 through 5 on them, while two parallel process
 output, one prefixing lines with the letter "A", the other with the letter "B". Which consumer
 gets the first line is non-deterministic, but once that race has been won, the lines are consumed
 alternately by one process and then the other. (Setting `$|=1` in Perl causes each print statement
-to flush the [`stdout`](@ref) handle, which is necessary for this example to work. Otherwise all
+to flush the `stdout` handle, which is necessary for this example to work. Otherwise all
 the output is buffered and printed to the pipe at once, to be read by just one consumer process.)
 
 Here is an even more complex multi-stage producer-consumer example:

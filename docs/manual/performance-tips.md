@@ -1,4 +1,4 @@
-# [Performance Tips](@id man-performance-tips)
+# Performance Tips
 
 In the following sections, we briefly go through a few techniques that can help make your Julia
 code run as fast as possible.
@@ -34,10 +34,13 @@ end
 
 Passing arguments to functions is better style. It leads to more reusable code and clarifies what the inputs and outputs are.
 
-!!! note
+```eval_rst
+
+.. note::
     All code in the REPL is evaluated in global scope, so a variable defined and assigned
     at top level will be a **global** variable. Variables defined at top level scope inside
     modules are also global.
+```
 
 In the following REPL session:
 
@@ -53,9 +56,9 @@ julia> global x = 1.0
 
 so all the performance issues discussed previously apply.
 
-## Measure performance with [`@time`](@ref) and pay attention to memory allocation
+## Measure performance with `@time` and pay attention to memory allocation
 
-A useful tool for measuring performance is the [`@time`](@ref) macro. We here repeat the example
+A useful tool for measuring performance is the `@time` macro. We here repeat the example
 with the global variable above, but this time with the type annotation removed:
 
 ```jldoctest; setup = :(using Random; Random.seed!(1234)), filter = r"[0-9\.]+ seconds \(.*?\)"
@@ -78,7 +81,7 @@ julia> @time sum_global()
 496.84883432553846
 ```
 
-On the first call (`@time sum_global()`) the function gets compiled. (If you've not yet used [`@time`](@ref)
+On the first call (`@time sum_global()`) the function gets compiled. (If you've not yet used `@time`
 in this session, it will also compile functions needed for timing.)  You should not take the results
 of this run seriously. For the second run, note that in addition to reporting the time, it also
 indicated that a significant amount of memory was allocated. We are here just computing a sum over all elements in
@@ -128,30 +131,33 @@ julia> time_sum(x)
 In some situations, your function may need to allocate memory as part of its operation, and this
 can complicate the simple picture above. In such cases, consider using one of the [tools](@ref tools)
 below to diagnose problems, or write a version of your function that separates allocation from
-its algorithmic aspects (see [Pre-allocating outputs](@ref)).
+its algorithmic aspects (see Pre-allocating outputs).
 
-!!! note
+```eval_rst
+
+.. note::
     For more serious benchmarking, consider the [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl)
     package which among other things evaluates the function multiple times in order to reduce noise.
+```
 
-## [Tools](@id tools)
+## Tools
 
 Julia and its package ecosystem includes tools that may help you diagnose problems and improve
 the performance of your code:
 
-  * [Profiling](@ref) allows you to measure the performance of your running code and identify lines
+  * Profiling allows you to measure the performance of your running code and identify lines
     that serve as bottlenecks. For complex projects, the [ProfileView](https://github.com/timholy/ProfileView.jl)
     package can help you visualize your profiling results.
   * The [Traceur](https://github.com/JunoLab/Traceur.jl) package can help you find common performance problems in your code.
-  * Unexpectedly-large memory allocations--as reported by [`@time`](@ref), [`@allocated`](@ref), or
+  * Unexpectedly-large memory allocations--as reported by `@time`, `@allocated`, or
     the profiler (through calls to the garbage-collection routines)--hint that there might be issues
     with your code. If you don't see another reason for the allocations, suspect a type problem.
      You can also start Julia with the `--track-allocation=user` option and examine the resulting
-    `*.mem` files to see information about where those allocations occur. See [Memory allocation analysis](@ref).
+    `*.mem` files to see information about where those allocations occur. See Memory allocation analysis.
   * `@code_warntype` generates a representation of your code that can be helpful in finding expressions
-    that result in type uncertainty. See [`@code_warntype`](@ref) below.
+    that result in type uncertainty. See `@code_warntype` below.
 
-## [Avoid containers with abstract type parameters](@id man-performance-abstract-container)
+## Avoid containers with abstract type parameters
 
 When working with parameterized types, including arrays, it is best to avoid parameterizing with
 abstract types where possible.
@@ -169,10 +175,10 @@ julia> push!(a, 1); push!(a, 2.0); push!(a, π)
  π = 3.1415926535897...
 ```
 
-Because `a` is an array of abstract type [`Real`](@ref), it must be able to hold any
+Because `a` is an array of abstract type `Real`, it must be able to hold any
 `Real` value. Since `Real` objects can be of arbitrary size and structure, `a` must be
 represented as an array of pointers to individually allocated `Real` objects. However, if we instead
-only allow numbers of the same type, e.g. [`Float64`](@ref), to be stored in `a` these can be stored more
+only allow numbers of the same type, e.g. `Float64`, to be stored in `a` these can be stored more
 efficiently:
 
 ```jldoctest
@@ -193,7 +199,7 @@ If you cannot avoid containers with abstract value types, it is sometimes better
 parametrize with `Any` to avoid runtime type checking. E.g. `IdDict{Any, Any}` performs
 better than `IdDict{Type, Vector}`
 
-See also the discussion under [Parametric Types](@ref).
+See also the discussion under Parametric Types.
 
 ## Type declarations
 
@@ -233,7 +239,7 @@ MyAmbiguousType
 
 The values of `b` and `c` have the same type, yet their underlying representation of data in memory is very
 different. Even if you stored just numeric values in field `a`, the fact that the memory representation
-of a [`UInt8`](@ref) differs from a [`Float64`](@ref) also means that the CPU needs to handle
+of a `UInt8` differs from a `Float64` also means that the CPU needs to handle
 them using two different kinds of instructions. Since the required information is not available
 in the type, such decisions have to be made at run-time. This slows performance.
 
@@ -445,12 +451,12 @@ function foo(a::Array{Any,1})
 end
 ```
 
-Here, we happened to know that the first element of `a` would be an [`Int32`](@ref). Making
+Here, we happened to know that the first element of `a` would be an `Int32`. Making
 an annotation like this has the added benefit that it will raise a run-time error if the
 value is not of the expected type, potentially catching certain bugs earlier.
 
 In the case that the type of `a[1]` is not known precisely, `x` can be declared via
-`x = convert(Int32, a[1])::Int32`. The use of the [`convert`](@ref) function allows `a[1]`
+`x = convert(Int32, a1])::Int32`. The use of the [`convert` function allows `a[1]`
 to be any object convertible to an `Int32` (such as `UInt8`), thus increasing the genericity
 of the code by loosening the type requirement. Notice that `convert` itself needs a type
 annotation in this context in order to achieve type stability. This is because the compiler
@@ -543,7 +549,7 @@ One only needs to introduce a single type parameter to force specialization, eve
 h_vararg(x::Vararg{Any, N}) where {N} = tuple(x...)
 ```
 
-Note that [`@code_typed`](@ref) and friends will always show you specialized code, even if Julia
+Note that `@code_typed` and friends will always show you specialized code, even if Julia
 would not normally specialize that method call. You need to check the
 [method internals](@ref ast-lowered-method) if you want to see whether specializations are generated
 when argument types are changed, i.e., if `(@which f(...)).specializations` contains specializations
@@ -598,7 +604,7 @@ easily be fixed as follows:
 pos(x) = x < 0 ? zero(x) : x
 ```
 
-There is also a [`oneunit`](@ref) function, and a more general [`oftype(x, y)`](@ref) function, which
+There is also a `oneunit` function, and a more general `oftype(x, y)` function, which
 returns `y` converted to the type of `x`.
 
 ## Avoid changing the type of a variable
@@ -616,7 +622,7 @@ end
 ```
 
 Local variable `x` starts as an integer, and after one loop iteration becomes a floating-point
-number (the result of [`/`](@ref) operator). This makes it more difficult for the compiler to
+number (the result of `/` operator). This makes it more difficult for the compiler to
 optimize the body of the loop. There are several possible fixes:
 
   * Initialize `x` with `x = 1.0`
@@ -624,7 +630,7 @@ optimize the body of the loop. There are several possible fixes:
   * Use an explicit conversion by `x = oneunit(Float64)`
   * Initialize with the first loop iteration, to `x = 1 / rand()`, then loop `for i = 2:10`
 
-## [Separate kernel functions (aka, function barriers)](@id kernel-functions)
+## Separate kernel functions (aka, function barriers)
 
 Many functions follow a pattern of performing some set-up work, and then running many iterations
 to perform a core computation. Where possible, it is a good idea to put these core computations
@@ -678,12 +684,12 @@ The second form is also often better style and can lead to more code reuse.
 
 This pattern is used in several places in Julia Base. For example, see `vcat` and `hcat`
 in [`abstractarray.jl`](https://github.com/JuliaLang/julia/blob/40fe264f4ffaa29b749bcf42239a89abdcbba846/base/abstractarray.jl#L1205-L1206),
-or the [`fill!`](@ref) function, which we could have used instead of writing our own `fill_twos!`.
+or the `fill!` function, which we could have used instead of writing our own `fill_twos!`.
 
 Functions like `strange_twos` occur when dealing with data of uncertain type, for example data
 loaded from an input file that might contain either integers, floats, strings, or something else.
 
-## [Types with values-as-parameters](@id man-performance-value-type)
+## Types with values-as-parameters
 
 Let's say you want to create an `N`-dimensional array that has size 3 along each axis. Such arrays
 can be created like this:
@@ -726,7 +732,7 @@ slow.
 Now, one very good way to solve such problems is by using the [function-barrier technique](@ref kernel-functions).
 However, in some cases you might want to eliminate the type-instability altogether. In such cases,
 one approach is to pass the dimensionality as a parameter, for example through `Val{T}()` (see
-["Value types"](@ref)):
+"Value types"):
 
 ```jldoctest
 julia> function array3(fillval, ::Val{N}) where N
@@ -820,7 +826,7 @@ or thousands of variants compiled for it. Each of these increases the size of th
 code, the length of internal lists of methods, etc. Excess enthusiasm for values-as-parameters
 can easily waste enormous resources.
 
-## [Access arrays in memory order, along columns](@id man-performance-column-major)
+## Access arrays in memory order, along columns
 
 Multidimensional arrays in Julia are stored in column-major order. This means that arrays are
 stacked one column at a time. This can be verified using the `vec` function or the syntax `[:]`
@@ -849,10 +855,10 @@ that looping will be faster if the inner-most loop index is the first to appear 
 Keep in mind that indexing an array with `:` is an implicit loop that iteratively accesses all elements within a particular dimension; it can be faster to extract columns than rows, for example.
 
 Consider the following contrived example. Imagine we wanted to write a function that accepts a
-[`Vector`](@ref) and returns a square [`Matrix`](@ref) with either the rows or the columns filled with copies
+`Vector` and returns a square `Matrix` with either the rows or the columns filled with copies
 of the input vector. Assume that it is not important whether rows or columns are filled with these
 copies (perhaps the rest of the code can be easily adapted accordingly). We could conceivably
-do this in at least four ways (in addition to the recommended call to the built-in [`repeat`](@ref)):
+do this in at least four ways (in addition to the recommended call to the built-in `repeat`):
 
 ```julia
 function copy_cols(x::Vector{T}) where T
@@ -969,7 +975,7 @@ julia> @time loopinc_prealloc()
 
 Preallocation has other advantages, for example by allowing the caller to control the "output"
 type from an algorithm. In the example above, we could have passed a `SubArray` rather than an
-[`Array`](@ref), had we so desired.
+`Array`, had we so desired.
 
 Taken to its extreme, pre-allocation can make your code uglier, so performance measurements and
 some judgment may be required. However, for "vectorized" (element-wise) functions, the convenient
@@ -1023,7 +1029,7 @@ example, but in many contexts it is more convenient to just sprinkle
 some dots in your expressions rather than defining a separate function
 for each vectorized operation.)
 
-## [Consider using views for slices](@id man-performance-views)
+## Consider using views for slices
 
 In Julia, an array "slice" expression like `array[1:5, :]` creates
 a copy of that data (except on the left-hand side of an assignment,
@@ -1039,9 +1045,9 @@ An alternative is to create a "view" of the array, which is
 an array object (a `SubArray`) that actually references the data
 of the original array in-place, without making a copy. (If you
 write to a view, it modifies the original array's data as well.)
-This can be done for individual slices by calling [`view`](@ref),
+This can be done for individual slices by calling `view`,
 or more simply for a whole expression or block of code by putting
-[`@views`](@ref) in front of that expression. For example:
+`@views` in front of that expression. For example:
 
 ```jldoctest; filter = r"[0-9\.]+ seconds \(.*?\)"
 julia> fcopy(x) = sum(x[2:end-1]);
@@ -1169,9 +1175,9 @@ responses = [fetch(r) for r in refs]
 ```
 
 The former results in a single network round-trip to every worker, while the latter results in
-two network calls - first by the [`@spawnat`](@ref) and the second due to the [`fetch`](@ref)
-(or even a [`wait`](@ref)).
-The [`fetch`](@ref)/[`wait`](@ref) is also being executed serially resulting in an overall poorer performance.
+two network calls - first by the `@spawnat` and the second due to the `fetch`
+(or even a `wait`).
+The `fetch`/`wait` is also being executed serially resulting in an overall poorer performance.
 
 ## Fix deprecation warnings
 
@@ -1183,22 +1189,22 @@ be modified as suggested by the warnings.
 
 These are some minor points that might help in tight inner loops.
 
-  * Avoid unnecessary arrays. For example, instead of [`sum([x,y,z])`](@ref) use `x+y+z`.
-  * Use [`abs2(z)`](@ref) instead of [`abs(z)^2`](@ref) for complex `z`. In general, try to rewrite
-    code to use [`abs2`](@ref) instead of [`abs`](@ref) for complex arguments.
-  * Use [`div(x,y)`](@ref) for truncating division of integers instead of [`trunc(x/y)`](@ref), [`fld(x,y)`](@ref)
-    instead of [`floor(x/y)`](@ref), and [`cld(x,y)`](@ref) instead of [`ceil(x/y)`](@ref).
+  * Avoid unnecessary arrays. For example, instead of `sum([x,y,z])` use `x+y+z`.
+  * Use `abs2(z)` instead of `abs(z)^2` for complex `z`. In general, try to rewrite
+    code to use `abs2` instead of `abs` for complex arguments.
+  * Use `div(x,y)` for truncating division of integers instead of `trunc(x/y)`, `fld(x,y)`
+    instead of `floor(x/y)`, and `cld(x,y)` instead of `ceil(x/y)`.
 
-## [Performance Annotations](@id man-performance-annotations)
+## Performance Annotations
 
 Sometimes you can enable better optimization by promising certain program properties.
 
-  * Use [`@inbounds`](@ref) to eliminate array bounds checking within expressions. Be certain before doing
+  * Use `@inbounds` to eliminate array bounds checking within expressions. Be certain before doing
     this. If the subscripts are ever out of bounds, you may suffer crashes or silent corruption.
-  * Use [`@fastmath`](@ref) to allow floating point optimizations that are correct for real numbers, but lead
+  * Use `@fastmath` to allow floating point optimizations that are correct for real numbers, but lead
     to differences for IEEE numbers. Be careful when doing this, as this may change numerical results.
     This corresponds to the `-ffast-math` option of clang.
-  * Write [`@simd`](@ref) in front of `for` loops to promise that the iterations are independent and may be
+  * Write `@simd` in front of `for` loops to promise that the iterations are independent and may be
     reordered.  Note that in many cases, Julia can automatically vectorize code without the `@simd` macro;
     it is only beneficial in cases where such a transformation would otherwise be illegal, including cases
     like allowing floating-point re-associativity and ignoring dependent memory accesses (`@simd ivdep`).
@@ -1211,10 +1217,13 @@ The common idiom of using 1:n to index into an AbstractArray is not safe if the 
 and may cause a segmentation fault if bounds checking is turned off. Use `LinearIndices(x)` or `eachindex(x)`
 instead (see also [Arrays with custom indices](@ref man-custom-indices)).
 
-!!! note
+```eval_rst
+
+.. note::
     While `@simd` needs to be placed directly in front of an innermost `for` loop, both `@inbounds` and `@fastmath`
     can be applied to either single expressions or all the expressions that appear within nested blocks of code, e.g.,
     using `@inbounds begin` or `@inbounds for ...`.
+```
 
 Here is an example with both `@inbounds` and `@simd` markup (we here use `@noinline` to prevent
 the optimizer from trying to be too clever and defeat our benchmark):
@@ -1343,7 +1352,7 @@ on this particular computer), the main difference is that the expression `1 / (2
 `idx = 1 / (2*dx)`. In the loop, the expression `... / (2*dx)` then becomes `... * idx`, which
 is much faster to evaluate. Of course, both the actual optimization that is applied by the compiler
 as well as the resulting speedup depend very much on the hardware. You can examine the change
-in generated code by using Julia's [`code_native`](@ref) function.
+in generated code by using Julia's `code_native` function.
 
 Note that `@fastmath` also assumes that `NaN`s will not occur during the computation, which can lead to surprising behavior:
 
@@ -1362,9 +1371,9 @@ false
 ## Treat Subnormal Numbers as Zeros
 
 Subnormal numbers, formerly called [denormal numbers](https://en.wikipedia.org/wiki/Denormal_number),
-are useful in many contexts, but incur a performance penalty on some hardware. A call [`set_zero_subnormals(true)`](@ref)
+are useful in many contexts, but incur a performance penalty on some hardware. A call `set_zero_subnormals(true)`
 grants permission for floating-point operations to treat subnormal inputs or outputs as zeros,
-which may improve performance on some hardware. A call [`set_zero_subnormals(false)`](@ref) enforces
+which may improve performance on some hardware. A call `set_zero_subnormals(false)` enforces
 strict IEEE behavior for subnormal numbers.
 
 Below is an example where subnormals noticeably impact performance on some hardware:
@@ -1432,9 +1441,9 @@ In some applications, an alternative to zeroing subnormal numbers is to inject a
 a = rand(Float32,1000) * 1.f-9
 ```
 
-## [[`@code_warntype`](@ref)](@id man-code-warntype)
+## `@code_warntype`
 
-The macro [`@code_warntype`](@ref) (or its function variant [`code_warntype`](@ref)) can sometimes
+The macro `@code_warntype` (or its function variant `code_warntype`) can sometimes
 be helpful in diagnosing type-related problems. Here's an example:
 
 ```julia-repl
@@ -1459,11 +1468,11 @@ Body::Float64
 └──      return %4
 ```
 
-Interpreting the output of [`@code_warntype`](@ref), like that of its cousins [`@code_lowered`](@ref),
-[`@code_typed`](@ref), [`@code_llvm`](@ref), and [`@code_native`](@ref), takes a little practice.
+Interpreting the output of `@code_warntype`, like that of its cousins `@code_lowered`,
+`@code_typed`, `@code_llvm`, and `@code_native`, takes a little practice.
 Your code is being presented in form that has been heavily digested on its way to generating
 compiled machine code. Most of the expressions are annotated by a type, indicated by the `::T`
-(where `T` might be [`Float64`](@ref), for example). The most important characteristic of [`@code_warntype`](@ref)
+(where `T` might be `Float64`, for example). The most important characteristic of `@code_warntype`
 is that non-concrete types are displayed in red; since this document is written in Markdown, which has no color,
 in this document, red text is denoted by uppercase.
 
@@ -1481,12 +1490,12 @@ How you use this information is up to you. Obviously, it would be far and away b
 to be type-stable: if you did so, all of the variables in `f` would be concrete, and its performance
 would be optimal. However, there are circumstances where this kind of *ephemeral* type instability
 might not matter too much: for example, if `pos` is never used in isolation, the fact that `f`'s
-output is type-stable (for [`Float64`](@ref) inputs) will shield later code from the propagating
+output is type-stable (for `Float64` inputs) will shield later code from the propagating
 effects of type instability. This is particularly relevant in cases where fixing the type instability
 is difficult or impossible. In such cases, the tips above (e.g., adding type annotations and/or
 breaking up functions) are your best tools to contain the "damage" from type instability.
 Also, note that even Julia Base has functions that are type unstable.
-For example, the function [`findfirst`](@ref) returns the index into an array where a key is found,
+For example, the function `findfirst` returns the index into an array where a key is found,
 or `nothing` if it is not found, a clear type instability. In order to make it easier to find the
 type instabilities that are likely to be important, `Union`s containing either `missing` or `nothing`
 are color highlighted in yellow, instead of red.
@@ -1512,7 +1521,7 @@ The following examples may help you interpret expressions marked as containing n
       * Suggestion: use concrete types like `Array{T,3}` or `Array{T,N}`, where `N` is now a parameter
         of `ArrayContainer`
 
-## [Performance of captured variable](@id man-performance-captured)
+## Performance of captured variable
 
 Consider the following example that defines an inner function:
 ```julia
@@ -1600,4 +1609,4 @@ When checking if a value is equal to some singleton it can be
 better for performance to check for identicality (`===`) instead of
 equality (`==`). The same advice applies to using `!==` over `!=`.
 These type of checks frequently occur e.g. when implementing the iteration
-protocol and checking if `nothing` is returned from [`iterate`](@ref).
+protocol and checking if `nothing` is returned from `iterate`.

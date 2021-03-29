@@ -10,24 +10,27 @@ permanent effect. The current value of the same environment variable can be
 determined by evaluating `ENV["JULIA_EDITOR"]`.
 
 The environment variables that Julia uses generally start with `JULIA`. If
-[`InteractiveUtils.versioninfo`](@ref) is called with the keyword `verbose=true`, then the
+`InteractiveUtils.versioninfo` is called with the keyword `verbose=true`, then the
 output will list any defined environment variables relevant for Julia,
 including those which include `JULIA` in their names.
 
-!!! note
+```eval_rst
+
+.. note::
 
     Some variables, such as `JULIA_NUM_THREADS` and `JULIA_PROJECT`, need to be set before Julia
     starts, therefore adding these to `~/.julia/config/startup.jl` is too late in the startup process.
     In Bash, environment variables can either be set manually by running, e.g.,
     `export JULIA_NUM_THREADS=4` before starting Julia, or by adding the same command to
     `~/.bashrc` or `~/.bash_profile` to set the variable each time Bash is started.
+```
 
 ## File locations
 
 ### `JULIA_BINDIR`
 
 The absolute path of the directory containing the Julia executable, which sets
-the global variable [`Sys.BINDIR`](@ref). If `$JULIA_BINDIR` is not set, then
+the global variable `Sys.BINDIR`. If `$JULIA_BINDIR` is not set, then
 Julia determines the value `Sys.BINDIR` at run-time.
 
 The executable itself is one of
@@ -82,15 +85,18 @@ then Julia tries to find a project directory that contains `Project.toml` or
 `JuliaProject.toml` file from the current directory and its parents. See also
 the chapter on [Code Loading](@ref code-loading).
 
-!!! note
+```eval_rst
+
+.. note::
 
     `JULIA_PROJECT` must be defined before starting julia; defining it in `startup.jl`
     is too late in the startup process.
+```
 
 ### `JULIA_LOAD_PATH`
 
 The `JULIA_LOAD_PATH` environment variable is used to populate the global Julia
-[`LOAD_PATH`](@ref) variable, which determines which packages can be loaded via
+`LOAD_PATH` variable, which determines which packages can be loaded via
 `import` and `using` (see [Code Loading](@ref code-loading)).
 
 Unlike the shell `PATH` variable, empty entries in `JULIA_LOAD_PATH` are expanded to
@@ -114,7 +120,7 @@ environment variable or if it must have a value, set it to the string `:`.
 ### `JULIA_DEPOT_PATH`
 
 The `JULIA_DEPOT_PATH` environment variable is used to populate the global Julia
-[`DEPOT_PATH`](@ref) variable, which controls where the package manager, as well
+`DEPOT_PATH` variable, which controls where the package manager, as well
 as Julia's code loading mechanisms, look for package registries, installed
 packages, named environments, repo clones, cached compiled package images,
 configuration files, and the default location of the REPL's history file.
@@ -137,10 +143,13 @@ chosen so that it would be possible to set an empty depot path via the environme
 variable. If you want the default depot path, either unset the environment variable
 or if it must have a value, set it to the string `:`.
 
-!!! note
+```eval_rst
+
+.. note::
 
     On Windows, path elements are separated by the `;` character, as is the case with
     most path lists on Windows.
+```
 
 ### `JULIA_HISTORY`
 
@@ -159,14 +168,17 @@ The absolute path of the shell with which Julia should execute external commands
 (via `Base.repl_cmd()`). Defaults to the environment variable `$SHELL`, and
 falls back to `/bin/sh` if `$SHELL` is unset.
 
-!!! note
+```eval_rst
+
+.. note::
 
     On Windows, this environment variable is ignored, and external commands are
     executed directly.
+```
 
 ### `JULIA_EDITOR`
 
-The editor returned by `InteractiveUtils.editor()` and used in, e.g., [`InteractiveUtils.edit`](@ref),
+The editor returned by `InteractiveUtils.editor()` and used in, e.g., `InteractiveUtils.edit`,
 referring to the command of the preferred editor, for instance `vim`.
 
 `$JULIA_EDITOR` takes precedence over `$VISUAL`, which in turn takes precedence
@@ -178,29 +190,35 @@ exists, or `emacs` otherwise.
 
 ### `JULIA_CPU_THREADS`
 
-Overrides the global variable [`Base.Sys.CPU_THREADS`](@ref), the number of
+Overrides the global variable `Base.Sys.CPU_THREADS`, the number of
 logical CPU cores available.
 
 ### `JULIA_WORKER_TIMEOUT`
 
-A [`Float64`](@ref) that sets the value of `Distributed.worker_timeout()` (default: `60.0`).
+A `Float64` that sets the value of `Distributed.worker_timeout()` (default: `60.0`).
 This function gives the number of seconds a worker process will wait for
 a master process to establish a connection before dying.
 
-### [`JULIA_NUM_THREADS`](@id JULIA_NUM_THREADS)
+### `JULIA_NUM_THREADS`
 
 An unsigned 64-bit integer (`uint64_t`) that sets the maximum number of threads
 available to Julia. If `$JULIA_NUM_THREADS` is not positive or is not set, or if
 the number of CPU threads cannot be determined through system calls, then the number
 of threads is set to `1`.
 
-!!! note
+```eval_rst
+
+.. note::
 
     `JULIA_NUM_THREADS` must be defined before starting julia; defining it in `startup.jl` is too late in the startup process.
+```
 
-!!! compat "Julia 1.5"
+```eval_rst
+
+.. versionchanged:: 1.5
     In Julia 1.5 and above the number of threads can also be specified on startup
     using the `-t`/`--threads` command line argument.
+```
 
 ### `JULIA_THREAD_SLEEP_THRESHOLD`
 
@@ -221,7 +239,7 @@ Environment variables that determine how REPL output should be formatted at the
 terminal. Generally, these variables should be set to [ANSI terminal escape
 sequences](http://ascii-table.com/ansi-escape-sequences.php). Julia provides
 a high-level interface with much of the same functionality; see the section on
-[The Julia REPL](@ref).
+The Julia REPL.
 
 ### `JULIA_ERROR_COLOR`
 
@@ -275,40 +293,51 @@ represents the arithmetic sequence `a`, `a + b`, `a + 2*b`, ... `c`.
 If the value of the environment variable begins with the character `'r'`, then
 the interval between garbage collection events is randomized.
 
-!!! note
+```eval_rst
+
+.. note::
 
     These environment variables only have an effect if Julia was compiled with
     garbage-collection debugging (that is, if `WITH_GC_DEBUG_ENV` is set to `1`
     in the build configuration).
+```
 
 ### `JULIA_GC_NO_GENERATIONAL`
 
 If set to anything besides `0`, then the Julia garbage collector never performs
 "quick sweeps" of memory.
 
-!!! note
+```eval_rst
+
+.. note::
 
     This environment variable only has an effect if Julia was compiled with
     garbage-collection debugging (that is, if `WITH_GC_DEBUG_ENV` is set to `1`
     in the build configuration).
+```
 
 ### `JULIA_GC_WAIT_FOR_DEBUGGER`
 
 If set to anything besides `0`, then the Julia garbage collector will wait for
 a debugger to attach instead of aborting whenever there's a critical error.
 
-!!! note
+```eval_rst
+
+.. note::
 
     This environment variable only has an effect if Julia was compiled with
     garbage-collection debugging (that is, if `WITH_GC_DEBUG_ENV` is set to `1`
     in the build configuration).
+```
 
 ### `ENABLE_JITPROFILING`
 
 If set to anything besides `0`, then the compiler will create and register an
 event listener for just-in-time (JIT) profiling.
 
-!!! note
+```eval_rst
+
+.. note::
 
     This environment variable only has an effect if Julia was compiled with JIT
     profiling support, using either
@@ -318,6 +347,7 @@ event listener for just-in-time (JIT) profiling.
       in the build configuration).
     * [Perf](https://perf.wiki.kernel.org) (`USE_PERF_JITEVENTS` set to `1`
       in the build configuration). This integration is enabled by default.
+```
 
 ### `ENABLE_GDBLISTENER`
 

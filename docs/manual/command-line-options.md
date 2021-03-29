@@ -1,4 +1,4 @@
-# [Command-line Options](@id command-line-options)
+# Command-line Options
 
 The following is a complete list of command-line switches available when launching julia:
 
@@ -37,7 +37,10 @@ The following is a complete list of command-line switches available when launchi
 |`--track-allocation={none\|user\|all}` |Count bytes allocated by each source line|
 |`--track-allocation`                   |equivalent to `--track-allocation=user`|
 
-!!! compat "Julia 1.1"
+```eval_rst
+
+.. versionchanged:: 1.1
     In Julia 1.0, the default `--project=@.` option did not search up from the root
     directory of a Git repository for the `Project.toml` file. From Julia 1.1 forward, it
     does.
+```

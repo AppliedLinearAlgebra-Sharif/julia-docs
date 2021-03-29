@@ -1,4 +1,4 @@
-# [Modules](@id modules)
+# Modules
 
 Modules in Julia help organize code into coherent units. They are delimited syntactically inside
 `module NameOfModule ... end`, and have the following features:
@@ -44,7 +44,7 @@ end
 end
 ```
 
-## [Namespace management](@id namespace-management)
+## Namespace management
 
 Namespace management refers to the facilities the language offers for making names in a module
 available in other modules. We discuss the related concepts and functionality below in detail.
@@ -53,7 +53,7 @@ available in other modules. We discuss the related concepts and functionality be
 
 Names for functions, variables and types in the global scope like `sin`, `ARGS`, and
 `UnitRange` always belong to a module, called the *parent module*, which can be found
-interactively with [`parentmodule`](@ref), for example
+interactively with `parentmodule`, for example
 
 ```jldoctest
 julia> parentmodule(UnitRange)
@@ -282,12 +282,12 @@ Here, Julia cannot decide which `f` you are referring to, so you have to make a 
 
 ### Default top-level definitions and bare modules
 
-Modules automatically contain `using Core`, `using Base`, and definitions of the [`eval`](@ref)
-and [`include`](@ref) functions, which evaluate expressions/files within the global scope of that
+Modules automatically contain `using Core`, `using Base`, and definitions of the `eval`
+and `include` functions, which evaluate expressions/files within the global scope of that
 module.
 
 If these default definitions are not wanted, modules can be defined using the keyword
-[`baremodule`](@ref) instead (note: `Core` is still imported). In terms of
+`baremodule` instead (note: `Core` is still imported). In terms of
 `baremodule`, a standard `module` looks like this:
 
 ```
@@ -306,11 +306,13 @@ end
 ### Standard modules
 
 There are three important standard modules:
-* [`Core`](@ref) contains all functionality "built into" the language.
-* [`Base`](@ref) contains basic functionality that is useful in almost all cases.
-* [`Main`](@ref) is the top-level module and the current module, when Julia is started.
+* `Core` contains all functionality "built into" the language.
+* `Base` contains basic functionality that is useful in almost all cases.
+* `Main` is the top-level module and the current module, when Julia is started.
 
-!!! note "Standard library modules"
+```eval_rst
+
+.. note::
     By default Julia ships with some standard library modules. These behave like regular
     Julia packages except that you don't need to install them explicitly. For example,
     if you wanted to perform some unit testing, you could load the `Test` standard library
@@ -318,7 +320,7 @@ There are three important standard modules:
     ```julia
     using Test
     ```
-
+```
 ## Submodules and relative paths
 
 Modules can contain *submodules*, nesting the same syntax `module ... end`. They can be used to introduce separate namespaces, which can be helpful for organizing complex codebases. Note that each `module` introduces its own [scope](@ref scope-of-variables), so submodules do not automatically “inherit” names from their parent.
@@ -400,10 +402,10 @@ Julia creates precompiled caches of the module to reduce this time.
 
 The incremental precompiled module file are created and used automatically when using `import`
 or `using` to load a module.  This will cause it to be automatically compiled the first time
-it is imported. Alternatively, you can manually call [`Base.compilecache(modulename)`](@ref). The resulting
+it is imported. Alternatively, you can manually call `Base.compilecache(modulename)`. The resulting
 cache files will be stored in `DEPOT_PATH[1]/compiled/`. Subsequently, the module is automatically
 recompiled upon `using` or `import` whenever any of its dependencies change; dependencies are modules it
-imports, the Julia build, files it includes, or explicit dependencies declared by [`include_dependency(path)`](@ref)
+imports, the Julia build, files it includes, or explicit dependencies declared by `include_dependency(path)`
 in the module file(s).
 
 For file dependencies, a change is determined by examining whether the modification time (`mtime`)
@@ -466,12 +468,12 @@ we can ensure that the type is known to the compiler and allow it to generate be
 code. Obviously, any other globals in your module that depends on `foo_data_ptr` would also have
 to be initialized in `__init__`.
 
-Constants involving most Julia objects that are not produced by [`ccall`](@ref) do not need to be placed
+Constants involving most Julia objects that are not produced by `ccall` do not need to be placed
 in `__init__`: their definitions can be precompiled and loaded from the cached module image. This
 includes complicated heap-allocated objects like arrays. However, any routine that returns a raw
-pointer value must be called at runtime for precompilation to work ([`Ptr`](@ref) objects will turn into
-null pointers unless they are hidden inside an [`isbits`](@ref) object). This includes the return values
-of the Julia functions [`@cfunction`](@ref) and [`pointer`](@ref).
+pointer value must be called at runtime for precompilation to work (`Ptr` objects will turn into
+null pointers unless they are hidden inside an `isbits` object). This includes the return values
+of the Julia functions `@cfunction` and `pointer`.
 
 Dictionary and set types, or in general anything that depends on the output of a `hash(key)` method,
 are a trickier case.  In the common case where the keys are numbers, strings, symbols, ranges,
@@ -480,7 +482,7 @@ precompile.  However, for a few other key types, such as `Function` or `DataType
 user-defined types where you haven't defined a `hash` method, the fallback `hash` method depends
 on the memory address of the object (via its `objectid`) and hence may change from run to run.
 If you have one of these key types, or if you aren't sure, to be safe you can initialize this
-dictionary from within your `__init__` function. Alternatively, you can use the [`IdDict`](@ref)
+dictionary from within your `__init__` function. Alternatively, you can use the `IdDict`
 dictionary type, which is specially handled by precompilation so that it is safe to initialize
 at compile-time.
 
@@ -510,7 +512,7 @@ Other known potential failure scenarios include:
    Note that `objectid` (which works by hashing the memory pointer) has similar issues (see notes
    on `Dict` usage below).
 
-   One alternative is to use a macro to capture [`@__MODULE__`](@ref) and store it alone with the current `counter` value,
+   One alternative is to use a macro to capture `@__MODULE__` and store it alone with the current `counter` value,
    however, it may be better to redesign the code to not depend on this global state.
 2. Associative collections (such as `Dict` and `Set`) need to be re-hashed in `__init__`. (In the
    future, a mechanism may be provided to register an initializer function.)
@@ -531,7 +533,7 @@ Other known potential failure scenarios include:
 Several additional restrictions are placed on the operations that can be done while precompiling
 code to help the user avoid other wrong-behavior situations:
 
-1. Calling [`eval`](@ref) to cause a side-effect in another module. This will also cause a warning to be
+1. Calling `eval` to cause a side-effect in another module. This will also cause a warning to be
    emitted when the incremental precompile flag is set.
 2. `global const` statements from local scope after `__init__()` has been started (see issue #12010
    for plans to add an error for this)
@@ -543,7 +545,7 @@ A few other points to be aware of:
    (including by `Pkg.update`), and no cleanup is done after `Pkg.rm`
 2. The memory sharing behavior of a reshaped array is disregarded by precompilation (each view gets
    its own copy)
-3. Expecting the filesystem to be unchanged between compile-time and runtime e.g. [`@__FILE__`](@ref)/`source_path()`
+3. Expecting the filesystem to be unchanged between compile-time and runtime e.g. `@__FILE__`/`source_path()`
    to find resources at runtime, or the BinDeps `@checked_lib` macro. Sometimes this is unavoidable.
    However, when possible, it can be good practice to copy resources into the module at compile-time
    so they won't need to be found at runtime.

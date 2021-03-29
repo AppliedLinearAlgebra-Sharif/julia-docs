@@ -1,4 +1,4 @@
-# [Variables](@id man-variables)
+# Variables
 
 A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to
 store a value (that you obtained after some math, for example) for later use. For example:
@@ -110,7 +110,7 @@ A space is required between an operator that ends with a subscript/superscript l
 variable name. For example, if `+ᵃ` is an operator, then `+ᵃx` must be written as `+ᵃ x` to distinguish
 it from `+ ᵃx` where `ᵃx` is the variable name.
 
-The only explicitly disallowed names for variables are the names of the built-in [Keywords](@ref):
+The only explicitly disallowed names for variables are the names of the built-in Keywords:
 
 ```julia-repl
 julia> else = false
@@ -142,4 +142,4 @@ conventions:
     "mutating" or "in-place" functions because they are intended to produce changes in their arguments
     after the function is called, not just return a value.
 
-For more information about stylistic conventions, see the [Style Guide](@ref).
+For more information about stylistic conventions, see the Style Guide.

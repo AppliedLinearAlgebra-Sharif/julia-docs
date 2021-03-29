@@ -1,8 +1,8 @@
-# [Conversion and Promotion](@id conversion-and-promotion)
+# Conversion and Promotion
 
 Julia has a system for promoting arguments of mathematical operators to a common type, which has
-been mentioned in various other sections, including [Integers and Floating-Point Numbers](@ref),
-[Mathematical Operations and Elementary Functions](@ref), [Types](@ref man-types), and [Methods](@ref).
+been mentioned in various other sections, including Integers and Floating-Point Numbers,
+Mathematical Operations and Elementary Functions, Types](@ref man-types), and [Methods.
 In this section, we explain how this promotion system works, as well as how to extend it to new
 types and apply it to functions besides built-in mathematical operators. Traditionally, programming
 languages fall into two camps with respect to promotion of arithmetic arguments:
@@ -47,7 +47,7 @@ without the programmer asking for it explicitly.
 One example is assigning a value into an array: if `A` is a `Vector{Float64}`, the expression
 `A[1] = 2` should work by automatically converting the `2` from `Int` to `Float64`, and
 storing the result in the array.
-This is done via the [`convert`](@ref) function.
+This is done via the `convert` function.
 
 The `convert` function generally takes two arguments: the first is a type object and the second is
 a value to convert to that type. The returned value is the value converted to an instance of given type.
@@ -83,7 +83,7 @@ julia> convert(Array{Float64}, a)
  4.0  5.0  6.0
 ```
 
-Conversion isn't always possible, in which case a [`MethodError`](@ref) is thrown indicating that `convert`
+Conversion isn't always possible, in which case a `MethodError` is thrown indicating that `convert`
 doesn't know how to perform the requested conversion:
 
 ```jldoctest
@@ -95,7 +95,7 @@ ERROR: MethodError: Cannot `convert` an object of type String to an object of ty
 Some languages consider parsing strings as numbers or formatting numbers as strings to be conversions
 (many dynamic languages will even perform conversion for you automatically). This is not the case in Julia.
 Even though some strings can be parsed as numbers, most strings are not valid representations
-of numbers, and only a very limited subset of them are. Therefore in Julia the dedicated [`parse`](@ref)
+of numbers, and only a very limited subset of them are. Therefore in Julia the dedicated `parse`
 function must be used to perform this operation, making it more explicit.
 
 ### When is `convert` called?
@@ -104,10 +104,10 @@ The following language constructs call `convert`:
 
   * Assigning to an array converts to the array's element type.
   * Assigning to a field of an object converts to the declared type of the field.
-  * Constructing an object with [`new`](@ref) converts to the object's declared field types.
+  * Constructing an object with `new` converts to the object's declared field types.
   * Assigning to a variable with a declared type (e.g. `local x::T`) converts to that type.
   * A function with a declared return type converts its return value to that type.
-  * Passing a value to [`ccall`](@ref) converts it to the corresponding argument type.
+  * Passing a value to `ccall` converts it to the corresponding argument type.
 
 ### Conversion vs. Construction
 
@@ -193,7 +193,7 @@ already of the requested type:
 convert(::Type{T}, x::T) where {T<:Number} = x
 ```
 
-Similar definitions exist for `AbstractString`, [`AbstractArray`](@ref), and [`AbstractDict`](@ref).
+Similar definitions exist for `AbstractString`, `AbstractArray`, and `AbstractDict`.
 
 ## Promotion
 
@@ -204,10 +204,10 @@ since the values are converted to a "greater" type -- i.e. one which can represe
 input values in a single common type. It is important, however, not to confuse this with object-oriented
 (structural) super-typing, or Julia's notion of abstract super-types: promotion has nothing to
 do with the type hierarchy, and everything to do with converting between alternate representations.
-For instance, although every [`Int32`](@ref) value can also be represented as a [`Float64`](@ref) value,
+For instance, although every `Int32` value can also be represented as a `Float64` value,
 `Int32` is not a subtype of `Float64`.
 
-Promotion to a common "greater" type is performed in Julia by the [`promote`](@ref) function, which takes
+Promotion to a common "greater" type is performed in Julia by the `promote` function, which takes
 any number of arguments, and returns a tuple of the same number of values, converted to a common
 type, or throws an exception if promotion is not possible. The most common use case for promotion
 is to convert numeric arguments to a common type:
@@ -285,7 +285,7 @@ can be convenient to do promotion automatically.
 
 Although one could, in principle, define methods for the `promote` function directly, this would
 require many redundant definitions for all possible permutations of argument types. Instead, the
-behavior of `promote` is defined in terms of an auxiliary function called [`promote_rule`](@ref), which
+behavior of `promote` is defined in terms of an auxiliary function called `promote_rule`, which
 one can provide methods for. The `promote_rule` function takes a pair of type objects and returns
 another type object, such that instances of the argument types will be promoted to the returned
 type. Thus, by defining the rule:
@@ -303,13 +303,13 @@ promote_rule(::Type{BigInt}, ::Type{Float64}) = BigFloat
 promote_rule(::Type{BigInt}, ::Type{Int8}) = BigInt
 ```
 
-In the latter case, the result type is [`BigInt`](@ref) since `BigInt` is the only type
+In the latter case, the result type is `BigInt` since `BigInt` is the only type
 large enough to hold integers for arbitrary-precision integer arithmetic. Also note that
 one does not need to define both `promote_rule(::Type{A}, ::Type{B})` and
 `promote_rule(::Type{B}, ::Type{A})` -- the symmetry is implied by the way `promote_rule`
 is used in the promotion process.
 
-The `promote_rule` function is used as a building block to define a second function called [`promote_type`](@ref),
+The `promote_rule` function is used as a building block to define a second function called `promote_type`,
 which, given any number of type objects, returns the common type to which those values, as arguments
 to `promote` should be promoted. Thus, if one wants to know, in absence of actual values, what
 type a collection of values of certain types would promote to, one can use `promote_type`:

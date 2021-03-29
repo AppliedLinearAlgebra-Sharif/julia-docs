@@ -4,18 +4,18 @@ Julia provides a variety of control flow constructs:
 
   * [Compound Expressions](@ref man-compound-expressions): `begin` and `;`.
   * [Conditional Evaluation](@ref man-conditional-evaluation): `if`-`elseif`-`else` and `?:` (ternary operator).
-  * [Short-Circuit Evaluation](@ref): logical operators `&&` (“and”) and `||` (“or”), and also chained comparisons.
+  * Short-Circuit Evaluation: logical operators `&&` (“and”) and `||` (“or”), and also chained comparisons.
   * [Repeated Evaluation: Loops](@ref man-loops): `while` and `for`.
-  * [Exception Handling](@ref): `try`-`catch`, [`error`](@ref) and [`throw`](@ref).
-  * [Tasks (aka Coroutines)](@ref man-tasks): [`yieldto`](@ref).
+  * Exception Handling: `try`-`catch`, `error` and `throw`.
+  * Tasks (aka Coroutines)](@ref man-tasks): [`yieldto`.
 
-The first five control flow mechanisms are standard to high-level programming languages. [`Task`](@ref)s
+The first five control flow mechanisms are standard to high-level programming languages. `Task`s
 are not so standard: they provide non-local control flow, making it possible to switch between
 temporarily-suspended computations. This is a powerful construct: both exception handling and
 cooperative multitasking are implemented in Julia using tasks. Everyday programming requires no
 direct usage of tasks, but certain problems can be solved much more easily by using tasks.
 
-## [Compound Expressions](@id man-compound-expressions)
+## Compound Expressions
 
 Sometimes it is convenient to have a single expression which evaluates several subexpressions
 in order, returning the value of the last subexpression as its value. There are two Julia constructs
@@ -53,7 +53,7 @@ julia> (x = 1;
 3
 ```
 
-## [Conditional Evaluation](@id man-conditional-evaluation)
+## Conditional Evaluation
 
 Conditional evaluation allows portions of code to be evaluated or not evaluated depending on the
 value of a boolean expression. Here is the anatomy of the `if`-`elseif`-`else` conditional syntax:
@@ -173,8 +173,8 @@ julia> if 1
 ERROR: TypeError: non-boolean (Int64) used in boolean context
 ```
 
-This error indicates that the conditional was of the wrong type: [`Int64`](@ref) rather
-than the required [`Bool`](@ref).
+This error indicates that the conditional was of the wrong type: `Int64` rather
+than the required `Bool`.
 
 The so-called "ternary operator", `?:`, is closely related to the `if`-`elseif`-`else` syntax,
 but is used where a conditional choice between single expression values is required, as opposed
@@ -344,7 +344,7 @@ Stacktrace:
 ```
 
 Boolean operations *without* short-circuit evaluation can be done with the bitwise boolean operators
-introduced in [Mathematical Operations and Elementary Functions](@ref): `&` and `|`. These are
+introduced in Mathematical Operations and Elementary Functions: `&` and `|`. These are
 normal functions, which happen to support infix operator syntax, but always evaluate their arguments:
 
 ```jldoctest tandf
@@ -379,7 +379,7 @@ julia> false && (x = (1, 2, 3))
 false
 ```
 
-## [Repeated Evaluation: Loops](@id man-loops)
+## Repeated Evaluation: Loops
 
 There are two constructs for repeated evaluation of expressions: the `while` loop and the `for`
 loop. Here is an example of a `while` loop:
@@ -553,7 +553,7 @@ julia> for i = 1:2, j = 3:4
 If this example were rewritten to use a `for` keyword for each variable, then the output would
 be different: the second and fourth values would contain `0`.
 
-Multiple containers can be iterated over at the same time in a single `for` loop using [`zip`](@ref):
+Multiple containers can be iterated over at the same time in a single `for` loop using `zip`:
 
 ```jldoctest
 julia> for (j, k) in zip([1 2 3], [4 5 6 7])
@@ -564,7 +564,7 @@ julia> for (j, k) in zip([1 2 3], [4 5 6 7])
 (3, 6)
 ```
 
-Using [`zip`](@ref) will create an iterator that is a tuple containing the subiterators for the containers passed to it.
+Using `zip` will create an iterator that is a tuple containing the subiterators for the containers passed to it.
 The `zip` iterator will iterate over all subiterators in order, choosing the ``i``th element of each subiterator in the
 ``i``th iteration of the `for` loop. Once any of the subiterators run out, the `for` loop will stop.
 
@@ -582,33 +582,33 @@ below all interrupt the normal flow of control.
 
 | `Exception`                   |
 |:----------------------------- |
-| [`ArgumentError`](@ref)       |
-| [`BoundsError`](@ref)         |
-| [`CompositeException`](@ref)  |
-| [`DimensionMismatch`](@ref)   |
-| [`DivideError`](@ref)         |
-| [`DomainError`](@ref)         |
-| [`EOFError`](@ref)            |
-| [`ErrorException`](@ref)      |
-| [`InexactError`](@ref)        |
-| [`InitError`](@ref)           |
-| [`InterruptException`](@ref)  |
+| `ArgumentError`       |
+| `BoundsError`         |
+| `CompositeException`  |
+| `DimensionMismatch`   |
+| `DivideError`         |
+| `DomainError`         |
+| `EOFError`            |
+| `ErrorException`      |
+| `InexactError`        |
+| `InitError`           |
+| `InterruptException`  |
 | `InvalidStateException`       |
-| [`KeyError`](@ref)            |
-| [`LoadError`](@ref)           |
-| [`OutOfMemoryError`](@ref)    |
-| [`ReadOnlyMemoryError`](@ref) |
-| [`RemoteException`](@ref)     |
-| [`MethodError`](@ref)         |
-| [`OverflowError`](@ref)       |
-| [`Meta.ParseError`](@ref)     |
-| [`SystemError`](@ref)         |
-| [`TypeError`](@ref)           |
-| [`UndefRefError`](@ref)       |
-| [`UndefVarError`](@ref)       |
-| [`StringIndexError`](@ref)    |
+| `KeyError`            |
+| `LoadError`           |
+| `OutOfMemoryError`    |
+| `ReadOnlyMemoryError` |
+| `RemoteException`     |
+| `MethodError`         |
+| `OverflowError`       |
+| `Meta.ParseError`     |
+| `SystemError`         |
+| `TypeError`           |
+| `UndefRefError`       |
+| `UndefVarError`       |
+| `StringIndexError`    |
 
-For example, the [`sqrt`](@ref) function throws a [`DomainError`](@ref) if applied to a negative
+For example, the `sqrt` function throws a `DomainError` if applied to a negative
 real value:
 
 ```jldoctest
@@ -625,10 +625,10 @@ You may define your own exceptions in the following way:
 julia> struct MyCustomException <: Exception end
 ```
 
-### The [`throw`](@ref) function
+### The `throw` function
 
-Exceptions can be created explicitly with [`throw`](@ref). For example, a function defined only
-for nonnegative numbers could be written to [`throw`](@ref) a [`DomainError`](@ref) if the argument
+Exceptions can be created explicitly with `throw`. For example, a function defined only
+for nonnegative numbers could be written to `throw` a `DomainError` if the argument
 is negative:
 
 ```jldoctest; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
@@ -645,7 +645,7 @@ Stacktrace:
  [1] f(::Int64) at ./none:1
 ```
 
-Note that [`DomainError`](@ref) without parentheses is not an exception, but a type of exception.
+Note that `DomainError` without parentheses is not an exception, but a type of exception.
 It needs to be called to obtain an `Exception` object:
 
 ```jldoctest
@@ -663,7 +663,7 @@ julia> throw(UndefVarError(:x))
 ERROR: UndefVarError: x not defined
 ```
 
-This mechanism can be implemented easily by custom exception types following the way [`UndefVarError`](@ref)
+This mechanism can be implemented easily by custom exception types following the way `UndefVarError`
 is written:
 
 ```jldoctest
@@ -674,7 +674,9 @@ julia> struct MyUndefVarError <: Exception
 julia> Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, " not defined")
 ```
 
-!!! note
+```eval_rst
+
+.. note::
     When writing an error message, it is preferred to make the first word lowercase. For example,
 
     `size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))`
@@ -687,14 +689,15 @@ julia> Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, " not defin
     to a function is a capital letter:
 
     `size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))`.
+```
 
 ### Errors
 
-The [`error`](@ref) function is used to produce an [`ErrorException`](@ref) that interrupts
+The `error` function is used to produce an `ErrorException` that interrupts
 the normal flow of control.
 
 Suppose we want to stop execution immediately if the square root of a negative number is taken.
-To do this, we can define a fussy version of the [`sqrt`](@ref) function that raises an error
+To do this, we can define a fussy version of the `sqrt` function that raises an error
 if its argument is negative:
 
 ```jldoctest fussy_sqrt; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
@@ -815,8 +818,8 @@ end
 The power of the `try/catch` construct lies in the ability to unwind a deeply nested computation
 immediately to a much higher level in the stack of calling functions. There are situations where
 no error has occurred, but the ability to unwind the stack and pass a value to a higher level
-is desirable. Julia provides the [`rethrow`](@ref), [`backtrace`](@ref), [`catch_backtrace`](@ref)
-and [`Base.catch_stack`](@ref) functions for more advanced error handling.
+is desirable. Julia provides the `rethrow`, `backtrace`, `catch_backtrace`
+and `Base.catch_stack` functions for more advanced error handling.
 
 ### `finally` Clauses
 
@@ -842,7 +845,7 @@ When control leaves the `try` block (for example due to a `return`, or just fini
 continue propagating. A `catch` block may be combined with `try` and `finally` as well. In this
 case the `finally` block will run after `catch` has handled the error.
 
-## [Tasks (aka Coroutines)](@id man-tasks)
+## Tasks (aka Coroutines)
 
 Tasks are a control flow feature that allows computations to be suspended and resumed in a flexible
 manner. We mention them here only for completeness; for a full discussion see

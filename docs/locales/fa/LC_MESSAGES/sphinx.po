@@ -156,6 +156,39 @@ msgstr "خانه"
 msgid "Builds"
 msgstr "ساخت‌ها"
 
+msgid "Attention"
+msgstr "توجه"
+
+msgid "Caution"
+msgstr "احتیاط"
+
+msgid "Danger"
+msgstr "خطر"
+
+msgid "Error"
+msgstr "خطا"
+
+msgid "Hint"
+msgstr "راهنمایی"
+
+msgid "Important"
+msgstr "مهم"
+
+msgid "Note"
+msgstr "یادداشت"
+
+msgid "See also"
+msgstr "همچنین ببینید"
+
+msgid "Tip"
+msgstr "نکته"
+
+msgid "Warning"
+msgstr "اخطار"
+
+msgid "Changed in version %s"
+msgstr "تغییر در نسخه %s"
+
 #~ msgid "Docs"
 #~ msgstr "مستندات"
 

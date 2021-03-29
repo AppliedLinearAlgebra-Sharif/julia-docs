@@ -1,6 +1,6 @@
 # Embedding Julia
 
-As we have seen in [Calling C and Fortran Code](@ref), Julia has a simple and efficient way to
+As we have seen in Calling C and Fortran Code, Julia has a simple and efficient way to
 call functions written in C. But there are situations where the opposite is needed: calling Julia
 function from C code. This can be used to integrate Julia code into a larger C/C++ project, without
 the need to rewrite everything in C/C++. Julia has a C API to make this possible. As almost all
@@ -58,7 +58,9 @@ The second statement in the test program evaluates a Julia statement using a cal
 Before the program terminates, it is strongly recommended to call `jl_atexit_hook`.  The above
 example program calls this before returning from `main`.
 
-!!! note
+```eval_rst
+
+.. note::
     Currently, dynamically linking with the `libjulia` shared library requires passing the `RTLD_GLOBAL`
     option. In Python, this looks like:
 
@@ -68,11 +70,15 @@ example program calls this before returning from `main`.
     >>> julia.jl_init()
     250593296
     ```
+```
 
-!!! note
+```eval_rst
+
+.. note::
     If the julia program needs to access symbols from the main executable, it may be necessary to
     add `-Wl,--export-dynamic` linker flag at compile time on Linux in addition to the ones generated
     by `julia-config.jl` described below. This is not necessary when compiling a shared library.
+```
 
 ### Using julia-config to automatically determine build parameters
 
@@ -184,7 +190,7 @@ At this point, the project should build and run.
 
 Real applications will not just need to execute expressions, but also return their values to the
 host program. `jl_eval_string` returns a `jl_value_t*`, which is a pointer to a heap-allocated
-Julia object. Storing simple data types like [`Float64`](@ref) in this way is called `boxing`,
+Julia object. Storing simple data types like `Float64` in this way is called `boxing`,
 and extracting the stored primitive data is called `unboxing`. Our improved sample program that
 calculates the square root of 2 in Julia and reads back the result in C looks as follows:
 
@@ -203,7 +209,7 @@ else {
 In order to check whether `ret` is of a specific Julia type, we can use the
 `jl_isa`, `jl_typeis`, or `jl_is_...` functions.
 By typing `typeof(sqrt(2.0))` into the Julia shell we can see that the return type is
-[`Float64`](@ref) (`double` in C). To convert the boxed Julia value into a C double the
+`Float64` (`double` in C). To convert the boxed Julia value into a C double the
 `jl_unbox_float64` function is used in the above code snippet.
 
 Corresponding `jl_box_...` functions are used to convert the other way:
