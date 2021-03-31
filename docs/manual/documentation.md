@@ -603,19 +603,11 @@ The `@enum` macro makes use of `@__doc__` to allow for documenting `Enum`s.
 Examining its definition
 should serve as an example of how to use `@__doc__` correctly.
 
-```plain
-    @__doc__(ex)
+```eval_rst
 
-Low-level macro used to mark expressions returned by a macro that should be documented. If
-more than one expression is marked then the same docstring is applied to each expression.
+.. function:: @__doc__(ex)
 
-    macro example(f)
-        quote
-            \$(f)() = 0
-            @__doc__ \$(f)(x) = 1
-            \$(f)(x, y) = 2
-        end |> esc
-    end
+   Low-level macro used to mark expressions returned by a macro that should be documented. If more than one expression is marked then the same docstring is applied to each expression.
 
-`@__doc__` has no effect when a macro that uses it is not documented.
+   `@__doc__` has no effect when a macro that uses it is not documented.
 ```
