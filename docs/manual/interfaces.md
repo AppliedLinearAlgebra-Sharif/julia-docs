@@ -59,7 +59,7 @@ end
 
 A simple example is an iterable sequence of square numbers with a defined length:
 
-```jldoctest squaretype
+```julia
 julia> struct Squares
            count::Int
        end
@@ -70,7 +70,7 @@ julia> Base.iterate(S::Squares, state=1) = state > S.count ? nothing : (state*st
 With only `iterate` definition, the `Squares` type is already pretty powerful.
 We can iterate over all the elements:
 
-```jldoctest squaretype
+```julia
 julia> for item in Squares(7)
            println(item)
        end
@@ -87,7 +87,7 @@ We can use many of the builtin methods that work with iterables,
 like `in`, or `mean` and `std` from the
 `Statistics` standard library module:
 
-```jldoctest squaretype
+```julia
 julia> 25 in Squares(10)
 true
 
@@ -106,7 +106,7 @@ the `eltype` method, we can give that information to Julia and help it make more
 code in the more complicated methods. We also know the number of elements in our sequence, so
 we can extend `length`, too:
 
-```jldoctest squaretype
+```julia
 julia> Base.eltype(::Type{Squares}) = Int # Note that this is defined for the type
 
 julia> Base.length(S::Squares) = S.count
@@ -115,7 +115,7 @@ julia> Base.length(S::Squares) = S.count
 Now, when we ask Julia to `collect` all the elements into an array it can preallocate a `Vector{Int}`
 of the right size instead of naively `push!`ing each element into a `Vector{Any}`:
 
-```jldoctest squaretype
+```julia
 julia> collect(Squares(4))
 4-element Vector{Int64}:
   1
@@ -128,7 +128,7 @@ While we can rely upon generic implementations, we can also extend specific meth
 there is a simpler algorithm. For example, there's a formula to compute the sum of squares, so
 we can override the generic iterative version with a more performant solution:
 
-```jldoctest squaretype
+```julia
 julia> Base.sum(S::Squares) = (n = S.count; return n*(n+1)*(2n+1)÷6)
 
 julia> sum(Squares(1803))
@@ -147,7 +147,7 @@ type `T` needs to implement `iterate` for `Iterators.Reverse{T}`.
 (Given `r::Iterators.Reverse{T}`, the underling iterator of type `T` is `r.itr`.)
 In our `Squares` example, we would implement `Iterators.Reverse{Squares}` methods:
 
-```jldoctest squaretype
+```julia
 julia> Base.iterate(rS::Iterators.Reverse{Squares}, state=rS.itr.count) = state < 1 ? nothing : (state*state, state-1)
 
 julia> collect(Iterators.reverse(Squares(4)))
@@ -171,7 +171,7 @@ For the `Squares` iterable above, we can easily compute the `i`th element of the
 it.  We can expose this as an indexing expression `S[i]`. To opt into this behavior, `Squares`
 simply needs to define `getindex`:
 
-```jldoctest squaretype
+```julia
 julia> function Base.getindex(S::Squares, i::Int)
            1 <= i <= S.count || throw(BoundsError(S, i))
            return i*i
@@ -184,7 +184,7 @@ julia> Squares(100)[23]
 Additionally, to support the syntax `Sbegin]` and `S[end]`, we must define [`firstindex` and
 `lastindex` to specify the first and last valid indices, respectively:
 
-```jldoctest squaretype
+```julia
 julia> Base.firstindex(S::Squares) = 1
 
 julia> Base.lastindex(S::Squares) = length(S)
@@ -201,7 +201,7 @@ Note, though, that the above *only* defines `getindex` with one integer index. I
 anything other than an `Int` will throw a `MethodError` saying that there was no matching method.
 In order to support indexing with ranges or vectors of `Int`s, separate methods must be written:
 
-```jldoctest squaretype
+```julia
 julia> Base.getindex(S::Squares, i::Number) = S[convert(Int, i)]
 
 julia> Base.getindex(S::Squares, I) = [S[i] for i in I]
@@ -267,7 +267,7 @@ library module, only supports two dimensions, so it just defines
 Returning to the sequence of squares from above, we could instead define it as a subtype of an
 `AbstractArray{Int, 1}`:
 
-```jldoctest squarevectype
+```julia
 julia> struct SquaresVector <: AbstractArray{Int, 1}
            count::Int
        end
@@ -284,7 +284,7 @@ defines the `eltype`, and the second defines the `ndims`. That supertype and tho
 methods are all it takes for `SquaresVector` to be an iterable, indexable, and completely functional
 array:
 
-```jldoctest squarevectype
+```julia
 julia> s = SquaresVector(4)
 4-element SquaresVector:
   1
@@ -315,7 +315,7 @@ julia> sin.(s)
 As a more complicated example, let's define our own toy N-dimensional sparse-like array type built
 on top of `Dict`:
 
-```jldoctest squarevectype
+```julia
 julia> struct SparseArray{T,N} <: AbstractArray{T,N}
            data::Dict{NTuple{N,Int}, T}
            dims::NTuple{N,Int}
@@ -338,7 +338,7 @@ Notice that this is an `IndexCartesian` array, so we must manually define `getin
 at the dimensionality of the array. Unlike the `SquaresVector`, we are able to define `setindex!`,
 and so we can mutate the array:
 
-```jldoctest squarevectype
+```julia
 julia> A = SparseArray(Float64, 3, 3)
 3×3 SparseArray{Float64, 2}:
  0.0  0.0  0.0
@@ -364,7 +364,7 @@ of the appropriate size and element type, which is filled in using the basic ind
 above. However, when implementing an array wrapper you often want the result to be wrapped as
 well:
 
-```jldoctest squarevectype
+```julia
 julia> A[1:2,:]
 2×3 SparseArray{Float64, 2}:
  1.0  4.0  7.0
@@ -377,7 +377,7 @@ forms, in most case you only need to specialize the 3-argument form.) For this t
 that `SparseArray` is mutable (supports `setindex!`). Defining `similar`, `getindex` and
 `setindex!` for `SparseArray` also makes it possible to `copy` the array:
 
-```jldoctest squarevectype
+```julia
 julia> copy(A)
 3×3 SparseArray{Float64, 2}:
  1.0  4.0  7.0
@@ -388,7 +388,7 @@ julia> copy(A)
 In addition to all the iterable and indexable methods from above, these types can also interact
 with each other and use most of the methods defined in Julia Base for `AbstractArrays`:
 
-```jldoctest squarevectype
+```julia
 julia> A[SquaresVector(3)]
 3-element SparseArray{Float64, 1}:
  1.0
@@ -536,7 +536,7 @@ list can — and often does — include other nested `Broadcasted` wrappers.
 For a complete example, let's say you have created a type, `ArrayAndChar`, that stores an
 array and a single character:
 
-```jldoctest ArrayAndChar; output = false
+```julia
 struct ArrayAndChar{T,N} <: AbstractArray{T,N}
     data::Array{T,N}
     char::Char
@@ -551,14 +551,14 @@ Base.showarg(io::IO, A::ArrayAndChar, toplevel) = print(io, typeof(A), " with ch
 
 You might want broadcasting to preserve the `char` "metadata." First we define
 
-```jldoctest ArrayAndChar; output = false
+```julia
 Base.BroadcastStyle(::Type{<:ArrayAndChar}) = Broadcast.ArrayStyle{ArrayAndChar}()
 # output
 
 ```
 
 This means we must also define a corresponding `similar` method:
-```jldoctest ArrayAndChar; output = false
+```julia
 function Base.similar(bc::Broadcast.Broadcasted{Broadcast.ArrayStyle{ArrayAndChar}}, ::Type{ElType}) where ElType
     # Scan the inputs for the ArrayAndChar:
     A = find_aac(bc)
@@ -578,7 +578,7 @@ find_aac (generic function with 6 methods)
 ```
 
 From these definitions, one obtains the following behavior:
-```jldoctest ArrayAndChar
+```julia
 julia> a = ArrayAndChar([1 2; 3 4], 'x')
 2×2 ArrayAndChar{Int64, 2} with char 'x':
  1  2

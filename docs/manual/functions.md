@@ -4,7 +4,7 @@ In Julia, a function is an object that maps a tuple of argument values to a retu
 functions are not pure mathematical functions, because they can alter and be affected
 by the global state of the program. The basic syntax for defining functions in Julia is:
 
-```jldoctest
+```julia
 julia> function f(x,y)
            x + y
        end
@@ -17,7 +17,7 @@ of the last expression evaluated, which is `x + y`.
 There is a second, more terse syntax for defining a function in Julia. The traditional function
 declaration syntax demonstrated above is equivalent to the following compact "assignment form":
 
-```jldoctest fofxy
+```julia
 julia> f(x,y) = x + y
 f (generic function with 1 method)
 ```
@@ -29,7 +29,7 @@ both typing and visual noise.
 
 A function is called using the traditional parenthesis syntax:
 
-```jldoctest fofxy
+```julia
 julia> f(2,3)
 5
 ```
@@ -37,7 +37,7 @@ julia> f(2,3)
 Without parentheses, the expression `f` refers to the function object, and can be passed around
 like any other value:
 
-```jldoctest fofxy
+```julia
 julia> g = f;
 
 julia> g(2,3)
@@ -46,7 +46,7 @@ julia> g(2,3)
 
 As with variables, Unicode can also be used for function names:
 
-```jldoctest
+```julia
 julia> ∑(x,y) = x + y
 ∑ (generic function with 1 method)
 
@@ -82,7 +82,7 @@ end
 Since function definitions can be entered into interactive sessions, it is easy to compare these
 definitions:
 
-```jldoctest
+```julia
 julia> f(x,y) = x + y
 f (generic function with 1 method)
 
@@ -105,7 +105,7 @@ in the function and omit the `return`. In conjunction with other control flow, h
 is of real use. Here, for example, is a function that computes the hypotenuse length of a right
 triangle with sides of length `x` and `y`, avoiding overflow:
 
-```jldoctest
+```julia
 julia> function hypot(x,y)
            x = abs(x)
            y = abs(y)
@@ -134,7 +134,7 @@ since it is the last expression.
 A return type can be specified in the function declaration using the `::` operator. This converts
 the return value to the specified type.
 
-```jldoctest
+```julia
 julia> function g(x, y)::Int8
            return x * y
        end;
@@ -178,7 +178,7 @@ since Short-Circuit Evaluation requires that their operands are not evaluated be
 of the operator.) Accordingly, you can also apply them using parenthesized argument lists, just
 as you would any other function:
 
-```jldoctest
+```julia
 julia> 1 + 2 + 3
 6
 
@@ -190,7 +190,7 @@ The infix form is exactly equivalent to the function application form -- in fact
 parsed to produce the function call internally. This also means that you can assign and pass around
 operators such as `+` and `*` just like you would with other function values:
 
-```jldoctest
+```julia
 julia> f = +;
 
 julia> f(1,2,3)
@@ -222,7 +222,7 @@ variable they have been assigned to. They can be used as arguments, and they can
 values. They can also be created anonymously, without being given a name, using either of these
 syntaxes:
 
-```jldoctest
+```julia
 julia> x -> x^2 + 2x - 1
 #1 (generic function with 1 method)
 
@@ -240,7 +240,7 @@ The primary use for anonymous functions is passing them to functions which take 
 as arguments. A classic example is `map`, which applies a function to each value of
 an array and returns a new array containing the resulting values:
 
-```jldoctest
+```julia
 julia> map(round, [1.2, 3.5, 1.7])
 3-element Vector{Float64}:
  1.0
@@ -253,7 +253,7 @@ to `map`. Often, however, a ready-to-use, named function does not exist. In thes
 situations, the anonymous function construct allows easy creation of a single-use function object
 without needing a name:
 
-```jldoctest
+```julia
 julia> map(x -> x^2 + 2x - 1, [1, 3, -1])
 3-element Vector{Int64}:
   2
@@ -293,7 +293,7 @@ A tuple is a fixed-length container that can hold any values, but cannot be modi
 (it is *immutable*).
 Tuples are constructed with commas and parentheses, and can be accessed via indexing:
 
-```jldoctest
+```julia
 julia> (1, 1+1)
 (1, 2)
 
@@ -316,7 +316,7 @@ be a parenthesized value.
 The components of tuples can optionally be named, in which case a *named tuple* is
 constructed:
 
-```jldoctest
+```julia
 julia> x = (a=2, b=1+2)
 (a = 2, b = 3)
 
@@ -338,7 +338,7 @@ can be created and destructured without needing parentheses, thereby providing a
 multiple values are being returned, rather than a single tuple value. For example, the following
 function returns a pair of values:
 
-```jldoctest foofunc
+```julia
 julia> function foo(a,b)
            a+b, a*b
        end
@@ -348,7 +348,7 @@ foo (generic function with 1 method)
 If you call it in an interactive session without assigning the return value anywhere, you will
 see the tuple returned:
 
-```jldoctest foofunc
+```julia
 julia> foo(2,3)
 (5, 6)
 ```
@@ -356,7 +356,7 @@ julia> foo(2,3)
 A typical usage of such a pair of return values, however, extracts each value into a variable.
 Julia supports simple tuple "destructuring" that facilitates this:
 
-```jldoctest foofunc
+```julia
 julia> x, y = foo(2,3)
 (5, 6)
 
@@ -401,7 +401,7 @@ It is often convenient to be able to write functions taking an arbitrary number 
 Such functions are traditionally known as "varargs" functions, which is short for "variable number
 of arguments". You can define a varargs function by following the last positional argument with an ellipsis:
 
-```jldoctest barfunc
+```julia
 julia> bar(a,b,x...) = (a,b,x)
 bar (generic function with 1 method)
 ```
@@ -410,7 +410,7 @@ The variables `a` and `b` are bound to the first two argument values as usual, a
 `x` is bound to an iterable collection of the zero or more values passed to `bar` after its first
 two arguments:
 
-```jldoctest barfunc
+```julia
 julia> bar(1,2)
 (1, 2, ())
 
@@ -433,7 +433,7 @@ On the flip side, it is often handy to "splat" the values contained in an iterab
 into a function call as individual arguments. To do this, one also uses `...` but in the function
 call instead:
 
-```jldoctest barfunc
+```julia
 julia> x = (3, 4)
 (3, 4)
 
@@ -444,7 +444,7 @@ julia> bar(1,2,x...)
 In this case a tuple of values is spliced into a varargs call precisely where the variable number
 of arguments go. This need not be the case, however:
 
-```jldoctest barfunc
+```julia
 julia> x = (2, 3, 4)
 (2, 3, 4)
 
@@ -460,7 +460,7 @@ julia> bar(x...)
 
 Furthermore, the iterable object splatted into a function call need not be a tuple:
 
-```jldoctest barfunc
+```julia
 julia> x = [3,4]
 2-element Vector{Int64}:
  3
@@ -483,7 +483,7 @@ julia> bar(x...)
 Also, the function that arguments are splatted into need not be a varargs function (although it
 often is):
 
-```jldoctest
+```julia
 julia> baz(a,b) = a + b;
 
 julia> args = [1,2]
@@ -532,7 +532,7 @@ of type `UTInstant{Day}`.
 With this definition, the function can be called with either one, two or three arguments, and
 `1` is automatically passed when only one or two of the arguments are specified:
 
-```jldoctest
+```julia
 julia> using Dates
 
 julia> Date(2000, 12, 12)
@@ -736,7 +736,7 @@ You can type the composition operator at the REPL and suitably-configured editor
 
 For example, the `sqrt` and `+` functions can be composed like this:
 
-```jldoctest
+```julia
 julia> (sqrt ∘ +)(3, 6)
 3.0
 ```
@@ -745,7 +745,7 @@ This adds the numbers first, then finds the square root of the result.
 
 The next example composes three functions and maps the result over an array of strings:
 
-```jldoctest
+```julia
 julia> map(first ∘ reverse ∘ uppercase, split("you can compose functions like this"))
 6-element Vector{Char}:
  'U': ASCII/Unicode U+0055 (category Lu: Letter, uppercase)
@@ -758,21 +758,21 @@ julia> map(first ∘ reverse ∘ uppercase, split("you can compose functions lik
 
 Function chaining (sometimes called "piping" or "using a pipe" to send data to a subsequent function) is when you apply a function to the previous function's output:
 
-```jldoctest
+```julia
 julia> 1:10 |> sum |> sqrt
 7.416198487095663
 ```
 
 Here, the total produced by `sum` is passed to the `sqrt` function. The equivalent composition would be:
 
-```jldoctest
+```julia
 julia> (sqrt ∘ sum)(1:10)
 7.416198487095663
 ```
 
 The pipe operator can also be used with broadcasting, as `.|>`, to provide a useful combination of the chaining/piping and dot vectorization syntax (described next).
 
-```jldoctest
+```julia
 julia> ["a", "list", "of", "strings"] .|> [uppercase, reverse, titlecase, length]
 4-element Vector{Any}:
   "A"
@@ -793,7 +793,7 @@ can call fast library code written in a low-level language. In Julia, vectorized
 `f` can be applied elementwise to any array (or other collection) with the syntax `f.(A)`.
 For example, `sin` can be applied to all elements in the vector `A` like so:
 
-```jldoctest
+```julia
 julia> A = [1.0, 2.0, 3.0]
 3-element Vector{Float64}:
  1.0
@@ -818,7 +818,7 @@ a new array consisting of `f(pi,a)` for each `a` in `A`, and `f.(vector1,vector2
 a new vector consisting of `f(vector1[i],vector2[i])` for each index `i` (throwing an exception
 if the vectors have different length).
 
-```jldoctest
+```julia
 julia> f(x,y) = 3x + 4y;
 
 julia> A = [1.0, 2.0, 3.0];
@@ -863,7 +863,7 @@ can be tedious and lead to code that is difficult to read, the macro
 [`@.`](@ref @__dot__) is provided to convert *every* function call,
 operation, and assignment in an expression into the "dotted" version.
 
-```jldoctest
+```julia
 julia> Y = [1.0, 2.0, 3.0, 4.0];
 
 julia> X = similar(Y); # pre-allocate output array
@@ -882,7 +882,7 @@ they are equivalent to `broadcast` calls and are fused with other nested "dot" c
  see also [dot operators](@ref man-dot-operators).
 
 You can also combine dot operations with function chaining using `|>`, as in this example:
-```jldoctest
+```julia
 julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
 5-element Vector{Real}:
     1

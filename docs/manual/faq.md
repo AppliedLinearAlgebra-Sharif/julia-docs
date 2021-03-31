@@ -123,7 +123,7 @@ parsing the file once it reaches to the `exec` statement.
 
 Suppose you call a function like this:
 
-```jldoctest
+```julia
 julia> x = 10
 10
 
@@ -148,7 +148,7 @@ However, if `x` is bound to an object of type `Array`
 (or any other *mutable* type). From within the function, you cannot "unbind" `x` from this Array,
 but you *can* change its content. For example:
 
-```jldoctest
+```julia
 julia> x = [1,2,3]
 3-element Vector{Int64}:
  1
@@ -221,7 +221,7 @@ In the context of function definitions, the `...` operator is used to combine ma
 into a single argument. This use of `...` for combining many different arguments into a single
 argument is called slurping:
 
-```jldoctest
+```julia
 julia> function printargs(args...)
            println(typeof(args))
            for (i, arg) in enumerate(args)
@@ -247,7 +247,7 @@ one argument when defining a function, the `...` operator is also used to cause 
 argument to be split apart into many different arguments when used in the context of a function
 call. This use of `...` is called splatting:
 
-```jldoctest
+```julia
 julia> function threeargs(a, b, c)
            println("a = $a::$(typeof(a))")
            println("b = $b::$(typeof(b))")
@@ -274,7 +274,7 @@ might have been written as `...->` instead of `...`.
 
 The operator `=` always returns the right-hand side, therefore:
 
-```jldoctest
+```julia
 julia> function threeint()
            x::Int = 3.0
            x # returns variable x
@@ -295,7 +295,7 @@ julia> threefloat()
 
 and similarly:
 
-```jldoctest
+```julia
 julia> function threetup()
            x, y = [3, 3]
            x, y # returns a tuple
@@ -324,7 +324,7 @@ It means that the type of the output is predictable from the types of the inputs
 it means that the type of the output cannot vary depending on the *values* of the inputs. The
 following code is *not* type-stable:
 
-```jldoctest
+```julia
 julia> function unstable(flag::Bool)
            if flag
                return 1
@@ -344,7 +344,7 @@ fast machine code.
 
 Certain operations make mathematical sense but result in errors:
 
-```jldoctest
+```julia
 julia> sqrt(-2.0)
 ERROR: DomainError with -2.0:
 sqrt will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).
@@ -362,7 +362,7 @@ and the `sqrt` function would have poor performance.
 In these and other cases, you can get the result you want by choosing an *input type* that conveys
 your willingness to accept an *output type* in which the result can be represented:
 
-```jldoctest
+```julia
 julia> sqrt(-2.0+0im)
 0.0 + 1.4142135623730951im
 ```
@@ -412,7 +412,7 @@ Julia uses machine arithmetic for integer computations. This means that the rang
 is bounded and wraps around at either end so that adding, subtracting and multiplying integers
 can overflow or underflow, leading to some results that can be unsettling at first:
 
-```jldoctest
+```julia
 julia> x = typemax(Int)
 9223372036854775807
 
@@ -513,7 +513,7 @@ This makes it hard to write many basic integer algorithms since a lot of common 
 on the fact that machine addition with overflow *is* associative. Consider finding the midpoint
 between integer values `lo` and `hi` in Julia using the expression `(lo + hi) >>> 1`:
 
-```jldoctest
+```julia
 julia> n = 2^62
 4611686018427387904
 
@@ -541,7 +541,7 @@ arithmetic. For example, since Julia integers use normal machine integer arithme
 to aggressively optimize simple little functions like `f(k) = 5k-1`. The machine code for this
 function is just this:
 
-```julia-repl
+```julia
 julia> code_native(f, Tuple{Int})
   .text
 Filename: none
@@ -557,7 +557,7 @@ Source line: 1
 The actual body of the function is a single `leaq` instruction, which computes the integer multiply
 and add at once. This is even more beneficial when `f` gets inlined into another function:
 
-```julia-repl
+```julia
 julia> function g(k, n)
            for i = 1:n
                k = f(k)
@@ -592,7 +592,7 @@ L26:
 Since the call to `f` gets inlined, the loop body ends up being just a single `leaq` instruction.
 Next, consider what happens if we make the number of loop iterations fixed:
 
-```julia-repl
+```julia
 julia> function g(k)
            for i = 1:10
                k = f(k)
@@ -643,7 +643,7 @@ for all integer operations. You can follow the status of the discussion
 As the error states, an immediate cause of an `UndefVarError` on a remote node is that a binding
 by that name does not exist. Let us explore some of the possible causes.
 
-```julia-repl
+```julia
 julia> module Foo
            foo() = remotecall_fetch(x->x, 2, "Hello")
        end
@@ -661,7 +661,7 @@ an `UndefVarError` is thrown.
 Globals under modules other than `Main` are not serialized by value to the remote node. Only a reference is sent.
 Functions which create global bindings (except under `Main`) may cause an `UndefVarError` to be thrown later.
 
-```julia-repl
+```julia
 julia> @everywhere module Foo
            function foo()
                global gvar = "Hello"
@@ -682,7 +682,7 @@ a new global binding `gvar` on the local node, but this was not found on node 2 
 Note that this does not apply to globals created under module `Main`. Globals under module `Main` are serialized
 and new bindings created under `Main` on the remote node.
 
-```julia-repl
+```julia
 julia> gvar_self = "Node1"
 "Node1"
 
@@ -701,7 +701,7 @@ gvar_self 13 bytes String
 This does not apply to `function` or `struct` declarations. However, anonymous functions bound to global
 variables are serialized as can be seen below.
 
-```julia-repl
+```julia
 julia> bar() = 1
 bar (generic function with 1 method)
 
@@ -830,7 +830,7 @@ While the streaming I/O API is synchronous, the underlying implementation is ful
 
 Consider the printed output from the following:
 
-```jldoctest
+```julia
 julia> @sync for i in 1:3
            @async write(stdout, string(i), " Foo ", " Bar ")
        end
@@ -843,7 +843,7 @@ yields to other tasks while waiting for that part of the I/O to complete.
 `print` and `println` "lock" the stream during a call. Consequently changing `write` to `println`
 in the above example results in:
 
-```jldoctest
+```julia
 julia> @sync for i in 1:3
            @async println(stdout, string(i), " Foo ", " Bar ")
        end
@@ -854,7 +854,7 @@ julia> @sync for i in 1:3
 
 You can lock your writes with a `ReentrantLock` like this:
 
-```jldoctest
+```julia
 julia> l = ReentrantLock();
 
 julia> @sync for i in 1:3

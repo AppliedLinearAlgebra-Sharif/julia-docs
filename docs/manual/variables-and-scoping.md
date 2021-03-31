@@ -38,7 +38,7 @@ meaning that a function's scope does not inherit from its caller's scope, but fr
 which the function was defined. For example, in the following code the `x` inside `foo` refers
 to the `x` in the global scope of its module `Bar`:
 
-```jldoctest moduleBar
+```julia
 julia> module Bar
            x = 1
            foo() = x
@@ -47,7 +47,7 @@ julia> module Bar
 
 and not a `x` in the scope where `foo` is used:
 
-```jldoctest moduleBar
+```julia
 julia> import .Bar
 
 julia> x = -1;
@@ -72,7 +72,7 @@ be changed within the module to which they belong. As an escape hatch, you can a
 inside that module to modify a variable; this guarantees, in particular, that module bindings cannot
 be modified externally by code that never calls `eval`.
 
-```jldoctest
+```julia
 julia> module A
            a = 1 # a global in A's scope
        end;
@@ -143,7 +143,7 @@ block of code.
 We'll begin with a nice and clear-cut situation—assignment inside of a hard scope, in this case a
 function body, when no local variable by that name already exists:
 
-```jldoctest
+```julia
 julia> function greet()
            x = "hello" # new local
            println(x)
@@ -162,7 +162,7 @@ in the function's scope. There are two relevant facts: the assignment occurs in 
 there is no existing local `x` variable. Since `x` is local, it doesn't matter if there is a global
 named `x` or not. Here for example we define `x = 123` before defining and calling `greet`:
 
-```jldoctest
+```julia
 julia> x = 123 # global
 123
 
@@ -203,7 +203,7 @@ the function scope. At the point where `s = s + i` occurs, `s` is already a loca
 assignment updates the existing `s` instead of creating a new local. We can test this out by calling
 `sum_to` in the REPL:
 
-```jldoctest
+```julia
 julia> function sum_to(n)
            s = 0 # new local
            for i = 1:n
@@ -229,7 +229,7 @@ Let's dig into the fact that the `for` loop body has its own scope for a second 
 more verbose variation which we'll call `sum_to_def`, in which we save the sum `s + i` in a variable `t`
 before updating `s`:
 
-```jldoctest
+```julia
 julia> function sum_to_def(n)
            s = 0 # new local
            for i = 1:n
@@ -256,7 +256,7 @@ Let's move onto some more ambiguous cases covered by the soft scope rule. We'll 
 extracting the bodies of the `greet` and `sum_to_def` functions into soft scope contexts. First, let's put the
 body of `greet` in a `for` loop—which is soft, rather than hard—and evaluate it in the REPL:
 
-```jldoctest
+```julia
 julia> for i = 1:3
            x = "hello" # new local
            println(x)
@@ -289,7 +289,7 @@ entered interactively, it behaves the same way it does in a function body. But i
 in a file, it  prints an ambiguity warning and throws an undefined variable error. Let's see it
 working in the REPL first:
 
-```jldoctest
+```julia
 julia> s = 0 # global
 0
 
@@ -317,7 +317,7 @@ The second fact is why execution of the loop changes the global value of `s` and
 why `t` is still undefined after the loop executes. Now, let's try evaluating this same code as
 though it were in a file instead:
 
-```jldoctest
+```julia
 julia> code = """
        s = 0 # global
        for i = 1:10
@@ -464,7 +464,7 @@ This difference is usually not important, and is only detectable in the case of 
 outlive their scope via closures. The `let` syntax accepts a comma-separated series of assignments
 and variable names:
 
-```jldoctest
+```julia
 julia> x, y, z = -1, -1, -1;
 
 julia> let x = 1, z
@@ -480,7 +480,7 @@ the new variable on the left-hand side has been introduced. Therefore it makes s
 something like `let x = x` since the two `x` variables are distinct and have separate storage.
 Here is an example where the behavior of `let` is needed:
 
-```jldoctest
+```julia
 julia> Fs = Vector{Any}(undef, 2); i = 1;
 
 julia> while i <= 2
@@ -499,7 +499,7 @@ Here we create and store two closures that return variable `i`. However, it is a
 variable `i`, so the two closures behave identically. We can use `let` to create a new binding
 for `i`:
 
-```jldoctest
+```julia
 julia> Fs = Vector{Any}(undef, 2); i = 1;
 
 julia> while i <= 2
@@ -519,7 +519,7 @@ julia> Fs[2]()
 Since the `begin` construct does not introduce a new scope, it can be useful to use a zero-argument
 `let` to just introduce a new scope block without creating any new bindings:
 
-```jldoctest
+```julia
 julia> let
            local x = 1
            let
@@ -539,7 +539,7 @@ In loops and [comprehensions](@ref man-comprehensions), new variables
 introduced in their body scopes are freshly allocated for each loop iteration, as if the loop body
 were surrounded by a `let` block, as demonstrated by this example:
 
-```jldoctest
+```julia
 julia> Fs = Vector{Any}(undef, 2);
 
 julia> for j = 1:2
@@ -555,7 +555,7 @@ julia> Fs[2]()
 
 A `for` loop or comprehension iteration variable is always a new variable:
 
-```julia-repl enable_doctest_when_deprecation_warning_is_removed
+```julia
 julia> function f()
            i = 0
            for i = 1:3
@@ -571,7 +571,7 @@ julia> f()
 However, it is occasionally useful to reuse an existing local variable as the iteration variable.
 This can be done conveniently by adding the keyword `outer`:
 
-```jldoctest
+```julia
 julia> function f()
            i = 0
            for outer i = 1:3
@@ -589,14 +589,14 @@ julia> f()
 A common use of variables is giving names to specific, unchanging values. Such variables are only
 assigned once. This intent can be conveyed to the compiler using the `const` keyword:
 
-```jldoctest
+```julia
 julia> const e  = 2.71828182845904523536;
 
 julia> const pi = 3.14159265358979323846;
 ```
 
 Multiple variables can be declared in a single `const` statement:
-```jldoctest
+```julia
 julia> const a, b = 1, 2
 (1, 2)
 ```
@@ -618,7 +618,7 @@ object (such as an array), and that object may still be modified. Additionally w
 to assign a value to a variable that is declared constant the following scenarios are possible:
 
 * if a new value has a different type than the type of the constant then an error is thrown:
-```jldoctest
+```julia
 julia> const x = 1.0
 1.0
 
@@ -626,7 +626,7 @@ julia> x = 1
 ERROR: invalid redefinition of constant x
 ```
 * if a new value has the same type as the constant then a warning is printed:
-```jldoctest
+```julia
 julia> const y = 1.0
 1.0
 
@@ -635,7 +635,7 @@ WARNING: redefinition of constant y. This may fail, cause incorrect answers, or 
 2.0
 ```
 * if an assignment would not result in the change of variable value no message is given:
-```jldoctest
+```julia
 julia> const z = 100
 100
 
@@ -643,7 +643,7 @@ julia> z = 100
 100
 ```
 The last rule applies to immutable objects even if the variable binding would change, e.g.:
-```julia-repl
+```julia
 julia> const s1 = "1"
 "1"
 
@@ -664,7 +664,7 @@ julia> pointer.([s1, s2], 1)
  Ptr{UInt8} @0x0000000013dd3d18
 ```
 However, for mutable objects the warning is printed as expected:
-```jldoctest
+```julia
 julia> const a = [1]
 1-element Vector{Int64}:
  1
@@ -680,7 +680,7 @@ discouraged, and is intended only for convenience during interactive use. Changi
 cause various problems or unexpected behaviors. For instance, if a method references a constant and
 is already compiled before the constant is changed, then it might keep using the old value:
 
-```jldoctest
+```julia
 julia> const x = 1
 1
 

@@ -69,7 +69,7 @@ is a subtype of any other. When the type is abstract, it suffices for the value 
 by a concrete type that is a subtype of the abstract type. If the type assertion is not true,
 an exception is thrown, otherwise, the left-hand value is returned:
 
-```jldoctest
+```julia
 julia> (1+2)::AbstractFloat
 ERROR: TypeError: in typeassert, expected AbstractFloat, got a value of type Int64
 
@@ -84,7 +84,7 @@ the `::` operator means something a bit different: it declares the variable to a
 specified type, like a type declaration in a statically-typed language such as C. Every value
 assigned to the variable will be converted to the declared type using `convert`:
 
-```jldoctest
+```julia
 julia> function foo()
            x::Int8 = 100
            x
@@ -192,7 +192,7 @@ the right-hand type to be an immediate supertype of the newly declared type. It 
 in expressions as a subtype operator which returns `true` when its left operand is a subtype of
 its right operand:
 
-```jldoctest
+```julia
 julia> Integer <: Number
 true
 
@@ -325,7 +325,7 @@ design.
 Composite types are introduced with the `struct` keyword followed by a block of field names, optionally
 annotated with types using the `::` operator:
 
-```jldoctest footype
+```julia
 julia> struct Foo
            bar
            baz::Int
@@ -338,7 +338,7 @@ Fields with no type annotation default to `Any`, and can accordingly hold any ty
 New objects of type `Foo` are created by applying the `Foo` type object like a function
 to values for its fields:
 
-```jldoctest footype
+```julia
 julia> foo = Foo("Hello, world.", 23, 1.5)
 Foo("Hello, world.", 23, 1.5)
 
@@ -355,7 +355,7 @@ it easier to add new definitions without inadvertently replacing a default const
 Since the `bar` field is unconstrained in type, any value will do. However, the value for `baz`
 must be convertible to `Int`:
 
-```jldoctest footype
+```julia
 julia> Foo((), 23.5, 1)
 ERROR: InexactError: Int64(23.5)
 Stacktrace:
@@ -364,14 +364,14 @@ Stacktrace:
 
 You may find a list of field names using the `fieldnames` function.
 
-```jldoctest footype
+```julia
 julia> fieldnames(Foo)
 (:bar, :baz, :qux)
 ```
 
 You can access the field values of a composite object using the traditional `foo.bar` notation:
 
-```jldoctest footype
+```julia
 julia> foo.bar
 "Hello, world."
 
@@ -399,7 +399,7 @@ discussed in the next section.
 
 If all the fields of an immutable structure are indistinguishable (`===`) then two immutable values containing those fields are also indistinguishable:
 
-```jldoctest
+```julia
 julia> struct X
            a::Int
            b::Float64
@@ -418,7 +418,7 @@ to be addressed in its own section: [Constructors](@ref man-constructors).
 If a composite type is declared with `mutable struct` instead of `struct`, then instances of
 it can be modified:
 
-```jldoctest bartype
+```julia
 julia> mutable struct Bar
            baz
            qux::Float64
@@ -475,7 +475,7 @@ sections are actually all closely related. They share the same key properties:
 Because of these shared properties, these types are internally represented as instances of the
 same concept, `DataType`, which is the type of any of these types:
 
-```jldoctest
+```julia
 julia> typeof(Real)
 DataType
 
@@ -494,7 +494,7 @@ Every concrete value in the system is an instance of some `DataType`.
 A type union is a special abstract type which includes as objects all instances of any of its
 argument types, constructed using the special `Union` keyword:
 
-```jldoctest
+```julia
 julia> IntOrString = Union{Int,AbstractString}
 Union{Int64, AbstractString}
 
@@ -545,7 +545,7 @@ abstract types, and finally parametric primitive types.
 
 Type parameters are introduced immediately after the type name, surrounded by curly braces:
 
-```jldoctest pointtype
+```julia
 julia> struct Point{T}
            x::T
            y::T
@@ -560,7 +560,7 @@ of `Point` with `Float64`. Thus, this single declaration actually declares an un
 number of types: `Point{Float64}`, `Point{AbstractString}`, `Point{Int64}`, etc. Each of these
 is now a usable concrete type:
 
-```jldoctest pointtype
+```julia
 julia> Point{Float64}
 Point{Float64}
 
@@ -574,7 +574,7 @@ the type `Point{AbstractString}` is a "point" whose "coordinates" are string obj
 `Point` itself is also a valid type object, containing all instances `Point{Float64}`, `Point{AbstractString}`,
 etc. as subtypes:
 
-```jldoctest pointtype
+```julia
 julia> Point{Float64} <: Point
 true
 
@@ -584,7 +584,7 @@ true
 
 Other types, of course, are not subtypes of it:
 
-```jldoctest pointtype
+```julia
 julia> Float64 <: Point
 false
 
@@ -594,7 +594,7 @@ false
 
 Concrete `Point` types with different values of `T` are never subtypes of each other:
 
-```jldoctest pointtype
+```julia
 julia> Point{Float64} <: Point{Int64}
 false
 
@@ -660,7 +660,7 @@ arguments to the object constructor.
 Since the type `Point{Float64}` is a concrete type equivalent to `Point` declared with `Float64`
 in place of `T`, it can be applied as a constructor accordingly:
 
-```jldoctest pointtype
+```julia
 julia> p = Point{Float64}(1.0, 2.0)
 Point{Float64}(1.0, 2.0)
 
@@ -670,7 +670,7 @@ Point{Float64}
 
 For the default constructor, exactly one argument must be supplied for each field:
 
-```jldoctest pointtype
+```julia
 julia> Point{Float64}(1.0)
 ERROR: MethodError: no method matching Point{Float64}(::Float64)
 [...]
@@ -688,7 +688,7 @@ the types of arguments to the constructor call already implicitly provide type i
 that reason, you can also apply `Point` itself as a constructor, provided that the implied value
 of the parameter type `T` is unambiguous:
 
-```jldoctest pointtype
+```julia
 julia> p1 = Point(1.0,2.0)
 Point{Float64}(1.0, 2.0)
 
@@ -705,7 +705,7 @@ Point{Int64}
 In the case of `Point`, the type of `T` is unambiguously implied if and only if the two arguments
 to `Point` have the same type. When this isn't the case, the constructor will fail with a `MethodError`:
 
-```jldoctest pointtype
+```julia
 julia> Point(1,2.5)
 ERROR: MethodError: no method matching Point(::Int64, ::Float64)
 Closest candidates are:
@@ -720,14 +720,14 @@ be discussed until later on in [Constructors](@ref man-constructors).
 Parametric abstract type declarations declare a collection of abstract types, in much the same
 way:
 
-```jldoctest pointytype
+```julia
 julia> abstract type Pointy{T} end
 ```
 
 With this declaration, `Pointy{T}` is a distinct abstract type for each type or integer value
 of `T`. As with parametric composite types, each such instance is a subtype of `Pointy`:
 
-```jldoctest pointytype
+```julia
 julia> Pointy{Int64} <: Pointy
 true
 
@@ -737,7 +737,7 @@ true
 
 Parametric abstract types are invariant, much as parametric composite types are:
 
-```jldoctest pointytype
+```julia
 julia> Pointy{Float64} <: Pointy{Real}
 false
 
@@ -748,7 +748,7 @@ false
 The notation `Pointy{<:Real}` can be used to express the Julia analogue of a
 *covariant* type, while `Pointy{>:Int}` the analogue of a *contravariant* type,
 but technically these represent *sets* of types (see UnionAll Types).
-```jldoctest pointytype
+```julia
 julia> Pointy{Float64} <: Pointy{<:Real}
 true
 
@@ -760,7 +760,7 @@ Much as plain old abstract types serve to create a useful hierarchy of types ove
 parametric abstract types serve the same purpose with respect to parametric composite types. We
 could, for example, have declared `Point{T}` to be a subtype of `Pointy{T}` as follows:
 
-```jldoctest pointytype
+```julia
 julia> struct Point{T} <: Pointy{T}
            x::T
            y::T
@@ -769,7 +769,7 @@ julia> struct Point{T} <: Pointy{T}
 
 Given such a declaration, for each choice of `T`, we have `Point{T}` as a subtype of `Pointy{T}`:
 
-```jldoctest pointytype
+```julia
 julia> Point{Float64} <: Pointy{Float64}
 true
 
@@ -782,7 +782,7 @@ true
 
 This relationship is also invariant:
 
-```jldoctest pointytype
+```julia
 julia> Point{Float64} <: Pointy{Real}
 false
 
@@ -794,7 +794,7 @@ What purpose do parametric abstract types like `Pointy` serve? Consider if we cr
 implementation that only requires a single coordinate because the point is on the diagonal line
 *x = y*:
 
-```jldoctest pointytype
+```julia
 julia> struct DiagPoint{T} <: Pointy{T}
            x::T
        end
@@ -809,14 +809,14 @@ next section, Methods.
 There are situations where it may not make sense for type parameters to range freely over all
 possible types. In such situations, one can constrain the range of `T` like so:
 
-```jldoctest realpointytype
+```julia
 julia> abstract type Pointy{T<:Real} end
 ```
 
 With such a declaration, it is acceptable to use any type that is a subtype of
 `Real` in place of `T`, but not types that are not subtypes of `Real`:
 
-```jldoctest realpointytype
+```julia
 julia> Pointy{Float64}
 Pointy{Float64}
 
@@ -879,14 +879,14 @@ However, there are three key differences:
 Tuple values are written with parentheses and commas. When a tuple is constructed, an appropriate
 tuple type is generated on demand:
 
-```jldoctest
+```julia
 julia> typeof((1,"foo",2.5))
 Tuple{Int64, String, Float64}
 ```
 
 Note the implications of covariance:
 
-```jldoctest
+```julia
 julia> Tuple{Int,AbstractString} <: Tuple{Real,Any}
 true
 
@@ -905,7 +905,7 @@ signature (when the signature matches).
 The last parameter of a tuple type can be the special type `Vararg`, which denotes any number
 of trailing elements:
 
-```jldoctest
+```julia
 julia> mytupletype = Tuple{AbstractString,Vararg{Int}}
 Tuple{AbstractString, Vararg{Int64, N} where N}
 
@@ -933,7 +933,7 @@ alias for `Tuple{Vararg{T,N}}`, i.e. a tuple type containing exactly `N` element
 Named tuples are instances of the `NamedTuple` type, which has two parameters: a tuple of
 symbols giving the field names, and a tuple type giving the field types.
 
-```jldoctest
+```julia
 julia> typeof((a=1,b="hello"))
 NamedTuple{(:a, :b), Tuple{Int64, String}}
 ```
@@ -941,7 +941,7 @@ NamedTuple{(:a, :b), Tuple{Int64, String}}
 The `@NamedTuple` macro provides a more convenient `struct`-like syntax for declaring
 `NamedTuple` types via `key::Type` declarations, where an omitted `::Type` corresponds to `::Any`.
 
-```jldoctest
+```julia
 julia> @NamedTuple{a::Int, b::String}
 NamedTuple{(:a, :b), Tuple{Int64, String}}
 
@@ -956,7 +956,7 @@ A `NamedTuple` type can be used as a constructor, accepting a single tuple argum
 The constructed `NamedTuple` type can be either a concrete type, with both parameters specified,
 or a type that specifies only field names:
 
-```jldoctest
+```julia
 julia> @NamedTuple{a::Float32,b::String}((1,""))
 (a = 1.0f0, b = "")
 
@@ -987,7 +987,7 @@ only by their type parameter. Thus, `Ptr{Float64}` and `Ptr{Int64}` are distinct
 they have identical representations. And of course, all specific pointer types are subtypes of
 the umbrella `Ptr` type:
 
-```jldoctest
+```julia
 julia> Ptr{Float64} <: Ptr
 true
 
@@ -1037,7 +1037,7 @@ kind of array whose element type contains the type of the first tuple element.
 The `where` keyword itself can be nested inside a more complex declaration. For example,
 consider the two types created by the following declarations:
 
-```jldoctest
+```julia
 julia> const T1 = Array{Array{T,1} where T, 1}
 Vector{Vector{T} where T} (alias for Array{Array{T, 1} where T, 1})
 
@@ -1078,7 +1078,7 @@ types by construction.
 
 From the definition, it follows that there can be only one instance of such types:
 
-```jldoctest
+```julia
 julia> struct NoFields
        end
 
@@ -1093,7 +1093,7 @@ The `===` function confirms that the constructed instances of `NoFields` are act
 and the same.
 
 Parametric types can be singleton types when the above condition holds. For example,
-```jldoctest
+```julia
 julia> struct NoFieldsParam{T}
        end
 
@@ -1125,7 +1125,7 @@ arguments.
 
 Since the definition is a little difficult to parse, let's look at some examples:
 
-```jldoctest
+```julia
 julia> isa(Float64, Type{Float64})
 true
 
@@ -1144,7 +1144,7 @@ and that object is a type.
 
 In particular, since parametric types are [invariant](@ref man-parametric-composite-types), we have
 
-```jldoctest
+```julia
 julia> struct TypeParamExample{T}
            x::T
        end
@@ -1162,7 +1162,7 @@ true
 Without the parameter, `Type` is simply an abstract type which has
 all type objects as its instances:
 
-```jldoctest
+```julia
 julia> isa(Type{Float64}, Type)
 true
 
@@ -1175,7 +1175,7 @@ true
 
 Any object that is not a type is not an instance of `Type`:
 
-```jldoctest
+```julia
 julia> isa(1, Type)
 false
 
@@ -1190,7 +1190,7 @@ less precisely, e.g. as [`DataType`](@ref man-declared-types) in the example bel
 default constuctor could lead to performance problems in code relying on the precise wrapped
 type (similarly to [abstract type parameters](@ref man-performance-abstract-container)).
 
-```jldoctest
+```julia
 julia> struct WrapType{T}
        value::T
        end
@@ -1212,7 +1212,7 @@ This can be done with a simple assignment statement.
 For example, `UInt` is aliased to either `UInt32` or `UInt64` as is
 appropriate for the size of pointers on the system:
 
-```julia-repl
+```julia
 # 32-bit system:
 julia> UInt
 UInt32
@@ -1249,7 +1249,7 @@ hand operand.
 
 The `isa` function tests if an object is of a given type and returns true or false:
 
-```jldoctest
+```julia
 julia> isa(1, Int)
 true
 
@@ -1261,7 +1261,7 @@ The `typeof` function, already used throughout the manual in examples, returns t
 of its argument. Since, as noted above, types are objects, they also have types, and we can ask
 what their types are:
 
-```jldoctest
+```julia
 julia> typeof(Rational{Int})
 DataType
 
@@ -1272,7 +1272,7 @@ Union
 What if we repeat the process? What is the type of a type of a type? As it happens, types are
 all composite values and thus all have a type of `DataType`:
 
-```jldoctest
+```julia
 julia> typeof(DataType)
 DataType
 
@@ -1285,7 +1285,7 @@ DataType
 Another operation that applies to some types is `supertype`, which reveals a type's
 supertype. Only declared types (`DataType`) have unambiguous supertypes:
 
-```jldoctest
+```julia
 julia> supertype(Float64)
 AbstractFloat
 
@@ -1302,7 +1302,7 @@ Any
 If you apply `supertype` to other type objects (or non-type objects), a `MethodError`
 is raised:
 
-```jldoctest; filter = r"Closest candidates.*"s
+```julia
 julia> supertype(Union{Float64,Int64})
 ERROR: MethodError: no method matching supertype(::Type{Union{Float64, Int64}})
 Closest candidates are:
@@ -1315,7 +1315,7 @@ Often, one wants to customize how instances of a type are displayed.  This is ac
 overloading the `show` function.  For example, suppose we define a type to represent
 complex numbers in polar form:
 
-```jldoctest polartype
+```julia
 julia> struct Polar{T<:Real} <: Number
            r::T
            Θ::T
@@ -1337,7 +1337,7 @@ If we want it to display instead as `3.0 * exp(4.0im)`, we would define the foll
 print the object to a given output object `io` (representing a file, terminal, buffer, etcetera;
 see Networking and Streams):
 
-```jldoctest polartype
+```julia
 julia> Base.show(io::IO, z::Polar) = print(io, z.r, " * exp(", z.Θ, "im)")
 ```
 
@@ -1349,14 +1349,14 @@ by default the `show(io, z)` function is called in both cases, you can define a 
 format for displaying an object by overloading a three-argument form of `show` that takes the
 `text/plain` MIME type as its second argument (see Multimedia I/O), for example:
 
-```jldoctest polartype
+```julia
 julia> Base.show(io::IO, ::MIME"text/plain", z::Polar{T}) where{T} =
            print(io, "Polar{$T} complex number:\n   ", z)
 ```
 
 (Note that `print(..., z)` here will call the 2-argument `show(io, z)` method.) This results in:
 
-```jldoctest polartype
+```julia
 julia> Polar(3, 4.0)
 Polar{Float64} complex number:
    3.0 * exp(4.0im)
@@ -1376,7 +1376,7 @@ Moreover, you can also define `show` methods for other MIME types in order to en
 (HTML, images, etcetera) of objects in environments that support this (e.g. IJulia).   For example,
 we can define formatted HTML display of `Polar` objects, with superscripts and italics, via:
 
-```jldoctest polartype
+```julia
 julia> Base.show(io::IO, ::MIME"text/html", z::Polar{T}) where {T} =
            println(io, "<code>Polar{$T}</code> complex number: ",
                    z.r, " <i>e</i><sup>", z.Θ, " <i>i</i></sup>")
@@ -1385,14 +1385,12 @@ julia> Base.show(io::IO, ::MIME"text/html", z::Polar{T}) where {T} =
 A `Polar` object will then display automatically using HTML in an environment that supports HTML
 display, but you can call `show` manually to get HTML output if you want:
 
-```jldoctest polartype
+```julia
 julia> show(stdout, "text/html", Polar(3.0,4.0))
 <code>Polar{Float64}</code> complex number: 3.0 <i>e</i><sup>4.0 <i>i</i></sup>
 ```
 
-```@raw html
 <p>An HTML renderer would display this as: <code>Polar{Float64}</code> complex number: 3.0 <i>e</i><sup>4.0 <i>i</i></sup></p>
-```
 
 As a rule of thumb, the single-line `show` method should print a valid Julia expression for creating
 the shown object.  When this `show` method contains infix operators, such as the multiplication
@@ -1400,7 +1398,7 @@ operator (`*`) in our single-line `show` method for `Polar` above, it may not pa
 printed as part of another object.  To see this, consider the expression object (see Program
 representation) which takes the square of a specific instance of our `Polar` type:
 
-```jldoctest polartype
+```julia
 julia> a = Polar(3, 4.0)
 Polar{Float64} complex number:
    3.0 * exp(4.0im)
@@ -1415,7 +1413,7 @@ exp(4.0im)) ^ 2`.  To solve this issue, we must make a custom method for `Base.s
 z::Polar, indent::Int, precedence::Int)`, which is called internally by the expression object when
 printing:
 
-```jldoctest polartype
+```julia
 julia> function Base.show_unquoted(io::IO, z::Polar, ::Int, precedence::Int)
            if Base.operator_precedence(:*) <= precedence
                print(io, "(")
@@ -1435,7 +1433,7 @@ calling operator is higher than or equal to the precedence of multiplication.  T
 expressions which parse correctly without the parentheses (such as `:($a + 2)` and `:($a == 2)`) to
 omit them when printing:
 
-```jldoctest polartype
+```julia
 julia> :($a + 2)
 :(3.0 * exp(4.0im) + 2)
 
@@ -1449,7 +1447,7 @@ passing contextual properties together with a wrapped IO stream.
 For example, we can build a shorter representation in our `show` method
 when the `:compact` property is set to `true`, falling back to the long
 representation if the property is `false` or absent:
-```jldoctest polartype
+```julia
 julia> function Base.show(io::IO, z::Polar)
            if get(io, :compact, false)
                print(io, z.r, "ℯ", z.Θ, "im")
@@ -1462,7 +1460,7 @@ julia> function Base.show(io::IO, z::Polar)
 This new compact representation will be used when the passed IO stream is an `IOContext`
 object with the `:compact` property set. In particular, this is the case when printing
 arrays with multiple columns (where horizontal space is limited):
-```jldoctest polartype
+```julia
 julia> show(IOContext(stdout, :compact=>true), Polar(3, 4.0))
 3.0ℯ4.0im
 
@@ -1488,7 +1486,7 @@ for cases where you don't need a more elaborate hierarchy.
 
 `Val` is defined as:
 
-```jldoctest valtype
+```julia
 julia> struct Val{x}
        end
 
@@ -1500,7 +1498,7 @@ There is no more to the implementation of `Val` than this.  Some functions in Ju
 library accept `Val` instances as arguments, and you can also use it to write your own functions.
  For example:
 
-```jldoctest valtype
+```julia
 julia> firstlast(::Val{true}) = "First"
 firstlast (generic function with 1 method)
 

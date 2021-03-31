@@ -37,7 +37,7 @@ Compute the Bar index between `x` and `y`.
 If `y` is unspecified, compute the Bar index between all pairs of columns of `x`.
 
 # Examples
-```julia-repl
+```julia
 julia> bar([1, 2], [1, 2])
 1
 ```
@@ -102,7 +102,7 @@ As in the example above, we recommend following some simple conventions when wri
 6. Include any code examples in an `# Examples` section.
 
    Examples should, whenever possible, be written as *doctests*. A *doctest* is a fenced code block
-   (see Code blocks) starting with ````` ```jldoctest````` and contains any number of `julia>`
+   (see Code blocks) starting with ````` ```julia````` and contains any number of `julia>`
    prompts together with inputs and expected outputs that mimic the Julia REPL.
 
    ```eval_rst
@@ -120,7 +120,7 @@ As in the example above, we recommend following some simple conventions when wri
    Some nice documentation here.
 
    # Examples
-   ```jldoctest
+   ```julia
    julia> a = [1 2; 3 4]
    2×2 Array{Int64,2}:
     1  2
@@ -155,7 +155,7 @@ As in the example above, we recommend following some simple conventions when wri
    for example:
 
    ````julia
-   ```jldoctest
+   ```julia
    julia> div(1, 0)
    ERROR: DivideError: integer division error
    [...]
@@ -603,6 +603,19 @@ The `@enum` macro makes use of `@__doc__` to allow for documenting `Enum`s.
 Examining its definition
 should serve as an example of how to use `@__doc__` correctly.
 
-```@docs
-Core.@__doc__
+```plain
+    @__doc__(ex)
+
+Low-level macro used to mark expressions returned by a macro that should be documented. If
+more than one expression is marked then the same docstring is applied to each expression.
+
+    macro example(f)
+        quote
+            \$(f)() = 0
+            @__doc__ \$(f)(x) = 1
+            \$(f)(x, y) = 2
+        end |> esc
+    end
+
+`@__doc__` has no effect when a macro that uses it is not documented.
 ```

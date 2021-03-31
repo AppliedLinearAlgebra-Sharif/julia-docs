@@ -7,7 +7,7 @@ easy to use programmatically.
 
 The primary function used to obtain a stack trace is `stacktrace`:
 
-```julia-repl
+```julia
 6-element Array{Base.StackTraces.StackFrame,1}:
  top-level scope
  eval at boot.jl:317 [inlined]
@@ -21,7 +21,7 @@ Calling `stacktrace()` returns a vector of `StackTraces.StackFrame` s. For ease 
 alias `StackTraces.StackTrace` can be used in place of `Vector{StackFrame}`. (Examples with `[...]`
 indicate that output may vary depending on how the code is run.)
 
-```julia-repl
+```julia
 julia> example() = stacktrace()
 example (generic function with 1 method)
 
@@ -53,7 +53,7 @@ Note that when calling `stacktrace()` you'll typically see a frame with `eval at
 When calling `stacktrace()` from the REPL you'll also have a few extra frames in the stack
 from `REPL.jl`, usually looking something like this:
 
-```julia-repl
+```julia
 julia> example() = stacktrace()
 example (generic function with 1 method)
 
@@ -75,7 +75,7 @@ indicating whether the frame has been inlined, a flag indicating whether it is a
 default C functions do not appear in the stack trace), and an integer representation of the pointer
 returned by `backtrace`:
 
-```julia-repl
+```julia
 julia> frame = stacktrace()[3]
 eval(::Module, ::Expr) at REPL.jl:5
 
@@ -109,7 +109,7 @@ more.
 While having easy access to information about the current state of the callstack can be helpful
 in many places, the most obvious application is in error handling and debugging.
 
-```julia-repl
+```julia
 julia> @noinline bad_function() = undeclared_variable
 bad_function (generic function with 1 method)
 
@@ -138,7 +138,7 @@ This can be remedied by passing the result of `catch_backtrace` to `stacktrace`.
 Instead of returning callstack information for the current context, `catch_backtrace`
 returns stack information for the context of the most recent exception:
 
-```julia-repl
+```julia
 julia> @noinline bad_function() = undeclared_variable
 bad_function (generic function with 1 method)
 
@@ -158,7 +158,7 @@ julia> example()
 
 Notice that the stack trace now indicates the appropriate line number and the missing frame.
 
-```julia-repl
+```julia
 julia> @noinline child() = error("Whoops!")
 child (generic function with 1 method)
 
@@ -200,7 +200,7 @@ in the associated `try` are considered to be successfully handled and are remove
 
 The stack of current exceptions can be accessed using the experimental `Base.catch_stack` function. For example,
 
-```julia-repl
+```julia
 julia> try
            error("(A) The root cause")
        catch
@@ -243,7 +243,7 @@ The exception stack is stored on the `Task` where the exceptions occurred. When 
 A call to `backtrace` returns a vector of `Union{Ptr{Nothing}, Base.InterpreterIP}`, which may then be passed into
 `stacktrace` for translation:
 
-```julia-repl
+```julia
 julia> trace = backtrace()
 18-element Array{Union{Ptr{Nothing}, Base.InterpreterIP},1}:
  Ptr{Nothing} @0x00007fd8734c6209
@@ -274,7 +274,7 @@ by `stacktrace` only has 6. This is because, by default, `stacktrace` removes
 any lower-level C functions from the stack. If you want to include stack frames from C calls,
 you can do it like this:
 
-```julia-repl
+```julia
 julia> stacktrace(trace, true)
 21-element Array{Base.StackTraces.StackFrame,1}:
  jl_apply_generic at gf.c:2167
@@ -303,7 +303,7 @@ julia> stacktrace(trace, true)
 Individual pointers returned by `backtrace` can be translated into `StackTraces.StackFrame`
 s by passing them into `StackTraces.lookup`:
 
-```julia-repl
+```julia
 julia> pointer = backtrace()[1];
 
 julia> frame = StackTraces.lookup(pointer)

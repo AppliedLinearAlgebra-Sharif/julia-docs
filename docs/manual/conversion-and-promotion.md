@@ -53,7 +53,7 @@ The `convert` function generally takes two arguments: the first is a type object
 a value to convert to that type. The returned value is the value converted to an instance of given type.
 The simplest way to understand this function is to see it in action:
 
-```jldoctest
+```julia
 julia> x = 12
 12
 
@@ -86,7 +86,7 @@ julia> convert(Array{Float64}, a)
 Conversion isn't always possible, in which case a `MethodError` is thrown indicating that `convert`
 doesn't know how to perform the requested conversion:
 
-```jldoctest
+```julia
 julia> convert(AbstractFloat, "foo")
 ERROR: MethodError: Cannot `convert` an object of type String to an object of type AbstractFloat
 [...]
@@ -212,7 +212,7 @@ any number of arguments, and returns a tuple of the same number of values, conve
 type, or throws an exception if promotion is not possible. The most common use case for promotion
 is to convert numeric arguments to a common type:
 
-```jldoctest
+```julia
 julia> promote(1, 2.5)
 (1.0, 2.5)
 
@@ -269,7 +269,7 @@ Rational(n::Integer, d::Integer) = Rational(promote(n,d)...)
 
 This allows calls like the following to work:
 
-```jldoctest
+```julia
 julia> x = Rational(Int8(15),Int32(-5))
 -3//1
 
@@ -314,7 +314,7 @@ which, given any number of type objects, returns the common type to which those 
 to `promote` should be promoted. Thus, if one wants to know, in absence of actual values, what
 type a collection of values of certain types would promote to, one can use `promote_type`:
 
-```jldoctest
+```julia
 julia> promote_type(Int8, Int64)
 Int64
 ```

@@ -55,7 +55,7 @@ Names for functions, variables and types in the global scope like `sin`, `ARGS`,
 `UnitRange` always belong to a module, called the *parent module*, which can be found
 interactively with `parentmodule`, for example
 
-```jldoctest
+```julia
 julia> parentmodule(UnitRange)
 Base
 ```

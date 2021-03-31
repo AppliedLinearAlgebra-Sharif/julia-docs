@@ -50,7 +50,7 @@ other subtypes of `AbstractChar`, e.g. to optimize operations for other
 [text encodings](https://en.wikipedia.org/wiki/Character_encoding).) Here is how `Char` values are
 input and shown:
 
-```jldoctest
+```julia
 julia> c = 'x'
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 
@@ -60,7 +60,7 @@ Char
 
 You can easily convert a `Char` to its integer value, i.e. code point:
 
-```jldoctest
+```julia
 julia> c = Int('x')
 120
 
@@ -71,7 +71,7 @@ Int64
 On 32-bit architectures, `typeof(c)` will be `Int32`. You can convert an
 integer value back to a `Char` just as easily:
 
-```jldoctest
+```julia
 julia> Char(120)
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 ```
@@ -80,7 +80,7 @@ Not all integer values are valid Unicode code points, but for performance, the `
 does not check that every character value is valid. If you want to check that each converted value
 is a valid code point, use the `isvalid` function:
 
-```jldoctest
+```julia
 julia> Char(0x110000)
 '\U110000': Unicode U+110000 (category In: Invalid, too high)
 
@@ -96,7 +96,7 @@ You can input any Unicode character in single quotes using `\u` followed by up t
 digits or `\U` followed by up to eight hexadecimal digits (the longest valid value only requires
 six):
 
-```jldoctest
+```julia
 julia> '\u0'
 '\0': ASCII/Unicode U+0000 (category Cc: Other, control)
 
@@ -115,7 +115,7 @@ as-is and which must be output using the generic, escaped `\u` or `\U` input for
 to these Unicode escape forms, all of [C's traditional escaped input forms](https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes)
 can also be used:
 
-```jldoctest
+```julia
 julia> Int('\0')
 0
 
@@ -137,7 +137,7 @@ julia> Int('\177')
 
 You can do comparisons and a limited amount of arithmetic with `Char` values:
 
-```jldoctest
+```julia
 julia> 'A' < 'a'
 true
 
@@ -158,7 +158,7 @@ julia> 'A' + 1
 
 String literals are delimited by double quotes or triple double quotes:
 
-```jldoctest helloworldstring
+```julia
 julia> str = "Hello, world.\n"
 "Hello, world.\n"
 
@@ -168,7 +168,7 @@ julia> """Contains "quote" characters"""
 
 If you want to extract a character from a string, you index into it:
 
-```jldoctest helloworldstring
+```julia
 julia> str[begin]
 'H': ASCII/Unicode U+0048 (category Lu: Letter, uppercase)
 
@@ -193,7 +193,7 @@ because some Unicode characters can occupy multiple "code units".
 You can perform arithmetic and other operations with `end`, just like
 a normal value:
 
-```jldoctest helloworldstring
+```julia
 julia> str[end-1]
 '.': ASCII/Unicode U+002E (category Po: Punctuation, other)
 
@@ -203,7 +203,7 @@ julia> str[end÷2]
 
 Using an index less than `begin` (`1`) or greater than `end` raises an error:
 
-```jldoctest helloworldstring
+```julia
 julia> str[begin-1]
 ERROR: BoundsError: attempt to access 14-codeunit String at index [0]
 [...]
@@ -215,14 +215,14 @@ ERROR: BoundsError: attempt to access 14-codeunit String at index [15]
 
 You can also extract a substring using range indexing:
 
-```jldoctest helloworldstring
+```julia
 julia> str[4:9]
 "lo, wo"
 ```
 
 Notice that the expressions `str[k]` and `str[k:k]` do not give the same result:
 
-```jldoctest helloworldstring
+```julia
 julia> str[6]
 ',': ASCII/Unicode U+002C (category Po: Punctuation, other)
 
@@ -237,7 +237,7 @@ Range indexing makes a copy of the selected part of the original string.
 Alternatively, it is possible to create a view into a string using the type `SubString`,
 for example:
 
-```jldoctest
+```julia
 julia> str = "long string"
 "long string"
 
@@ -257,7 +257,7 @@ Julia fully supports Unicode characters and strings. As [discussed above](@ref m
 literals, Unicode code points can be represented using Unicode `\u` and `\U` escape sequences,
 as well as all the standard C escape sequences. These can likewise be used to write string literals:
 
-```jldoctest unicodestring
+```julia
 julia> s = "\u2200 x \u2203 y"
 "∀ x ∃ y"
 ```
@@ -274,7 +274,7 @@ are used to encode arbitrary characters (code points). This means that not every
 index into a `String` is necessarily a valid index for a character. If you index into
 a string at such an invalid byte index, an error is thrown:
 
-```jldoctest unicodestring
+```julia
 julia> s[1]
 '∀': Unicode U+2200 (category Sm: Symbol, math)
 
@@ -299,7 +299,7 @@ and the next index after that by `nextind(s,4)` and so on.
 Since `end` is always the last valid index into a collection, `end-1` references an invalid
 byte index if the second-to-last character is multibyte.
 
-```jldoctest unicodestring
+```julia
 julia> s[end-1]
 ' ': ASCII/Unicode U+0020 (category Zs: Separator, space)
 
@@ -319,7 +319,7 @@ into `s` you can write `s[prevind(s, end, 2)]` and `end` expands to `lastindex(s
 
 Extraction of a substring using range indexing also expects valid byte indices or an error is thrown:
 
-```jldoctest unicodestring
+```julia
 julia> s[1:1]
 "∀"
 
@@ -339,7 +339,7 @@ of characters comprising the string `s`. Thus we have the identity that `length(
 since each character in a string must have its own index. The following is an inefficient and
 verbose way to iterate through the characters of `s`:
 
-```jldoctest unicodestring
+```julia
 julia> for i = firstindex(s):lastindex(s)
            try
                println(s[i])
@@ -360,7 +360,7 @@ The blank lines actually have spaces on them. Fortunately, the above awkward idi
 for iterating through the characters in a string, since you can just use the string as an iterable
 object, no exception handling required:
 
-```jldoctest unicodestring
+```julia
 julia> for c in s
            println(c)
        end
@@ -377,7 +377,7 @@ If you need to obtain valid indices for a string, you can use the `nextind` and
 `prevind` functions to increment/decrement to the next/previous valid index, as mentioned above.
 You can also use the `eachindex` function to iterate over the valid character indices:
 
-```jldoctest unicodestring
+```julia
 julia> collect(eachindex(s))
 7-element Vector{Int64}:
   1
@@ -410,7 +410,7 @@ In particular this means that overlong and too-high code unit sequences and pref
 as a single invalid character rather than multiple invalid characters.
 This rule may be best explained with an example:
 
-```julia-repl
+```julia
 julia> s = "\xc0\xa0\xe2\x88\xe2|"
 "\xc0\xa0\xe2\x88\xe2|"
 
@@ -454,7 +454,7 @@ primarily for working with external data and libraries.
 
 One of the most common and useful string operations is concatenation:
 
-```jldoctest stringconcat
+```julia
 julia> greet = "Hello"
 "Hello"
 
@@ -470,7 +470,7 @@ The resulting string may contain different characters than the input strings,
 and its number of characters may be lower than sum of numbers of characters
 of the concatenated strings, e.g.:
 
-```julia-repl
+```julia
 julia> a, b = "\xe2\x88", "\x80"
 ("\xe2\x88", "\x80")
 
@@ -495,7 +495,7 @@ concatenation preserves all characters in strings and additivity of string lengt
 
 Julia also provides `*` for string concatenation:
 
-```jldoctest stringconcat
+```julia
 julia> greet * ", " * whom * ".\n"
 "Hello, world.\n"
 ```
@@ -523,7 +523,7 @@ Constructing strings using concatenation can become a bit cumbersome, however. T
 verbose calls to `string` or repeated multiplications, Julia allows interpolation into string literals
 using `$`, as in Perl:
 
-```jldoctest stringconcat
+```julia
 julia> "$greet, $whom.\n"
 "Hello, world.\n"
 ```
@@ -534,7 +534,7 @@ rewrites this apparent single string literal into the call `string(greet, ", ", 
 The shortest complete expression after the `$` is taken as the expression whose value is to be
 interpolated into the string. Thus, you can interpolate any expression into a string using parentheses:
 
-```jldoctest
+```julia
 julia> "1 + 2 = $(1 + 2)"
 "1 + 2 = 3"
 ```
@@ -546,7 +546,7 @@ should add methods to `print` or `show` instead of `string`.
 Most non-`AbstractString` objects are converted to strings closely corresponding to how
 they are entered as literal expressions:
 
-```jldoctest
+```julia
 julia> v = [1,2,3]
 3-element Vector{Int64}:
  1
@@ -560,7 +560,7 @@ julia> "v: $v"
 `string` is the identity for `AbstractString` and `AbstractChar` values, so these are interpolated
 into strings as themselves, unquoted and unescaped:
 
-```jldoctest
+```julia
 julia> c = 'x'
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 
@@ -570,7 +570,7 @@ julia> "hi, $c"
 
 To include a literal `$` in a string literal, escape it with a backslash:
 
-```jldoctest
+```julia
 julia> print("I have \$100 in my account.\n")
 I have $100 in my account.
 ```
@@ -583,7 +583,7 @@ can be useful for creating longer blocks of text.
 First, triple-quoted strings are also dedented to the level of the least-indented line.
 This is useful for defining strings within code that is indented. For example:
 
-```jldoctest
+```julia
 julia> str = """
            Hello,
            world.
@@ -599,7 +599,7 @@ only spaces or tabs (the line containing the closing `"""` is always included).
 Then for all lines, excluding the text following the opening `"""`, the common starting
 sequence is removed (including lines containing only spaces and tabs if they start with
 this sequence), e.g.:
-```jldoctest
+```julia
 julia> """    This
          is
            a test"""
@@ -632,7 +632,7 @@ will contain a literal newline at the beginning.
 
 Stripping of the newline is performed after the dedentation. For example:
 
-```jldoctest
+```julia
 julia> """
          Hello,
          world."""
@@ -652,7 +652,7 @@ you can enter the literal string `"a CRLF line ending\r\n"`.
 
 You can lexicographically compare strings using the standard comparison operators:
 
-```jldoctest
+```julia
 julia> "abracadabra" < "xylophone"
 true
 
@@ -669,7 +669,7 @@ true
 You can search for the index of a particular character using the
 `findfirst` and `findlast` functions:
 
-```jldoctest
+```julia
 julia> findfirst(isequal('o'), "xylophone")
 4
 
@@ -682,7 +682,7 @@ julia> findfirst(isequal('z'), "xylophone")
 You can start the search for a character at a given offset by using
 the functions `findnext` and `findprev`:
 
-```jldoctest
+```julia
 julia> findnext(isequal('o'), "xylophone", 1)
 4
 
@@ -697,7 +697,7 @@ julia> findnext(isequal('o'), "xylophone", 8)
 
 You can use the `occursin` function to check if a substring is found within a string:
 
-```jldoctest
+```julia
 julia> occursin("world", "Hello, world.")
 true
 
@@ -715,7 +715,7 @@ The last example shows that `occursin` can also look for a character literal.
 
 Two other handy string functions are `repeat` and `join`:
 
-```jldoctest
+```julia
 julia> repeat(".:Z:.", 10)
 ".:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:."
 
@@ -755,7 +755,7 @@ can be used to efficiently search for patterns in strings. In Julia, regular exp
 using non-standard string literals prefixed with various identifiers beginning with `r`. The most
 basic regular expression literal without any options turned on just uses `r"..."`:
 
-```jldoctest
+```julia
 julia> re = r"^\s*(?:#|$)"
 r"^\s*(?:#|$)"
 
@@ -765,7 +765,7 @@ Regex
 
 To check if a regex matches a string, use `occursin`:
 
-```jldoctest
+```julia
 julia> occursin(r"^\s*(?:#|$)", "not a comment")
 false
 
@@ -778,7 +778,7 @@ match for the given regex occurs in the string. Commonly, however, one wants to 
 just whether a string matched, but also *how* it matched. To capture this information about
 a match, use the `match` function instead:
 
-```jldoctest
+```julia
 julia> match(r"^\s*(?:#|$)", "not a comment")
 
 julia> match(r"^\s*(?:#|$)", "# a comment")
@@ -804,7 +804,7 @@ matches and any captured substrings, if there are any. This example only capture
 of the substring that matches, but perhaps we want to capture any non-blank text after the comment
 character. We could do the following:
 
-```jldoctest
+```julia
 julia> m = match(r"^\s*(?:#\s*(.*?)\s*$|$)", "# a comment ")
 RegexMatch("# a comment ", 1="a comment")
 ```
@@ -812,7 +812,7 @@ RegexMatch("# a comment ", 1="a comment")
 When calling `match`, you have the option to specify an index at which to start the
 search. For example:
 
-```jldoctest
+```julia
 julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",1)
 RegexMatch("1")
 
@@ -834,7 +834,7 @@ For when a capture doesn't match, instead of a substring, `m.captures` contains 
 position, and `m.offsets` has a zero offset (recall that indices in Julia are 1-based, so a zero
 offset into a string is invalid). Here is a pair of somewhat contrived examples:
 
-```jldoctest acdmatch
+```julia
 julia> m = match(r"(a|b)(c)?(d)", "acd")
 RegexMatch("acd", 1="a", 2="c", 3="d")
 
@@ -881,7 +881,7 @@ julia> m.offsets
 It is convenient to have captures returned as an array so that one can use destructuring syntax
 to bind them to local variables:
 
-```jldoctest acdmatch
+```julia
 julia> first, second, third = m.captures; first
 "a"
 ```
@@ -889,7 +889,7 @@ julia> first, second, third = m.captures; first
 Captures can also be accessed by indexing the `RegexMatch` object with the number or name of the
 capture group:
 
-```jldoctest
+```julia
 julia> m=match(r"(?<hour>\d+):(?<minute>\d+)","12:45")
 RegexMatch("12:45", hour="12", minute="45")
 
@@ -905,14 +905,14 @@ to refer to the nth capture group and prefixing the substitution string with `s`
 0 refers to the entire match object. Named capture groups can be referenced in the substitution
 with `\g<groupname>`. For example:
 
-```jldoctest
+```julia
 julia> replace("first second", r"(\w+) (?<agroup>\w+)" => s"\g<agroup> \1")
 "second first"
 ```
 
 Numbered capture groups can also be referenced as `\g<n>` for disambiguation, as in:
 
-```jldoctest
+```julia
 julia> replace("a", r"." => s"\g<0>1")
 "a1"
 ```
@@ -953,7 +953,7 @@ x   Tells the regular expression parser to ignore most whitespace
 
 For example, the following regex has all three flags turned on:
 
-```jldoctest
+```julia
 julia> r"a+.*b+.*?d$"ism
 r"a+.*b+.*?d$"ims
 
@@ -965,7 +965,7 @@ The `r"..."` literal is constructed without interpolation and unescaping (except
 quotation mark `"` which still has to be escaped). Here is an example
 showing the difference from standard string literals:
 
-```julia-repl
+```julia
 julia> x = 10
 10
 
@@ -987,7 +987,7 @@ for regular expressions containing quotation marks or newlines).
 
 The `Regex()` constructor may be used to create a valid regex string programmatically.  This permits using the contents of string variables and other string operations when constructing the regex string. Any of the regex codes above can be used within the single string argument to `Regex()`. Here are some examples:
 
-```jldoctest
+```julia
 julia> using Dates
 
 julia> d = Date(1962,7,10)
@@ -1028,7 +1028,7 @@ There is some overlap between these rules since the behavior of `\x` and octal e
 rules allow one to easily use ASCII characters, arbitrary byte values, and UTF-8 sequences to
 produce arrays of bytes. Here is an example using all three:
 
-```jldoctest
+```julia
 julia> b"DATA\xff\u2200"
 8-element Base.CodeUnits{UInt8, String}:
  0x44
@@ -1045,7 +1045,7 @@ The ASCII string "DATA" corresponds to the bytes 68, 65, 84, 65. `\xff` produces
 The Unicode escape `\u2200` is encoded in UTF-8 as the three bytes 226, 136, 128. Note that the
 resulting byte array does not correspond to a valid UTF-8 string:
 
-```jldoctest
+```julia
 julia> isvalid("DATA\xff\u2200")
 false
 ```
@@ -1053,7 +1053,7 @@ false
 As it was mentioned `CodeUnits{UInt8, String}` type behaves like read only array of `UInt8` and
 if you need a standard vector you can convert it using `Vector{UInt8}`:
 
-```jldoctest
+```julia
 julia> x = b"123"
 3-element Base.CodeUnits{UInt8, String}:
  0x31
@@ -1078,7 +1078,7 @@ Also observe the significant distinction between `\xff` and `\uff`: the former e
 encodes the *byte 255*, whereas the latter escape sequence represents the *code point 255*, which
 is encoded as two bytes in UTF-8:
 
-```jldoctest
+```julia
 julia> b"\xff"
 1-element Base.CodeUnits{UInt8, String}:
  0xff
@@ -1160,7 +1160,7 @@ to `"\""`.
 To make it possible to express all strings, backslashes then also must be escaped, but
 only when appearing right before a quote character:
 
-```jldoctest
+```julia
 julia> println(raw"\\ \\\"")
 \\ \"
 ```

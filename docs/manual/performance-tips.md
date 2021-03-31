@@ -44,13 +44,13 @@ Passing arguments to functions is better style. It leads to more reusable code a
 
 In the following REPL session:
 
-```julia-repl
+```julia
 julia> x = 1.0
 ```
 
 is equivalent to:
 
-```julia-repl
+```julia
 julia> global x = 1.0
 ```
 
@@ -61,7 +61,7 @@ so all the performance issues discussed previously apply.
 A useful tool for measuring performance is the `@time` macro. We here repeat the example
 with the global variable above, but this time with the type annotation removed:
 
-```jldoctest; setup = :(using Random; Random.seed!(1234)), filter = r"[0-9\.]+ seconds \(.*?\)"
+```julia
 julia> x = rand(1000);
 
 julia> function sum_global()
@@ -97,7 +97,7 @@ If we instead pass `x` as an argument to the function it no longer allocates mem
 (the allocation reported below is due to running the `@time` macro in global scope)
 and is significantly faster after the first call:
 
-```jldoctest sumarg; setup = :(using Random; Random.seed!(1234)), filter = r"[0-9\.]+ seconds \(.*?\)"
+```julia
 julia> x = rand(1000);
 
 julia> function sum_arg(x)
@@ -120,7 +120,7 @@ julia> @time sum_arg(x)
 The 1 allocation seen is from running the `@time` macro itself in global scope. If we instead run
 the timing in a function, we can see that indeed no allocations are performed:
 
-```jldoctest sumarg; filter = r"[0-9\.]+ seconds"
+```julia
 julia> time_sum(x) = @time sum_arg(x);
 
 julia> time_sum(x)
@@ -164,7 +164,7 @@ abstract types where possible.
 
 Consider the following:
 
-```jldoctest
+```julia
 julia> a = Real[]
 Real[]
 
@@ -181,7 +181,7 @@ represented as an array of pointers to individually allocated `Real` objects. Ho
 only allow numbers of the same type, e.g. `Float64`, to be stored in `a` these can be stored more
 efficiently:
 
-```jldoctest
+```julia
 julia> a = Float64[]
 Float64[]
 
@@ -212,7 +212,7 @@ specific instances where declarations are helpful.
 
 Types can be declared without specifying the types of their fields:
 
-```jldoctest myambig
+```julia
 julia> struct MyAmbiguousType
            a
        end
@@ -223,7 +223,7 @@ objects of type `MyAmbiguousType`, the compiler will not be able to generate hig
 code. The reason is that the compiler uses the types of objects, not their values, to determine
 how to build code. Unfortunately, very little can be inferred about an object of type `MyAmbiguousType`:
 
-```jldoctest myambig
+```julia
 julia> b = MyAmbiguousType("Hello")
 MyAmbiguousType("Hello")
 
@@ -246,7 +246,7 @@ in the type, such decisions have to be made at run-time. This slows performance.
 You can do better by declaring the type of `a`. Here, we are focused on the case where `a` might
 be any one of several types, in which case the natural solution is to use parameters. For example:
 
-```jldoctest myambig2
+```julia
 julia> mutable struct MyType{T<:AbstractFloat}
            a::T
        end
@@ -254,7 +254,7 @@ julia> mutable struct MyType{T<:AbstractFloat}
 
 This is a better choice than
 
-```jldoctest myambig2
+```julia
 julia> mutable struct MyStillAmbiguousType
            a::AbstractFloat
        end
@@ -263,7 +263,7 @@ julia> mutable struct MyStillAmbiguousType
 because the first version specifies the type of `a` from the type of the wrapper object. For
 example:
 
-```jldoctest myambig2
+```julia
 julia> m = MyType(3.2)
 MyType{Float64}(3.2)
 
@@ -280,7 +280,7 @@ MyStillAmbiguousType
 The type of field `a` can be readily determined from the type of `m`, but not from the type of
 `t`. Indeed, in `t` it's possible to change the type of the field `a`:
 
-```jldoctest myambig2
+```julia
 julia> typeof(t.a)
 Float64
 
@@ -293,7 +293,7 @@ Float32
 
 In contrast, once `m` is constructed, the type of `m.a` cannot change:
 
-```jldoctest myambig2
+```julia
 julia> m.a = 4.5f0
 4.5f0
 
@@ -308,7 +308,7 @@ like `m` but not for objects like `t`.
 Of course, all of this is true only if we construct `m` with a concrete type. We can break this
 by explicitly constructing it with an abstract type:
 
-```jldoctest myambig2
+```julia
 julia> m = MyType{AbstractFloat}(3.2)
 MyType{AbstractFloat}(3.2)
 
@@ -345,7 +345,7 @@ to resolve the type at run-time. This results in shorter and faster code.
 
 The same best practices also work for container types:
 
-```jldoctest containers
+```julia
 julia> struct MySimpleContainer{A<:AbstractVector}
            a::A
        end
@@ -357,7 +357,7 @@ julia> struct MyAmbiguousContainer{T}
 
 For example:
 
-```jldoctest containers
+```julia
 julia> c = MySimpleContainer(1:3);
 
 julia> typeof(c)
@@ -386,7 +386,7 @@ While the compiler can now do its job perfectly well, there are cases where *you
 your code could do different things depending on the *element type* of `a`. Usually the best
 way to achieve this is to wrap your specific operation (here, `foo`) in a separate function:
 
-```jldoctest containers
+```julia
 julia> function sumfoo(c::MySimpleContainer)
            s = 0
            for x in c.a
@@ -409,7 +409,7 @@ However, there are cases where you may need to declare different versions of the
 for different element types or types of the `AbstractVector` of the field `a` in `MySimpleContainer`.
 You could do it like this:
 
-```jldoctest containers
+```julia
 julia> function myfunc(c::MySimpleContainer{<:AbstractArray{<:Integer}})
            return c.a[1]+1
        end
@@ -426,7 +426,7 @@ julia> function myfunc(c::MySimpleContainer{Vector{T}}) where T <: Integer
 myfunc (generic function with 3 methods)
 ```
 
-```jldoctest containers
+```julia
 julia> myfunc(MySimpleContainer(1:3))
 2
 
@@ -637,7 +637,7 @@ to perform a core computation. Where possible, it is a good idea to put these co
 in separate functions. For example, the following contrived function returns an array of a randomly-chosen
 type:
 
-```jldoctest; setup = :(using Random; Random.seed!(1234))
+```julia
 julia> function strange_twos(n)
            a = Vector{rand(Bool) ? Int64 : Float64}(undef, n)
            for i = 1:n
@@ -655,7 +655,7 @@ julia> strange_twos(3)
 
 This should be written as:
 
-```jldoctest; setup = :(using Random; Random.seed!(1234))
+```julia
 julia> function fill_twos!(a)
            for i = eachindex(a)
                a[i] = 2
@@ -694,7 +694,7 @@ loaded from an input file that might contain either integers, floats, strings, o
 Let's say you want to create an `N`-dimensional array that has size 3 along each axis. Such arrays
 can be created like this:
 
-```jldoctest
+```julia
 julia> A = fill(5.0, (3, 3))
 3×3 Matrix{Float64}:
  5.0  5.0  5.0
@@ -710,7 +710,7 @@ the same function.
 But now let's say you want to write a function that creates a 3×3×... array in arbitrary dimensions;
 you might be tempted to write a function
 
-```jldoctest
+```julia
 julia> function array3(fillval, N)
            fill(fillval, ntuple(d->3, N))
        end
@@ -734,7 +734,7 @@ However, in some cases you might want to eliminate the type-instability altogeth
 one approach is to pass the dimensionality as a parameter, for example through `Val{T}()` (see
 "Value types"):
 
-```jldoctest
+```julia
 julia> function array3(fillval, ::Val{N}) where N
            fill(fillval, ntuple(d->3, Val(N)))
        end
@@ -832,7 +832,7 @@ Multidimensional arrays in Julia are stored in column-major order. This means th
 stacked one column at a time. This can be verified using the `vec` function or the syntax `[:]`
 as shown below (notice that the array is ordered `[1 3 2 4]`, not `[1 2 3 4]`):
 
-```jldoctest
+```julia
 julia> x = [1 2; 3 4]
 2×2 Matrix{Int64}:
  1  2
@@ -900,7 +900,7 @@ end
 
 Now we will time each of these functions using the same random `10000` by `1` input vector:
 
-```julia-repl
+```julia
 julia> x = randn(10000);
 
 julia> fmt(f) = println(rpad(string(f)*": ", 14, ' '), @elapsed f(x))
@@ -925,7 +925,7 @@ Unfortunately, oftentimes allocation and its converse, garbage collection, are s
 Sometimes you can circumvent the need to allocate memory on each function call by preallocating
 the output. As a trivial example, compare
 
-```jldoctest prealloc
+```julia
 julia> function xinc(x)
            return [x, x+1, x+2]
        end;
@@ -942,7 +942,7 @@ julia> function loopinc()
 
 with
 
-```jldoctest prealloc
+```julia
 julia> function xinc!(ret::AbstractVector{T}, x::T) where T
            ret[1] = x
            ret[2] = x+1
@@ -963,7 +963,7 @@ julia> function loopinc_prealloc()
 
 Timing results:
 
-```jldoctest prealloc; filter = r"[0-9\.]+ seconds \(.*?\)"
+```julia
 julia> @time loopinc()
   0.529894 seconds (40.00 M allocations: 1.490 GiB, 12.14% gc time)
 50000015000000
@@ -998,7 +998,7 @@ to instead use `vector .+ vector` and `vector .* scalar` because the
 resulting loops can be fused with surrounding computations. For example,
 consider the two functions:
 
-```jldoctest dotfuse
+```julia
 julia> f(x) = 3x.^2 + 4x + 7x.^3;
 
 julia> fdot(x) = @. 3x^2 + 4x + 7x^3 # equivalent to 3 .* x.^2 .+ 4 .* x .+ 7 .* x.^3;
@@ -1008,7 +1008,7 @@ Both `f` and `fdot` compute the same thing. However, `fdot`
 (defined with the help of the [`@.`](@ref @__dot__) macro) is
 significantly faster when applied to an array:
 
-```jldoctest dotfuse; filter = r"[0-9\.]+ seconds \(.*?\)"
+```julia
 julia> x = rand(10^6);
 
 julia> @time f(x);
@@ -1049,7 +1049,7 @@ This can be done for individual slices by calling `view`,
 or more simply for a whole expression or block of code by putting
 `@views` in front of that expression. For example:
 
-```jldoctest; filter = r"[0-9\.]+ seconds \(.*?\)"
+```julia
 julia> fcopy(x) = sum(x[2:end-1]);
 
 julia> @views fview(x) = sum(x[2:end-1]);
@@ -1078,7 +1078,7 @@ in a large speedup, such as in the example below. Here, a matrix and a vector ar
 800,000 of their randomly-shuffled indices before being multiplied. Copying the views into
 plain arrays speeds up the multiplication even with the cost of the copying operation.
 
-```julia-repl
+```julia
 julia> using Random
 
 julia> x = randn(1_000_000);
@@ -1356,7 +1356,7 @@ in generated code by using Julia's `code_native` function.
 
 Note that `@fastmath` also assumes that `NaN`s will not occur during the computation, which can lead to surprising behavior:
 
-```julia-repl
+```julia
 julia> f(x) = isnan(x);
 
 julia> f(NaN)
@@ -1424,7 +1424,7 @@ decreasing curve, which slowly flattens out over time.
 Treating subnormals as zeros should be used with caution, because doing so breaks some identities,
 such as `x-y == 0` implies `x == y`:
 
-```jldoctest
+```julia
 julia> x = 3f-38; y = 2f-38;
 
 julia> set_zero_subnormals(true); (x - y, x == y)
@@ -1446,7 +1446,7 @@ a = rand(Float32,1000) * 1.f-9
 The macro `@code_warntype` (or its function variant `code_warntype`) can sometimes
 be helpful in diagnosing type-related problems. Here's an example:
 
-```julia-repl
+```julia
 julia> @noinline pos(x) = x < 0 ? 0 : x;
 
 julia> function f(x)

@@ -11,7 +11,7 @@ functionality.
 All Julia streams expose at least a `read` and a `write` method, taking the
 stream as their first argument, e.g.:
 
-```julia-repl
+```julia
 julia> write(stdout, "Hello World");  # suppress return value 11 with ;
 Hello World
 julia> read(stdin, Char)
@@ -28,7 +28,7 @@ takes the type of the data to be read as the second argument.
 
 For example, to read a simple byte array, we could do:
 
-```julia-repl
+```julia
 julia> x = zeros(UInt8, 4)
 4-element Array{UInt8,1}:
  0x00
@@ -48,7 +48,7 @@ abcd
 However, since this is slightly cumbersome, there are several convenience methods provided. For
 example, we could have written the above as:
 
-```julia-repl
+```julia
 julia> read(stdin, 4)
 abcd
 4-element Array{UInt8,1}:
@@ -60,7 +60,7 @@ abcd
 
 or if we had wanted to read the entire line instead:
 
-```julia-repl
+```julia
 julia> readline(stdin)
 abcd
 "abcd"
@@ -91,7 +91,7 @@ end
 Note that the `write` method mentioned above operates on binary streams. In particular,
 values do not get converted to any canonical text representation but are written out as is:
 
-```jldoctest
+```julia
 julia> write(stdout, 0x61);  # suppress return value 1 with ;
 a
 ```
@@ -102,7 +102,7 @@ value is `1` (since `0x61` is one byte).
 For text I/O, use the `print` or `show` methods, depending on your needs (see
 the documentation for these two methods for a detailed discussion of the difference between them):
 
-```jldoctest
+```julia
 julia> print(stdout, 0x61)
 97
 ```
@@ -124,7 +124,7 @@ Like many other environments, Julia has an `open` function, which takes a filena
 returns an `IOStream` object that you can use to read and write things from the file. For example,
 if we have a file, `hello.txt`, whose contents are `Hello, World!`:
 
-```julia-repl
+```julia
 julia> f = open("hello.txt")
 IOStream(<file hello.txt>)
 
@@ -135,7 +135,7 @@ julia> readlines(f)
 
 If you want to write to a file, you can open it with the write (`"w"`) flag:
 
-```julia-repl
+```julia
 julia> f = open("hello.txt","w")
 IOStream(<file hello.txt>)
 
@@ -147,7 +147,7 @@ If you examine the contents of `hello.txt` at this point, you will notice that i
 has actually been written to disk yet. This is because the `IOStream` must be closed before the
 write is actually flushed to disk:
 
-```julia-repl
+```julia
 julia> close(f)
 ```
 
@@ -166,7 +166,7 @@ end
 
 You can call:
 
-```julia-repl
+```julia
 julia> open(read_and_capitalize, "hello.txt")
 "HELLO AGAIN."
 ```
@@ -177,7 +177,7 @@ contents.
 To avoid even having to define a named function, you can use the `do` syntax, which creates an
 anonymous function on the fly:
 
-```julia-repl
+```julia
 julia> open("hello.txt") do f
            uppercase(read(f, String))
        end
@@ -190,7 +190,7 @@ Let's jump right in with a simple example involving TCP sockets.
 This functionality is in a standard library package called `Sockets`.
 Let's first create a simple server:
 
-```julia-repl
+```julia
 julia> using Sockets
 
 julia> @async begin
@@ -208,7 +208,7 @@ usage is somewhat simpler than the raw Unix socket API. The first call to `liste
 create a server waiting for incoming connections on the specified port (2000) in this case. The
 same function may also be used to create various other kinds of servers:
 
-```julia-repl
+```julia
 julia> listen(2000) # Listens on localhost:2000 (IPv4)
 Sockets.TCPServer(active)
 
@@ -244,7 +244,7 @@ so, assuming the environment (i.e. host, cwd, etc.) is the same you should be ab
 arguments to `connect` as you did to listen to establish the connection. So let's try that
 out (after having created the server above):
 
-```julia-repl
+```julia
 julia> connect(2000)
 TCPSocket(open, 0 bytes waiting)
 
@@ -264,7 +264,7 @@ task resumed execution (because a connection request was now available), accepte
 printed the message and waited for the next client. Reading and writing works in the same way.
 To see this, consider the following simple echo server:
 
-```julia-repl
+```julia
 julia> @async begin
            server = listen(2001)
            while true
@@ -290,7 +290,7 @@ Hello World from the Echo Server
 
 As with other streams, use `close` to disconnect the socket:
 
-```julia-repl
+```julia
 julia> close(clientside)
 ```
 
@@ -300,7 +300,7 @@ One of the `connect` methods that does not follow the `listen` methods is
 `connect(host::String,port)`, which will attempt to connect to the host given by the `host` parameter
 on the port given by the `port` parameter. It allows you to do things like:
 
-```julia-repl
+```julia
 julia> connect("google.com", 80)
 TCPSocket(RawFD(30) open, 0 bytes waiting)
 ```
@@ -308,7 +308,7 @@ TCPSocket(RawFD(30) open, 0 bytes waiting)
 At the base of this functionality is `getaddrinfo`, which will do the appropriate address
 resolution:
 
-```julia-repl
+```julia
 julia> getaddrinfo("google.com")
 ip"74.125.226.225"
 ```
@@ -320,7 +320,7 @@ All I/O operations exposed by `Base.read` and `Base.write` can be performed
 asynchronously through the use of [coroutines](@ref man-tasks). You can create a new coroutine to
 read from or write to a stream using the `@async` macro:
 
-```julia-repl
+```julia
 julia> task = @async open("foo.txt", "w") do io
            write(io, "Hello, World!")
        end;
@@ -336,7 +336,7 @@ It's common to run into situations where you want to perform multiple asynchrono
 concurrently and wait until they've all completed. You can use the `@sync` macro to cause
 your program to block until all of the coroutines it wraps around have exited:
 
-```julia-repl
+```julia
 julia> using Sockets
 
 julia> @sync for hostname in ("google.com", "github.com", "julialang.org")

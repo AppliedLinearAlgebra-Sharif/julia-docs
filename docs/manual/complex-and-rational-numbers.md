@@ -12,14 +12,14 @@ square root of -1. (Using mathematicians' `i` or engineers' `j` for this global 
 this binding suffices to provide convenient syntax for complex numbers, similar to the traditional
 mathematical notation:
 
-```jldoctest
+```julia
 julia> 1+2im
 1 + 2im
 ```
 
 You can perform all the standard arithmetic operations with complex numbers:
 
-```jldoctest
+```julia
 julia> (1 + 2im)*(2 - 3im)
 8 + 1im
 
@@ -53,7 +53,7 @@ julia> 3(2 - 5im)^-1.0
 
 The promotion mechanism ensures that combinations of operands of different types just work:
 
-```jldoctest
+```julia
 julia> 2(1 - 1im)
 2 - 2im
 
@@ -87,7 +87,7 @@ division.
 
 Standard functions to manipulate complex values are provided:
 
-```jldoctest
+```julia
 julia> z = 1 + 2im
 1 + 2im
 
@@ -116,7 +116,7 @@ numbers since it avoids taking a square root. `angle` returns the phase angle in
 (also known as the *argument* or *arg* function). The full gamut of other Elementary Functions
 is also defined for complex numbers:
 
-```jldoctest
+```julia
 julia> sqrt(1im)
 0.7071067811865476 + 0.7071067811865475im
 
@@ -137,7 +137,7 @@ Note that mathematical functions typically return real values when applied to re
 complex values when applied to complex numbers. For example, `sqrt` behaves differently
 when applied to `-1` versus `-1 + 0im` even though `-1 == -1 + 0im`:
 
-```jldoctest
+```julia
 julia> sqrt(-1)
 ERROR: DomainError with -1.0:
 sqrt will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).
@@ -151,7 +151,7 @@ julia> sqrt(-1 + 0im)
 The [literal numeric coefficient notation](@ref man-numeric-literal-coefficients) does not work when constructing a complex number
 from variables. Instead, the multiplication must be explicitly written out:
 
-```jldoctest
+```julia
 julia> a = 1; b = 2; a + b*im
 1 + 2im
 ```
@@ -159,7 +159,7 @@ julia> a = 1; b = 2; a + b*im
 However, this is *not* recommended. Instead, use the more efficient `complex` function to construct
 a complex value directly from its real and imaginary parts:
 
-```jldoctest
+```julia
 julia> a = 1; b = 2; complex(a, b)
 1 + 2im
 ```
@@ -169,7 +169,7 @@ This construction avoids the multiplication and addition operations.
 `Inf` and `NaN` propagate through complex numbers in the real and imaginary parts
 of a complex number as described in the Special floating-point values section:
 
-```jldoctest
+```julia
 julia> 1 + Inf*im
 1.0 + Inf*im
 
@@ -182,7 +182,7 @@ julia> 1 + NaN*im
 Julia has a rational number type to represent exact ratios of integers. Rationals are constructed
 using the `//` operator:
 
-```jldoctest
+```julia
 julia> 2//3
 2//3
 ```
@@ -190,7 +190,7 @@ julia> 2//3
 If the numerator and denominator of a rational have common factors, they are reduced to lowest
 terms such that the denominator is non-negative:
 
-```jldoctest
+```julia
 julia> 6//9
 2//3
 
@@ -209,7 +209,7 @@ tested by checking for equality of the numerator and denominator. The standardiz
 denominator of a rational value can be extracted using the `numerator` and `denominator`
 functions:
 
-```jldoctest
+```julia
 julia> numerator(2//3)
 2
 
@@ -220,7 +220,7 @@ julia> denominator(2//3)
 Direct comparison of the numerator and denominator is generally not necessary, since the standard
 arithmetic and comparison operations are defined for rational values:
 
-```jldoctest
+```julia
 julia> 2//3 == 6//9
 true
 
@@ -248,7 +248,7 @@ julia> 6//5 / 10//7
 
 Rationals can easily be converted to floating-point numbers:
 
-```jldoctest
+```julia
 julia> float(3//4)
 0.75
 ```
@@ -256,7 +256,7 @@ julia> float(3//4)
 Conversion from rational to floating-point respects the following identity for any integral values
 of `a` and `b`, with the exception of the case `a == 0` and `b == 0`:
 
-```jldoctest
+```julia
 julia> a = 1; b = 2;
 
 julia> isequal(float(a//b), a/b)
@@ -265,7 +265,7 @@ true
 
 Constructing infinite rational values is acceptable:
 
-```jldoctest
+```julia
 julia> 5//0
 1//0
 
@@ -278,7 +278,7 @@ Rational{Int64}
 
 Trying to construct a `NaN` rational value, however, is invalid:
 
-```jldoctest
+```julia
 julia> 0//0
 ERROR: ArgumentError: invalid rational: zero(Int64)//zero(Int64)
 Stacktrace:
@@ -287,7 +287,7 @@ Stacktrace:
 
 As usual, the promotion system makes interactions with other numeric types effortless:
 
-```jldoctest
+```julia
 julia> 3//5 + 1
 8//5
 

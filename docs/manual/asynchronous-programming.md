@@ -28,7 +28,7 @@ It has a create-start-run-finish lifecycle.
 Tasks are created by calling the `Task` constructor on a 0-argument function to run,
 or using the `@task` macro:
 
-```julia-repl
+```julia
 julia> t = @task begin; sleep(5); println("done"); end
 Task (runnable) @0x00007f13a40c0eb0
 ```
@@ -38,7 +38,7 @@ Task (runnable) @0x00007f13a40c0eb0
 This task will wait for five seconds, and then print `done`. However, it has not
 started running yet. We can run it whenever we're ready by calling `schedule`:
 
-```julia-repl
+```julia
 julia> schedule(t);
 ```
 
@@ -55,7 +55,7 @@ printed. `t` is then finished.
 The `wait` function blocks the calling task until some other task finishes.
 So for example if you type
 
-```julia-repl
+```julia
 julia> schedule(t); wait(t)
 ```
 
@@ -86,7 +86,7 @@ To consume values, we need to schedule the producer to run in a new task. A spec
 constructor which accepts a 1-arg function as an argument can be used to run a task bound to a channel.
 We can then `take!` values repeatedly from the channel object:
 
-```jldoctest producer
+```julia
 julia> function producer(c::Channel)
            put!(c, "start")
            for n=1:4
@@ -122,7 +122,7 @@ calls to `put!`, the producer's execution is suspended and the consumer has cont
 The returned `Channel` can be used as an iterable object in a `for` loop, in which case the
 loop variable takes on all the produced values. The loop is terminated when the channel is closed.
 
-```jldoctest producer
+```julia
 julia> for x in Channel(producer)
            println(x)
        end
@@ -202,7 +202,7 @@ A channel can be visualized as a pipe, i.e., it has a write end and a read end :
     freely via `take!` and `put!` calls. `close` closes a `Channel`.
     On a closed `Channel`, `put!` will fail. For example:
 
-    ```julia-repl
+    ```julia
     julia> c = Channel(2);
 
     julia> put!(c, 1) # `put!` on an open channel succeeds
@@ -219,7 +219,7 @@ A channel can be visualized as a pipe, i.e., it has a write end and a read end :
   * `take!` and `fetch` (which retrieves but does not remove the value) on a closed
     channel successfully return any existing values until it is emptied. Continuing the above example:
 
-    ```julia-repl
+    ```julia
     julia> fetch(c) # Any number of `fetch` calls succeed.
     1
 
@@ -241,7 +241,7 @@ Each task in this simulation reads a `job_id`, waits for a random amount of time
 a tuple of `job_id` and the simulated time to the results channel. Finally all the `results` are
 printed out.
 
-```julia-repl
+```julia
 julia> const jobs = Channel{Int}(32);
 
 julia> const results = Channel{Tuple}(32);

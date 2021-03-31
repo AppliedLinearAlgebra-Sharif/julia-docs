@@ -16,7 +16,7 @@ operators and functions.
 For these functions, uncertainty about the value of one of the operands
 induces uncertainty about the result. In practice, this means a math operation
 involving a `missing` value generally returns `missing`
-```jldoctest
+```julia
 julia> missing + 1
 missing
 
@@ -47,7 +47,7 @@ For example, `f(x)` becomes `passmissing(f)(x)`.
 Standard equality and comparison operators follow the propagation rule presented
 above: if any of the operands is `missing`, the result is `missing`.
 Here are a few examples
-```jldoctest
+```julia
 julia> missing == 1
 missing
 
@@ -69,7 +69,7 @@ Special comparison operators `isequal` and `===` are exceptions
 to the propagation rule: they always return a `Bool` value, even in the presence
 of `missing` values, considering `missing` as equal to `missing` and as different
 from any other value. They can therefore be used to test whether a value is `missing`
-```jldoctest
+```julia
 julia> missing === 1
 false
 
@@ -86,7 +86,7 @@ true
 The `isless` operator is another exception: `missing` is considered
 as greater than any other value. This operator is used by `sort`,
 which therefore places `missing` values after all other values.
-```jldoctest
+```julia
 julia> isless(1, missing)
 true
 
@@ -112,7 +112,7 @@ Let us illustrate this principle with the logical "or" operator `|`.
 Following the rules of boolean logic, if one of the operands is `true`,
 the value of the other operand does not have an influence on the result,
 which will always be `true`
-```jldoctest
+```julia
 julia> true | true
 true
 
@@ -129,7 +129,7 @@ uncertainty about the actual value of one of the operands. If we had
 been able to observe the actual value of the second operand, it could only be
 `true` or `false`, and in both cases the result would be `true`. Therefore,
 in this particular case, missingness does *not* propagate
-```jldoctest
+```julia
 julia> true | missing
 true
 
@@ -140,7 +140,7 @@ true
 On the contrary, if one of the operands is `false`, the result could be either
 `true` or `false` depending on the value of the other operand. Therefore,
 if that operand is `missing`, the result has to be `missing` too
-```jldoctest
+```julia
 julia> false | true
 true
 
@@ -161,7 +161,7 @@ The behavior of the logical "and" operator `&` is similar to that of the
 `|` operator, with the difference that missingness does not propagate when
 one of the operands is `false`. For example, when that is the case of the first
 operand
-```jldoctest
+```julia
 julia> false & false
 false
 
@@ -174,7 +174,7 @@ false
 
 On the other hand, missingness propagates when one of the operands is `true`,
 for example the first one
-```jldoctest
+```julia
 julia> true & true
 true
 
@@ -198,7 +198,7 @@ do not allow for missing values. This is because of the uncertainty about whethe
 the actual value would be `true` or `false` if we could observe it,
 which implies that we do not know how the program should behave. A `TypeError`
 is thrown as soon as a `missing` value is encountered in this context
-```jldoctest
+```julia
 julia> if missing
            println("here")
        end
@@ -209,7 +209,7 @@ For the same reason, contrary to logical operators presented above,
 the short-circuiting boolean operators `&&` and `||` do not
 allow for `missing` values in situations where the value of the operand
 determines whether the next operand is evaluated or not. For example
-```jldoctest
+```julia
 julia> missing || false
 ERROR: TypeError: non-boolean (Missing) used in boolean context
 
@@ -224,7 +224,7 @@ On the other hand, no error is thrown when the result can be determined without
 the `missing` values. This is the case when the code short-circuits
 before evaluating the `missing` operand, and when the `missing` operand is the
 last one
-```jldoctest
+```julia
 julia> true && missing
 missing
 
@@ -235,7 +235,7 @@ false
 ## Arrays With Missing Values
 
 Arrays containing missing values can be created like other arrays
-```jldoctest
+```julia
 julia> [1, missing]
 2-element Vector{Union{Missing, Int64}}:
  1
@@ -252,7 +252,7 @@ of the entry (i.e. whether it is `Missing` or `T`).
 Arrays allowing for missing values can be constructed with the standard syntax.
 Use `Array{Union{Missing, T}}(missing, dims)` to create arrays filled with
 missing values:
-```jldoctest
+```julia
 julia> Array{Union{Missing, String}}(missing, 2, 3)
 2×3 Matrix{Union{Missing, String}}:
  missing  missing  missing
@@ -271,7 +271,7 @@ An array allowing for `missing` values but which does not contain any such value
 can be converted back to an array which does not allow for missing values using
 `convert`. If the array contains `missing` values, a `MethodError` is thrown
 during conversion
-```jldoctest
+```julia
 julia> x = Union{Missing, String}["a", "b"]
 2-element Vector{Union{Missing, String}}:
  "a"
@@ -294,20 +294,20 @@ ERROR: MethodError: Cannot `convert` an object of type Missing to an object of t
 
 Since `missing` values propagate with standard mathematical operators, reduction
 functions return `missing` when called on arrays which contain missing values
-```jldoctest
+```julia
 julia> sum([1, missing])
 missing
 ```
 
 In this situation, use the `skipmissing` function to skip missing values
-```jldoctest
+```julia
 julia> sum(skipmissing([1, missing]))
 1
 ```
 
 This convenience function returns an iterator which filters out `missing` values
 efficiently. It can therefore be used with any function which supports iterators
-```jldoctest skipmissing; setup = :(using Statistics)
+```julia
 julia> x = skipmissing([3, missing, 2, 1])
 skipmissing(Union{Missing, Int64}[3, missing, 2, 1])
 
@@ -325,7 +325,7 @@ Objects created by calling `skipmissing` on an array can be indexed using indice
 from the parent array. Indices corresponding to missing values are not valid for
 these objects and an error is thrown when trying to use them (they are also skipped
 by `keys` and `eachindex`)
-```jldoctest skipmissing
+```julia
 julia> x[1]
 3
 
@@ -338,7 +338,7 @@ This allows functions which operate on indices to work in combination with `skip
 This is notably the case for search and find functions, which return indices
 valid for the object returned by `skipmissing` which are also the indices of the
 matching entries *in the parent array*
-```jldoctest skipmissing
+```julia
 julia> findall(==(1), x)
 1-element Vector{Int64}:
  4
@@ -351,7 +351,7 @@ julia> argmax(x)
 ```
 
 Use `collect` to extract non-`missing` values and store them in an array
-```jldoctest skipmissing
+```julia
 julia> collect(x)
 3-element Vector{Int64}:
  3
@@ -368,7 +368,7 @@ determined without knowing the actual value of the `missing` entry. In practice,
 this means that `missing` is returned if all non-missing values of the compared
 arrays are equal, but one or both arrays contain missing values (possibly at
 different positions)
-```jldoctest
+```julia
 julia> [1, missing] == [2, missing]
 false
 
@@ -381,7 +381,7 @@ missing
 
 As for single values, use `isequal` to treat `missing` values as equal
 to other `missing` values but different from non-missing values
-```jldoctest
+```julia
 julia> isequal([1, missing], [1, missing])
 true
 
@@ -391,7 +391,7 @@ false
 
 Functions `any` and `all` also follow the rules of
 three-valued logic, returning `missing` when the result cannot be determined
-```jldoctest
+```julia
 julia> all([true, missing])
 missing
 

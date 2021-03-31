@@ -5,7 +5,7 @@ In Julia, type objects also serve as constructor functions: they create new inst
 when applied to an argument tuple as a function. This much was already mentioned briefly when
 composite types were introduced. For example:
 
-```jldoctest footype
+```julia
 julia> struct Foo
            bar
            baz
@@ -46,7 +46,7 @@ by simply defining new methods. For example, let's say you want to add a constru
 `Foo` objects that takes only one argument and uses the given value for both the `bar` and `baz`
 fields. This is simple:
 
-```jldoctest footype
+```julia
 julia> Foo(x) = Foo(x,x)
 Foo
 
@@ -57,7 +57,7 @@ Foo(1, 1)
 You could also add a zero-argument `Foo` constructor method that supplies default values for both
 of the `bar` and `baz` fields:
 
-```jldoctest footype
+```julia
 julia> Foo() = Foo(0)
 Foo
 
@@ -87,7 +87,7 @@ For example, suppose one wants to declare a type that holds a pair of real numbe
 the constraint that the first number is not greater than the second one. One could declare it
 like this:
 
-```jldoctest pairtype
+```julia
 julia> struct OrderedPair
            x::Real
            y::Real
@@ -97,7 +97,7 @@ julia> struct OrderedPair
 
 Now `OrderedPair` objects can only be constructed such that `x <= y`:
 
-```jldoctest pairtype; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
+```julia
 julia> OrderedPair(1, 2)
 OrderedPair(1, 2)
 
@@ -124,7 +124,7 @@ is equivalent to writing your own inner constructor method that takes all of the
 as parameters (constrained to be of the correct type, if the corresponding field has a type),
 and passes them to `new`, returning the resulting object:
 
-```jldoctest
+```julia
 julia> struct Foo
            bar
            baz
@@ -137,7 +137,7 @@ This declaration has the same effect as the earlier definition of the `Foo` type
 inner constructor method. The following two types are equivalent -- one with a default constructor,
 the other with an explicit constructor:
 
-```jldoctest
+```julia
 julia> struct T1
            x::Int64
        end
@@ -172,7 +172,7 @@ The final problem which has still not been addressed is construction of self-ref
 or more generally, recursive data structures. Since the fundamental difficulty may not be immediately
 obvious, let us briefly explain it. Consider the following recursive type declaration:
 
-```jldoctest selfrefer
+```julia
 julia> mutable struct SelfReferential
            obj::SelfReferential
        end
@@ -182,7 +182,7 @@ julia> mutable struct SelfReferential
 This type may appear innocuous enough, until one considers how to construct an instance of it.
 If `a` is an instance of `SelfReferential`, then a second instance can be created by the call:
 
-```julia-repl
+```julia
 julia> b = SelfReferential(a)
 ```
 
@@ -198,7 +198,7 @@ object, finishing its initialization before returning it. Here, for example, is 
 at defining the `SelfReferential` type, this time using a zero-argument inner constructor returning instances
 having `obj` fields pointing to themselves:
 
-```jldoctest selfrefer2
+```julia
 julia> mutable struct SelfReferential
            obj::SelfReferential
            SelfReferential() = (x = new(); x.obj = x)
@@ -208,7 +208,7 @@ julia> mutable struct SelfReferential
 
 We can verify that this constructor works and constructs objects that are, in fact, self-referential:
 
-```jldoctest selfrefer2
+```julia
 julia> x = SelfReferential();
 
 julia> x === x
@@ -224,7 +224,7 @@ true
 Although it is generally a good idea to return a fully initialized object from an inner constructor,
 it is possible to return incompletely initialized objects:
 
-```jldoctest incomplete
+```julia
 julia> mutable struct Incomplete
            data
            Incomplete() = new()
@@ -236,7 +236,7 @@ julia> z = Incomplete();
 While you are allowed to create objects with uninitialized fields, any access to an uninitialized
 reference is an immediate error:
 
-```jldoctest incomplete
+```julia
 julia> z.data
 ERROR: UndefRefError: access to undefined reference
 ```
@@ -247,7 +247,7 @@ and does not reference other objects. The plain data types consist of primitive 
 and immutable structs of other plain data types. The initial contents of a plain data type is
 undefined:
 
-```julia-repl
+```julia
 julia> struct HasPlain
            n::Int
            HasPlain() = new()
@@ -261,7 +261,7 @@ Arrays of plain data types exhibit the same behavior.
 
 You can pass incomplete objects to other functions from inner constructors to delegate their completion:
 
-```jldoctest
+```julia
 julia> mutable struct Lazy
            data
            Lazy(v) = complete_me(new(), v)
@@ -279,7 +279,7 @@ that, by default, instances of parametric composite types can be constructed eit
 given type parameters or with type parameters implied by the types of the arguments given to the
 constructor. Here are some examples:
 
-```jldoctest parametric; filter = r"Closest candidates.*\n  .*"
+```julia
 julia> struct Point{T<:Real}
            x::T
            y::T
@@ -326,7 +326,7 @@ behaves just like non-parametric default inner constructors do. It also provides
 outer `Point` constructor that takes pairs of real arguments, which must be of the same type.
 This automatic provision of constructors is equivalent to the following explicit declaration:
 
-```jldoctest parametric2
+```julia
 julia> struct Point{T<:Real}
            x::T
            y::T
@@ -350,7 +350,7 @@ Suppose we wanted to make the constructor call `Point(1,2.5)` work by "promoting
 value `1` to the floating-point value `1.0`. The simplest way to achieve this is to define the
 following additional outer constructor method:
 
-```jldoctest parametric2
+```julia
 julia> Point(x::Int64, y::Float64) = Point(convert(Float64,x),y);
 ```
 
@@ -359,7 +359,7 @@ and then delegates construction to the general constructor for the case where bo
 `Float64`. With this method definition what was previously a `MethodError` now
 successfully creates a point of type `Point{Float64}`:
 
-```jldoctest parametric2
+```julia
 julia> p = Point(1,2.5)
 Point{Float64}(1.0, 2.5)
 
@@ -369,7 +369,7 @@ Point{Float64}
 
 However, other similar calls still don't work:
 
-```jldoctest parametric2
+```julia
 julia> Point(1.5,2)
 ERROR: MethodError: no method matching Point(::Float64, ::Int64)
 Closest candidates are:
@@ -380,7 +380,7 @@ For a more general way to make all such calls work sensibly, see [Conversion and
 At the risk of spoiling the suspense, we can reveal here that all it takes is the following outer
 method definition to make all calls to the general `Point` constructor work as one would expect:
 
-```jldoctest parametric2
+```julia
 julia> Point(x::Real, y::Real) = Point(promote(x,y)...);
 ```
 
@@ -388,7 +388,7 @@ The `promote` function converts all its arguments to a common type -- in this ca
 With this method definition, the `Point` constructor promotes its arguments the same way that
 numeric operators like `+` do, and works for all kinds of real numbers:
 
-```jldoctest parametric2
+```julia
 julia> Point(1.5,2)
 Point{Float64}(1.5, 2.0)
 
@@ -412,7 +412,7 @@ parametric composite type and its constructor methods. To that end, we implement
 [`rational.jl`](https://github.com/JuliaLang/julia/blob/master/base/rational.jl):
 
 
-```jldoctest rational
+```julia
 julia> struct OurRational{T<:Integer} <: Real
            num::T
            den::T
@@ -493,7 +493,7 @@ Finally, applying
 `⊘` to complex integral values creates an instance of `Complex{OurRational}` -- a complex
 number whose real and imaginary parts are rationals:
 
-```jldoctest rational
+```julia
 julia> z = (1 + 2im) ⊘ (1 - 2im);
 
 julia> typeof(z)
@@ -520,7 +520,7 @@ that specific type parameters cannot be requested manually.
 For example, say we define a type that stores a vector along with an accurate representation of
 its sum:
 
-```jldoctest
+```julia
 julia> struct SummedArray{T<:Number,S<:Number}
            data::Vector{T}
            sum::S
@@ -537,7 +537,7 @@ instances of the type `SummedArray{Int32,Int32}`. One way to do this is to provi
 constructor only for `SummedArray`, but inside the `struct` definition block to suppress
 generation of default constructors:
 
-```jldoctest
+```julia
 julia> struct SummedArray{T<:Number,S<:Number}
            data::Vector{T}
            sum::S

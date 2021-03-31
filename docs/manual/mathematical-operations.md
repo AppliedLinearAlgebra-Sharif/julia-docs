@@ -30,7 +30,7 @@ system.
 
 Here are some simple examples using arithmetic operators:
 
-```jldoctest
+```julia
 julia> 1 + 2 + 3
 6
 
@@ -47,7 +47,7 @@ and then `2` is added to that result.)
 
 When used in multiplication, `false` acts as a *strong zero*:
 
-```jldoctest
+```julia
 julia> NaN * false
 0.0
 
@@ -88,7 +88,7 @@ are supported on all primitive integer types:
 
 Here are some examples with bitwise operators:
 
-```jldoctest
+```julia
 julia> ~123
 -124
 
@@ -118,7 +118,7 @@ of the operation back into its left operand. The updating version of the binary 
 by placing a `=` immediately after the operator. For example, writing `x += 3` is equivalent to
 writing `x = x + 3`:
 
-```jldoctest
+```julia
 julia> x = 1
 1
 
@@ -141,7 +141,7 @@ The updating versions of all the binary arithmetic and bitwise operators are:
     An updating operator rebinds the variable on the left-hand side. As a result, the type of the
     variable may change.
 
-    ```jldoctest
+    ```julia
     julia> x = 0x01; typeof(x)
     UInt8
 
@@ -165,7 +165,7 @@ mathematical meaning to "cubing" a (non-square) array, but
 operators like `!` or `√`, there is a corresponding `.√` that
 applies the operator elementwise.
 
-```jldoctest
+```julia
 julia> [1,2,3] .^ 3
 3-element Vector{Int64}:
   1
@@ -215,7 +215,7 @@ Standard comparison operations are defined for all the primitive numeric types:
 
 Here are some simple examples:
 
-```jldoctest
+```julia
 julia> 1 == 1
 true
 
@@ -261,7 +261,7 @@ are compared according to the [IEEE 754 standard](https://en.wikipedia.org/wiki/
 
 The last point is potentially surprising and thus worth noting:
 
-```jldoctest
+```julia
 julia> NaN == NaN
 false
 
@@ -277,7 +277,7 @@ false
 
 and can cause headaches when working with [arrays](@ref man-multi-dim-arrays):
 
-```jldoctest
+```julia
 julia> [1 NaN] == [1 NaN]
 false
 ```
@@ -294,7 +294,7 @@ situations like hash key comparisons:
 
 `isequal` considers `NaN`s equal to each other:
 
-```jldoctest
+```julia
 julia> isequal(NaN, NaN)
 true
 
@@ -307,7 +307,7 @@ true
 
 `isequal` can also be used to distinguish signed zeros:
 
-```jldoctest
+```julia
 julia> -0.0 == 0.0
 true
 
@@ -328,7 +328,7 @@ to ensure that `isequal(x,y)` implies `hash(x) == hash(y)`.
 Unlike most languages, with the [notable exception of Python](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators),
 comparisons can be arbitrarily chained:
 
-```jldoctest
+```julia
 julia> 1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
 true
 ```
@@ -340,7 +340,7 @@ are true where the corresponding elements of `A` are between 0 and 1.
 
 Note the evaluation behavior of chained comparisons:
 
-```jldoctest
+```julia
 julia> v(x) = (println(x); x)
 v (generic function with 1 method)
 
@@ -406,7 +406,7 @@ in the `Base` module but may be given definitions by standard libraries, package
 
 You can also find the numerical precedence for any given operator via the built-in function `Base.operator_precedence`, where higher numbers take precedence:
 
-```jldoctest
+```julia
 julia> Base.operator_precedence(:+), Base.operator_precedence(:*), Base.operator_precedence(:.)
 (11, 12, 17)
 
@@ -416,7 +416,7 @@ julia> Base.operator_precedence(:sin), Base.operator_precedence(:+=), Base.opera
 
 A symbol representing the operator associativity can also be found by calling the built-in function `Base.operator_associativity`:
 
-```jldoctest
+```julia
 julia> Base.operator_associativity(:-), Base.operator_associativity(:+), Base.operator_associativity(:^)
 (:left, :none, :right)
 
@@ -429,7 +429,7 @@ operators of lowest precedence. Similarly, such operators are assigned associati
 
 [Numeric literal coefficients](@ref man-numeric-literal-coefficients), e.g. `2x`, are treated as multiplications with higher precedence than any other binary operation, with the exception of `^` where they have higher precedence only as the exponent.
 
-```jldoctest
+```julia
 julia> x = 3; 2x^2
 18
 
@@ -457,7 +457,7 @@ conversions.
 
 The following examples show the different forms.
 
-```jldoctest
+```julia
 julia> Int8(127)
 127
 

@@ -22,7 +22,7 @@ in order, returning the value of the last subexpression as its value. There are 
 that accomplish this: `begin` blocks and `;` chains. The value of both compound expression constructs
 is that of the last subexpression. Here's an example of a `begin` block:
 
-```jldoctest
+```julia
 julia> z = begin
            x = 1
            y = 2
@@ -34,7 +34,7 @@ julia> z = begin
 Since these are fairly small, simple expressions, they could easily be placed onto a single line,
 which is where the `;` chain syntax comes in handy:
 
-```jldoctest
+```julia
 julia> z = (x = 1; y = 2; x + y)
 3
 ```
@@ -43,7 +43,7 @@ This syntax is particularly useful with the terse single-line function definitio
 in [Functions](@ref man-functions). Although it is typical, there is no requirement that `begin` blocks be multiline
 or that `;` chains be single-line:
 
-```jldoctest
+```julia
 julia> begin x = 1; y = 2; x + y end
 3
 
@@ -72,7 +72,7 @@ If the condition expression `x < y` is `true`, then the corresponding block is e
 the condition expression `x > y` is evaluated, and if it is `true`, the corresponding block is
 evaluated; if neither expression is true, the `else` block is evaluated. Here it is in action:
 
-```jldoctest
+```julia
 julia> function test(x, y)
            if x < y
                println("x is less than y")
@@ -103,7 +103,7 @@ expressions or blocks are evaluated.
 defined inside the `if` clauses can be used after the `if` block, even if they weren't defined
 before. So, we could have defined the `test` function above as
 
-```jldoctest
+```julia
 julia> function test(x,y)
            if x < y
                relation = "less than"
@@ -124,7 +124,7 @@ The variable `relation` is declared inside the `if` block, but used outside. How
 on this behavior, make sure all possible code paths define a value for the variable. The following
 change to the above function results in a runtime error
 
-```jldoctest; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
+```julia
 julia> function test(x,y)
            if x < y
                relation = "less than"
@@ -148,7 +148,7 @@ Stacktrace:
 This value is simply the return value of the last executed statement in the branch that was chosen,
 so
 
-```jldoctest
+```julia
 julia> x = 3
 3
 
@@ -166,7 +166,7 @@ Evaluation in Julia, as outlined in the next section.
 Unlike C, MATLAB, Perl, Python, and Ruby -- but like Java, and a few other stricter, typed languages
 -- it is an error if the value of a conditional expression is anything but `true` or `false`:
 
-```jldoctest
+```julia
 julia> if 1
            println("true")
        end
@@ -196,7 +196,7 @@ The easiest way to understand this behavior is to see an example. In the previou
 print. This could be written more concisely using the ternary operator. For the sake of clarity,
 let's try a two-way version first:
 
-```jldoctest
+```julia
 julia> x = 1; y = 2;
 
 julia> println(x < y ? "less than" : "not less than")
@@ -212,7 +212,7 @@ If the expression `x < y` is true, the entire ternary operator expression evalua
 `"less than"` and otherwise it evaluates to the string `"not less than"`. The original three-way
 example requires chaining multiple uses of the ternary operator together:
 
-```jldoctest
+```julia
 julia> test(x, y) = println(x < y ? "x is less than y"    :
                             x > y ? "x is greater than y" : "x is equal to y")
 test (generic function with 1 method)
@@ -232,7 +232,7 @@ To facilitate chaining, the operator associates from right to left.
 It is significant that like `if`-`elseif`-`else`, the expressions before and after the `:` are
 only evaluated if the condition expression evaluates to `true` or `false`, respectively:
 
-```jldoctest
+```julia
 julia> v(x) = (println(x); x)
 v (generic function with 1 method)
 
@@ -267,7 +267,7 @@ The reasoning is that `a && b` must be `false` if `a` is `false`, regardless of 
 of `b`. Both `&&` and `||` associate to the right, but `&&` has higher precedence than `||` does.
 It's easy to experiment with this behavior:
 
-```jldoctest tandf
+```julia
 julia> t(x) = (println(x); true)
 t (generic function with 1 method)
 
@@ -321,7 +321,7 @@ one can write `<cond> || <statement>` (which could be read as: <cond> *or else* 
 
 For example, a recursive factorial routine could be defined like this:
 
-```jldoctest; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
+```julia
 julia> function fact(n::Int)
            n >= 0 || error("n must be non-negative")
            n == 0 && return 1
@@ -347,7 +347,7 @@ Boolean operations *without* short-circuit evaluation can be done with the bitwi
 introduced in Mathematical Operations and Elementary Functions: `&` and `|`. These are
 normal functions, which happen to support infix operator syntax, but always evaluate their arguments:
 
-```jldoctest tandf
+```julia
 julia> f(1) & t(2)
 1
 2
@@ -363,7 +363,7 @@ Just like condition expressions used in `if`, `elseif` or the ternary operator, 
 `&&` or `||` must be boolean values (`true` or `false`). Using a non-boolean value anywhere except
 for the last entry in a conditional chain is an error:
 
-```jldoctest
+```julia
 julia> 1 && true
 ERROR: TypeError: non-boolean (Int64) used in boolean context
 ```
@@ -371,7 +371,7 @@ ERROR: TypeError: non-boolean (Int64) used in boolean context
 On the other hand, any type of expression can be used at the end of a conditional chain. It will
 be evaluated and returned depending on the preceding conditionals:
 
-```jldoctest
+```julia
 julia> true && (x = (1, 2, 3))
 (1, 2, 3)
 
@@ -384,7 +384,7 @@ false
 There are two constructs for repeated evaluation of expressions: the `while` loop and the `for`
 loop. Here is an example of a `while` loop:
 
-```jldoctest
+```julia
 julia> i = 1;
 
 julia> while i <= 5
@@ -406,7 +406,7 @@ The `for` loop makes common repeated evaluation idioms easier to write. Since co
 down like the above `while` loop does is so common, it can be expressed more concisely with a
 `for` loop:
 
-```jldoctest
+```julia
 julia> for i = 1:5
            println(i)
        end
@@ -425,7 +425,7 @@ scope, in the `for` loop form, it is visible only inside of the `for` loop, and 
 outside/afterwards. You'll either need a new interactive session instance or a different variable
 name to test this:
 
-```jldoctest
+```julia
 julia> for j = 1:5
            println(j)
        end
@@ -446,7 +446,7 @@ In general, the `for` loop construct can iterate over any container. In these ca
 (but fully equivalent) keyword `in` or `∈` is typically used instead of `=`, since it makes
 the code read more clearly:
 
-```jldoctest
+```julia
 julia> for i in [1,4,0]
            println(i)
        end
@@ -469,7 +469,7 @@ It is sometimes convenient to terminate the repetition of a `while` before the t
 is falsified or stop iterating in a `for` loop before the end of the iterable object is reached.
 This can be accomplished with the `break` keyword:
 
-```jldoctest
+```julia
 julia> i = 1;
 
 julia> while true
@@ -503,7 +503,7 @@ Without the `break` keyword, the above `while` loop would never terminate on its
 In other circumstances, it is handy to be able to stop an iteration and move on to the next one
 immediately. The `continue` keyword accomplishes this:
 
-```jldoctest
+```julia
 julia> for i = 1:10
            if i % 3 != 0
                continue
@@ -523,7 +523,7 @@ which one calls `continue`.
 Multiple nested `for` loops can be combined into a single outer loop, forming the cartesian product
 of its iterables:
 
-```jldoctest
+```julia
 julia> for i = 1:2, j = 3:4
            println((i, j))
        end
@@ -539,7 +539,7 @@ However a `break` statement inside such a loop exits the entire nest of loops, n
 Both variables (`i` and `j`) are set to their current iteration values each time the inner loop runs.
 Therefore, assignments to `i` will not be visible to subsequent iterations:
 
-```jldoctest
+```julia
 julia> for i = 1:2, j = 3:4
            println((i, j))
            i = 0
@@ -555,7 +555,7 @@ be different: the second and fourth values would contain `0`.
 
 Multiple containers can be iterated over at the same time in a single `for` loop using `zip`:
 
-```jldoctest
+```julia
 julia> for (j, k) in zip([1 2 3], [4 5 6 7])
            println((j,k))
        end
@@ -611,7 +611,7 @@ below all interrupt the normal flow of control.
 For example, the `sqrt` function throws a `DomainError` if applied to a negative
 real value:
 
-```jldoctest
+```julia
 julia> sqrt(-1)
 ERROR: DomainError with -1.0:
 sqrt will only return a complex result if called with a complex argument. Try sqrt(Complex(x)).
@@ -621,7 +621,7 @@ Stacktrace:
 
 You may define your own exceptions in the following way:
 
-```jldoctest
+```julia
 julia> struct MyCustomException <: Exception end
 ```
 
@@ -631,7 +631,7 @@ Exceptions can be created explicitly with `throw`. For example, a function defin
 for nonnegative numbers could be written to `throw` a `DomainError` if the argument
 is negative:
 
-```jldoctest; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
+```julia
 julia> f(x) = x>=0 ? exp(-x) : throw(DomainError(x, "argument must be nonnegative"))
 f (generic function with 1 method)
 
@@ -648,7 +648,7 @@ Stacktrace:
 Note that `DomainError` without parentheses is not an exception, but a type of exception.
 It needs to be called to obtain an `Exception` object:
 
-```jldoctest
+```julia
 julia> typeof(DomainError(nothing)) <: Exception
 true
 
@@ -658,7 +658,7 @@ false
 
 Additionally, some exception types take one or more arguments that are used for error reporting:
 
-```jldoctest
+```julia
 julia> throw(UndefVarError(:x))
 ERROR: UndefVarError: x not defined
 ```
@@ -666,7 +666,7 @@ ERROR: UndefVarError: x not defined
 This mechanism can be implemented easily by custom exception types following the way `UndefVarError`
 is written:
 
-```jldoctest
+```julia
 julia> struct MyUndefVarError <: Exception
            var::Symbol
        end
@@ -700,7 +700,7 @@ Suppose we want to stop execution immediately if the square root of a negative n
 To do this, we can define a fussy version of the `sqrt` function that raises an error
 if its argument is negative:
 
-```jldoctest fussy_sqrt; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
+```julia
 julia> fussy_sqrt(x) = x >= 0 ? sqrt(x) : error("negative x not allowed")
 fussy_sqrt (generic function with 1 method)
 
@@ -719,7 +719,7 @@ If `fussy_sqrt` is called with a negative value from another function, instead o
 execution of the calling function, it returns immediately, displaying the error message in the
 interactive session:
 
-```jldoctest fussy_sqrt; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
+```julia
 julia> function verbose_fussy_sqrt(x)
            println("before fussy_sqrt")
            r = fussy_sqrt(x)
@@ -755,7 +755,7 @@ when deciding how to handle unexpected situations is that using a `try/catch` bl
 much slower than using conditional branching to handle those situations.
 Below there are more examples of handling exceptions with a `try/catch` block:
 
-```jldoctest
+```julia
 julia> try
            sqrt("ten")
        catch e
@@ -768,7 +768,7 @@ You should have entered a numeric value
 contrived example calculates the square root of the second element of `x` if `x`
 is indexable, otherwise assumes `x` is a real number and returns its square root:
 
-```jldoctest
+```julia
 julia> sqrt_second(x) = try
            sqrt(x[2])
        catch y

@@ -35,7 +35,7 @@ any alternatives.
 
 Let's work with a simple test case:
 
-```julia-repl
+```julia
 julia> function myfunc()
            A = rand(200, 200, 400)
            maximum(A)
@@ -45,13 +45,13 @@ julia> function myfunc()
 It's a good idea to first run the code you intend to profile at least once (unless you want to
 profile Julia's JIT-compiler):
 
-```julia-repl
+```julia
 julia> myfunc() # run once to force compilation
 ```
 
 Now we're ready to profile this function:
 
-```julia-repl
+```julia
 julia> using Profile
 
 julia> @profile myfunc()
@@ -69,7 +69,7 @@ An entirely independent approach to profile visualization is [PProf.jl](https://
 
 Here, though, we'll use the text-based display that comes with the standard library:
 
-```julia-repl
+```julia
 julia> Profile.print()
 80 ./event.jl:73; (::Base.REPL.##1#2{Base.REPL.REPLBackend})()
  80 ./REPL.jl:97; macro expansion
@@ -136,7 +136,7 @@ Overall, we can tentatively conclude that generating the random numbers is appro
 as finding the maximum element. We could increase our confidence in this result by
 collecting more samples:
 
-```julia-repl
+```julia
 julia> @profile (for i = 1:100; myfunc(); end)
 
 julia> Profile.print()
@@ -160,7 +160,7 @@ using the `C=true` output mode described below, or by using [ProfileView.jl](htt
 This illustrates the default "tree" dump; an alternative is the "flat" dump, which accumulates
 counts independent of their nesting:
 
-```julia-repl
+```julia
 julia> Profile.print(format=:flat)
  Count File          Line Function
   6714 ./<missing>     -1 anonymous

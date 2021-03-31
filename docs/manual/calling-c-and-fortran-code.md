@@ -70,7 +70,7 @@ to `ccall` are:
 As a complete but simple example, the following calls the `clock` function from the standard C
 library on most Unix-derived systems:
 
-```julia-repl
+```julia
 julia> t = ccall(:clock, Int32, ())
 2292761
 
@@ -85,7 +85,7 @@ Int32
 argument types must be written with a trailing comma. For example, to call the `getenv` function
 to get a pointer to the value of an environment variable, one makes a call like this:
 
-```julia-repl
+```julia
 julia> path = ccall(:getenv, Cstring, (Cstring,), "SHELL")
 Cstring(@0x00007fff5fbffc45)
 
@@ -97,7 +97,7 @@ Note that the argument type tuple must be written as `(Cstring,)`, not `(Cstring
 is because `(Cstring)` is just the expression `Cstring` surrounded by parentheses, rather than
 a 1-tuple containing `Cstring`:
 
-```jldoctest
+```julia
 julia> (Cstring)
 Cstring
 
@@ -127,7 +127,7 @@ indicate errors in various different ways, including by returning -1, 0, 1 and o
 This wrapper throws an exception clearly indicating the problem if the caller tries to get a non-existent
 environment variable:
 
-```julia-repl
+```julia
 julia> getenv("SHELL")
 "/bin/bash"
 
@@ -214,7 +214,7 @@ Now, suppose that we have a 1-d array `A` of values in Julia that we want to sor
 using the `qsort` function (rather than Julia's built-in `sort` function). Before we consider
 calling `qsort` and passing arguments, we need to write a comparison function:
 
-```jldoctest mycompare
+```julia
 julia> function mycompare(a, b)::Cint
            return (a < b) ? -1 : ((a > b) ? +1 : 0)
        end
@@ -226,7 +226,7 @@ to be `Cint`.
 
 In order to pass this function to C, we obtain its address using the macro `@cfunction`:
 
-```jldoctest mycompare
+```julia
 julia> mycompare_c = @cfunction(mycompare, Cint, (Ref{Cdouble}, Ref{Cdouble}));
 ```
 
@@ -236,7 +236,7 @@ julia> mycompare_c = @cfunction(mycompare, Cint, (Ref{Cdouble}, Ref{Cdouble}));
 
 The final call to `qsort` looks like this:
 
-```jldoctest mycompare
+```julia
 julia> A = [1.3, -2.7, 4.4, 3.1]
 4-element Vector{Float64}:
   1.3
@@ -1066,7 +1066,7 @@ Global variables exported by native libraries can be accessed by name using the 
 function. The arguments to `cglobal` are a symbol specification identical to that used
 by `ccall`, and a type describing the value stored in the variable:
 
-```julia-repl
+```julia
 julia> cglobal((:errno, :libc), Int32)
 Ptr{Int32} @0x00007f418d0816b8
 ```

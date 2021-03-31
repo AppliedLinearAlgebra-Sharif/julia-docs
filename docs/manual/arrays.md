@@ -74,7 +74,7 @@ omitted it will default to `Float64`.
 [^1]: *iid*, independently and identically distributed.
 
 To see the various ways we can pass dimensions to these functions, consider the following examples:
-```jldoctest
+```julia
 julia> zeros(Int8, 2, 3)
 2×3 Matrix{Int8}:
  0  0  0
@@ -104,7 +104,7 @@ same type, then that is its `eltype`. If they all have a common
 that can hold anything — a `Vector{Any}` — is constructed; this includes the literal `[]`
 where no arguments are given.
 
-```jldoctest
+```julia
 julia> [1,2,3] # An array of `Int`s
 3-element Vector{Int64}:
  1
@@ -130,7 +130,7 @@ If the arguments inside the square brackets are separated by semicolons (`;`) or
 instead of commas, then their contents are _vertically concatenated_ together instead of
 the arguments being used as elements themselves.
 
-```jldoctest
+```julia
 julia> [1:2, 4:5] # Has a comma, so no concatenation occurs. The ranges are themselves the elements
 2-element Vector{UnitRange{Int64}}:
  1:2
@@ -157,7 +157,7 @@ julia> [1:2
 Similarly, if the arguments are separated by tabs or spaces, then their contents are
 _horizontally concatenated_ together.
 
-```jldoctest
+```julia
 julia> [1:2  4:5  7:8]
 2×3 Matrix{Int64}:
  1  4  7
@@ -176,7 +176,7 @@ julia> [1 2 3] # Numbers can also be horizontally concatenated
 Using semicolons (or newlines) and spaces (or tabs) can be combined to concatenate
 both horizontally and vertically at the same time.
 
-```jldoctest
+```julia
 julia> [1 2
         3 4]
 2×2 Matrix{Int64}:
@@ -210,7 +210,7 @@ etc. For example, `Any[x, y, z]` constructs a heterogeneous array that can conta
 Concatenation syntax can similarly be prefixed with a type to specify the element type of the
 result.
 
-```jldoctest
+```julia
 julia> [[1 2] [3 4]]
 1×4 Matrix{Int64}:
  1  2  3  4
@@ -238,7 +238,7 @@ of the variable ranges `rx`, `ry`, etc. and each `F(x,y,...)` evaluation returns
 The following example computes a weighted average of the current element and its left and right
 neighbor along a 1-d grid. :
 
-```julia-repl
+```julia
 julia> x = rand(8)
 8-element Array{Float64,1}:
  0.843025
@@ -275,7 +275,7 @@ known as a generator. This object can be iterated to produce values on demand, i
 an array and storing them in advance (see Iteration). For example, the following expression
 sums a series without allocating memory:
 
-```jldoctest
+```julia
 julia> sum(1/n^2 for n=1:1000)
 1.6439345666815615
 ```
@@ -283,7 +283,7 @@ julia> sum(1/n^2 for n=1:1000)
 When writing a generator expression with multiple dimensions inside an argument list, parentheses
 are needed to separate the generator from subsequent arguments:
 
-```julia-repl
+```julia
 julia> map(tuple, 1/(i+j) for i=1:2, j=1:2, [1:4;])
 ERROR: syntax: invalid iteration specification
 ```
@@ -291,7 +291,7 @@ ERROR: syntax: invalid iteration specification
 All comma-separated expressions after `for` are interpreted as ranges. Adding parentheses lets
 us add a third argument to `map`:
 
-```jldoctest
+```julia
 julia> map(tuple, (1/(i+j) for i=1:2, j=1:2), [1 3; 2 4])
 2×2 Matrix{Tuple{Float64, Int64}}:
  (0.5, 1)       (0.333333, 3)
@@ -309,7 +309,7 @@ Captured variables can present performance challenges; see
 Ranges in generators and comprehensions can depend on previous ranges by writing multiple `for`
 keywords:
 
-```jldoctest
+```julia
 julia> [(i,j) for i=1:3 for j=1:i]
 6-element Vector{Tuple{Int64, Int64}}:
  (1, 1)
@@ -324,7 +324,7 @@ In such cases, the result is always 1-d.
 
 Generated values can be filtered using the `if` keyword:
 
-```jldoctest
+```julia
 julia> [(i,j) for i=1:3 for j=1:i if i+j == 4]
 2-element Vector{Tuple{Int64, Int64}}:
  (2, 2)
@@ -354,7 +354,7 @@ with location `i_1, i_2, ..., i_n` of `X` containing the value `A[I_1[i_1], I_2[
 
 Example:
 
-```jldoctest
+```julia
 julia> A = reshape(collect(1:16), (2, 2, 2, 2))
 2×2×2×2 Array{Int64, 4}:
 [:, :, 1, 1] =
@@ -404,7 +404,7 @@ shape `(size(I_1, 1), size(I_1, 2), length(I_2), ..., length(I_n))`. The matrix 
 
 Example:
 
-```jldoctest
+```julia
 julia> A = reshape(collect(1:16), (2, 2, 2, 2));
 
 julia> A[[1 2; 1 2]]
@@ -432,7 +432,7 @@ X = getindex(A, I_1, I_2, ..., I_n)
 
 Example:
 
-```jldoctest
+```julia
 julia> x = reshape(1:16, 4, 4)
 4×4 reshape(::UnitRange{Int64}, 4, 4) with eltype Int64:
  1  5   9  13
@@ -494,7 +494,7 @@ setindex!(A, X, I_1, I_2, ..., I_n)
 
 Example:
 
-```jldoctest
+```julia
 julia> x = collect(reshape(1:9, 3, 3))
 3×3 Matrix{Int64}:
  1  4  7
@@ -532,7 +532,7 @@ indices and can be converted to such by `to_indices`:
     * Arrays of booleans, which select elements at their `true` indices (see below for more details)
 
 Some examples:
-```jldoctest
+```julia
 julia> A = reshape(collect(1:2:18), (3, 3))
 3×3 Matrix{Int64}:
  1   7  13
@@ -580,7 +580,7 @@ julia> A[:, 3]
 The special `CartesianIndex{N}` object represents a scalar index that behaves
 like an `N`-tuple of integers spanning multiple dimensions.  For example:
 
-```jldoctest cartesianindex
+```julia
 julia> A = reshape(1:32, 4, 4, 2);
 
 julia> A[3, 2, 1]
@@ -603,7 +603,7 @@ of scalar indices that each span `N` dimensions, enabling a form of indexing
 that is sometimes referred to as pointwise indexing. For example, it enables
 accessing the diagonal elements from the first "page" of `A` from above:
 
-```jldoctest cartesianindex
+```julia
 julia> page = A[:,:,1]
 4×4 Matrix{Int64}:
  1  5   9  13
@@ -627,7 +627,7 @@ and by combining it with a normal integer index (instead of extracting the
 first `page` from `A` as a separate step). It can even be combined with a `:`
 to extract both diagonals from the two pages at the same time:
 
-```jldoctest cartesianindex
+```julia
 julia> A[CartesianIndex.(axes(A, 1), axes(A, 2)), 1]
 4-element Vector{Int64}:
   1
@@ -665,7 +665,7 @@ must be the only index provided and match the size and dimensionality of the
 array it indexes into. It is generally more efficient to use boolean arrays as
 indices directly instead of first calling `findall`.
 
-```jldoctest
+```julia
 julia> x = reshape(1:16, 4, 4)
 4×4 reshape(::UnitRange{Int64}, 4, 4) with eltype Int64:
  1  5   9  13
@@ -711,7 +711,7 @@ column-major iteration order that linearly spans the entire array. This is known
 indexing_. It essentially treats the array as though it had been reshaped into a
 one-dimensional vector with `vec`.
 
-```jldoctest linindexing
+```julia
 julia> A = [2 6; 4 7; 3 1]
 3×2 Matrix{Int64}:
  2  6
@@ -730,7 +730,7 @@ indexing with `CartesianIndices(A)i]` (see [`CartesianIndices`), and a set of
 `N` cartesian indices can be converted to a linear index with
 `LinearIndices(A)i_1, i_2, ..., i_N]` (see [`LinearIndices`).
 
-```jldoctest linindexing
+```julia
 julia> CartesianIndices(A)[5]
 CartesianIndex(2, 2)
 
@@ -764,7 +764,7 @@ indexing expression. For example, a four-dimensional array with size `(3, 4, 2,
 (the fourth dimension) has length one. Note that linear indexing takes
 precedence over this rule.
 
-```jldoctest
+```julia
 julia> A = reshape(1:24, 3, 4, 2, 1)
 3×4×2×1 reshape(::UnitRange{Int64}, 3, 4, 2, 1) with eltype Int64:
 [:, :, 1, 1] =
@@ -796,7 +796,7 @@ dimensionality of the array are `1` (or more generally are the first and only
 element of `axes(A, d)` where `d` is that particular dimension number). This
 allows vectors to be indexed like one-column matrices, for example:
 
-```jldoctest
+```julia
 julia> A = [8,6,7]
 3-element Vector{Int64}:
  8
@@ -825,7 +825,7 @@ The first construct is used when you need the value, but not index, of each elem
 construct, `i` will be an `Int` if `A` is an array type with fast linear indexing; otherwise,
 it will be a `CartesianIndex`:
 
-```jldoctest
+```julia
 julia> A = rand(4,3);
 
 julia> B = view(A, 1:3, 2:3);
@@ -887,7 +887,7 @@ It is sometimes useful to perform element-by-element binary operations on arrays
 sizes, such as adding a vector to each column of a matrix. An inefficient way to do this would
 be to replicate the vector to the size of the matrix:
 
-```julia-repl
+```julia
 julia> a = rand(2,1); A = rand(2,3);
 
 julia> repeat(a,1,3)+A
@@ -900,7 +900,7 @@ This is wasteful when dimensions get large, so Julia provides `broadcast`, which
 singleton dimensions in array arguments to match the corresponding dimension in the other array
 without using extra memory, and applies the given function elementwise:
 
-```julia-repl
+```julia
 julia> broadcast(+, a, A)
 2×3 Array{Float64,2}:
  1.20813  1.82068  1.25387
@@ -930,7 +930,7 @@ considered scalars, including (but not limited to) `Number`s, `String`s, `Symbol
 and some common singletons like `missing` and `nothing`. All other arguments are
 iterated over or indexed into elementwise.
 
-```jldoctest
+```julia
 julia> convert.(Float32, [1, 2])
 2-element Vector{Float32}:
  1.0
@@ -951,7 +951,7 @@ julia> string.(1:3, ". ", ["First", "Second", "Third"])
 Sometimes, you want a container (like an array) that would normally participate in broadcast to be "protected"
 from broadcast's behavior of iterating over all of its elements. By placing it inside another container
 (like a single element `Tuple`) broadcast will treat it as a single value.
-```jldoctest
+```julia
 julia> ([1, 2, 3], [4, 5, 6]) .+ ([1, 2, 3],)
 ([2, 4, 6], [5, 7, 9])
 
@@ -1011,7 +1011,7 @@ dimension `d`. For example, the builtin `Array` returned by `rand(5,7,2)` has it
 arranged contiguously in column major order. This means that the stride of the first
 dimension — the spacing between elements in the same column — is `1`:
 
-```julia-repl
+```julia
 julia> A = rand(5,7,2);
 
 julia> stride(A,1)
@@ -1023,7 +1023,7 @@ as many elements as there are in a single column (`5`). Similarly, jumping betwe
 "pages" (in the third dimension) requires skipping `5*7 == 35` elements.  The `strides`
 of this array is the tuple of these three numbers together:
 
-```julia-repl
+```julia
 julia> strides(A)
 (1, 5, 35)
 ```
@@ -1036,7 +1036,7 @@ This view `V` refers to the same memory as `A` but is skipping and re-arranging 
 elements. The stride of the first dimension of `V` is `3` because we're only selecting every
 third row from our original array:
 
-```julia-repl
+```julia
 julia> V = @view A[1:3:4, 2:2:6, 2:-1:1];
 
 julia> stride(V, 1)
@@ -1047,7 +1047,7 @@ This view is similarly selecting every other column from our original `A` — an
 needs to skip the equivalent of two five-element columns when moving between indices in the
 second dimension:
 
-```julia-repl
+```julia
 julia> stride(V, 2)
 10
 ```
@@ -1056,7 +1056,7 @@ The third dimension is interesting because its order is reversed! Thus to get fr
 "page" to the second one it must go _backwards_ in memory, and so its stride in this
 dimension is negative!
 
-```julia-repl
+```julia
 julia> stride(V, 3)
 -35
 ```

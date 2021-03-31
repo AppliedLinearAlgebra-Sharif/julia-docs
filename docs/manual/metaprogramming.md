@@ -15,7 +15,7 @@ data.
 
 Every Julia program starts life as a string:
 
-```jldoctest prog
+```julia
 julia> prog = "1 + 1"
 "1 + 1"
 ```
@@ -25,7 +25,7 @@ julia> prog = "1 + 1"
 The next step is to [parse](https://en.wikipedia.org/wiki/Parsing#Computer_languages) each string
 into an object called an expression, represented by the Julia type `Expr`:
 
-```jldoctest prog
+```julia
 julia> ex1 = Meta.parse(prog)
 :(1 + 1)
 
@@ -38,14 +38,14 @@ Expr
   * a `Symbol` identifying the kind of expression. A symbol is an [interned string](https://en.wikipedia.org/wiki/String_interning)
     identifier (more discussion below).
 
-```jldoctest prog
+```julia
 julia> ex1.head
 :call
 ```
 
   * the expression arguments, which may be symbols, other expressions, or literal values:
 
-```jldoctest prog
+```julia
 julia> ex1.args
 3-element Vector{Any}:
   :+
@@ -55,14 +55,14 @@ julia> ex1.args
 
 Expressions may also be constructed directly in [prefix notation](https://en.wikipedia.org/wiki/Polish_notation):
 
-```jldoctest prog
+```julia
 julia> ex2 = Expr(:call, :+, 1, 1)
 :(1 + 1)
 ```
 
 The two expressions constructed above – by parsing and by direct construction – are equivalent:
 
-```jldoctest prog
+```julia
 julia> ex1 == ex2
 true
 ```
@@ -72,7 +72,7 @@ from the language itself.**
 
 The `dump` function provides indented and annotated display of `Expr` objects:
 
-```jldoctest prog
+```julia
 julia> dump(ex2)
 Expr
   head: Symbol call
@@ -84,7 +84,7 @@ Expr
 
 `Expr` objects may also be nested:
 
-```jldoctest ex3
+```julia
 julia> ex3 = Meta.parse("(4 + 4) / 2")
 :((4 + 4) / 2)
 ```
@@ -93,7 +93,7 @@ Another way to view expressions is with `Meta.show_sexpr`, which displays the [S
 form of a given `Expr`, which may look very familiar to users of Lisp. Here's an example illustrating
 the display on a nested `Expr`:
 
-```jldoctest ex3
+```julia
 julia> Meta.show_sexpr(ex3)
 (:call, :/, (:call, :+, 4, 4), 2)
 ```
@@ -104,7 +104,7 @@ The `:` character has two syntactic purposes in Julia. The first form creates a 
 an [interned string](https://en.wikipedia.org/wiki/String_interning) used as one building-block
 of expressions:
 
-```jldoctest
+```julia
 julia> s = :foo
 :foo
 
@@ -115,7 +115,7 @@ Symbol
 The `Symbol` constructor takes any number of arguments and creates a new symbol by concatenating
 their string representations together:
 
-```jldoctest
+```julia
 julia> :foo == Symbol("foo")
 true
 
@@ -134,7 +134,7 @@ is evaluated, a symbol is replaced with the value bound to that symbol in the ap
 
 Sometimes extra parentheses around the argument to `:` are needed to avoid ambiguity in parsing:
 
-```jldoctest
+```julia
 julia> :(:)
 :(:)
 
@@ -151,7 +151,7 @@ the explicit `Expr` constructor. This is referred to as *quoting*. The `:` chara
 by paired parentheses around a single statement of Julia code, produces an `Expr` object based
 on the enclosed code. Here is example of the short form used to quote an arithmetic expression:
 
-```jldoctest
+```julia
 julia> ex = :(a+b*c+1)
 :(a + b * c + 1)
 
@@ -165,7 +165,7 @@ as above or `Meta.@dump`)
 Note that equivalent expressions may be constructed using `Meta.parse` or the direct `Expr`
 form:
 
-```jldoctest
+```julia
 julia>      :(a + b*c + 1)       ==
        Meta.parse("a + b*c + 1") ==
        Expr(:call, :+, :a, Expr(:call, :*, :b, :c), 1)
@@ -180,7 +180,7 @@ is a subexpression, and `1` is a literal 64-bit signed integer.
 There is a second syntactic form of quoting for multiple expressions: blocks of code enclosed
 in `quote ... end`.
 
-```jldoctest
+```julia
 julia> ex = quote
            x = 1
            y = 2
@@ -207,7 +207,7 @@ literals or expressions into quoted expressions. Interpolation is indicated by a
 
 In this example, the value of variable `a` is interpolated:
 
-```jldoctest interp1
+```julia
 julia> a = 1;
 
 julia> ex = :($a + b)
@@ -216,14 +216,14 @@ julia> ex = :($a + b)
 
 Interpolating into an unquoted expression is not supported and will cause a compile-time error:
 
-```jldoctest interp1
+```julia
 julia> $a + b
 ERROR: syntax: "$" expression outside quote
 ```
 
 In this example, the tuple `(1,2,3)` is interpolated as an expression into a conditional test:
 
-```jldoctest interp1
+```julia
 julia> ex = :(a in $:((1,2,3)) )
 :(a in (1, 2, 3))
 ```
@@ -242,7 +242,7 @@ This can be done with the syntax `$(xs...)`.
 For example, the following code generates a function call where the number of arguments is
 determined programmatically:
 
-```jldoctest interp1
+```julia
 julia> args = [:x, :y, :z];
 
 julia> :(f(1, $(args...)))
@@ -255,7 +255,7 @@ Naturally, it is possible for quote expressions to contain other quote expressio
 Understanding how interpolation works in these cases can be a bit tricky.
 Consider this example:
 
-```jldoctest interp1
+```julia
 julia> x = :(1 + 2);
 
 julia> e = quote quote $x end end
@@ -273,7 +273,7 @@ evaluated yet.
 In other words, the `$` expression "belongs to" the inner quote expression, and
 so its argument is only evaluated when the inner quote expression is:
 
-```jldoctest interp1
+```julia
 julia> eval(e)
 quote
     #= none:1 =#
@@ -285,7 +285,7 @@ However, the outer `quote` expression is able to interpolate values inside the `
 in the inner quote.
 This is done with multiple `$`s:
 
-```jldoctest interp1
+```julia
 julia> e = quote quote $$x end end
 quote
     #= none:1 =#
@@ -299,7 +299,7 @@ end
 Notice that `(1 + 2)` now appears in the result instead of the symbol `x`.
 Evaluating this expression yields an interpolated `3`:
 
-```jldoctest interp1
+```julia
 julia> eval(e)
 quote
     #= none:1 =#
@@ -315,7 +315,7 @@ equivalent of `eval(eval(:x))`.
 
 The usual representation of a `quote` form in an AST is an `Expr` with head `:quote`:
 
-```jldoctest interp1
+```julia
 julia> dump(Meta.parse(":(1+2)"))
 Expr
   head: Symbol quote
@@ -332,7 +332,7 @@ As we have seen, such expressions support interpolation with `$`.
 However, in some situations it is necessary to quote code *without* performing interpolation.
 This kind of quoting does not yet have syntax, but is represented internally
 as an object of type `QuoteNode`:
-```jldoctest interp1
+```julia
 julia> eval(Meta.quot(Expr(:$, :(1+2))))
 3
 
@@ -340,7 +340,7 @@ julia> eval(QuoteNode(Expr(:$, :(1+2))))
 :($(Expr(:$, :(1 + 2))))
 ```
 The parser yields `QuoteNode`s for simple quoted items like symbols:
-```jldoctest interp1
+```julia
 julia> dump(Meta.parse(":x"))
 QuoteNode
   value: Symbol x
@@ -353,7 +353,7 @@ QuoteNode
 Given an expression object, one can cause Julia to evaluate (execute) it at global scope using
 `eval`:
 
-```jldoctest interp1
+```julia
 julia> ex1 = :(1 + 2)
 :(1 + 2)
 
@@ -377,7 +377,7 @@ Every module](@ref modules) has its own [`eval` function that evaluates expressi
 scope. Expressions passed to `eval` are not limited to returning values -- they can
 also have side-effects that alter the state of the enclosing module's environment:
 
-```jldoctest
+```julia
 julia> ex = :(x = 1)
 :(x = 1)
 
@@ -398,7 +398,7 @@ Since expressions are just `Expr` objects which can be constructed programmatica
 it is possible to dynamically generate arbitrary code which can then be run using `eval`.
 Here is a simple example:
 
-```julia-repl
+```julia
 julia> a = 1;
 
 julia> ex = Expr(:call, :+, a, :b)
@@ -429,7 +429,7 @@ objects: the `parse` function, which takes a string of Julia code and returns th
 `Expr`. A function can also take one or more `Expr` objects as arguments, and return another
 `Expr`. Here is a simple, motivating example:
 
-```jldoctest
+```julia
 julia> function math_expr(op, op1, op2)
            expr = Expr(:call, op, op1, op2)
            return expr
@@ -446,7 +446,7 @@ julia> eval(ex)
 As another example, here is a function that doubles any numeric argument, but leaves expressions
 alone:
 
-```jldoctest
+```julia
 julia> function make_expr2(op, opr1, opr2)
            opr1f, opr2f = map(x -> isa(x, Number) ? 2*x : x, (opr1, opr2))
            retexpr = Expr(:call, op, opr1f, opr2f)
@@ -475,7 +475,7 @@ literal values, and symbols.
 
 Here is an extraordinarily simple macro:
 
-```jldoctest sayhello
+```julia
 julia> macro sayhello()
            return :( println("Hello, world!") )
        end
@@ -493,14 +493,14 @@ instances of `@sayhello` with:
 When `@sayhello` is entered in the REPL, the expression executes immediately, thus we only see the
 evaluation result:
 
-```jldoctest sayhello
+```julia
 julia> @sayhello()
 Hello, world!
 ```
 
 Now, consider a slightly more complex macro:
 
-```jldoctest sayhello2
+```julia
 julia> macro sayhello(name)
            return :( println("Hello, ", $name) )
        end
@@ -510,7 +510,7 @@ julia> macro sayhello(name)
 This macro takes one argument: `name`. When `@sayhello` is encountered, the quoted expression
 is *expanded* to interpolate the value of the argument into the final expression:
 
-```jldoctest sayhello2
+```julia
 julia> @sayhello("human")
 Hello, human
 ```
@@ -518,7 +518,7 @@ Hello, human
 We can view the quoted return expression using the function `macroexpand` (**important note:**
 this is an extremely useful tool for debugging macros):
 
-```julia-repl sayhello2
+```julia
 julia> ex = macroexpand(Main, :(@sayhello("human")) )
 :(Main.println("Hello, ", "human"))
 
@@ -531,7 +531,7 @@ We can see that the `"human"` literal has been interpolated into the expression.
 There also exists a macro `@macroexpand` that is perhaps a bit more convenient than the `macroexpand` function:
 
 
-```jldoctest sayhello2
+```julia
 julia> @macroexpand @sayhello "human"
 :(println("Hello, ", "human"))
 ```
@@ -545,7 +545,7 @@ Macros are necessary because they execute when code is parsed, therefore, macros
 to generate and include fragments of customized code *before* the full program is run. To illustrate
 the difference, consider the following example:
 
-```julia-repl whymacros
+```julia
 julia> macro twostep(arg)
            println("I execute at parse time. The argument is: ", arg)
            return :(println("I execute at runtime. The argument is: ", $arg))
@@ -559,7 +559,7 @@ I execute at parse time. The argument is: :((1, 2, 3))
 The first call to `println` is executed when `macroexpand` is called. The
 resulting expression contains *only* the second `println`:
 
-```julia-repl whymacros
+```julia
 julia> typeof(ex)
 Expr
 
@@ -599,7 +599,7 @@ It is important to emphasize that macros receive their arguments as expressions,
 symbols. One way to explore macro arguments is to call the `show` function within the
 macro body:
 
-```jldoctest
+```julia
 julia> macro showarg(x)
            show(x)
            # ... remainder of macro, returning an expression
@@ -626,7 +626,7 @@ as well as to implement the `@__LINE__`, `@__FILE__`, and `@__DIR__` macros.
 
 The location information can be accessed by referencing `__source__.line` and `__source__.file`:
 
-```jldoctest
+```julia
 julia> macro __LOCATION__(); return QuoteNode(__source__); end
 @__LOCATION__ (macro with 1 method)
 
@@ -649,7 +649,7 @@ in the current module.
 
 Here is a simplified definition of Julia's `@assert` macro:
 
-```jldoctest building
+```julia
 julia> macro assert(ex)
            return :( $ex ? nothing : throw(AssertionError($(string(ex)))) )
        end
@@ -658,7 +658,7 @@ julia> macro assert(ex)
 
 This macro can be used like this:
 
-```jldoctest building
+```julia
 julia> @assert 1 == 1.0
 
 julia> @assert 1 == 0
@@ -687,7 +687,7 @@ user to optionally specify their own error message, instead of just printing the
 Just like in functions with a variable number of arguments (Varargs Functions), this is specified with an ellipses
 following the last argument:
 
-```jldoctest assert2
+```julia
 julia> macro assert(ex, msgs...)
            msg_body = isempty(msgs) ? ex : msgs[1]
            msg = string(msg_body)
@@ -702,7 +702,7 @@ will behave the same as the simpler definition above. But now if the user specif
 it is printed in the message body instead of the failing expression. You can inspect the result
 of a macro expansion with the aptly named `@macroexpand` macro:
 
-```julia-repl assert2
+```julia
 julia> @macroexpand @assert a == b
 :(if Main.a == Main.b
         Main.nothing
@@ -724,7 +724,7 @@ in the custom message, e.g., `@assert a==b "a ($a) should equal b ($b)!"`, but t
 as expected with the above macro. Can you see why? Recall from [string interpolation](@ref string-interpolation) that
 an interpolated string is rewritten to a call to `string`. Compare:
 
-```jldoctest
+```julia
 julia> typeof(:("a should equal b"))
 String
 
@@ -824,7 +824,7 @@ the output verbatim. Therefore it will be resolved in the macro call environment
 This escaping mechanism can be used to "violate" hygiene when necessary, in order to introduce
 or manipulate user variables. For example, the following macro sets `x` to zero in the call environment:
 
-```jldoctest
+```julia
 julia> macro zerox()
            return esc(:(x = 0))
        end
@@ -872,7 +872,7 @@ while we want `@time` to be usable with minimum impact on the wrapped code.
 ### Macros and dispatch
 
 Macros, just like Julia functions, are generic. This means they can also have multiple method definitions, thanks to multiple dispatch:
-```jldoctest macromethods
+```julia
 julia> macro m end
 @m (macro with 0 methods)
 
@@ -894,7 +894,7 @@ Two arguments
 ```
 However one should keep in mind, that macro dispatch is based on the types of AST
 that are handed to the macro, not the types that the AST evaluates to at runtime:
-```jldoctest macromethods
+```julia
 julia> macro m(::Int)
            println("An Integer")
        end
@@ -918,7 +918,7 @@ and a separate program to generate the repetitive code. In Julia, expression int
 `eval` allow such code generation to take place in the normal course of program execution.
 For example, consider the following custom type
 
-```jldoctest mynumber-codegen
+```julia
 struct MyNumber
     x::Float64
 end
@@ -929,7 +929,7 @@ end
 for which we want to add a number of methods to. We can do this programmatically in the
 following loop:
 
-```jldoctest mynumber-codegen
+```julia
 for op = (:sin, :cos, :tan, :log, :exp)
     eval(quote
         Base.$op(a::MyNumber) = MyNumber($op(a.x))
@@ -941,7 +941,7 @@ end
 
 and we can now use those functions with our custom type:
 
-```jldoctest mynumber-codegen
+```julia
 julia> x = MyNumber(π)
 MyNumber(3.141592653589793)
 
@@ -1127,7 +1127,7 @@ When defining generated functions, there are five main differences to ordinary f
 
 It's easiest to illustrate this with an example. We can declare a generated function `foo` as
 
-```jldoctest generated
+```julia
 julia> @generated function foo(x)
            Core.println(x)
            return :(x * x)
@@ -1141,7 +1141,7 @@ of `x * x`.
 From the caller's perspective, this is identical to a regular function; in fact, you don't
 have to know whether you're calling a regular or generated function. Let's see how `foo` behaves:
 
-```jldoctest generated
+```julia
 julia> x = foo(2); # note: output is from println() statement in the body
 Int64
 
@@ -1161,7 +1161,7 @@ we returned from the definition, now with the *value* of `x`.
 
 What happens if we evaluate `foo` again with a type that we have already used?
 
-```jldoctest generated
+```julia
 julia> foo(4)
 16
 ```
@@ -1187,13 +1187,13 @@ prior to the *definition* of the generated function itself.
 
 Initially `f(x)` has one definition
 
-```jldoctest redefinition
+```julia
 julia> f(x) = "original definition";
 ```
 
 Define other operations that use `f(x)`:
 
-```jldoctest redefinition
+```julia
 julia> g(x) = f(x);
 
 julia> @generated gen1(x) = f(x);
@@ -1203,7 +1203,7 @@ julia> @generated gen2(x) = :(f(x));
 
 We now add some new definitions for `f(x)`:
 
-```jldoctest redefinition
+```julia
 julia> f(x::Int) = "definition for Int";
 
 julia> f(x::Type{Int}) = "definition for Type{Int}";
@@ -1211,7 +1211,7 @@ julia> f(x::Type{Int}) = "definition for Type{Int}";
 
 and compare how these results differ:
 
-```jldoctest redefinition
+```julia
 julia> f(1)
 "definition for Int"
 
@@ -1227,7 +1227,7 @@ julia> gen2(1)
 
 Each method of a generated function has its own view of defined functions:
 
-```jldoctest redefinition
+```julia
 julia> @generated gen1(x::Real) = f(x);
 
 julia> gen1(1)
@@ -1239,7 +1239,7 @@ could not do (except printing the type on the first invocation, and incurring hi
 However, the power of a generated function lies in its ability to compute different quoted expressions
 depending on the types passed to it:
 
-```jldoctest
+```julia
 julia> @generated function bar(x)
            if x <: Integer
                return :(x ^ 2)
@@ -1260,7 +1260,7 @@ julia> bar("baz")
 
 Abusing this will corrupt the runtime system and cause undefined behavior:
 
-```jldoctest
+```julia
 julia> @generated function baz(x)
            if rand() < .9
                return :(x^2)
@@ -1315,7 +1315,7 @@ array, based on a set of n multilinear indices - in other words, to calculate th
 can be used to index into an array `A` using `A[i]`, instead of `A[x,y,z,...]`. One possible implementation
 is the following:
 
-```jldoctest sub2ind
+```julia
 julia> function sub2ind_loop(dims::NTuple{N}, I::Integer...) where N
            ind = I[N] - 1
            for i = N-1:-1:1
@@ -1331,7 +1331,7 @@ julia> sub2ind_loop((3, 5), 1, 2)
 
 The same thing can be done using recursion:
 
-```jldoctest
+```julia
 julia> sub2ind_rec(dims::Tuple{}) = 1;
 
 julia> sub2ind_rec(dims::Tuple{}, i1::Integer, I::Integer...) =
@@ -1354,7 +1354,7 @@ Thus, we can utilize generated functions to move the iteration to compile-time; 
 we use generated functions to manually unroll the loop. The body becomes almost identical, but
 instead of calculating the linear index, we build up an *expression* that calculates the index:
 
-```jldoctest sub2ind_gen
+```julia
 julia> @generated function sub2ind_gen(dims::NTuple{N}, I::Integer...) where N
            ex = :(I[$N] - 1)
            for i = (N - 1):-1:1
@@ -1372,7 +1372,7 @@ julia> sub2ind_gen((3, 5), 1, 2)
 
 An easy way to find out is to extract the body into another (regular) function:
 
-```jldoctest sub2ind_gen2
+```julia
 julia> @generated function sub2ind_gen(dims::NTuple{N}, I::Integer...) where N
            return sub2ind_gen_impl(dims, I...)
        end
@@ -1391,7 +1391,7 @@ sub2ind_gen_impl (generic function with 1 method)
 
 We can now execute `sub2ind_gen_impl` and examine the expression it returns:
 
-```jldoctest sub2ind_gen2
+```julia
 julia> sub2ind_gen_impl(Tuple{Int,Int}, Int, Int)
 :(((I[1] - 1) + dims[1] * (I[2] - 1)) + 1)
 ```

@@ -8,7 +8,7 @@ of Julia multi-threading features.
 By default, Julia starts up with a single thread of execution. This can be verified by using the
 command `Threads.nthreads()`:
 
-```julia-repl
+```julia
 julia> Threads.nthreads()
 1
 ```
@@ -33,14 +33,14 @@ $ julia --threads 4
 
 Let's verify there are 4 threads at our disposal.
 
-```julia-repl
+```julia
 julia> Threads.nthreads()
 4
 ```
 
 But we are currently on the master thread. To check, we use the function `Threads.threadid`
 
-```julia-repl
+```julia
 julia> Threads.threadid()
 1
 ```
@@ -84,7 +84,7 @@ The best way to ensure this is to acquire a lock around any access to data that
 can be observed from multiple threads. For example, in most cases you should
 use the following code pattern:
 
-```julia-repl
+```julia
 julia> lock(lk) do
            use(a)
        end
@@ -124,7 +124,7 @@ bad_read2(a) # it is NOT safe to access `a` here
 
 Let's work a simple example using our native threads. Let us create an array of zeros:
 
-```jldoctest
+```julia
 julia> a = zeros(10)
 10-element Vector{Float64}:
  0.0
@@ -145,7 +145,7 @@ thread ID into each location.
 Julia supports parallel loops using the `Threads.@threads` macro. This macro is affixed
 in front of a `for` loop to indicate to Julia that the loop is a multi-threaded region:
 
-```julia-repl
+```julia
 julia> Threads.@threads for i = 1:10
            a[i] = Threads.threadid()
        end
@@ -154,7 +154,7 @@ julia> Threads.@threads for i = 1:10
 The iteration space is split among the threads, after which each thread writes its thread ID
 to its assigned locations:
 
-```julia-repl
+```julia
 julia> a
 10-element Array{Float64,1}:
  1.0
@@ -178,7 +178,7 @@ Julia supports accessing and modifying values *atomically*, that is, in a thread
 type) can be wrapped as `Threads.Atomic` to indicate it must be accessed in this way.
 Here we can see an example:
 
-```julia-repl
+```julia
 julia> i = Threads.Atomic{Int}(0);
 
 julia> ids = zeros(4);
@@ -209,7 +209,7 @@ Had we tried to do the addition without the atomic tag, we might have gotten the
 wrong answer due to a race condition. An example of what would happen if we didn't
 avoid the race:
 
-```julia-repl
+```julia
 julia> using Base.Threads
 
 julia> nthreads()

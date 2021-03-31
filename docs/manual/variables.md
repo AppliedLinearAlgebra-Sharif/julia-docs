@@ -3,7 +3,7 @@
 A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to
 store a value (that you obtained after some math, for example) for later use. For example:
 
-```julia-repl
+```julia
 # Assign the value 10 to the variable x
 julia> x = 10
 10
@@ -25,7 +25,7 @@ Julia provides an extremely flexible system for naming variables. Variable names
 and have no semantic meaning (that is, the language will not treat variables differently based
 on their names).
 
-```jldoctest
+```julia
 julia> x = 1.0
 1.0
 
@@ -44,7 +44,7 @@ julia> UniversalDeclarationOfHumanRightsStart = "人人生而自由，在尊严�
 
 Unicode names (in UTF-8 encoding) are allowed:
 
-```jldoctest
+```julia
 julia> δ = 0.00001
 1.0e-5
 
@@ -62,7 +62,7 @@ then paste the symbol.)
 Julia will even let you redefine built-in constants and functions if needed (although
 this is not recommended to avoid potential confusions):
 
-```jldoctest
+```julia
 julia> pi = 3
 3
 
@@ -76,7 +76,7 @@ julia> sqrt = 4
 However, if you try to redefine a built-in constant or function already in use, Julia will give
 you an error:
 
-```jldoctest
+```julia
 julia> pi
 π = 3.1415926535897...
 
@@ -112,7 +112,7 @@ it from `+ ᵃx` where `ᵃx` is the variable name.
 
 The only explicitly disallowed names for variables are the names of the built-in Keywords:
 
-```julia-repl
+```julia
 julia> else = false
 ERROR: syntax: unexpected "else"
 

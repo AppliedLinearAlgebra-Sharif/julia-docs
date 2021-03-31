@@ -366,7 +366,7 @@ little as possible through promotion.
 
 For example,
 
-```jldoctest
+```julia
 julia> f(x) = 2.0 * x
 f (generic function with 1 method)
 
@@ -382,7 +382,7 @@ julia> f(1)
 
 while
 
-```jldoctest
+```julia
 julia> g(x) = 2 * x
 g (generic function with 1 method)
 
@@ -401,7 +401,7 @@ input argument, while the first didn't. This is because e.g. `promote_type(Int, 
 and promotion happens with the multiplication. Similarly, `Rational` literals are less type disruptive
 than `Float64` literals, but more disruptive than `Int`s:
 
-```jldoctest
+```julia
 julia> h(x) = 2//1 * x
 h (generic function with 1 method)
 

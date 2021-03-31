@@ -9,12 +9,24 @@ The easiest way to learn and experiment with Julia is by starting an interactive
 known as a read-eval-print loop or "REPL") by double-clicking the Julia executable or running
 `julia` from the command line:
 
-```@eval
-io = IOBuffer()
-Base.banner(io)
-banner = String(take!(io))
-import Markdown
-Markdown.parse("```\n\$ julia\n\n$(banner)\njulia> 1 + 2\n3\n\njulia> ans\n3\n```")
+```julia
+$ julia
+
+               _
+   _       _ _(_)_     |  Documentation: https://docs.julialang.org
+  (_)     | (_) (_)    |
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
+  | | | | | | |/ _` |  |
+  | | |_| | | | (_| |  |  Version 1.6.0 (2021-03-24)
+ _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
+|__/                   |
+
+
+julia> 1 + 2
+3
+
+julia> ans
+3
 ```
 
 To exit the interactive session, type `CTRL-D` (press the Control/`^` key together with the `d` key), or type

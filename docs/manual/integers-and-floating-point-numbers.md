@@ -48,7 +48,7 @@ flexible, user-extensible [type promotion system](@ref conversion-and-promotion)
 
 Literal integers are represented in the standard manner:
 
-```jldoctest
+```julia
 julia> 1
 1
 
@@ -59,7 +59,7 @@ julia> 1234
 The default type for an integer literal depends on whether the target system has a 32-bit architecture
 or a 64-bit architecture:
 
-```julia-repl
+```julia
 # 32-bit system:
 julia> typeof(1)
 Int32
@@ -72,7 +72,7 @@ Int64
 The Julia internal variable `Sys.WORD_SIZE` indicates whether the target system is 32-bit
 or 64-bit:
 
-```julia-repl
+```julia
 # 32-bit system:
 julia> Sys.WORD_SIZE
 32
@@ -85,7 +85,7 @@ julia> Sys.WORD_SIZE
 Julia also defines the types `Int` and `UInt`, which are aliases for the system's signed and unsigned
 native integer types respectively:
 
-```julia-repl
+```julia
 # 32-bit system:
 julia> Int
 Int32
@@ -102,7 +102,7 @@ UInt64
 Larger integer literals that cannot be represented using only 32 bits but can be represented in
 64 bits always create 64-bit integers, regardless of the system type:
 
-```jldoctest
+```julia
 # 32-bit or 64-bit system:
 julia> typeof(3000000000)
 Int64
@@ -112,7 +112,7 @@ Unsigned integers are input and output using the `0x` prefix and hexadecimal (ba
 `0-9a-f` (the capitalized digits `A-F` also work for input). The size of the unsigned value is
 determined by the number of hex digits used:
 
-```jldoctest
+```julia
 julia> x = 0x1
 0x01
 
@@ -150,7 +150,7 @@ an integer value.
 
 Binary and octal literals are also supported:
 
-```jldoctest
+```julia
 julia> x = 0b10
 0x02
 
@@ -181,7 +181,7 @@ Binary, octal, and hexadecimal literals may be signed by a `-` immediately prece
 unsigned literal. They produce an unsigned integer of the same size as the unsigned literal
 would do, with the two's complement of the value:
 
-```jldoctest
+```julia
 julia> -0x2
 0xfe
 
@@ -192,7 +192,7 @@ julia> -0x0002
 The minimum and maximum representable values of primitive numeric types such as integers are given
 by the `typemin` and `typemax` functions:
 
-```jldoctest
+```julia
 julia> (typemin(Int32), typemax(Int32))
 (-2147483648, 2147483647)
 
@@ -220,7 +220,7 @@ with some existing programming experience.)
 
 In Julia, exceeding the maximum representable value of a given type results in a wraparound behavior:
 
-```jldoctest
+```julia
 julia> x = typemax(Int64)
 9223372036854775807
 
@@ -239,7 +239,7 @@ is recommended instead.
 
 An example of overflow behavior and how to potentially resolve it is as follows:
 
-```jldoctest
+```julia
 julia> 10^19
 -8446744073709551616
 
@@ -259,7 +259,7 @@ second argument is zero.
 Literal floating-point numbers are represented in the standard formats, using
 [E-notation](https://en.wikipedia.org/wiki/Scientific_notation#E_notation) when necessary:
 
-```jldoctest
+```julia
 julia> 1.0
 1.0
 
@@ -285,7 +285,7 @@ julia> 2.5e-4
 The above results are all `Float64` values. Literal `Float32` values can be
 entered by writing an `f` in place of `e`:
 
-```jldoctest
+```julia
 julia> x = 0.5f0
 0.5f0
 
@@ -298,7 +298,7 @@ julia> 2.5f-4
 
 Values can be converted to `Float32` easily:
 
-```jldoctest
+```julia
 julia> x = Float32(-1.5)
 -1.5f0
 
@@ -309,7 +309,7 @@ Float32
 Hexadecimal floating-point literals are also valid, but only as `Float64` values,
 with `p` preceding the base-2 exponent:
 
-```jldoctest
+```julia
 julia> 0x1p0
 1.0
 
@@ -326,7 +326,7 @@ Float64
 Half-precision floating-point numbers are also supported (`Float16`), but they are
 implemented in software and use `Float32` for calculations.
 
-```jldoctest
+```julia
 julia> sizeof(Float16(4.))
 2
 
@@ -336,7 +336,7 @@ Float16(8.0)
 
 The underscore `_` can be used as digit separator:
 
-```jldoctest
+```julia
 julia> 10_000, 0.000_000_005, 0xdead_beef, 0b1011_0010
 (10000, 5.0e-9, 0xdeadbeef, 0xb2)
 ```
@@ -347,7 +347,7 @@ Floating-point numbers have [two zeros](https://en.wikipedia.org/wiki/Signed_zer
 and negative zero. They are equal to each other but have different binary representations, as
 can be seen using the `bitstring` function:
 
-```jldoctest
+```julia
 julia> 0.0 == -0.0
 true
 
@@ -373,7 +373,7 @@ For further discussion of how these non-finite floating-point values are ordered
 to each other and other floats, see Numeric Comparisons. By the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008),
 these floating-point values are the results of certain arithmetic operations:
 
-```jldoctest
+```julia
 julia> 1/Inf
 0.0
 
@@ -413,7 +413,7 @@ NaN
 
 The `typemin` and `typemax` functions also apply to floating-point types:
 
-```jldoctest
+```julia
 julia> (typemin(Float16),typemax(Float16))
 (-Inf16, Inf16)
 
@@ -433,7 +433,7 @@ which is often known as [machine epsilon](https://en.wikipedia.org/wiki/Machine_
 Julia provides `eps`, which gives the distance between `1.0` and the next larger representable
 floating-point value:
 
-```jldoctest
+```julia
 julia> eps(Float32)
 1.1920929f-7
 
@@ -450,7 +450,7 @@ argument, and gives the absolute difference between that value and the next repr
 floating point value. That is, `eps(x)` yields a value of the same type as `x` such that
 `x + eps(x)` is the next representable floating-point value larger than `x`:
 
-```jldoctest
+```julia
 julia> eps(1.0)
 2.220446049250313e-16
 
@@ -473,7 +473,7 @@ a 64-bit floating-point value.
 Julia also provides the `nextfloat` and `prevfloat` functions which return
 the next largest or smallest representable floating-point number to the argument respectively:
 
-```jldoctest
+```julia
 julia> x = 1.25f0
 1.25f0
 
@@ -547,7 +547,7 @@ Once created, they participate in arithmetic
 with all other numeric types thanks to Julia's
 [type promotion and conversion mechanism](@ref conversion-and-promotion):
 
-```jldoctest
+```julia
 julia> BigInt(typemax(Int64)) + 1
 9223372036854775808
 
@@ -585,7 +585,7 @@ julia> factorial(BigInt(40))
 However, type promotion between the primitive types above and `BigInt`/`BigFloat`
 is not automatic and must be explicitly stated.
 
-```jldoctest
+```julia
 julia> x = typemin(Int64)
 -9223372036854775808
 
@@ -611,7 +611,7 @@ and all further calculations will take these changes in account.  Alternatively,
 or the rounding can be changed only within the execution of a particular block of code by using
 the same functions with a `do` block:
 
-```jldoctest
+```julia
 julia> setrounding(BigFloat, RoundUp) do
            BigFloat(1) + parse(BigFloat, "0.1")
        end
@@ -634,7 +634,7 @@ To make common numeric formulae and expressions clearer, Julia allows variables 
 preceded by a numeric literal, implying multiplication. This makes writing polynomial expressions
 much cleaner:
 
-```jldoctest numeric-coefficients
+```julia
 julia> x = 3
 3
 
@@ -647,7 +647,7 @@ julia> 1.5x^2 - .5x + 1
 
 It also makes writing exponential functions more elegant:
 
-```jldoctest numeric-coefficients
+```julia
 julia> 2^2x
 64
 ```
@@ -661,7 +661,7 @@ For example `2^3x` is parsed as `2^(3x)`, and `2x^3` is parsed as `2*(x^3)`.
 
 Numeric literals also work as coefficients to parenthesized expressions:
 
-```jldoctest numeric-coefficients
+```julia
 julia> 2(x-1)^2 - 3(x-1) + 1
 3
 ```
@@ -678,7 +678,7 @@ julia> 2(x-1)^2 - 3(x-1) + 1
 Additionally, parenthesized expressions can be used as coefficients to variables, implying multiplication
 of the expression by the variable:
 
-```jldoctest numeric-coefficients
+```julia
 julia> (x-1)x
 6
 ```
@@ -686,7 +686,7 @@ julia> (x-1)x
 Neither juxtaposition of two parenthesized expressions, nor placing a variable before a parenthesized
 expression, however, can be used to imply multiplication:
 
-```jldoctest numeric-coefficients
+```julia
 julia> (x-1)(x+1)
 ERROR: MethodError: objects of type Int64 are not callable
 
@@ -743,7 +743,7 @@ These functions are useful in Numeric Comparisons to avoid overhead from unneces
 
 Examples:
 
-```jldoctest
+```julia
 julia> zero(Float32)
 0.0f0
 
