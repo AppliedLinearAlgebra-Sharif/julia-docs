@@ -317,7 +317,7 @@ The second fact is why execution of the loop changes the global value of `s` and
 why `t` is still undefined after the loop executes. Now, let's try evaluating this same code as
 though it were in a file instead:
 
-```julia
+```
 julia> code = """
        s = 0 # global
        for i = 1:10
@@ -643,7 +643,7 @@ julia> z = 100
 100
 ```
 The last rule applies to immutable objects even if the variable binding would change, e.g.:
-```julia
+```
 julia> const s1 = "1"
 "1"
 

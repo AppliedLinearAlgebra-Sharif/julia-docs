@@ -998,7 +998,7 @@ to instead use `vector .+ vector` and `vector .* scalar` because the
 resulting loops can be fused with surrounding computations. For example,
 consider the two functions:
 
-```julia
+```
 julia> f(x) = 3x.^2 + 4x + 7x.^3;
 
 julia> fdot(x) = @. 3x^2 + 4x + 7x^3 # equivalent to 3 .* x.^2 .+ 4 .* x .+ 7 .* x.^3;

@@ -190,7 +190,7 @@ Let's jump right in with a simple example involving TCP sockets.
 This functionality is in a standard library package called `Sockets`.
 Let's first create a simple server:
 
-```julia
+```
 julia> using Sockets
 
 julia> @async begin
@@ -264,7 +264,7 @@ task resumed execution (because a connection request was now available), accepte
 printed the message and waited for the next client. Reading and writing works in the same way.
 To see this, consider the following simple echo server:
 
-```julia
+```
 julia> @async begin
            server = listen(2001)
            while true

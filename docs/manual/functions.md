@@ -863,7 +863,7 @@ can be tedious and lead to code that is difficult to read, the macro
 [`@.`](@ref @__dot__) is provided to convert *every* function call,
 operation, and assignment in an expression into the "dotted" version.
 
-```julia
+```
 julia> Y = [1.0, 2.0, 3.0, 4.0];
 
 julia> X = similar(Y); # pre-allocate output array

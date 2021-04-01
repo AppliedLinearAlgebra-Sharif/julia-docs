@@ -85,7 +85,7 @@ Int32
 argument types must be written with a trailing comma. For example, to call the `getenv` function
 to get a pointer to the value of an environment variable, one makes a call like this:
 
-```julia
+```
 julia> path = ccall(:getenv, Cstring, (Cstring,), "SHELL")
 Cstring(@0x00007fff5fbffc45)
 
@@ -1066,7 +1066,7 @@ Global variables exported by native libraries can be accessed by name using the 
 function. The arguments to `cglobal` are a symbol specification identical to that used
 by `ccall`, and a type describing the value stored in the variable:
 
-```julia
+```
 julia> cglobal((:errno, :libc), Int32)
 Ptr{Int32} @0x00007f418d0816b8
 ```

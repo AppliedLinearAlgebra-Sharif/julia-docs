@@ -243,7 +243,7 @@ The exception stack is stored on the `Task` where the exceptions occurred. When 
 A call to `backtrace` returns a vector of `Union{Ptr{Nothing}, Base.InterpreterIP}`, which may then be passed into
 `stacktrace` for translation:
 
-```julia
+```
 julia> trace = backtrace()
 18-element Array{Union{Ptr{Nothing}, Base.InterpreterIP},1}:
  Ptr{Nothing} @0x00007fd8734c6209
