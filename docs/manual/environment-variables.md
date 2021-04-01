@@ -341,12 +341,16 @@ event listener for just-in-time (JIT) profiling.
 
     This environment variable only has an effect if Julia was compiled with JIT
     profiling support, using either
+
     * Intel's [VTune™ Amplifier](https://software.intel.com/en-us/vtune)
       (`USE_INTEL_JITEVENTS` set to `1` in the build configuration), or
+
     * [OProfile](http://oprofile.sourceforge.net/news/) (`USE_OPROFILE_JITEVENTS` set to `1`
       in the build configuration).
+
     * [Perf](https://perf.wiki.kernel.org) (`USE_PERF_JITEVENTS` set to `1`
       in the build configuration). This integration is enabled by default.
+
 ```
 
 ### `ENABLE_GDBLISTENER`

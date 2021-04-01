@@ -491,19 +491,20 @@ checks and is only meant to improve readability of the call.
     others *optionally* permit placing hidden arguments directly after the character argument (Intel, PGI).
     For example, Fortran subroutines of the form
 
-    ```fortran
-    subroutine test(str1, str2)
-    character(len=*) :: str1,str2
-    ```
+    .. code-block:: fortran
+
+        subroutine test(str1, str2)
+        character(len=*) :: str1,str2
 
     can be called via the following Julia code, where the lengths are appended
 
-    ```julia
-    str1 = "foo"
-    str2 = "bar"
-    ccall(:test, Cvoid, (Ptr{UInt8}, Ptr{UInt8}, Csize_t, Csize_t),
-                        str1, str2, sizeof(str1), sizeof(str2))
-    ```
+    .. code-block:: julia
+
+        str1 = "foo"
+        str2 = "bar"
+        ccall(:test, Cvoid, (Ptr{UInt8}, Ptr{UInt8}, Csize_t, Csize_t),
+                            str1, str2, sizeof(str1), sizeof(str2))
+
 ```
 
 ```eval_rst

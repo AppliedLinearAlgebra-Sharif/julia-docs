@@ -91,6 +91,7 @@ As in the example above, we recommend following some simple conventions when wri
    ...
    """
    ```
+
 5. Provide hints to related functions.
 
    Sometimes there are functions of related functionality. To increase discoverability please provide
@@ -99,10 +100,11 @@ As in the example above, we recommend following some simple conventions when wri
    ```
    See also: `bar!`, `baz`, `baaz`
    ```
+
 6. Include any code examples in an `# Examples` section.
 
    Examples should, whenever possible, be written as *doctests*. A *doctest* is a fenced code block
-   (see Code blocks) starting with ````` ```julia````` and contains any number of `julia>`
+   (see Code blocks) starting with ````` ```jldoctest````` and contains any number of `julia>`
    prompts together with inputs and expected outputs that mimic the Julia REPL.
 
    ```eval_rst
@@ -139,7 +141,7 @@ As in the example above, we recommend following some simple conventions when wri
        doctesting.
 
        Operating system word size (`Int32` or `Int64`) as well as path separator differences
-       (`/` or `\`) will also affect the reproducibility of some doctests.
+       (`/` or `\\`) will also affect the reproducibility of some doctests.
 
        Note that whitespace in your doctest is significant! The doctest will fail if you misalign the
        output of pretty-printing an array, for example.
@@ -540,19 +542,21 @@ the referenced value itself.
 
     For example you should write
 
-    ```julia
-    "..."
-    f(x) = x + 1
-    const alias = f
-    ```
+    .. code-block:: julia
+
+        "..."
+        f(x) = x + 1
+        const alias = f
+
 
     rather than
 
-    ```julia
-    f(x) = x + 1
-    "..."
-    const alias = f
-    ```
+    .. code-block:: julia
+
+        f(x) = x + 1
+        "..."
+        const alias = f
+
 ```
 
 ```julia

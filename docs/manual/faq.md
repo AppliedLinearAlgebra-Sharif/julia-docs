@@ -104,17 +104,21 @@ parsing the file once it reaches to the `exec` statement.
 ```eval_rst
 
 .. note::
-    In order to [catch CTRL-C](@ref catch-ctrl-c) in the script you can use
-    ```julia
-    #!/bin/bash
-    #=
-    exec julia --color=yes --startup-file=no -e 'include(popfirst!(ARGS))' \
-        "${BASH_SOURCE[0]}" "$@"
-    =#
 
-    @show ARGS  # put any Julia code here
-    ```
+    In order to [catch CTRL-C](@ref catch-ctrl-c) in the script you can use
+
+    .. code-block:: julia
+
+        #!/bin/bash
+        #=
+        exec julia --color=yes --startup-file=no -e 'include(popfirst!(ARGS))' \
+            "${BASH_SOURCE[0]}" "$@"
+        =#
+
+        @show ARGS  # put any Julia code here
+
     instead. Note that with this strategy `PROGRAM_FILE` will not be set.
+
 ```
 
 ## Functions

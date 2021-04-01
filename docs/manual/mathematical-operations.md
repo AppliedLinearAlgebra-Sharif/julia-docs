@@ -138,19 +138,21 @@ The updating versions of all the binary arithmetic and bitwise operators are:
 ```eval_rst
 
 .. note::
+
     An updating operator rebinds the variable on the left-hand side. As a result, the type of the
     variable may change.
 
-    ```julia
-    julia> x = 0x01; typeof(x)
-    UInt8
+    .. code-block:: julia
 
-    julia> x *= 2 # Same as x = x * 2
-    2
+        julia> x = 0x01; typeof(x)
+        UInt8
 
-    julia> typeof(x)
-    Int64
-    ```
+        julia> x *= 2 # Same as x = x * 2
+        2
+
+        julia> typeof(x)
+        Int64
+
 ```
 
 ## Vectorized "dot" operators
