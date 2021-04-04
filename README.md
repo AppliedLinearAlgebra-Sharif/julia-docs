@@ -5,7 +5,7 @@
 
 <div align="center">
 
-[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.6.0&style=for-the-badge)](http://julia-docs.readthedocs.org/fa/v1.6.0/)
+[![Documentation Status](https://readthedocs.org/projects/julia-docs/badge/?version=v1.6.0&style=for-the-badge)](https://readthedocs.org/projects/julia-docs/builds/)
 [![Julia](https://img.shields.io/badge/Version-1.6.0-brightgreen?style=for-the-badge&color=brightgreen)](https://github.com/JuliaLang/julia/tree/v1.6.0)
 [![Contributors](https://img.shields.io/github/contributors/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/graphs/contributors)
 [![License](https://img.shields.io/github/license/AppliedLinearAlgebra-Sharif/julia-docs?style=for-the-badge&color=brightgreen)](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.6.0/LICENSE)

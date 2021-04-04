@@ -50,17 +50,23 @@ julia> Threads.threadid()
 .. note::
     If you prefer to use the environment variable you can set it as follows in
     Bash (Linux/macOS):
-    ```bash
-    export JULIA_NUM_THREADS=4
-    ```
+
+    .. code-block:: bash
+
+        export JULIA_NUM_THREADS=4
+
     C shell on Linux/macOS, CMD on Windows:
-    ```bash
-    set JULIA_NUM_THREADS=4
-    ```
+
+    .. code-block:: bash
+
+        set JULIA_NUM_THREADS=4
+
     Powershell on Windows:
-    ```powershell
-    $env:JULIA_NUM_THREADS=4
-    ```
+
+    .. code-block:: powershell
+
+        $env:JULIA_NUM_THREADS=4
+
     Note that this must be done *before* starting Julia.
 ```
 

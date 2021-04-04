@@ -317,10 +317,13 @@ There are three important standard modules:
     Julia packages except that you don't need to install them explicitly. For example,
     if you wanted to perform some unit testing, you could load the `Test` standard library
     as follows:
-    ```julia
-    using Test
-    ```
+
+    .. code-block:: julia
+
+        using Test
+
 ```
+
 ## Submodules and relative paths
 
 Modules can contain *submodules*, nesting the same syntax `module ... end`. They can be used to introduce separate namespaces, which can be helpful for organizing complex codebases. Note that each `module` introduces its own [scope](@ref scope-of-variables), so submodules do not automatically “inherit” names from their parent.

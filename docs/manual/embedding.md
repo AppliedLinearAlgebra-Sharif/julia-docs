@@ -64,12 +64,13 @@ example program calls this before returning from `main`.
     Currently, dynamically linking with the `libjulia` shared library requires passing the `RTLD_GLOBAL`
     option. In Python, this looks like:
 
-    ```
-    >>> julia=CDLL('./libjulia.dylib',RTLD_GLOBAL)
-    >>> julia.jl_init.argtypes = []
-    >>> julia.jl_init()
-    250593296
-    ```
+    .. code-block:: julia
+
+        >>> julia=CDLL('./libjulia.dylib',RTLD_GLOBAL)
+        >>> julia.jl_init.argtypes = []
+        >>> julia.jl_init()
+        250593296
+
 ```
 
 ```eval_rst
