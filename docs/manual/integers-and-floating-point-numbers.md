@@ -531,7 +531,7 @@ most books on scientific computation, and also in the following references:
 
 برای انجام محاسبات با دقت دلخواه اعداد صحیح و اعشاری، جولیا به ترتیب از کتابخانه‌های [دقت محاسبات چندگانه GNU](https://gmplib.org) و [GNU MPFR](https://www.mpfr.org) استفاده می‌کند. در زبان برنامه نویسی جولیا تایپ‌های `BigInt` و `Big Float` به ترتیب برای دقت دلخواه اعداد صحیح و اعشاری در دسترس هستند.
 
-در زبان برنامه نویسی جولیا، سازندگانی برای ساخت این تایپ‌ها از تایپ‌های اعداد اولیه و راستین‌نماد رشته وجود دارند [(@ref non-standard-string-literals) ] و شما می‌توانید از `@big_str` یا  `parse` برای ساخت این تایپ‌ها از `AbstractString`ها استفاده کنید. همچنین `BigInt`ها زمانی که برای سایر تایپ‌های اعداد صحیح موجود خیلی بزرگ باشند، ممکن است به عنوان راستین‌نماد اعداد صحیح ورودی داده شوند. توجه داشته باشید که با توجه به اینکه هیچ تایپ عدد صحیح بدون علامت با دقت دلخواه در  `Base`  وجود ندارد (`BigInt` در اکثر موارد کافی است)، هگزادسیمال ، هشت و دودویی می توانند مورد استفاده قرار گیرند (علاوه بر راستین‌نماد‌های اعشاری).
+در زبان برنامه نویسی جولیا، سازندگانی برای ساخت این تایپ‌ها از تایپ‌های اعداد اولیه و لیترال رشته وجود دارند [(@ref non-standard-string-literals) ] و شما می‌توانید از `@big_str` یا  `parse` برای ساخت این تایپ‌ها از `AbstractString`ها استفاده کنید. همچنین `BigInt`ها زمانی که برای سایر تایپ‌های اعداد صحیح موجود خیلی بزرگ باشند، ممکن است به عنوان لیترال اعداد صحیح ورودی داده شوند. توجه داشته باشید که با توجه به اینکه هیچ تایپ عدد صحیح بدون علامت با دقت دلخواه در  `Base`  وجود ندارد (`BigInt` در اکثر موارد کافی است)، هگزادسیمال ، هشت و دودویی می توانند مورد استفاده قرار گیرند (علاوه بر لیترال‌های اعشاری).
 
 به لطف [مکانیسم ارتقاء و تبدیل زبان برنامه نویسی جولیا](@ref conversion-and-promotion) شما می‌توانید پس از ساخت این تایپ‌ها، آن‌ها را در محاسبات با دیگر تایپ‌های عددی جولیا به کار بگیرید:
 
@@ -615,11 +615,9 @@ julia> setprecision(40) do
 1.1000000000004
 ```
 
-## Numeric Literal Coefficients
+## ضرایب لیترال عددی
 
-To make common numeric formulae and expressions clearer, Julia allows variables to be immediately
-preceded by a numeric literal, implying multiplication. This makes writing polynomial expressions
-much cleaner:
+برای همگامی با فرمول‌های مرسوم و کدهای تمیز و سرراست‌تر، در زبان برنامه نویسی جولیا شما می‌توانید ضرایب لیترال متغیرها را مستقیما پیش از متغیرها به منظور عمل ضرب میان آن‌ها به کار بگیرید. با این کار بیان عبارات چند جمله‌ای‌ بسیار مرتب‌تر می‌شود:
 
 ```julia
 julia> x = 3
@@ -632,26 +630,24 @@ julia> 1.5x^2 - .5x + 1
 13.0
 ```
 
-It also makes writing exponential functions more elegant:
+
+این کار همچنین باعث ظرافت بیشتری در بیان توابع نمایی می‌شود:
 
 ```julia
 julia> 2^2x
 64
 ```
 
-The precedence of numeric literal coefficients is slightly lower than that of
-unary operators such as negation.
-So `-2x` is parsed as `(-2) * x` and `√2x` is parsed as `(√2) * x`.
-However, numeric literal coefficients parse similarly to unary operators when
-combined with exponentiation.
-For example `2^3x` is parsed as `2^(3x)`, and `2x^3` is parsed as `2*(x^3)`.
 
-Numeric literals also work as coefficients to parenthesized expressions:
+در بحث تقدم اعمال عملکردهای ریاضی، ضرایب لیترال عددی تقدم نسبتاً کمتری از عملگرهای یگانی (عملگرهایی که فقط روی یک عملوند عمل می‌کنند) همانند منفی کردن دارند. پس `2x-` به صورت `(-2) * x` و `2x√` به صورت `(2√) * x` اعمال می‌شود. با این حال، ضرایب لیترال عددی هنگامی که با یک بیان چند جمله‌ای ترکیب می‌شوند، شبیه به عملگرهای یگانی عمل می‌کنند. مثلاً `2x^3` به صورت `2*(x^3)` عمل می‌کند.
+
+لیترال‌های عددی همچنین به عنوان ضرایب عبارات داخل پرانتز نیز می‌توانند استفاده شوند:
 
 ```julia
 julia> 2(x-1)^2 - 3(x-1) + 1
 3
 ```
+
 
 ```eval_rst
 
@@ -662,16 +658,16 @@ julia> 2(x-1)^2 - 3(x-1) + 1
     `1 / 2im` equals `-0.5im` and `6 // 2(2 + 1)` equals `1 // 1`.
 ```
 
-Additionally, parenthesized expressions can be used as coefficients to variables, implying multiplication
-of the expression by the variable:
+
+علاوه بر این‌ها، پرانتزها نیز می‌توانند به عنوان ضریب متغیرها به منظور اعمال عمل ضرب میان آن‌ها استفاده شوند:
 
 ```julia
 julia> (x-1)x
 6
 ```
 
-Neither juxtaposition of two parenthesized expressions, nor placing a variable before a parenthesized
-expression, however, can be used to imply multiplication:
+
+شما نمی‌توانید دو پرانتز را به منظور اعمال عمل ضرب در کنار یکدیگر بگذارید و همچنین نمی‌توانید یک متغیر را به منظور اعمال عمل ضرب قبل از یک پرانتز بگذارید:
 
 ```julia
 julia> (x-1)(x+1)
@@ -681,54 +677,39 @@ julia> x(x+1)
 ERROR: MethodError: objects of type Int64 are not callable
 ```
 
-Both expressions are interpreted as function application: any expression that is not a numeric
-literal, when immediately followed by a parenthetical, is interpreted as a function applied to
-the values in parentheses (see Functions for more about functions). Thus, in both of these
-cases, an error occurs since the left-hand value is not a function.
 
-The above syntactic enhancements significantly reduce the visual noise incurred when writing common
-mathematical formulae. Note that no whitespace may come between a numeric literal coefficient
-and the identifier or parenthesized expression which it multiplies.
+هر دو عبارت به عنوان کاربرد تابع تفسیر می‌شوند: هر عبارتی که یک لیترال عددی نباشد، زمانی که بلافاصله به دنبال آن یک عبارت پرانتزی بیاید، به عنوان یک تابع اعمال شده روی مقادیر درون پرانتز تفسیر می‌شود (برای اطلاع بیشتر در مورد توابع، بخش توابع را ببینید). بنابراین در هر دو مورد بالا، خطا رخ می‌دهد زیرا که مقدار سمت چپ یک تابع نیست.
 
-### Syntax Conflicts
+عبارات نحوی(سینتکس‌ها) بالا باعث می‌شود تا نامنظمی‌های بصری در نوشتن فرمول‌های ریاضی به صورت رایج، بسیار کاهش پیدا کنند. توجه داشته باشید که برای اعمال عمل ضرب، نباید میان یک ضریب لیترال عددی و متغیر یا پرانتزش، فاصله وجود داشته باشد.
 
-Juxtaposed literal coefficient syntax may conflict with some numeric literal syntaxes: hexadecimal,
-octal and binary integer literals and engineering notation for floating-point literals. Here are some situations
-where syntactic conflicts arise:
+### تضادهای نحوی(سینتکس)
 
-  * The hexadecimal integer literal expression `0xff` could be interpreted as the numeric literal
-    `0` multiplied by the variable `xff`. Similar ambiguities arise with octal and binary literals like
-    `0o777` or `0b01001010`.
-  * The floating-point literal expression `1e10` could be interpreted as the numeric literal `1` multiplied
-    by the variable `e10`, and similarly with the equivalent `E` form.
-  * The 32-bit floating-point literal expression `1.5f22` could be interpreted as the numeric literal
-    `1.5` multiplied by the variable `f22`.
+قرار دادن نحو(سینتکس) ضریب‌های لیترال در کنار هم ممکن است با برخی از نحوهای مختلف لیترال‌های عددی تداخل کند: لیترال‌های صحیح هگزادسیمال و نحوه نوشتن مهندسی(علمی) برای لیترال‌های اعشاری. برخی از شرایطی که موجب وقوع تداخل‌های نحوی می‌شوند، به این صورت هستند: 
 
-In all cases the ambiguity is resolved in favor of interpretation as numeric literals:
++ عبارت لیترال صحیح هگزادسیمال `0xff` ممکن است به صورت ضرب  لیترال عددی `0` در متغیر `xff` تفسیر شود. تداخل‌های مشابهی از لیترال‌های  اوکتال یا دودویی مانند `0o777` یا `0b01001010` بوجود می‌آیند.
++ عبارت لیترال اعشاری `1e10` ممکن است به صورت ضرب لیترال عددی `1` در متغیر `e10` تفسیر شود و با فرم متناظر `E` نیز همچنین.
++ عبارت لیترال اعشاری 32بیتی `1.5f22` ممکن است به صورت ضرب لیترال عددی `1.5` در متغیر `f22` تفسیر شود.
 
-  * Expressions starting with `0x`/`0o`/`0b` are always hexadecimal/octal/binary literals.
-  * Expressions starting with a numeric literal followed by `e` or `E` are always floating-point literals.
-  * Expressions starting with a numeric literal followed by `f` are always 32-bit floating-point literals.
+در همه این گونه موارد، عبارات به صورت لیترال‌های عددی تفسیر می‌شوند:
 
-Unlike `E`, which is equivalent to `e` in numeric literals for historical reasons, `F` is just another
-letter and does not behave like `f` in numeric literals. Hence, expressions starting with a numeric literal
-followed by `F` are interpreted as the numerical literal multiplied by a variable, which means that, for
-example, `1.5F22` is equal to `1.5 * F22`.
++ عباراتی که با `0x`/`0o`/`0b` شروع می‌شوند، همیشه لیترال‌های هگزادسیمال، اوکتال و دودویی هستند.
++ عباراتی که با لیترال‌های عددی شروع شده و بعد از آن‌ها `e` یا `E` است، همیشه لیترال‌های اعشاری هستند.
++ عباراتی که با لیترال‌های عددی شروع شده و همراهشان `f` است، همیشه لیترال‌های اعشاری 32بیتی هستند.
 
-## Literal zero and one
+برخلاف `E` که به خاطر دلایل تاریخی متناظر با `e`  در نظر گرفته می‌شود، `F` فقط یکی دیگر از حروف است و مانند `f` در لیترال‌های عددی عمل نمی‌کند. از این رو، عباراتی که با لیترال عددی شروع بشوند و به دنبالش `F` بیاید، به صورت ضرب یک لیترال عددی در یک متغیر تفسیر می‌شود. برای مثال، `1.5F22` که برابر است با `1.5 * F22`.
 
-Julia provides functions which return literal 0 and 1 corresponding to a specified type or the
-type of a given variable.
+## لیترال صفر و یک
 
-| Function          | Description                                      |
+در زبان برنامه نویسی جولیا توابعی مهیا شده است که لیترال صفر و یک را با توجه به یک تایپ مشخص شده یا تایپ یک متغیر داده شده، باز می‌گردانند.
+
+| تابع          | توضیحات                                      |
 |:----------------- |:------------------------------------------------ |
-| `zero(x)` | Literal zero of type `x` or type of variable `x` |
-| `one(x)`  | Literal one of type `x` or type of variable `x`  |
+| `zero(x)` | گرفتن لیترال صفر از تایپ `x` یا تایپ متغیر `x`|
+| `one(x)` | گرفتن لیترال یک از تایپ `x` یا تایپ متغیر `x`|
 
-These functions are useful in Numeric Comparisons to avoid overhead from unnecessary
-[type conversion](@ref conversion-and-promotion).
+این توابع در مقایسه‌های عددی برای جلوگیری از اورهد غیرضروری در [تبدیل تایپ](@ref conversion-and-promotion) به کار می‌آیند.
 
-Examples:
+مثال‌ها:
 
 ```julia
 julia> zero(Float32)
@@ -743,3 +724,4 @@ julia> one(Int32)
 julia> one(BigFloat)
 1.0
 ```
+
