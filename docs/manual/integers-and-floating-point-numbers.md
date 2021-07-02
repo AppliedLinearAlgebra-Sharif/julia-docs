@@ -527,25 +527,14 @@ most books on scientific computation, and also in the following references:
     of [William Kahan](https://en.wikipedia.org/wiki/William_Kahan), commonly known as the "Father
     of Floating-Point". Of particular interest may be [An Interview with the Old Man of Floating-Point](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html).
 
-## Arbitrary Precision Arithmetic
+## دقت دلخواه محاسبات
 
-To allow computations with arbitrary-precision integers and floating point numbers, Julia wraps
-the [GNU Multiple Precision Arithmetic Library (GMP)](https://gmplib.org) and the [GNU MPFR Library](https://www.mpfr.org),
-respectively. The `BigInt` and `BigFloat` types are available in Julia for arbitrary
-precision integer and floating point numbers respectively.
+برای انجام محاسبات با دقت دلخواه اعداد صحیح و اعشاری، جولیا به ترتیب از کتابخانه‌های [دقت محاسبات چندگانه GNU](https://gmplib.org) و [GNU MPFR](https://www.mpfr.org) استفاده می‌کند. در زبان برنامه نویسی جولیا تایپ‌های `BigInt` و `Big Float` به ترتیب برای دقت دلخواه اعداد صحیح و اعشاری در دسترس هستند.
 
-Constructors exist to create these types from primitive numerical types, and the
-string literal](@ref non-standard-string-literals) [`@big_str` or `parse`
-can be used to construct them from `AbstractString`s.
-`BigInt`s can also be input as integer literals when
-they are too big for other built-in integer types. Note that as there
-is no unsigned arbitrary-precision integer type in `Base` (`BigInt` is
-sufficient in most cases), hexadecimal, octal and binary literals can
-be used (in addition to decimal literals).
+در زبان برنامه نویسی جولیا، سازندگانی برای ساخت این تایپ‌ها از تایپ‌های اعداد اولیه و راستین‌نماد رشته وجود دارند [(@ref non-standard-string-literals) ] و شما می‌توانید از `@big_str` یا  `parse` برای ساخت این تایپ‌ها از `AbstractString`ها استفاده کنید. همچنین `BigInt`ها زمانی که برای سایر تایپ‌های اعداد صحیح موجود خیلی بزرگ باشند، ممکن است به عنوان راستین‌نماد اعداد صحیح ورودی داده شوند. توجه داشته باشید که با توجه به اینکه هیچ تایپ عدد صحیح بدون علامت با دقت دلخواه در  `Base`  وجود ندارد (`BigInt` در اکثر موارد کافی است)، هگزادسیمال ، هشت و دودویی می توانند مورد استفاده قرار گیرند (علاوه بر راستین‌نماد‌های اعشاری).
 
-Once created, they participate in arithmetic
-with all other numeric types thanks to Julia's
-[type promotion and conversion mechanism](@ref conversion-and-promotion):
+به لطف [مکانیسم ارتقاء و تبدیل زبان برنامه نویسی جولیا](@ref conversion-and-promotion) شما می‌توانید پس از ساخت این تایپ‌ها، آن‌ها را در محاسبات با دیگر تایپ‌های عددی جولیا به کار بگیرید:
+
 
 ```julia
 julia> BigInt(typemax(Int64)) + 1
@@ -582,8 +571,9 @@ julia> factorial(BigInt(40))
 815915283247897734345611269596115894272000000000
 ```
 
-However, type promotion between the primitive types above and `BigInt`/`BigFloat`
-is not automatic and must be explicitly stated.
+
+توجه داشته باشید که قابلیت ارتقاء تایپ‌ها بین تایپ‌های اولیه بالا و تایپ‌های `BigInt`/`BigFloat` به صورت خود به خود نیست و باید به طور صریح مشخص شوند: 
+
 
 ```julia
 julia> x = typemin(Int64)
@@ -605,11 +595,8 @@ julia> typeof(y)
 BigInt
 ```
 
-The default precision (in number of bits of the significand) and rounding mode of `BigFloat`
-operations can be changed globally by calling `setprecision` and `setrounding`,
-and all further calculations will take these changes in account.  Alternatively, the precision
-or the rounding can be changed only within the execution of a particular block of code by using
-the same functions with a `do` block:
+
+شما می‌توانید دقت (در تعداد بیت‌های مانتیس) و حالت گرد کردن پیش‌فرض را برای عملیات‌های `BigFloat` به صورت کلی (در سر تا سر برنامه) به کمک صدا زدن `setprecision` و `setrounding` تغییر داده و محاسبات بعدی خود را به وسیله تغییرات ایجاد شده انجام دهید. از طرف دیگر، شما می‌توانید دقت یا گرد کردن را فقط برای یک بلاک خاص از کدتان، تغییر دهید و برای این کار کافی است تا همین توابع را به همراه بلاک `do` مورد استفاده قرار دهید:
 
 ```julia
 julia> setrounding(BigFloat, RoundUp) do
