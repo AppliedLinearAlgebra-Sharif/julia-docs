@@ -1,34 +1,29 @@
-# Mathematical Operations and Elementary Functions
+# عملیات ریاضی و توابع اولیه
 
-Julia provides a complete collection of basic arithmetic and bitwise operators across all of its
-numeric primitive types, as well as providing portable, efficient implementations of a comprehensive
-collection of standard mathematical functions.
+زبان برنامه نویسی جولیا یک مجموعه کامل از عملگرهای محاسباتی و بیتی اولیه برای کار بر روی انواع تایپ‌های عددی اولیه را فراهم نموده است. همچنین پیاده‌سازی‌های بهینه از یک مجموعه همه جانبه از توابع استاندارد ریاضی ارائه می‌دهد.
 
-## Arithmetic Operators
+## عملگرهای محاسباتی
 
-The following [arithmetic operators](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations)
-are supported on all primitive numeric types:
+[عملگرهای محاسباتی](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations) زیر برای تمامی تایپ‌های عددی اولیه پشتیبانی می‌شوند:
 
-| Expression | Name           | Description                            |
+| نماد | نام           | توضیحات                            |
 |:---------- |:-------------- |:-------------------------------------- |
-| `+x`       | unary plus     | the identity operation                 |
-| `-x`       | unary minus    | maps values to their additive inverses |
-| `x + y`    | binary plus    | performs addition                      |
-| `x - y`    | binary minus   | performs subtraction                   |
-| `x * y`    | times          | performs multiplication                |
-| `x / y`    | divide         | performs division                      |
-| `x ÷ y`    | integer divide | x / y, truncated to an integer         |
-| `x \ y`    | inverse divide | equivalent to `y / x`                  |
-| `x ^ y`    | power          | raises `x` to the `y`th power          |
-| `x % y`    | remainder      | equivalent to `rem(x,y)`               |
+| `+x`       | جمع یگانی     |  عمل همانی                |
+| `-x`       | تفریق یگانی    | مقادیر را به وارون جمعی‌شان تبدیل می‌کند |
+| `x + y`    | جمع باینری     | عمل جمع                      |
+| `x - y`    | تفریق باینری   | عمل تفریق                   |
+| `x * y`    | ضرب          | عمل ضرب                |
+| `x / y`    | تقسیم         | عمل تقسیم                      |
+| `x ÷ y`    | تقسیم صحیح | قسمت صحیح `x / y` را بر می‌گرداند         |
+| `x \ y`    | تقسیم بالعکس | معادل با `x / y` است                  |
+| `x ^ y`    | توان          | `x` را به توان `y` می‌رساند   |
+| `x % y`    | باقیمانده      | معادل با `rem(x,y)` است      |
 
-A numeric literal placed directly before an identifier or parentheses, e.g. `2x` or `2(x+y)`, is treated as a multiplication, except with higher precedence than other binary operations.  See [Numeric Literal Coefficients](@ref man-numeric-literal-coefficients) for details.
+یک لیترال عددی که دقیقا قبل از یک متغیر یا پرانتز قرار گرفته است، برای مثال `2x`  یا  `2(x+y)`، به صوورت عمل ضرب در نظر گرفته می‌شود، که اولویت بالاتری از سایر عملیات باینری دارد. 
 
-Julia's promotion system makes arithmetic operations on mixtures of argument types "just work"
-naturally and automatically. See [Conversion and Promotion](@ref conversion-and-promotion) for details of the promotion
-system.
+سیستم ارتقای جولیا به صورت طبیعی و خود به خودی(اتوماتیک) عملگرهای محاسباتی را برای مخلوطی از انواع تایپ‌ها مدیریت کرده و درست کار می‌کنند. برای اطلاع بیشتر در مورد سیستم ارتقاء، بخش [تبدیل و ارتقاء](@ref conversion-and-promotion) را ببیند.
 
-Here are some simple examples using arithmetic operators:
+یک سری مثال ساده را در زیر مشاهده می‌کنید:
 
 ```julia
 julia> 1 + 2 + 3
@@ -41,11 +36,10 @@ julia> 3*2/12
 0.5
 ```
 
-(By convention, we tend to space operators more tightly if they get applied before other nearby
-operators. For instance, we would generally write `-x + 2` to reflect that first `x` gets negated,
-and then `2` is added to that result.)
 
-When used in multiplication, `false` acts as a *strong zero*:
+(طبق قرار داد، برای استحکام بیشتر در بیان عملگرها، ما آن‌ها را در نزدیکترین حالت به عملوندشان، قبل از عملوند قرار می‌دهیم. برای مثال، ما معمولاً باید بنویسیم `x+2-`تا ابتدا مقدار `x` را منفی کرده سپس `2` را به آن اضافه کنیم.)
+
+در عمل ضرب، `false` به صورت یک *صفر قوی* عمل می‌کند.
 
 ```julia
 julia> NaN * false
@@ -55,7 +49,8 @@ julia> false * Inf
 0.0
 ```
 
-This is useful for preventing the propagation of `NaN` values in quantities that are known to be zero. See [Knuth (1992)](https://arxiv.org/abs/math/9205211) for motivation.
+
+این کار برای پیشگیری از انتشار مقادیر  `NaN` در کمیت‌هایی که می‌دانیم برابر صفر هستند، استفاده می‌شود. برای اطلاعات بیشتر [Knuth (1992)](https://arxiv.org/abs/math/9205211) را ببینید.
 
 ## Boolean Operators
 
