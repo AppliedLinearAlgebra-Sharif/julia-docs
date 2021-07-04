@@ -49,39 +49,39 @@ julia> false * Inf
 0.0
 ```
 
-
 این کار برای پیشگیری از انتشار مقادیر  `NaN` در کمیت‌هایی که می‌دانیم برابر صفر هستند، استفاده می‌شود. برای اطلاعات بیشتر [Knuth (1992)](https://arxiv.org/abs/math/9205211) را ببینید.
 
-## Boolean Operators
 
-The following Boolean operators](https://en.wikipedia.org/wiki/Boolean_algebra#Operations) are supported on [`Bool` types:
+## عملگرهای بولی
 
-| Expression | Name                                                    |
+[عملگر‌های بولی](https://en.wikipedia.org/wiki/Boolean_algebra#Operations) زیر روی تایپ `Bool`  اعمال می شوند:
+
+| نماد | توضیحات                                                    |
 |:---------- |:--------------------------------------------------------|
-| `!x`       | negation                                                |
-| `x && y`   | [short-circuiting and](@ref man-conditional-evaluation) |
-| `x \|\| y` | [short-circuiting or](@ref man-conditional-evaluation)  |
+|     `!x`  |            منفی کردن                                  |
+| `x && y`   | [اند مدار کوتاه](@ref man-conditional-evaluation) |
+| `x \|\| y` | [اور مدار کوتاه](@ref man-conditional-evaluation)  |
 
-Negation changes `true` to `false` and vice versa. The short-circuiting opeations are explained on the linked page.
+عمل منفی کردن `true` را به `false` تبدیل می‌کند و برعکس. عملیات‌های مدار کوتاه در صفحه‌ی لینک‌شده توضیح داده شده‌اند.
 
-Note that `Bool` is an integer type and all the usual promotion rules and numeric operators are also defined on it.
+توجه کنید که  `Bool` یک تایپ عدد صحیح است و همه‌ روابط ارتقا و عملگر‌های عددی روی آن تعریف می‌شوند.
 
-## Bitwise Operators
 
-The following [bitwise operators](https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators)
-are supported on all primitive integer types:
+## عملگر‌های بیتی
 
-| Expression | Name                                                                     |
+[عملگرهای محاسباتی](https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators) زیر برای تمامی تایپ‌های صحیح اولیه پشتیبانی می‌شوند:
+
+| توضیحات | نماد                                                                     |
 |:---------- |:------------------------------------------------------------------------ |
-| `~x`       | bitwise not                                                              |
-| `x & y`    | bitwise and                                                              |
-| `x \| y`   | bitwise or                                                               |
-| `x ⊻ y`    | bitwise xor (exclusive or)                                               |
-| `x >>> y`  | [logical shift](https://en.wikipedia.org/wiki/Logical_shift) right       |
-| `x >> y`   | [arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift) right |
-| `x << y`   | logical/arithmetic shift left                                            |
+| `~x`       | عمل not به صورت بیت به بیت                                                              |
+| `x & y`    | عمل and به صورت بیتی                                                              |
+| `x \| y`   | عمل اور به صورت بیتی                                                               |
+| `x ⊻ y`    | عمل xor بیتی                                               |
+| `x >>> y`  | [شیفت منطقی](https://en.wikipedia.org/wiki/Logical_shift) به سمت راست       |
+| `x >> y`   | [شیفت محاسباتی](https://en.wikipedia.org/wiki/Arithmetic_shift) به سمت راست |
+| `x << y`   | شیفت منطقی/محاسباتی به  چپ                                      |
 
-Here are some examples with bitwise operators:
+مثال‌هایی از عملگرهای بیتی در جولیا:
 
 ```julia
 julia> ~123
@@ -106,12 +106,10 @@ julia> ~UInt8(123)
 0x84
 ```
 
-## Updating operators
 
-Every binary arithmetic and bitwise operator also has an updating version that assigns the result
-of the operation back into its left operand. The updating version of the binary operator is formed
-by placing a `=` immediately after the operator. For example, writing `x += 3` is equivalent to
-writing `x = x + 3`:
+## عملگرهای بروزرسان
+
+تمام عملگرهای باینری محاسباتی و بیتی یک حالت بروز رسانی دارند که نتایج عملیات را در عملوند سمت چپ خود می‌ریزند. حالت بروز رسانی عملگرهای باینری بوسیله استفاده بدون واسطه `=` پس از عملگر، به کار گرفته می‌شود. برای نمونه، نوشتن `x+=3` معادل است با نوشتن `x=x+3`:
 
 ```julia
 julia> x = 1
@@ -124,7 +122,8 @@ julia> x
 4
 ```
 
-The updating versions of all the binary arithmetic and bitwise operators are:
+
+حالت بروزرسانی تمام عملگرهای محاسباتی و بیتی به صورت زیر اند:
 
 ```
 +=  -=  *=  /=  \=  ÷=  %=  ^=  &=  |=  ⊻=  >>>=  >>=  <<=
