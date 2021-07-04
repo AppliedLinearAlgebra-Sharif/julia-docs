@@ -59,10 +59,10 @@ julia> false * Inf
 | نماد | توضیحات                                                    |
 |:---------- |:--------------------------------------------------------|
 |     `!x`  |            منفی کردن                                  |
-| `x && y`   | [اند مدار کوتاه](@ref man-conditional-evaluation) |
-| `x \|\| y` | [اور مدار کوتاه](@ref man-conditional-evaluation)  |
+| `x && y`   | [اند اتصال کوتاه](@ref man-conditional-evaluation) |
+| `x \|\| y` | [اور اتصال کوتاه](@ref man-conditional-evaluation)  |
 
-عمل منفی کردن `true` را به `false` تبدیل می‌کند و برعکس. عملیات‌های مدار کوتاه در صفحه‌ی لینک‌شده توضیح داده شده‌اند.
+عمل منفی کردن `true` را به `false` تبدیل می‌کند و برعکس. عملیات‌های اتصال کوتاه در صفحه‌ی لینک‌شده توضیح داده شده‌اند.
 
 توجه کنید که  `Bool` یک تایپ عدد صحیح است و همه‌ روابط ارتقا و عملگر‌های عددی روی آن تعریف می‌شوند.
 
@@ -149,17 +149,9 @@ julia> x
 
 ```
 
-## Vectorized "dot" operators
+## عملگرهای نقطه‌ای برداری
 
-For *every* binary operation like `^`, there is a corresponding
-"dot" operation `.^` that is *automatically* defined
-to perform `^` element-by-element on arrays. For example,
-`[1,2,3] ^ 3` is not defined, since there is no standard
-mathematical meaning to "cubing" a (non-square) array, but
-`[1,2,3] .^ 3` is defined as computing the elementwise
-(or "vectorized") result `[1^3, 2^3, 3^3]`.  Similarly for unary
-operators like `!` or `√`, there is a corresponding `.√` that
-applies the operator elementwise.
+برای تمامی عملیات‌های باینری مانند `^`، یک عملیات متناظر نقطه‌ای `^.` وجود دارد که به صورت خود به خودی(اتوماتیک) عمل `^` را بر روی تک تک المان‌های یک آرایه اعمال می‌کند. برای مثال، بیان `3^[1,2,3]` تعریف نشده است زیرا مکعب یک ارایه‌ (ارایه غیر مربعی) تعریف استاندارد ریاضیاتی ندارد. اما `3^.[1,2,3]` به صورت محاسبه‌ی المانی(یا برداری) `[3^3, 3^2, 3^1]` تعریف شده است. به طور مشابه برای عملگرهای یگانی مانند `!` یا `√` نیز  `√.` وجود دارد که عملیات را به صورت المانی اجرا می‌کند.
 
 ```julia
 julia> [1,2,3] .^ 3
@@ -169,47 +161,30 @@ julia> [1,2,3] .^ 3
  27
 ```
 
-More specifically, `a .^ b` is parsed as the ["dot" call](@ref man-vectorized)
-`(^).(a,b)`, which performs a [broadcast](@ref Broadcasting) operation:
-it can combine arrays and scalars, arrays of the same size (performing
-the operation elementwise), and even arrays of different shapes (e.g.
-combining row and column vectors to produce a matrix). Moreover, like
-all vectorized "dot calls," these "dot operators" are
-*fusing*. For example, if you compute `2 .* A.^2 .+ sin.(A)` (or
-equivalently `@. 2A^2 + sin(A)`, using the [`@.`](@ref @__dot__) macro) for
-an array `A`, it performs a *single* loop over `A`, computing `2a^2 + sin(a)`
-for each element of `A`. In particular, nested dot calls like `f.(g.(x))`
-are fused, and "adjacent" binary operators like `x .+ 3 .* x.^2` are
-equivalent to nested dot calls `(+).(x, (*).(3, (^).(x, 2)))`.
 
-Furthermore, "dotted" updating operators like `a .+= b` (or `@. a += b`) are parsed
-as `a .= a .+ b`, where `.=` is a fused *in-place* assignment operation
-(see the [dot syntax documentation](@ref man-vectorized)).
+به طور دقیق‌تر، `a.^b`(این بیان یعنی تک تک المان‌های آرایه `a` به توان المان متناظر آن در آرایه `b` برسد. یعنی المان اول `a` به توان المان اول `b` و المان دوم `a` به توان المان دوم `b` و…) به صورت [فراخوانی نقطه‌ای](@ref man-vectorized)
+ `(a,b).(^)` شناخته می‌شود که یک عملیات [گسترش](@ref Broadcasting) را اجرا می‌کند: این عملیات می‌تواند آرایه‌ها و اسکالرها، آرایه‌های هم اندازه (انجام عملیات به صورت المانی) و  حتی میان آرایه‌هایی با اشکال مختلف(مثلاً ترکیب بردار‌های ستونی و ردیفی برای ساخت ماتریس). علاوه بر این، مانند تمام فراخوانی‌های نقطه‌ای برداری(المانی)، این عملگرهای نقطه‌ای نیز همپوش هستند. برای مثال، اگر شما `2 .* A.^2 .+ sin.(A)` (که معادل با `@. 2A^2 + sin(A)` است و ماکروی [`.@`](@ref @__dot__) macro) در آن استفاده شده است) را برای آرایه‌ای مانند `A` محاسبه کنید، یک تک حلقه روی `A` اجرا می‌شود که `2a^2 + sin(a)` را برای هر المان از `A` محاسبه می‌کند. به طور خاص، فراخوانی نقطه‌ای تودرتو مانند `f.(g.(x))` همپوشانی شده‌ است و این یعنی عملگرهای باینری مجاور مانند `x.+ 3.*x.^2` با فراخوانی نقطه تودرتوی `(+).(x, (*).(3, (^).(x, 2)))` معادل هستند.
 
-Note the dot syntax is also applicable to user-defined operators.
-For example, if you define `⊗(A,B) = kron(A,B)` to give a convenient
-infix syntax `A ⊗ B` for Kronecker products (`kron`), then
-`[A,B] .⊗ [C,D]` will compute `[A⊗C, B⊗D]` with no additional coding.
+علاوه بر این‌ موارد، عملگرهای بروز‌رسان نقطه‌ای مانند `a.+=b` (یا `a+=b.@`) به صورت `a.=a.+b` اجرا می‌شود، که در آن `=.` یک عملیات تخصیص در محل همپوشانی شده است (نوشته [نحو نقطه‌ای]((@ref man-vectorized)) را ببینید).
 
-Combining dot operators with numeric literals can be ambiguous.
-For example, it is not clear whether `1.+x` means `1. + x` or `1 .+ x`.
-Therefore this syntax is disallowed, and spaces must be used around
-the operator in such cases.
+دقت کنید که نحو(سینتکس) نقطه‌ای برای عملگرهای تعریف شده توسط کاربر نیز قابل استفاده است. برای مثال اگر شما `⊗(A,B) = kron(A,B)` را به منظور عمل  `A ⊗ B` برای داشتن یک سینتکس راحت برای ضرب کرونر تعریف کنید، پس از آن بدون هیچ کد اضافه‌ای شما می‌توانید `[C,D]⊗.[A,B]` را برای محاسبه `[A⊗C,B⊗D]` بیان کنید. 
 
-## Numeric Comparisons
+ترکیب عملگرهای نقطه‌ای با لیترال‌های عددی می‌تواند ابهام آور باشد. به طور مثال، معلوم نیست که منظور از عبارت `1.+x` به صورت `1. + x` است یا `1 .+ x`. در نتیجه این نوع نحوه بیان مجاز نیست و حتماً باید بوسیله فضای خالی میان عملگر نقطه و عملوندهایش در چنین مواردی فاصله ایجاد کنید.
 
-Standard comparison operations are defined for all the primitive numeric types:
+## مقایسات عددی
 
-| Operator                     | Name                     |
+عملگرهای مقایسه‌ای استاندارد برای تمام تایپ‌های عددی اولیه تعریف شده‌اند:
+
+| عملگر                     | تووضیحات                     |
 |:---------------------------- |:------------------------ |
-| `==`                 | equality                 |
-| `!=`, [`≠`](@ref !=) | inequality               |
-| `<`                  | less than                |
-| `<=`, [`≤`](@ref <=) | less than or equal to    |
-| `>`                  | greater than             |
-| `>=`, [`≥`](@ref >=) | greater than or equal to |
+| `==`                 | برابری                 |
+| `!=`, [`≠`](@ref !=) | نابرابری               |
+| `<`                  | کوچکتر                 |
+| `<=`, [`≤`](@ref <=) | کوچتر یا مساوی    |
+| `>`                  | بزرگتر              |
+| `>=`, [`≥`](@ref >=) | بزرگتر یا مساوی |
 
-Here are some simple examples:
+در اینجا چند مثال ساده را مشاهده می‌کنید:
 
 ```julia
 julia> 1 == 1
@@ -246,16 +221,16 @@ julia> 3 < -0.5
 false
 ```
 
-Integers are compared in the standard manner -- by comparison of bits. Floating-point numbers
-are compared according to the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008):
 
-  * Finite numbers are ordered in the usual manner.
-  * Positive zero is equal but not greater than negative zero.
-  * `Inf` is equal to itself and greater than everything else except `NaN`.
-  * `-Inf` is equal to itself and less than everything else except `NaN`.
-  * `NaN` is not equal to, not less than, and not greater than anything, including itself.
+اعداد صحیح به صورت استاندارد با مقایسه‌ی بیت‌ها مورد سنجش قرار داده می‌شوند. اعداد اعشاری نیز با توجه به [استاندارد IEEE 754](https://en.wikipedia.org/wiki/IEEE_754-2008) مقایسه می شوند:
 
-The last point is potentially surprising and thus worth noting:
++ ترتیب اعداد محدود، به صورت معمولی است.
++ صفر مثبت برابر است با صفر منفی اما از آن بزرگتر نیست.
++ `Inf` با خودش برابر و از هر چیز دیگری بجز  `NaN` بزرگتر است.
++ `Inf` با خودش برابر و از هر چیز دیگری بجز `NaN` کوچکتر است.
++ `NaN` نه با چیزی برابر، نه از چیزی بزرگتر و نه کوچکتر است. این گزاره شامل خودش هم می‌شود.
+
+نکته آخر بسیار شگفت انگیز است و ارزش دقت دارد:
 
 ```julia
 julia> NaN == NaN
@@ -271,24 +246,25 @@ julia> NaN > NaN
 false
 ```
 
-and can cause headaches when working with [arrays](@ref man-multi-dim-arrays):
+
+این نکته در کار با [آرایه‌ها](@ref man-multi-dim-arrays) می‌تواند موجب کمی سردرد شود:
 
 ```julia
 julia> [1 NaN] == [1 NaN]
 false
 ```
 
-Julia provides additional functions to test numbers for special values, which can be useful in
-situations like hash key comparisons:
 
-| Function                | Tests if                  |
+جولیا توابعی اضافی برای آزمون اعداد در مقادیر خاص فراهم کرده است که می‌تواند در موقعیت‌هایی مانند مقایسه‌‌های کلید هش استفاده شود:
+
+| تابع                | تست می‌کند که                  |
 |:----------------------- |:------------------------- |
-| `isequal(x, y)` | `x` and `y` are identical |
-| `isfinite(x)`   | `x` is a finite number    |
-| `isinf(x)`      | `x` is infinite           |
-| `isnan(x)`      | `x` is not a number       |
+| `isequal(x, y)` | آیا `x` و `x` یکسان هستند؟ |
+| `isfinite(x)`   | آیا `x` یک عدد متناهی است؟    |
+| `isinf(x)`      | آیا `x` بی‌نهایت است؟           |
+| `isnan(x)`      | آیا `x` یک عدد نیست؟       |
 
-`isequal` considers `NaN`s equal to each other:
+`isequal` متغیر `NaN` را برابر با خودش در نظر می‌گیرد:
 
 ```julia
 julia> isequal(NaN, NaN)
@@ -301,7 +277,8 @@ julia> isequal(NaN, NaN32)
 true
 ```
 
-`isequal` can also be used to distinguish signed zeros:
+
+`isequal` همچنین می‌تواند برای تمییز دادن صفرهای علامت‌دار استفاده شود:
 
 ```julia
 julia> -0.0 == 0.0
@@ -311,30 +288,24 @@ julia> isequal(-0.0, 0.0)
 false
 ```
 
-Mixed-type comparisons between signed integers, unsigned integers, and floats can be tricky. A
-great deal of care has been taken to ensure that Julia does them correctly.
 
-For other types, `isequal` defaults to calling `==`, so if you want to define
-equality for your own types then you only need to add a `==` method.  If you define
-your own equality function, you should probably define a corresponding `hash` method
-to ensure that `isequal(x,y)` implies `hash(x) == hash(y)`.
+مقایسات ترکیبی میان اعداد صحیح علامت‌دار، اعداد صحیح بدون علامت و اعداد اعشاری می‌تواند گول زننده باشد. مراقبت‌های زیادی انجام شده است تا اطمینان حاصل شود که جولیا آن‌ها را به درستی انجام می‌دهد.
 
-### Chaining comparisons
+برای بقیه تایپ‌ها، `isequal` به صورت پیشفرض `==` را صدا می‌زند؛ بنابراین اگر شما می‌خواهید برابری برای تایپ‌های خود را بسنجید، کافیست از متد `==` استفاده کنید. اگر شما می‌خواهید تابع سنجش برابری خودتان را تعریف کنید، بهتر است یک تابع `hash` متناظر تعریف کنید تا اطمینان شود که `(isequal(x,y` برابری `(hash(x)==hash(y` را می‌رساند.
 
-Unlike most languages, with the [notable exception of Python](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators),
-comparisons can be arbitrarily chained:
+### مقایسه‌های زنجیره‌ای
+
+بر خلاف بسیاری از زبان ها [به استثنای پایتون](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators)، مقایسه‌ها می‌توانند به طور دلخواه به صورت زنجیره‌ای استفاده شوند:
 
 ```julia
 julia> 1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
 true
 ```
 
-Chaining comparisons is often quite convenient in numerical code. Chained comparisons use the
-`&&` operator for scalar comparisons, and the `&` operator for elementwise comparisons,
-which allows them to work on arrays. For example, `0 .< A .< 1` gives a boolean array whose entries
-are true where the corresponding elements of `A` are between 0 and 1.
 
-Note the evaluation behavior of chained comparisons:
+استفاده از مقایسه‌های زنجیره‌ای در کدهای عددی، اغلب باعث راحتی بسیاری می‌شود. این مقایسه‌ها از عملگر `&&` برای سنجش‌های اسکالر و از عملگر `&` برای سنجش‌های المانی استفاده می‌کنند که این کار اجازه می‌دهد تا بر روی آرایه‌ها نیز عمل کنند. برای مثال عبارت  `0 .< A .< 1` یک ارایه بولی نتیجه می‌دهد که درایه‌هایی که true هستند، نشان می‌دهند که درایه‌‌های متناظر آن در `A` بین صفر و یک هستند.
+
+به نحوه‌ی رفتار ارزیابی در مقایسه‌های زنجیره‌ای توجه داشته باشید:
 
 ```julia
 julia> v(x) = (println(x); x)
@@ -352,11 +323,8 @@ julia> v(1) > v(2) <= v(3)
 false
 ```
 
-The middle expression is only evaluated once, rather than twice as it would be if the expression
-were written as `v(1) < v(2) && v(2) <= v(3)`. However, the order of evaluations in a chained
-comparison is undefined. It is strongly recommended not to use expressions with side effects (such
-as printing) in chained comparisons. If side effects are required, the short-circuit `&&` operator
-should be used explicitly (see Short-Circuit Evaluation).
+
+عبارتی که در وسط آمده است فقط یک بار ارزیابی می‌شود، که اگر عبارت به صورت  `v(1) < v(2) && v(2) <= v(3)` نوشته شده‌بود، دوبار ارزیابی می‌شد. با این حال، ترتیب ارزیابی‌ها در یک مقایسه زنجیره‌ای تعریف نشده است. به شدت توصیه می‌شود که از عباراتی با عوارض جانبی (مانند چاپ) در مقایسه‌های زنجیره‌ای بپرهیزید. اگر به عباراتی برای عوارض جانبی نیاز داشتید، از عملگر `&&` اتصال-کوتاه به طور صریح استفاده کنید (نوشته ارزیابی اتصال-کوتاه را ببینید).
 
 ### Elementary Functions
 
