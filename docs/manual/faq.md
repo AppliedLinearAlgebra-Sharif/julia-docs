@@ -320,13 +320,22 @@ julia> threearr()
  3
 ```
 
+<div dir="rtl">
+
 ## Types, type declarations, and constructors
 
 ### What does "type-stable" mean?
 
-It means that the type of the output is predictable from the types of the inputs.  In particular,
-it means that the type of the output cannot vary depending on the *values* of the inputs. The
-following code is *not* type-stable:
+### معنی type-stable چیست؟
+
+این عبارت به این معنی است که جنس خروجی را می‌توان از طریق جنس ورودی‌ها پیش‌بینی کرد.
+ به عبارتی دیگر، جنس خروجی‌ها مستقل از
+ *مقدار*
+ ورودی‌ها می‌باشد. برای مثال کد زیر
+ type-stable
+ *نمی‌باشد*:
+
+ </div>
 
 ```julia
 julia> function unstable(flag::Bool)
@@ -338,15 +347,23 @@ julia> function unstable(flag::Bool)
        end
 unstable (generic function with 1 method)
 ```
+<div dir="rtl">
+کد بالا، با توجه به مقدار آرگومان‌های ورودی، خروجی‌اش از جنس  
+`Int`
+یا
+`Float64`
+می‌باشد.
+از آنجایی که جولیا نمی‌تواند جنس خروجی این تابع را در زمان کامپایل پیش‌بینی کند،
+هر محاسباتی که از این تابع استفاده می‌کند باید با مقادیر از هر دو نوع جنس
+سازگار باشد و این موضوع باعث می‌شود تا نوشتن یک کد با سرعت بالا، سخت شود.
 
-It returns either an `Int` or a `Float64` depending on the value of its argument.
-Since Julia can't predict the return type of this function at compile-time, any computation
-that uses it must be able to cope with values of both types, which makes it hard to produce
-fast machine code.
+### چرا جولیا برای برخی از عملیات‌های به ظاهر معقول خطای `DomainError` می‌دهد؟
 
-### Why does Julia give a `DomainError` for certain seemingly-sensible operations?
-
-Certain operations make mathematical sense but result in errors:
+برخی از عملیات‌ها در ریاضیات
+معقول و معنادار هستند
+اما در جولیا با خطا مواجه می‌شوند.
+مانند مثال زیر:
+</div>
 
 ```julia
 julia> sqrt(-2.0)
@@ -356,12 +373,30 @@ Stacktrace:
 [...]
 ```
 
-This behavior is an inconvenient consequence of the requirement for type-stability.  In the case
-of `sqrt`, most users want `sqrt(2.0)` to give a real number, and would be unhappy if
-it produced the complex number `1.4142135623730951 + 0.0im`.  One could write the `sqrt`
-function to switch to a complex-valued output only when passed a negative number (which is what
-`sqrt` does in some other languages), but then the result would not be [type-stable](@ref man-type-stability)
-and the `sqrt` function would have poor performance.
+<div dir="rtl">
+این رفتار یکی از نتیجه‌های ناراحت کننده‌ی
+type-stability
+می‌باشد.
+در این مثال خاص،
+بسیاری از افراد می‌خواهند تا خروجی تابع
+`sqrt(2.0)`
+یک عدد حقیقی باشد و دوست ندارند تا خروجی این تابع به صورت
+ عدد مختلط
+ `1.4142135623730951 + 0.0im`
+ باشد.
+ شاید یک ایده‌ای که به ذهن بیاید این باشد که
+ تابع
+ `sqrt`
+ را طوری بنویسیم که وقتی آرگومان ورودی آن یک عدد منفی بود، خروجی تابع از جنس یک عدد مختلط باشد
+ (مانند کاری که در زبان‌های برنامه‌نویسی دیگر انجام می‌شود).
+ اما در این صورت خروجی تابع
+ [type-stable](@ref man-type-stability)
+ نمی‌باشد و
+ تابع
+ `sqrt`
+ دارای عملکرد ضعیفی می‌شود.
+</div>
+
 
 In these and other cases, you can get the result you want by choosing an *input type* that conveys
 your willingness to accept an *output type* in which the result can be represented:
