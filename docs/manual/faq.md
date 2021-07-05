@@ -322,9 +322,7 @@ julia> threearr()
 
 <div dir="rtl">
 
-## Types, type declarations, and constructors
-
-### What does "type-stable" mean?
+## انواع، تعریف نوع و سازنده‌ها
 
 ### معنی type-stable چیست؟
 
@@ -395,16 +393,24 @@ type-stability
  تابع
  `sqrt`
  دارای عملکرد ضعیفی می‌شود.
+
+ در این حالت‌ها، جنس ورودی‌ها باید به صورتی باشد که اگر جنس خروجی نیز
+
+ در این حالت‌ها، جنس ورودی
+ باید به صورتی باشد که اگر
+ جنس خروجی
+ نیز به همان شکل باشد، خواسته شما براورده شود و خروجی مد نظرتان در آن
+ جنس خروجی
+ قابل نمایش باشد. برای
+ نمونه مشکل ذکر شده در بالا را می‌توان به این صورت رفع کرد:
 </div>
-
-
-In these and other cases, you can get the result you want by choosing an *input type* that conveys
-your willingness to accept an *output type* in which the result can be represented:
 
 ```julia
 julia> sqrt(-2.0+0im)
 0.0 + 1.4142135623730951im
 ```
+<div dir="rtl">
+</div>
 
 ### How can I constrain or compute type parameters?
 
