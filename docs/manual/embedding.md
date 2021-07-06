@@ -1,5 +1,5 @@
 # Embedding Julia
-<div dir="rtl"> &#9679; گرافیک سه بعدی  </div>
+<div dir="rtl"> همانطور که در Calling C و Fortran   </div>
 As we have seen in Calling C and Fortran Code, Julia has a simple and efficient way to
 call functions written in C. But there are situations where the opposite is needed: calling Julia
 function from C code. This can be used to integrate Julia code into a larger C/C++ project, without
