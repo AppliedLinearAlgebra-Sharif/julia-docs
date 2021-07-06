@@ -1,5 +1,5 @@
 # Embedding Julia
-<div dir="rtl"> همانطور که در Calling C و Fortran   </div>
+<div dir="rtl"> همانطور که در Calling C و Fortran Code , دیده ایم جولیا یک راه ساده و به صرفه دارد که توابع را که در C نوشته شده اند را صدا بزند. اما موقعیت هایی وجود دارند که برعکس این روند نیاز است یعنی صدا زدن توابع جولیا از زبان C. این کار می تواند استفاده شود تا جولیا را با یک پروژه c/c++ بزرگتر ادغام کند بدون نیاز به دوباره نوشتن همه چیز در C/C++. جولیا یک API C دارد تا این کار را ممکن کند.همانند تقریبا همه زبان های برنامه نویسی که امکان این را دارند که توابع C را صدا بزنند , API C جولیا هم می تواند استفاده شود برای ساخت پل های بیش تر به زبان ها     </div>
 As we have seen in Calling C and Fortran Code, Julia has a simple and efficient way to
 call functions written in C. But there are situations where the opposite is needed: calling Julia
 function from C code. This can be used to integrate Julia code into a larger C/C++ project, without
