@@ -19,6 +19,8 @@ further language bridges (e.g. calling Julia from Python or C#).
 
 ## <div dir="rtl">  تعبیه سطح بالا  </div>
 
+__<div dir="rtl">  توجه  </div>__:
+
 __Note__: This section covers embedding Julia code in C on Unix-like operating systems. For doing
 this on Windows, please see the section following this.
 
