@@ -19,7 +19,9 @@ further language bridges (e.g. calling Julia from Python or C#).
 
 ## <div dir="rtl">  تعبیه سطح بالا  </div>
 
-__<div dir="rtl">  توجه  </div>__:
+__<div dir="rtl">  توجه:  </div>__ این قسمت تعبیه کد جولیا را در زبان C روی سیستم عامل های شبه یونیکس را پوشش می دهد. برای انجام دادن این کار روی ویندوز, لطفا قسمت بعد را مشاهده کنید.
+
+با یک برنامه ساده C  جولیا را مقدار دهی اولیه می کند و سپس بعضی از کد های جولیا را صدا میزند:شروع می کنیم که 
 
 __Note__: This section covers embedding Julia code in C on Unix-like operating systems. For doing
 this on Windows, please see the section following this.
@@ -47,7 +49,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 ```
-
+<div dir="rtl">  برای اینکه این برنامه را بسازید باید مسیر هدر جولیا را در مسیر include قراردهید و با `libjulia` لینک کنید. برای مثال, وقتی که جولیا در `$JULIA_DIR` نصب شد می توانید برنامه تست بالا را `test.c` با `gcc` با استفاده از کد زیر اجرا کنید:</div>
 In order to build this program you have to put the path to the Julia header into the include path
 and link against `libjulia`. For instance, when Julia is installed to `$JULIA_DIR`, one can compile
 the above test program `test.c` with `gcc` using:
@@ -55,7 +57,8 @@ the above test program `test.c` with `gcc` using:
 ```
 gcc -o test -fPIC -I$JULIA_DIR/include/julia -L$JULIA_DIR/lib -Wl,-rpath,$JULIA_DIR/lib test.c -ljulia
 ```
-
+ <div dir="rtl"> `embedding.c` در درخت سورس جولیا در فولدر `test/embedding/` نگاه کنید. از سوی دیگر به برنامه   </div>
+  <div dir="rtl"> فایل برنامه `cli/loader_exe.c` یک مثال ساده دیگر است از اینکه چطور در حالیه دارید از `libjulia` `jl_options`  گزینه های را تنظیم کنید</div>
 Alternatively, look at the `embedding.c` program in the Julia source tree in the `test/embedding/` folder.
 The file `cli/loader_exe.c` program is another simple example of how to set `jl_options` options while
 linking against `libjulia`.
