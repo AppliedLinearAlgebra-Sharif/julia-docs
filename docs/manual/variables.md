@@ -1,7 +1,6 @@
-# Variables
+# متغیرها
 
-A variable, in Julia, is a name associated (or bound) to a value. It's useful when you want to
-store a value (that you obtained after some math, for example) for later use. For example:
+یک متغیر در جولیا(و کلاً در برنامه نویسی) نامی است که به یک مقدار اختصاص می‌دهیم. این کار برای این مفید است که بخواهید مقدار مشخصی(که می‌تواند نتیجه محاسباتی باشد) را در حافظه برای استفاده در آینده ذخیره کنید. به عنوان مثال:
 
 ```julia
 # Assign the value 10 to the variable x
@@ -20,10 +19,7 @@ julia> x = 1 + 1
 julia> x = "Hello World!"
 "Hello World!"
 ```
-
-Julia provides an extremely flexible system for naming variables. Variable names are case-sensitive,
-and have no semantic meaning (that is, the language will not treat variables differently based
-on their names).
+جولیا یک سیستم بسیار انعطاف‌پذیر برای نامگذاری متغیرها فراهم کرده است. توجه داشته باشید که متغیرها در جولیا `case-sensitive` هستند به این معنی که جولیا بین حروف بزرگ و کوچک تفاوت قائل می‌شود و مثلا متغیر `a` با `A` یکی نیست. همچنین جولیا بر اساس نام متغیرها برای آن‌ها تمایزی قائل نمی‌شود. برای مثال:
 
 ```julia
 julia> x = 1.0
@@ -42,7 +38,7 @@ julia> UniversalDeclarationOfHumanRightsStart = "人人生而自由，在尊严�
 "人人生而自由，在尊严和权利上一律平等。"
 ```
 
-Unicode names (in UTF-8 encoding) are allowed:
+برای نام گذاری متغیرها می‌توانید از یونیکد استفاده کنید( یونیکدهای مجاز در UTF-8):
 
 ```julia
 julia> δ = 0.00001
@@ -52,15 +48,10 @@ julia> 안녕하세요 = "Hello"
 "Hello"
 ```
 
-In the Julia REPL and several other Julia editing environments, you can type many Unicode math
-symbols by typing the backslashed LaTeX symbol name followed by tab. For example, the variable
-name `δ` can be entered by typing `\delta`-*tab*, or even `α̂⁽²⁾` by `\alpha`-*tab*-`\hat`-
-*tab*-`\^(2)`-*tab*. (If you find a symbol somewhere, e.g. in someone else's code,
-that you don't know how to type, the REPL help will tell you: just type `?` and
-then paste the symbol.)
+در محیط REPL جولیا و بسیاری از محیط‌های ویرایش، شما بسیاری از نمادهای ریاضی یونیکد را می‌توانید با نوشتن بک اسلش شده نام نمادهای LaTeX و کلید tab استفاده کنید. برای مثال، متغیر با نام `δ` می‌تواند به وسیله نوشتن `delta\`–_فشردن کلید tab_ به نمایش درآید. همینطور برای نوشتن `α̂⁽²⁾` بنویسید `alpha\`–_فشردن کلید تب_–`hat\`–_فشردن کلید تب_–`\^(2)`–_فشردن کلید تب_. اگر شما نمادی را پیدا کردید(مثلاً در کدهای دیگر) و نمی‌دانستید که چگونه آن را به نمایش در آورید، کافیست به جولیا REPL مراجعه کرده و بنویسید `?` و سپس نماد را الحاق کنید و `enter` را بزنید. 
 
-Julia will even let you redefine built-in constants and functions if needed (although
-this is not recommended to avoid potential confusions):
+
+جولیا حتی به شما اجازه می‌دهد تا ثابت‌ها و توابع درون-ساخت خود جولیا را نیز در صورت لزوم تغییر دهید. هرچند که این کار برای جلوگیری از سردرگمی اصلاً توصیه نمی‌شود:
 
 ```julia
 julia> pi = 3
@@ -73,8 +64,7 @@ julia> sqrt = 4
 4
 ```
 
-However, if you try to redefine a built-in constant or function already in use, Julia will give
-you an error:
+مطلب بالا فقط زمانی قابل انجام است که آن ثابتی که قرار است تغییرش دهید، در حال استفاده نباشد. اگر در حال استفاده باشد، جولیا به شما خطا می‌دهد:
 
 ```julia
 julia> pi
@@ -90,27 +80,14 @@ julia> sqrt = 4
 ERROR: cannot assign a value to variable Base.sqrt from module Main
 ```
 
-## Allowed Variable Names
+## نام‌های مجاز برای متغیرها در جولیا
 
-Variable names must begin with a letter (A-Z or a-z), underscore, or a subset of Unicode code
-points greater than 00A0; in particular, [Unicode character categories](http://www.fileformat.info/info/unicode/category/index.htm)
-Lu/Ll/Lt/Lm/Lo/Nl (letters), Sc/So (currency and other symbols), and a few other letter-like characters
-(e.g. a subset of the Sm math symbols) are allowed. Subsequent characters may also include ! and
-digits (0-9 and other characters in categories Nd/No), as well as other Unicode code points: diacritics
-and other modifying marks (categories Mn/Mc/Me/Sk), some punctuation connectors (category Pc),
-primes, and a few other characters.
+نام متغیر باید با یک حرف (A-Z یا a-z)، زیرخط( _ ) یا یک زیرمجموعه یونیکد بزرگتر از 00A0، شروع شود؛ به طور خاص، [دسته‌های کاراکتر یونیکد](http://www.fileformat.info/info/unicode/category/index.htm) (حروف) Lu/Ll/Lt/Lm/Lo/Nl یا (ارز و سایر نمادها) Sc / So و چند کاراکتر مشابه حرف (مانند یک زیر مجموعه از نمادهای ریاضی Sm) مجاز هستند. در کاراکترهای بعدی نیز ممکن است !، ارقام (0-9 و سایر کاراکترها در دسته Nd / No)، همچنین سایر نقاط کد یونیکد: تعاریف و سایر علامت‌های اصلاح (دسته‌های Mn / Mc / Me / Sk)، برخی از نقطه گذاری‌های اتصال دهنده (دسته Pc)، پرایمزها و چند کاراکتر دیگر در نام گذاری متغیر شرکت کنند.
 
-Operators like `+` are also valid identifiers, but are parsed specially. In some contexts, operators
-can be used just like variables; for example `(+)` refers to the addition function, and `(+) = f`
-will reassign it. Most of the Unicode infix operators (in category Sm), such as `⊕`, are parsed
-as infix operators and are available for user-defined methods (e.g. you can use `const ⊗ = kron`
-to define `⊗` as an infix Kronecker product).  Operators can also be suffixed with modifying marks,
-primes, and sub/superscripts, e.g. `+̂ₐ″` is parsed as an infix operator with the same precedence as `+`.
-A space is required between an operator that ends with a subscript/superscript letter and a subsequent
-variable name. For example, if `+ᵃ` is an operator, then `+ᵃx` must be written as `+ᵃ x` to distinguish
-it from `+ ᵃx` where `ᵃx` is the variable name.
+عملگرهایی مثل `+` هم شناسه‌های معتبری هستند اما از آنها باید به صورت خاصی استفاده کرد. در برخی موارد می‌توان از عملگرها مثل متغیرها استفاده کرد. برای مثال `(+)` به تابع جمع اشاره دارد و `(+) = f` آن را دوباره مقداردهی می‌کند. بسیاری از عملگرهای infix یونیکد(در دسته Sm) مانند `⊕`، به عنوان عملگر infix(یعنی عملگری که میان دو عملوند قرار می گیرد) تعریف شده و کاربر آنها را می‌تواند مشخص کند. برای مثال `const ⊗ = kron` عملگر `⊗` را به عنوان عملگر infix ضرب کرونکر معرفی می‌کند(یعنی اگر `⊗` بین دو عملوند قرار گیرد، عمل ضرب کرونکر را بر روی آن دو عملوند اعمال می‌کند). عملگرها همچنین می‌توانند به وسیله اصلاح علامت، اولویت‌ها و زیرنویس‌ها/بالا نویس‌ها جایگزین شوند. برای مثال `+̂ₐ″` به عنوان یک عملگر infix با همان اولویت `+` عمل می‌کند.
+ میان یک عملگر که در انتهایش یک حرف زیرنویس‌/بالانویس‌ قرار دارد و نام متغیر بعد از آن باید یک فاصله وجود داشته باشد. برای مثال اگر  `+ᵃ` یک عملگر باشد،  `+ᵃx`  باید به صورت `+ᵃ x` نوشته شود تا از `+ ᵃx` که در آن `ᵃx` نام یک متغیر است، متمایز باشد.
 
-The only explicitly disallowed names for variables are the names of the built-in Keywords:
+تنها نام‌های نامجاز برای متغیرها در جولیا نام‌هایی هستند که برای اسامی درون-ساخت به کار رفته اند:
 
 ```julia
 julia> else = false
@@ -120,26 +97,17 @@ julia> try = "No"
 ERROR: syntax: unexpected "="
 ```
 
-Some Unicode characters are considered to be equivalent in identifiers.
-Different ways of entering Unicode combining characters (e.g., accents)
-are treated as equivalent (specifically, Julia identifiers are [NFC](http://www.macchiato.com/unicode/nfc-faq)-normalized).
-The Unicode characters `ɛ` (U+025B: Latin small letter open e)
-and `µ` (U+00B5: micro sign) are treated as equivalent to the corresponding
-Greek letters, because the former are easily accessible via some input methods.
+برخی از کاراکترهای Unicode بر اساس شناسه‌ها یکسان در نظر گرفته می‌شوند.با راه‌های متفاوت وارد کردن کاراکترهای ترکیبی با Unicode (مانند لحجه) نیز یکسان برخورد می‌شود.(به طور خاص شناسه‌های جولیا توسط [NFC](http://www.macchiato.com/unicode/nfc-faq) یک‌سان‌سازی شده‌اند)
+کاراکترهای `ɛ` (U+025B: حرف کوچک لاتین باز e) و `µ` (U+00B5: علامت میکرو) به عنوان معادل حروف یونانی متناظر با آنها در نظر گرفته می‌شوند زیرا از طریق برخی روش‌های ورودی به راحتی در دسترس هستند.
 
-## Stylistic Conventions
+## قراردادهای سبکی
 
-While Julia imposes few restrictions on valid names, it has become useful to adopt the following
-conventions:
+در حالی که جولیا محدودیت‌های کمی در مورد نام‌گذاری‌های معتبر اعمال می‌کند، وجود قراردادهای زیر مفید واقع شده‌است:
 
-  * Names of variables are in lower case.
-  * Word separation can be indicated by underscores (`'_'`), but use of underscores is discouraged
-    unless the name would be hard to read otherwise.
-  * Names of `Type`s and `Module`s begin with a capital letter and word separation is shown with upper
-    camel case instead of underscores.
-  * Names of `function`s and `macro`s are in lower case, without underscores.
-  * Functions that write to their arguments have names that end in `!`. These are sometimes called
-    "mutating" or "in-place" functions because they are intended to produce changes in their arguments
-    after the function is called, not just return a value.
+  * نام متغیرها با حروف کوچک است.
+  * تفکیک کلمه‌ها را می‌توان با زیرخط نشان داد (`'_'`)، اما استفاده از زیرخط تنها در صورتی که بدون آن خواندن نام سخت باشد پیشنهاد می‌شود.
+  * نام‌های `Type`ها و`Module`ها با حروف بزرگ شروع می‌شود و جداسازی کلمه به جای زیرخط با حروف بزرگ (camel case) نشان داده می‌شود.
+  * نام‌های `function`ها و`macro`ها با حروف کوچک و بدون زیرخط هستند.
+  * توابعی که در آرگومان‌های ورودی خود تغییر ایجاد می‌کنند، نام‌هایشان به `!` ختم می‌شوند. این توابع را گاهی اوقات "جهش" یا "درجا" می‌نامند زیرا آنها قصد دارند بعد از فراخوانی تابع تغییراتی در آرگومان‌های خود ایجاد کنند، نه اینکه فقط یک مقدار را برگردانند.
 
-For more information about stylistic conventions, see the Style Guide.
+برای کسب اطلاعات بیشتر در مورد قراردادهای سبکی، به [راهنمای سبک](style-guide.html) مراجعه کنید.
