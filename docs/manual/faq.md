@@ -8,11 +8,11 @@ No.
 
 ### Why don't you compile Matlab/Python/R/… code to Julia?
 
-Since many people are familiar with the syntax of other dynamic languages, and lots of code has already been written in those languages, it is natural to wonder why we didn't just plug a Matlab or Python front-end into a Julia back-end (or “transpile” code to Julia) in order to get all the performance benefits of Julia without requiring programmers to learn a new language.  Simple, right?
+Since many people are familiar with the syntax of other dynamic languages, and lots of code has already been written in those languages, it is natural to wonder why we didn't just plug a Matlab or Python front-end into a Julia back-end (or “transpile" code to Julia) in order to get all the performance benefits of Julia without requiring programmers to learn a new language.  Simple, right?
 
-The basic issue is that there is *nothing special about Julia's compiler*: we use a commonplace compiler (LLVM) with no “secret sauce” that other language developers don't know about.  Indeed, Julia's compiler is in many ways much simpler than those of other dynamic languages (e.g. PyPy or LuaJIT).   Julia's performance advantage derives almost entirely from its front-end: its language semantics allow a [well-written Julia program](@ref man-performance-tips) to *give more opportunities to the compiler* to generate efficient code and memory layouts.  If you tried to compile Matlab or Python code to Julia, our compiler would be limited by the semantics of Matlab or Python to producing code no better than that of existing compilers for those languages (and probably worse).  The key role of semantics is also why several existing Python compilers (like Numba and Pythran) only attempt to optimize a small subset of the language (e.g. operations on Numpy arrays and scalars), and for this subset they are already doing at least as well as we could for the same semantics.  The people working on those projects are incredibly smart and have accomplished amazing things, but retrofitting a compiler onto a language that was designed to be interpreted is a very difficult problem.
+The basic issue is that there is *nothing special about Julia's compiler*: we use a commonplace compiler (LLVM) with no “secret sauce" that other language developers don't know about.  Indeed, Julia's compiler is in many ways much simpler than those of other dynamic languages (e.g. PyPy or LuaJIT).   Julia's performance advantage derives almost entirely from its front-end: its language semantics allow a [well-written Julia program](@ref man-performance-tips) to *give more opportunities to the compiler* to generate efficient code and memory layouts.  If you tried to compile Matlab or Python code to Julia, our compiler would be limited by the semantics of Matlab or Python to producing code no better than that of existing compilers for those languages (and probably worse).  The key role of semantics is also why several existing Python compilers (like Numba and Pythran) only attempt to optimize a small subset of the language (e.g. operations on Numpy arrays and scalars), and for this subset they are already doing at least as well as we could for the same semantics.  The people working on those projects are incredibly smart and have accomplished amazing things, but retrofitting a compiler onto a language that was designed to be interpreted is a very difficult problem.
 
-Julia's advantage is that good performance is not limited to a small subset of “built-in” types and operations, and one can write high-level type-generic code that works on arbitrary user-defined types while remaining fast and memory-efficient.  Types in languages like Python simply don't provide enough information to the compiler for similar capabilities, so as soon as you used those languages as a Julia front-end you would be stuck.
+Julia's advantage is that good performance is not limited to a small subset of “built-in" types and operations, and one can write high-level type-generic code that works on arbitrary user-defined types while remaining fast and memory-efficient.  Types in languages like Python simply don't provide enough information to the compiler for similar capabilities, so as soon as you used those languages as a Julia front-end you would be stuck.
 
 For similar reasons, automated translation to Julia would also typically generate unreadable, slow, non-idiomatic code that would not be a good starting point for a native Julia port from another language.
 
@@ -409,13 +409,11 @@ type-stability
 julia> sqrt(-2.0+0im)
 0.0 + 1.4142135623730951im
 ```
-<div dir="rtl">
-</div>
 
 ### How can I constrain or compute type parameters?
 
 The parameters of a [parametric type](@ref Parametric-Types) can hold either
-types or bits values, and the type itself chooses how it makes use of these parameters.
+types or bits values, and the type itself chooses how it makes use of these parameters.
 For example, `Array{Float64, 2}` is parameterized by the type `Float64` to express its
 element type and the integer value `2` to express its number of dimensions.  When
 defining your own parametric type, you can use subtype constraints to declare that a
@@ -423,19 +421,28 @@ certain parameter must be a subtype (`<:`) of some abstract type or a previous
 type parameter.  There is not, however, a dedicated syntax to declare that a parameter
 must be a _value_ of a given type — that is, you cannot directly declare that a
 dimensionality-like parameter `isa` `Int` within the `struct` definition, for
-example.  Similarly, you cannot do computations (including simple things like addition
-or subtraction) on type parameters.  Instead, these sorts of constraints and
-relationships may be expressed through additional type parameters that are computed
-and enforced within the type's [constructors](@ref man-constructors).
+example.  
 
-As an example, consider
+<div dir="rtl">
+
+به طور مشابه نمی‌توانید بر روی پارامترهای تایپ، محاسبات (شامل عملیات‌های ساده مثل جمع یا تفریق) کنید. در عوض، این نوع محدودیت‌ها و روابط را می‌توانید از طریق پارامترهای تایپ دیگری که در سازنده(@ref man-constructors) آورده می‌شوند، اعمال کنید.
+
+به عنوان مثال کد زیر را در نظر بگیرید:
+
+</div>
+
 ```julia
 struct ConstrainedType{T,N,N+1} # NOTE: INVALID SYNTAX
     A::Array{T,N}
     B::Array{T,N+1}
 end
 ```
-where the user would like to enforce that the third type parameter is always the second plus one. This can be implemented with an explicit type parameter that is checked by an [inner constructor method](@ref man-inner-constructor-methods) (where it can be combined with other checks):
+<div dir="rtl">
+
+در این مثال کاربر می‌خواهد همواره پارامتر سوم یک واحد بیشتر از پارامتر دوم باشد. این کار را می‌توان با استفاده از یک پارامتر تایپ که در سازنده درونی(@ref man-inner-constructor-methods) چک می‌شود، اعمال کرد (می‌توانید آن را با شروط دیگر نیز ترکیب کنید):
+
+</div>
+
 ```julia
 struct ConstrainedType{T,N,M}
     A::Array{T,N}
@@ -446,16 +453,22 @@ struct ConstrainedType{T,N,M}
     end
 end
 ```
-This check is usually *costless*, as the compiler can elide the check for valid concrete types. If the second argument is also computed, it may be advantageous to provide an [outer constructor method](@ref man-outer-constructor-methods) that performs this calculation:
+<div dir="rtl">
+
+این کار معمولا هزینه‌ای ندارد زیرا کامپایلر می‌تواند تست‌های معتبر بودن نوع‌های غیر انتزاعی را ترکیب کند. اگر چندتا از پارامترها نیاز به محاسبه داشته باشند، بهتر است تا از یک سازنده‌ی خارجی(@ref man-outer-constructor-methods) برای این محاسبات استفاده کنید:
+
+</div>
+
 ```julia
 ConstrainedType(A) = ConstrainedType(A, compute_B(A))
 ```
 
-### Why does Julia use native machine integer arithmetic?
+<div dir="rtl">
 
-Julia uses machine arithmetic for integer computations. This means that the range of `Int` values
-is bounded and wraps around at either end so that adding, subtracting and multiplying integers
-can overflow or underflow, leading to some results that can be unsettling at first:
+### چرا جولیا از محاسبات ماشینی صحیح استفاده می‌کند؟
+
+جولیا برای محاسبات اعداد صحیح، از محاسبات ماشینی استفاده می‌کند. این به این معنی است که دامنه‌ی مقدارهای `Int` کران‌دار می‌باشد و دو طرف بازه به یکدیگر متصل هستند، به طوری که جمع و تفریق و ضرب کردن اعداد صحیح می‌تواند باعث سرریز یا زیرریز شدن شود و نتایج غیرمنتظره‌ای به وجود بیاورد:
+</div>
 
 ```julia
 julia> x = typemax(Int)
@@ -470,42 +483,27 @@ julia> z = -y
 julia> 2*z
 0
 ```
+<div dir="rtl">
+واضحا، این تفاوت زیادی با رفتار اعداد صحیح در ریاضیات دارد و به همین خاطر ممکن است فکر کنید برای یک زبان سطح بالا ایده‌آل نیست که این نتیجه را خروجی دهد. اما، در کارهای عددی که سرعت و دقت اولویت دارند، روش‌های جایگزین بدتر می‌باشند.
 
-Clearly, this is far from the way mathematical integers behave, and you might think it less than
-ideal for a high-level programming language to expose this to the user. For numerical work where
-efficiency and transparency are at a premium, however, the alternatives are worse.
+یک راه جایگزین این است که هر محاسبات عددی را برای سرریز شدن چک کنیم و در صورت نیاز نتایج را در نوع‌های بزرگتر عدد صحیح، مانند `Int128` و `BigInt` ذخیره کنیم.
 
-One alternative to consider would be to check each integer operation for overflow and promote
-results to bigger integer types such as `Int128` or `BigInt` in the case of overflow.
-Unfortunately, this introduces major overhead on every integer operation (think incrementing a
-loop counter) – it requires emitting code to perform run-time overflow checks after arithmetic
-instructions and branches to handle potential overflows. Worse still, this would cause every computation
-involving integers to be type-unstable. As we mentioned above, [type-stability is crucial](@ref man-type-stability)
-for effective generation of efficient code. If you can't count on the results of integer operations
-being integers, it's impossible to generate fast, simple code the way C and Fortran compilers
-do.
+متاسفانه، انجام این کار برای تمام محاسبات عددی (برای مثال افزایش مقدار یک شمارنده در یک حلقه) باعث انجام تعداد قابل توجهی از عملیات‌های اضافی می‌شود؛ زیرا نیاز به نوشتن کد برای چک کردن سرریز در هنگام اجرای هر عملیات عددی و همینطور شاخه‌هایی برای رفع کردن مشکل سرریز می‌باشد. مشکل‌ بزرگتر این است که این باعث می‌شود هر عملیات بر روی اعداد صحیح، type-unstable باشد. همان‌طور که در بالا ‌ذکر شده،
+type-stability(@ref man-type-stability)
+ برای نوشتن کد بهینه ضروری است. اگر نتوانیم روی صحیح بودن نتایج عملیات‌ اعداد صحیح مطمئن باشیم، ایجاد کد سریع و ساده (مشابه کامپایلرهای C و Fortran)‌ غیرممکن است.
 
-A variation on this approach, which avoids the appearance of type instability is to merge the
-`Int` and `BigInt` types into a single hybrid integer type, that internally changes representation
-when a result no longer fits into the size of a machine integer. While this superficially avoids
-type-instability at the level of Julia code, it just sweeps the problem under the rug by foisting
-all of the same difficulties onto the C code implementing this hybrid integer type. This approach
-*can* be made to work and can even be made quite fast in many cases, but has several drawbacks.
-One problem is that the in-memory representation of integers and arrays of integers no longer
-match the natural representation used by C, Fortran and other languages with native machine integers.
-Thus, to interoperate with those languages, we would ultimately need to introduce native integer
-types anyway. Any unbounded representation of integers cannot have a fixed number of bits, and
-thus cannot be stored inline in an array with fixed-size slots – large integer values will always
-require separate heap-allocated storage. And of course, no matter how clever a hybrid integer
-implementation one uses, there are always performance traps – situations where performance degrades
-unexpectedly. Complex representation, lack of interoperability with C and Fortran, the inability
-to represent integer arrays without additional heap storage, and unpredictable performance characteristics
-make even the cleverest hybrid integer implementations a poor choice for high-performance numerical
-work.
+یک روش دیگر برای انجام همین کار، که ظاهر type instability را ندارد، این است که `Int` و `BigInt` را در یک نوع عدد صحیح ترکیب کنیم؛ که وقتی نتیجه در بازه‌ی اعداد صحیح ماشینی نمی‌گنجد، به طور درونی روش نگهداری اعداد در خود را تغییر دهد.
+در حالی که این روش به طور ظاهری مشکل type-instability را در کد جولیا ندارد، اما در واقعیت فقط همان مشکلات را به کد C-ای که این نوع عدد صحیح را پیاده سازی می‌کند، منتقل می‌کند. پیاده‌سازی خوب و بهینه‌ی این روش شدنی است،‌ ولی چند عیب دارد. یک مشکل این است که روش نگهداری اعداد صحیح و آرایه‌های اعداد صحیح در حافظه، دیگر با روش طبیعی نگه‌داری آن‌ها در
+C و Fortran
+  و زبان‌های دیگر با اعداد‌ صحیح ماشینی تطابق ندارد. در نتیجه، برای تعامل با این زبان‌ها، در نهایت هنوز نیاز به پیاده‌سازی اعداد صحیحی ماشینی می‌باشد.
+هر پیاده‌سازی بدون کران از اعداد صحیح، نمی‌تواند تعداد ثابتی بیت داشته باشد و در نتیجه نمی‌تواند به طور در خط  در یک آرایه با جایگاه‌هایی با اندازه‌ی ثابت ذخیره شود؛ بلکه اعداد صحیح بزرگتر همیشه نیاز به یک ساختار هرمی مجزا دارند. همچنین، هر چقدر پیاده‌سازی ما برای این کار، هوشمندانه باشد، همیشه حالت‌هایی وجود دارند که عملکرد کد ما در این حالت‌ها به صورت غیرقابل پیش‌بینی‌ای بسیار بد باشد.
+نمایش پیچیده، عدم امکان تعامل با C و Fortran، عدم امکان نمایش آرایه‌های اعداد صحیح بدون حافظه‌ی هرمی اضافه، و عملکرد غیرقابل پیش‌بینی، باعث می‌شوند که حتی هوشمندانه‌ترین پیاده‌سازی‌ها برای این کار، انتخاب ضعیفی برای کار عددی با عملکرد بالا باشند.
 
-An alternative to using hybrid integers or promoting to BigInts is to use saturating integer arithmetic,
-where adding to the largest integer value leaves it unchanged and likewise for subtracting from
-the smallest integer value. This is precisely what Matlab™ does:
+یک جایگزین برای استفاده از اعداد صحیح ترکیبی یا تغییر نوع نتایج به
+`BigInt`
+، این است که از محاسبات اشباعی‌(Saturating integer arithmetic)‌ برای اعداد صحیح استفاده کنیم؛ یعنی افزودن به بزرگترین مقدار عدد صحیح و یا کاهیدن از کوچکترین مقدار صحیح، مقدار آن‌ها را تغییر نمی‌دهد. این دقیقا روشی‌است که متلب استفاده می‌کند:
+
+</div>
 
 ```
 >> int64(9223372036854775807)
@@ -533,15 +531,16 @@ ans =
  -9223372036854775808
 ```
 
-At first blush, this seems reasonable enough since 9223372036854775807 is much closer to 9223372036854775808
-than -9223372036854775808 is and integers are still represented with a fixed size in a natural
-way that is compatible with C and Fortran. Saturated integer arithmetic, however, is deeply problematic.
-The first and most obvious issue is that this is not the way machine integer arithmetic works,
-so implementing saturated operations requires emitting instructions after each machine integer
-operation to check for underflow or overflow and replace the result with `typemin(Int)`
-or `typemax(Int)` as appropriate. This alone expands each integer operation from a single,
-fast instruction into half a dozen instructions, probably including branches. Ouch. But it gets
-worse – saturating integer arithmetic isn't associative. Consider this Matlab computation:
+<div dir="rtl">
+
+در نگاه اول، این روش نسبتا منطقی به نظر می‌آید، زیرا 9223372036854775807 بسیار به 9223372036854775808 نسبت به -9223372036854775808 نزدیک‌تر است؛ و اعداد صحیح همچنان به روشی طبیعی با اندازه ثابت نمایش داده می‌شوند که با C و Fortran تطابق دارد. اما، محاسبات اشباعی اعداد صحیح، مشکلات عمیقی دارند.
+اولین و واضح‌ترین مشکل این است که این روشی نیست که محاسبات ماشینی اعداد صحیح طبق آن عمل می‌کنند، پس پیاده سازی عملکردهای اشباعی هنوز نیاز به نوشتن کد بعد از هر محاسبه برای چک کردن سرریز و زیرریز و در صورت نیاز جایگزینی نتیجه با
+`typemin(Int)`
+ یا
+`typemax(Int)`
+دارد. همین به تنهایی، هر عملیات محاسباتی را از یک عملکرد سریع به چندین عملکرد، که احتمالا شامل شاخه‌های مختلف هستند، تبدیل می‌کند. اما بدتر هم می‌شود! محاسبات اشباعی اعداد صحیح، قابلیت شرکت‌پذیری ندارد. این محاسبات متلب را در نظر بگیرید:
+
+</div>
 
 ```
 >> n = int64(2)^62
@@ -554,9 +553,17 @@ worse – saturating integer arithmetic isn't associative. Consider this Matlab 
 9223372036854775806
 ```
 
-This makes it hard to write many basic integer algorithms since a lot of common techniques depend
-on the fact that machine addition with overflow *is* associative. Consider finding the midpoint
-between integer values `lo` and `hi` in Julia using the expression `(lo + hi) >>> 1`:
+<div dir="rtl">
+
+این باعث‌ ‌می‌شود نوشتن خیلی از الگوریتم‌های ساده اعداد صحیح به مشکل بخورد، زیرا بسیاری از تکنیک‌های معمول، به ویژگی شرکت‌پذیری جمع و تفریق ماشینی (با سرریز و زیرریز) وابسته هستند. فرض کنید می‌خواهیم از طریق عبارت
+`(lo + hi) >>> 1`
+، مقدار میانی بین دو عدد صحیح
+`lo`
+ و
+`hi`
+ را در جولیا پیدا کنیم:
+
+</div>
 
 ```julia
 julia> n = 2^62
@@ -565,9 +572,19 @@ julia> n = 2^62
 julia> (n + 2n) >>> 1
 6917529027641081856
 ```
+<div dir="rtl">
 
-See? No problem. That's the correct midpoint between 2^62 and 2^63, despite the fact that `n + 2n`
-is -4611686018427387904. Now try it in Matlab:
+همانطور که مشاهده می‌کنید، نتیجه درست می‌باشد. با وجود اینکه
+`n + 2n`
+ برابر
+-4611686018427387904
+ است، نتیجه‌ی این محاسبات برابر با مقدار میانی صحیح بین دو عدد
+2^62
+ و
+2^63
+ است. حالا این کار را در متلب انجام می‌دهیم:
+
+</div>
 
 ```
 >> (n + 2*n)/2
@@ -577,14 +594,20 @@ ans =
   4611686018427387904
 ```
 
-Oops. Adding a `>>>` operator to Matlab wouldn't help, because saturation that occurs when adding
-`n` and `2n` has already destroyed the information necessary to compute the correct midpoint.
+<div dir="rtl">
 
-Not only is lack of associativity unfortunate for programmers who cannot rely it for techniques
-like this, but it also defeats almost anything compilers might want to do to optimize integer
-arithmetic. For example, since Julia integers use normal machine integer arithmetic, LLVM is free
-to aggressively optimize simple little functions like `f(k) = 5k-1`. The machine code for this
-function is just this:
+این‌‌بار، جواب درست نمی‌باشد. استفاده کردن از عملگر
+`>>>`
+ به متلب نیز کمکی به این موضوع نمی‌کند، زیرا اشباعی که هنگام جمع کردن
+`n`
+ و
+`2n`
+ اتفاق می‌افتد، اطلاعات لازم برای به دست آوردن مقدار میانی دو عدد را از بین برده است.
+
+عدم ‌شرکت‌پذیری، نه تنها برای برنامه‌نویس‌هایی که نمی‌توانند روی آن برای تکنیک‌های این‌چنینی تکیه کنند مشکل ساز است، که تقریبا از هر روشی که کامپیالر‌ها ممکن است برای بهینه‌سازی محاسبات عددی استفاده کنند، جلوگیری می‌کند. به عنوان مثال، از ‌آن‌جایی که جولیا از محاسبات عددی ماشینی استفاده می‌کند، LLVM آزاد است که تابع‌های ساده و کوتاهی مثل
+`f(k) = 5k-1`
+ را به خوبی بهینه‌سازی کند. کد ماشینی برای این تابع به صورت زیر می‌باشد:
+</div>
 
 ```julia
 julia> code_native(f, Tuple{Int})
@@ -599,8 +622,14 @@ Source line: 1
   nopl  (%rax,%rax)
 ```
 
-The actual body of the function is a single `leaq` instruction, which computes the integer multiply
-and add at once. This is even more beneficial when `f` gets inlined into another function:
+<div dir="rtl">
+
+بدنه‌ی اصلی این تابع تنها یک عملیات
+`leaq`
+است، که ضرب و جمع صحیح را همزمان محاسبه می‌کند. وقتی که
+`f`
+در یک تابع دیگر به صورت در خط استفاده شود، این کد حتی مفیدتر است:
+</div>
 
 ```julia
 julia> function g(k, n)
@@ -634,8 +663,15 @@ L26:
   nop
 ```
 
-Since the call to `f` gets inlined, the loop body ends up being just a single `leaq` instruction.
-Next, consider what happens if we make the number of loop iterations fixed:
+<div dir="rtl">
+
+از آن‌جایی که صدا زدن تابع
+`f`
+به صورت در خط انجام می‌شود، بدنه‌ی حلقه در نهایت تنها یک عملیات
+`leaq`
+ است. حالا در نظر بگیرید چه اتفاقی می‌افتد وقتی تعداد تکرارهای حلقه را ثابت در نظر بگیریم:
+
+</div>
 
 ```julia
 julia> function g(k)
@@ -660,27 +696,26 @@ Source line: 5
   nopw  %cs:(%rax,%rax)
 ```
 
-Because the compiler knows that integer addition and multiplication are associative and that multiplication
-distributes over addition – neither of which is true of saturating arithmetic – it can optimize
-the entire loop down to just a multiply and an add. Saturated arithmetic completely defeats this
-kind of optimization since associativity and distributivity can fail at each loop iteration, causing
-different outcomes depending on which iteration the failure occurs in. The compiler can unroll
-the loop, but it cannot algebraically reduce multiple operations into fewer equivalent operations.
+<div dir="rtl">
 
-The most reasonable alternative to having integer arithmetic silently overflow is to do checked
-arithmetic everywhere, raising errors when adds, subtracts, and multiplies overflow, producing
-values that are not value-correct. In this [blog post](https://danluu.com/integer-overflow/), Dan
-Luu analyzes this and finds that rather than the trivial cost that this approach should in theory
-have, it ends up having a substantial cost due to compilers (LLVM and GCC) not gracefully optimizing
-around the added overflow checks. If this improves in the future, we could consider defaulting
-to checked integer arithmetic in Julia, but for now, we have to live with the possibility of overflow.
+چون که کامپایلر می‌داند که جمع و ضرب شرکت‌پذیرند و ضرب روی جمع توزیع‌پذیری دارد (هیچ کدام از این دو در محاسبات اشباعی برقرار نیستند)، می‌تواند کل حلقه را بهینه‌سازی کند و تبدیل به تنها یک جمع و یک ضرب کند. محاسبات اشباعی، کاملا جلوی این نوع بهینه‌سازی را میگیرد، زیرا در هر تکرار، شرکت‌پذیری و توزیع‌پذیری می‌توانند برقرار نباشند و در نتیجه بر اساس اینکه این مشکل در کدام تکرار اتفاق می‌افتد، نتایج مختلفی ایجاد کنند. کامپایلر می‌تواند حلقه را باز کند
+(Loop Unrolling)
+، ولی نمی‌تواند به طور جبری چند عملگر را با تعداد کمتری عملگر معادل‌سازی کند.
 
-In the meantime, overflow-safe integer operations can be achieved through the use of external libraries
-such as [SaferIntegers.jl](https://github.com/JeffreySarnoff/SaferIntegers.jl). Note that, as stated
-previously, the use of these libraries significantly increases the execution time of code using the
-checked integer types. However, for limited usage, this is far less of an issue than if it were used
-for all integer operations. You can follow the status of the discussion
-[here](https://github.com/JuliaLang/julia/issues/855).
+منطقی‌ترین جایگزین برای رفع کردن مشکل  سرریز در محاسبات عددی، این است که همه‌جا محاسبات چک‌شده انجام دهیم و هنگامی که جمع، تفریق یا ضرب سرریز می‌کنند و مقدار‌های اشتباه به وجود می‌آورند، یک خطا خروجی دهیم. در این
+ [نوشته](https://danluu.com/integer-overflow/)
+،
+Dan Luu
+این موضوع را بررسی می‌کند و نتیجه‌ می‌گیرد که با وجود هزینه ناچیزی که این روش در تئوری دارد، در واقعیت به دلیل عدم بهینه‌سازی چک‌های اضافه‌ برای سرریز توسط کامپایلرها
+(LLVM و GCC)
+، هزینه‌ی قابل توجهی دارد. اگر این مساله در آینده پیشرفت کند، می‌توانیم استفاده از محاسبات عددی چک‌شده در جولیا را در نظر بگیریم‌؛ ولی در حال حاضر، باید با امکان به وجود آمدن سرریز زندگی کنیم.
+
+در عین حال، با استفاده از کتابخانه‌های خارجی‌ای مانند  [SaferIntegers.jl](https://github.com/JeffreySarnoff/SaferIntegers.jl)
+ می‌توان عملیات‌های عددی‌ای انجام داد که در آن‌ها سرریز پیش نیاید. توجه کنید که همان‌طور که ذکر شد، استفاده از این کتابخانه‌ها، زمان اجرای کد را به دلیل استفاده از نوع‌های عددی چک‌شده، به میزان قابل توجهی زیاد می‌کند. با این حال، برای استفاده محدود، این بسیار مشکل کوچک‌تری است تا این که برای همه‌ی محاسبات عددی استفاده شود. شما می‌توانید وضعیت این بحث را از
+[اینجا](https://github.com/JuliaLang/julia/issues/855)
+دنبال کنید.
+
+</div>
 
 
 ### What are the possible causes of an `UndefVarError` during remote execution?
