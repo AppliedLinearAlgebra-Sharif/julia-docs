@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 ```
-<div dir="rtl">  برای اینکه این برنامه را بسازید باید مسیر هدر جولیا را در مسیر include قراردهید و با `libjulia` لینک کنید. برای مثال, وقتی که جولیا در `$JULIA_DIR` نصب شد می توانید برنامه تست بالا را `test.c` با `gcc` با استفاده از کد زیر اجرا کنید:</div>
+<div dir="rtl">  برای اینکه این برنامه را بسازید باید مسیر هدر جولیا را در مسیر include قراردهید و با `libjulia` لینک کنید. برای مثال, وقتی که جولیا در `$JULIA_DIR` نصب شد می توانید برنامه تست بالا را یعنی را `test.c` با `gcc` با استفاده از کد زیر اجرا کنید:</div>
 In order to build this program you have to put the path to the Julia header into the include path
 and link against `libjulia`. For instance, when Julia is installed to `$JULIA_DIR`, one can compile
 the above test program `test.c` with `gcc` using:
