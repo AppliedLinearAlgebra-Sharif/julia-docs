@@ -19,11 +19,9 @@ further language bridges (e.g. calling Julia from Python or C#).
 
 ## <div dir="rtl">  تعبیه سطح بالا  </div>
 
-__<div dir="rtl">  توجه:  </div>__<div dir="rtl">
-این قسمت تعبیه کد جولیا را در زبان C روی سیستم عامل های شبه یونیکس را پوشش می دهد. برای انجام دادن این کار روی ویندوز, لطفا قسمت بعد را مشاهده کنید.
-
-با یک برنامه ساده C  جولیا را مقدار دهی اولیه می کند و سپس بعضی از کد های جولیا را صدا میزند:شروع می کنیم که 
-    </div>
+__<div dir="rtl">  توجه:  </div>__
+<div dir="rtl">  این قسمت تعبیه کد جولیا را در زبان C روی سیستم عامل های شبه یونیکس پوشش می دهد. برای انجام دادن این کار روی ویندوز لطفا بخش بعد را نگاه کنید. </div>
+<div dir="rtl"> با یک برنامه ساده C شروع می کنیم که ابتدا جولیا را مقدار دهی اولیه می کند و سپس کد جولیا را صدا می زند:
 __Note__: This section covers embedding Julia code in C on Unix-like operating systems. For doing
 this on Windows, please see the section following this.
 
