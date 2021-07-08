@@ -1,23 +1,18 @@
-# Complex and Rational Numbers
+# اعداد مختلط و گویا
 
-Julia includes predefined types for both complex and rational numbers, and supports
-all the standard Mathematical Operations and Elementary Functions on them. [Conversion and Promotion](@ref conversion-and-promotion) are defined
-so that operations on any combination of predefined numeric types, whether primitive or composite,
-behave as expected.
+جولیا شامل انواع از پیش تعریف‌شده برای اعداد گویا و حقیقی است و تمام عملیت‌‌های استاندارد ریاضی و توابع ابتدایی روی آن‌‌ها را پشتیبانی می‌کند. تبدیل این متغیر‌ها به گونه‌ای پیاده‌سازی شده که هر ترکیبی از تایپ‌های عددی از پیش تعریف شده، همانگونه که انتظار داریم عمل خواهند کرد.
 
-## Complex Numbers
 
-The global constant `im` is bound to the complex number *i*, representing the principal
-square root of -1. (Using mathematicians' `i` or engineers' `j` for this global constant were rejected since they are such popular index variable names.) Since Julia allows numeric literals to be [juxtaposed with identifiers as coefficients](@ref man-numeric-literal-coefficients),
-this binding suffices to provide convenient syntax for complex numbers, similar to the traditional
-mathematical notation:
+## اعداد مختلط
 
-```julia
+ثابت سراسری `im` به عدد مختلط *i* مقید است که نشان‌دهنده عدد اصلی اعداد مختلط یعنی جذر ۱- است. ریاضیدانان و مهندسان معمولا از نمادهای i و j برای این ثابت سراسری استفاده می‌کنند که بخاطر استفاده‌ی زیاد این نمادها در اندیس گذاری، از عبارت im برای این ثابت استفاده شده است. از آنجا که جولیا اجازه می‌دهد حروف عددی با شناسه‌ها درکنار هم (به عنوان ضریب) قرار بگیرند تا مشابه نمادگذاری سنتی ریاضی باشند:
+ 
+```jlia
 julia> 1+2im
 1 + 2im
 ```
 
-You can perform all the standard arithmetic operations with complex numbers:
+شما می‌تواند تمام عملیات‌ها را با اعداد مختلط نیز انجام دهید:
 
 ```julia
 julia> (1 + 2im)*(2 - 3im)
@@ -51,7 +46,7 @@ julia> 3(2 - 5im)^-1.0
 0.20689655172413796 + 0.5172413793103449im
 ```
 
-The promotion mechanism ensures that combinations of operands of different types just work:
+ساز و کار ارتقای جولیا به گونه‌ای است که اطمینان حاصل می‌کند که ترکیب عملوندهای مختلف، همانگونه که انتظار داریم کار کنند:
 
 ```julia
 julia> 2(1 - 1im)
@@ -82,10 +77,9 @@ julia> 1 + 3/4im
 1.0 - 0.75im
 ```
 
-Note that `3/4im == 3/(4*im) == -(3/4*im)`, since a literal coefficient binds more tightly than
-division.
+دقت کنید  `3/4im == 3/(4*im) == -(3/4*im)` برقرار است، زیرا یک ضریب حروفی، محکم‌تر مقید میکند.
 
-Standard functions to manipulate complex values are provided:
+توابع استاندارد برای دستکاری مقادیر مختلط:
 
 ```julia
 julia> z = 1 + 2im
@@ -110,11 +104,8 @@ julia> angle(1 + 2im) # phase angle in radians
 1.1071487177940904
 ```
 
-As usual, the absolute value (`abs`) of a complex number is its distance from zero.
-`abs2` gives the square of the absolute value, and is of particular use for complex
-numbers since it avoids taking a square root. `angle` returns the phase angle in radians
-(also known as the *argument* or *arg* function). The full gamut of other Elementary Functions
-is also defined for complex numbers:
+می‌دانیم که مقدار قدر مطلق یک عدد گنگ (`abs`) فاصله‌ی آن  از صفر است. `abs2` مقدار مربع قدرمطلق را می‌دهد و برای اعداد مختلط کاربرد به خصوص دارد زیرا از گرفتن ریشه‌ی مربع عدد جلوگیری می‌کند. `angle` مقدار زاویه‌ی فاز را برحسب رادیان برمی‌گرداند.
+دامنه کامل سایر توابع ابتدایی نیز برای اعداد مختلط تعریف شده است:
 
 ```julia
 julia> sqrt(1im)
@@ -133,9 +124,7 @@ julia> sinh(1 + 2im)
 -0.4890562590412937 + 1.4031192506220405im
 ```
 
-Note that mathematical functions typically return real values when applied to real numbers and
-complex values when applied to complex numbers. For example, `sqrt` behaves differently
-when applied to `-1` versus `-1 + 0im` even though `-1 == -1 + 0im`:
+توجه داشته باشید که توابع ریاضی معمولاً وقتی روی اعداد حقیقی اعمال می شوند مقادیر حقیقی را برمی گردانند و وقتی روی اعداد مختلط اعمال می شوند مقادیر مختلط را برمی گردانند. به طور مثال، `sqrt` وقتی روی `-1` اعمال می‌شود رفتار متفاوتی با `-1 + 0im` دارد، هرچند که  `-1 == -1 + 0im`:
 
 ```julia
 julia> sqrt(-1)
@@ -148,27 +137,21 @@ julia> sqrt(-1 + 0im)
 0.0 + 1.0im
 ```
 
-The [literal numeric coefficient notation](@ref man-numeric-literal-coefficients) does not work when constructing a complex number
-from variables. Instead, the multiplication must be explicitly written out:
+ضرایب عددی هنگام ساختن عدد مختلط کار نمی‌کنند، در عوض ضریب باید به صورت صریح نوشته شود:
 
 ```julia
 julia> a = 1; b = 2; a + b*im
 1 + 2im
 ```
+هرچند روش گفته شده پیشنهاد می‌شود، در عوض از تابع به‌ صرفه‌تر  `complex` برای ساختن عدد مختلط برحسب مقادیر حقیقی و مختلط آن استفاده کنید:
 
-However, this is *not* recommended. Instead, use the more efficient `complex` function to construct
-a complex value directly from its real and imaginary parts:
-
-```julia
+```ulia
 julia> a = 1; b = 2; complex(a, b)
 1 + 2im
 ```
+این نوع ساختن، از عملیات‌های ضرب و جمع جلوگیری می‌کند.
 
-This construction avoids the multiplication and addition operations.
-
-`Inf` and `NaN` propagate through complex numbers in the real and imaginary parts
-of a complex number as described in the Special floating-point values section:
-
+مقادیر `inf` و `NaN`  روی بخش‌های مختلف حقیقی و مختلط عدد،‌ منتشر می‌شوند:
 ```julia
 julia> 1 + Inf*im
 1.0 + Inf*im
@@ -177,18 +160,16 @@ julia> 1 + NaN*im
 1.0 + NaN*im
 ```
 
-## Rational Numbers
+## اعداد گویا
 
-Julia has a rational number type to represent exact ratios of integers. Rationals are constructed
-using the `//` operator:
+جولیا از نوع  اعداد گویا نیز پشتیبانی می‌کند تا بتواند نسبت دقیق اعداد صحیح را نشان دهد. اعداد گویا توسط عملگر `//` ساخته می‌شوند:
 
 ```julia
 julia> 2//3
 2//3
 ```
 
-If the numerator and denominator of a rational have common factors, they are reduced to lowest
-terms such that the denominator is non-negative:
+اگر صورت و مخرج یک عدد گویا، شامل مقسوم علیه مشترک باشند، این عدد نسبت به بزرگترین مقسوم علیه مشترک ساده می‌شود، به طوری که مخرج منفی نشود:
 
 ```julia
 julia> 6//9
@@ -204,10 +185,7 @@ julia> -4//-12
 1//3
 ```
 
-This normalized form for a ratio of integers is unique, so equality of rational values can be
-tested by checking for equality of the numerator and denominator. The standardized numerator and
-denominator of a rational value can be extracted using the `numerator` and `denominator`
-functions:
+این فرم نرمال‌سازی برای نسبت اعداد صحیح منحصربه‌فرد است، بنابراین برای بررسی برابری دو عدد، می‌توان برابری صورت و مخرج آن‌ها را بررسی کرد. صورت و مخرج استاندارد یک عدد گویا را می‌توان  با استفاده از `numerator` و `denominator` به دست‌آورد:
 
 ```julia
 julia> numerator(2//3)
@@ -217,8 +195,7 @@ julia> denominator(2//3)
 3
 ```
 
-Direct comparison of the numerator and denominator is generally not necessary, since the standard
-arithmetic and comparison operations are defined for rational values:
+معمولا محاسبه‌ی دقیق صورت و مخرح لاز م نیست، زیرا عملیت‌های استاندارد و مقایسه‌ای برای اعداد گویا پیاده‌سازی شده‌اند:
 
 ```julia
 julia> 2//3 == 6//9
@@ -245,16 +222,13 @@ julia> 5//8 * 3//12
 julia> 6//5 / 10//7
 21//25
 ```
-
-Rationals can easily be converted to floating-point numbers:
+اعداد گویا را می‌توان به راحتی به عداد اعشاری (ممیز شناور) تبدیل کرد:
 
 ```julia
 julia> float(3//4)
 0.75
 ```
-
-Conversion from rational to floating-point respects the following identity for any integral values
-of `a` and `b`, with the exception of the case `a == 0` and `b == 0`:
+عملیات تبدیل از اعداد گویا به اعداد اعشاری برای هر مقدار صحیح `a` و `b` مقادیر آن‌ها حفظ می‌کند به جز حالت `a == 0` و `b == 0`:
 
 ```julia
 julia> a = 1; b = 2;
@@ -262,8 +236,7 @@ julia> a = 1; b = 2;
 julia> isequal(float(a//b), a/b)
 true
 ```
-
-Constructing infinite rational values is acceptable:
+ساختن مقادیر گویای بینهایت نیز پشتیبانی می‌شود:
 
 ```julia
 julia> 5//0
@@ -275,17 +248,15 @@ julia> x = -3//0
 julia> typeof(x)
 Rational{Int64}
 ```
+اما ساختن مقدار گویای `NaN` امکان‌پذیر نیست:
 
-Trying to construct a `NaN` rational value, however, is invalid:
-
-```julia
+```ulia
 julia> 0//0
 ERROR: ArgumentError: invalid rational: zero(Int64)//zero(Int64)
 Stacktrace:
 [...]
 ```
-
-As usual, the promotion system makes interactions with other numeric types effortless:
+و مطابق انتظار، ساز و کار تبدیل امکان برهمکنش این نوع عدد با باقی انواع عددی را امکان‌پذیر می‌کند:
 
 ```julia
 julia> 3//5 + 1
@@ -321,3 +292,4 @@ true
 julia> 1//3 - 0.33
 0.0033333333333332993
 ```
+
