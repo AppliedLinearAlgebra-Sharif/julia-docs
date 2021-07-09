@@ -651,11 +651,8 @@ julia> 2(x-1)^2 - 3(x-1) + 1
 
 ```eval_rst
 
-.. note::
-    The precedence of numeric literal coefficients used for implicit
-    multiplication is higher than other binary operators such as multiplication
-    (`*`), and division (`/`, `\\`, and `//`).  This means, for example, that
-    `1 / 2im` equals `-0.5im` and `6 // 2(2 + 1)` equals `1 // 1`.
+.. توجه::
+    تقدم ضرایب لیترال عددی در ضرب ضمنی، از سایر عملگرهای باینری مانند ضرب و تقسیم (`/`, `\\`, and `//`) بالاتر است. به این معنی که عبارت `1 / 2im` با  `-0.5im`، و عبارت `6 // 2(2 + 1)` با `1 // 1` معادل هستند.
 ```
 
 
