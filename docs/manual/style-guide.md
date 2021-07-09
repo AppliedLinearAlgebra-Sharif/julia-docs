@@ -1,5 +1,13 @@
 # Style Guide
 
+<div dir="auto">
+ در این بخش ها ما به بررسی بخش از عبارات اصطلاحی در نوشتن برنامه به زبان جولیا می پردازیم
+    .
+    هیچ کدام از این قوانین مطلق نیستند
+    .
+    انها تنها برای کمک  به اشنا شدن شما با زبان و کمک برای انتخاب بین راه حل های طراحی موجود است
+    .
+ </div>
 The following sections explain a few aspects of idiomatic Julia coding style. None of these rules
 are absolute; they are only suggestions to help familiarize you with the language and to help
 you choose among alternative designs.
