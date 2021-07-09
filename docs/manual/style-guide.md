@@ -480,28 +480,26 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
  پایبندی به این دستور کلی تا آنجا که ممکن است احتمالاً به کاربران شما تجربه سازگارتری میدهد
  .
  </div>
-   In Julia keyword arguments have to come last anyway in function definitions; they're
-   listed here for the sake of completeness.
-
-The vast majority of functions will not take every kind of argument listed above; the
-numbers merely denote the precedence that should be used for any applicable arguments
-to a function.
-
-There are of course a few exceptions.
-For example, in [`convert`](@ref), the type should always come first.
-In [`setindex!`](@ref), the value comes before the indices so that the indices can be
-provided as varargs.
-
-When designing APIs, adhering to this general order as much as possible is likely to give
-users of your functions a more consistent experience.
 
 ## Don't overuse try-catch(بیش از اندازه استفاده نکنید)
 <div dir="auto">
+ بهتر است از گرفتن خطا اجتناب کنید تا اینکه انهارا 
+ catch 
+ کنید
+ .
 </div>
 It is better to avoid errors than to rely on catching them.
 
-## Don't parenthesize conditions
+## Don't parenthesize conditions(شرط ها را با پرانتز ننویسید)
 <div dir="auto">
+ جولیا نیازی به پرانتز برای نوشتن شرط ها در 
+ if
+ و 
+ while
+ نیازی ندارد
+ .
+ بنویسید
+ :
 </div>
 Julia doesn't require parens around conditions in `if` and `while`. Write:
 
@@ -509,8 +507,10 @@ Julia doesn't require parens around conditions in `if` and `while`. Write:
 if a == b
 ```
 <div dir="auto">
+ به جای 
+ :
 </div>
-instead of:
+
 
 ```julia
 if (a == b)
