@@ -372,7 +372,7 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
  parse
  شود می اید
  .
- در بسیاری از مثال ها که نوع خروجب اول می اید ولی مفید است که ذکر کنیم که
+ در بسیاری از مثال ها که نوع خروجی اول می اید ولی مفید است که ذکر کنیم که
  ارگومان 
  `IO`
  در تابع
@@ -627,16 +627,13 @@ foo(::MyType) = foo(MyType)
  ای که نیاز دارد دسترسی دارد
  .
 </div>
-Be aware of when a macro could really be a function instead.
 
-Calling [`eval`](@ref) inside a macro is a particularly dangerous warning sign; it means the
-macro will only work when called at the top level. If such a macro is written as a function instead,
-it will naturally have access to the run-time values it needs.
 
-## Don't expose unsafe operations at the interface level
+## Don't expose unsafe operations at the interface level(در سطح رابط از عمل خطرناک استفاده نکنیذ)
 <div dir="auto">
+ اگر شما یک تایپ دارید که از یک اشاره گر بومی استفاده می کند.
+ (native pointer):
 </div>
-If you have a type that uses a native pointer:
 
 ```julia
 mutable struct NativeType
@@ -645,6 +642,8 @@ mutable struct NativeType
 end
 ```
 <div dir="auto">
+ تعاریف را مانند مثال زیر ننویسید
+ :
 </div>
 don't write definitions like the following:
 
@@ -652,22 +651,28 @@ don't write definitions like the following:
 getindex(x::NativeType, i) = unsafe_load(x.p, i)
 ```
 <div dir="auto">
+ مشکل اینجاست که کاربر این تایپ می تواند بنویسد 
+ x[i]
+ بدون اینکه بفهمد این عملیات امن نیست.
+و ممکن است دچار باگ های حافظه شود. 
+ <br>
+ چنین تابعی باید عملیات هایش چک شود تا تضمین شود که امن بوده است و یا یکجایی در اسم خود کلمه 
+ unsafe
+ داشته باشد که صدازننده این تابع ،این موضوع را بداند.
+ 
 </div>
-The problem is that users of this type can write `x[i]` without realizing that the operation is
-unsafe, and then be susceptible to memory bugs.
-
-Such a function should either check the operation to ensure it is safe, or have `unsafe` somewhere
-in its name to alert callers.
 
 ## Don't overload methods of base container types
 <div dir="auto">
+ ممکن است تعاریفی مانند زیر بنویسیم 
+ :
 </div>
-It is possible to write definitions like the following:
 
 ```julia
 show(io::IO, v::Vector{MyType}) = ...
 ```
-
+<div dir="auto">
+</div>
 This would provide custom showing of vectors with a specific new element type. While tempting,
 this should be avoided. The trouble is that users will expect a well-known type like `Vector()`
 to behave in a certain way, and overly customizing its behavior can make it harder to work with.
@@ -705,15 +710,32 @@ conversions between color spaces. Another example might be a package that acts a
 wrapper for some C code, which another package might then pirate to implement a
 higher-level, Julia-friendly API.
 
-## Be careful with type equality
+## Be careful with type equality(در برابر بودن تایپ دقت کنید)
 <div dir="auto">
+ ما به صورت کلی از 
+ 
 </div>
 You generally want to use [`isa`](@ref) and [`<:`](@ref) for testing types,
 not `==`. Checking types for exact equality typically only makes sense when comparing to a known
 concrete type (e.g. `T == Float64`), or if you *really, really* know what you're doing.
 
-## Do not write `x->f(x)`
+## Do not write `x->f(x)`(این را ننویسید)
 <div dir="auto">
+ تا جایی که توابع با ترتیب بالاتر در اجرا معمولا به وسیله توابع ناشناس 
+ anonymous
+ ساخته شده اند ،راحت است دریابیم که این خوب یا حتی لازم است .
+ ولی هر تابعی میتواند به صورت مستقیم پاس داده شود ،بدون اینکه در توابع ناشناس
+ (anonymous)
+  به اصطلاح 
+ (wrapped)
+ شوند .
+ <br>
+ به جای نوشتن 
+ map(x->f(x), a)
+ بنویسید 
+ <span><a href="https://docs.julialang.org/en/v1/)/">map(f, a)</a></span>
+ .
+ 
 </div>
 Since higher-order functions are often called with anonymous functions, it is easy to conclude
 that this is desirable or even necessary. But any function can be passed directly, without being
@@ -726,7 +748,10 @@ If you write generic code which handles numbers, and which can be expected to ru
 numeric type arguments, try using literals of a numeric type that will affect the arguments as
 little as possible through promotion.
 
-For example,
+<div dir="auto">
+ به عنوان مثال 
+ ,
+</div>
 
 ```jldoctest
 julia> f(x) = 2.0 * x
@@ -759,6 +784,24 @@ julia> g(1)
 2
 ```
 <div dir="auto">
+ همان طور که می بینید ،ورژن دوم  موقعی که ما از 
+ Int
+ استفاده کردیم به عنوان نوع ارگومان ورودی در نظر گرفته شد ولی دفعه اول چنین اتفاقی نیافتاد .
+ زیرا 
+promote_type(Int, Float64) == Float64
+ و ترفیع با ضرب اتفاق می افتد.
+ به طور مشابه حرف های 
+ Rational
+ کمتر
+ مخل نوع هستند تا 
+  حرف های 
+ Float64
+ ولی بیشتر از 
+ Int
+ خراب کننده هستند 
+ :
+
+
 </div>
 As you can see, the second version, where we used an `Int` literal, preserved the type of the
 input argument, while the first didn't. This is because e.g. `promote_type(Int, Float64) == Float64`,
