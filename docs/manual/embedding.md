@@ -77,8 +77,8 @@ example program calls this before returning from `main`.
 
 ```eval_rst
 
-.. note::
-    .. <div dir="rtl"> توجه </div>::
+.. توجه::
+    
     Currently, dynamically linking with the `libjulia` shared library requires passing the `RTLD_GLOBAL`
     option. In Python, this looks like:
 
