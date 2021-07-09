@@ -56,25 +56,29 @@ the above test program `test.c` with `gcc` using:
 ```
 gcc -o test -fPIC -I$JULIA_DIR/include/julia -L$JULIA_DIR/lib -Wl,-rpath,$JULIA_DIR/lib test.c -ljulia
 ```
- <div dir="rtl"> `embedding.c` در درخت سورس جولیا در فولدر `test/embedding/` نگاه کنید. از سوی دیگر به برنامه   </div>
-  <div dir="rtl"> فایل برنامه `cli/loader_exe.c` یک مثال ساده دیگر است از اینکه چطور در حالیه دارید از `libjulia` `jl_options`  گزینه های را تنظیم کنید</div>
+<div dir="rtl"> از سوی دیگر به برنامه `embedding.c` در درخت منبع (source tree) جولیا در فولدر `test/embedding/`نگاه کنید.</div>
+<div dir="rtl">  فایل برنامه `cli/loader_exe.c` یک مثال ساده دیگر است از اینکه چطور گزینه های `jl_options` را تنظیم کنیددرحالیکه با `libjulia` لینک می کنید.</div>   
 Alternatively, look at the `embedding.c` program in the Julia source tree in the `test/embedding/` folder.
 The file `cli/loader_exe.c` program is another simple example of how to set `jl_options` options while
 linking against `libjulia`.
 
+<div dir="rtl"> اولین چیزی که باید انجام شود قبل صدا زدن هر تابع دیگر جولیا در C این است که جولیا مقدار دهی اولیه شود. این کار با صدا زدن `jl_init` انجام می شود که تلاش می کند که به صورت خودکار محل نصب جولیا را تشخیص دهد. اگر شما می خواهید که یک مکان دلخواه را مشخص کنید یا مشخص کنید که کدام سیستم ایمیج لود شود از `jl_init_with_image` استفاده کنید.</div>   
 The first thing that has to be done before calling any other Julia C function is to initialize
 Julia. This is done by calling `jl_init`, which tries to automatically determine Julia's install
 location. If you need to specify a custom location, or specify which system image to load,
 use `jl_init_with_image` instead.
-
+    
+<div dir="rtl"> عبارت دوم در برنامه test با استفاده از صدا زدن `jl_eval_string` یک عبارت جولیا را بررسی و اجرا می کند.</div>
 The second statement in the test program evaluates a Julia statement using a call to `jl_eval_string`.
 
+<div dir="rtl"> قبل از اینکه برنامه اجرا شود به شدت توصیه می شود که `jl_atexit_hook` را صدا بزنید.  برنامه بالا این عبارت را قبل از بازگشت از `main` صدا می زند. </div>  
 Before the program terminates, it is strongly recommended to call `jl_atexit_hook`.  The above
 example program calls this before returning from `main`.
 
 ```eval_rst
 
 .. note::
+    .. <div dir="rtl"> توجه </div>::
     Currently, dynamically linking with the `libjulia` shared library requires passing the `RTLD_GLOBAL`
     option. In Python, this looks like:
 
