@@ -94,7 +94,7 @@ example program calls this before returning from `main`.
 ```eval_rst
 
 .. توجه::
-        
+    اگر برنامه جولیا نیاز به دسترسی کد هایی از برنامه اصلی دارد ممکن است نیاز باشد که پرچم لینک دهنده(linker flag)  `-Wl,--export-dynamic` را در زمان اجرا روی لینوکس علاوه بر آن هایی که توسط `julia-config.jl` که در پایین توضیح  داده شده است اضافه شود. این کار زمان اجرای کتابخانه اشتراکی واجب نیست. 
     If the julia program needs to access symbols from the main executable, it may be necessary to
     add `-Wl,--export-dynamic` linker flag at compile time on Linux in addition to the ones generated
     by `julia-config.jl` described below. This is not necessary when compiling a shared library.
