@@ -78,7 +78,7 @@ example program calls this before returning from `main`.
 ```eval_rst
 
 .. توجه::
-    <div dir="rtl"> در حال حاضر لینک کردن با کتاب خانه اشتراکی `libjulia` به صورت پویا نیاز به رد شدن از `RTLD_GLOBAL` دارد. در پایتون این کار به صورت زیر است:</div> 
+    در حال حاضر لینک کردن با کتاب خانه اشتراکی `libjulia` به صورت پویا نیاز به رد شدن از `RTLD_GLOBAL` دارد. در پایتون این کار به صورت زیر است: 
     Currently, dynamically linking with the `libjulia` shared library requires passing the `RTLD_GLOBAL`
     option. In Python, this looks like:
 
