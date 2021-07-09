@@ -102,14 +102,14 @@ example program calls this before returning from `main`.
 
 ### Using julia-config to automatically determine build parameters
 ### استفاده از julia-config برای تعیین کردن پارامتر های ساخت به صورت خودکار 
-فایل `julia-config.jl` ساخته شده است که کمک کند در مشخص کردن اینکه چه پارامتر های ساختی برای یک برنامه ای که جولیا را تعبیه کرده است لازم است. این فایل از پارامتر های ساخت و از پیکر بندی سیستم توزیع خاص جولیا که توسط آن فراخوانی می شود استفاده می کند تا پرچم های اجرا (compiler flags)  های ضروری را برای برنامه ای که جولیا را تعبیه می کند صادر کند تا با آن توزیع تعامل کند. این فایل در دایرکتوری دیتا های اشتراکی جولیا قرار دارد.  
+فایل `julia-config.jl` ساخته شده است که کمک کند در مشخص کردن اینکه چه پارامتر های ساختی برای یک برنامه ای که جولیا را تعبیه کرده است لازم است. این فایل از پارامتر های ساخت و از پیکر بندی سیستم توزیع خاص جولیا که توسط آن فراخوانی می شود استفاده می کند تا پرچم های اجرا (compiler flags)  های ضروری را برای برنامه ای که جولیا را تعبیه می کند صادر کند تا با آن توزیع تعامل کند. این فایل در دایرکتوری داده های اشتراکی جولیا قرار دارد.  
 The script `julia-config.jl` was created to aid in determining what build parameters are required
 by a program that uses embedded Julia.  This script uses the build parameters and system configuration
 of the particular Julia distribution it is invoked by to export the necessary compiler flags for
 an embedding program to interact with that distribution.  This script is located in the Julia
 shared data directory.
 
-#### Example
+#### مثال
 
 ```c
 #include <julia.h>
@@ -123,8 +123,9 @@ int main(int argc, char *argv[])
 }
 ```
 
-#### On the command line
+#### در خط فرمان (Command Line)
 
+یک استفاده ساده از این فایل از طریق خط فرمان (Command Line) است. فرض کنید که `julia-config.jl` در آدرس `/usr/local/julia/share/julia` قرار گرفته است در این صورت این فایل می تواند از طریق خط فرمان (Command Line) به صورت مستقیم فراخوانی شود و هر ترکیبی از سه پرچم (flag) را داشته باشد :   
 A simple use of this script is from the command line.  Assuming that `julia-config.jl` is located
 in `/usr/local/julia/share/julia`, it can be invoked on the command line directly and takes any
 combination of 3 flags:
