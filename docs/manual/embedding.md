@@ -94,14 +94,15 @@ example program calls this before returning from `main`.
 ```eval_rst
 
 .. توجه::
-    اگر برنامه جولیا نیاز به دسترسی کد هایی از برنامه اصلی دارد ممکن است نیاز باشد که پرچم لینک دهنده(linker flag)  `-Wl,--export-dynamic`  روی لینوکس در زمان اجرا     علاوه بر آن هایی که توسط `julia-config.jl` که در پایین توضیح  داده شده است اضافه شود. این کار زمان اجرای کتابخانه اشتراکی واجب نیست. 
+    اگر برنامه جولیا نیاز به دسترسی کد هایی از برنامه اصلی داشته باشد ممکن است نیاز باشد که پرچم لینک دهنده(linker flag)  `-Wl,--export-dynamic`  روی لینوکس در زمان اجرا علاوه بر آن هایی که توسط `julia-config.jl` تولید شده اند که در پایین توضیح داده شده است اضافه شود. این کار زمان اجرای کتابخانه اشتراکی واجب نیست. 
     If the julia program needs to access symbols from the main executable, it may be necessary to
     add `-Wl,--export-dynamic` linker flag at compile time on Linux in addition to the ones generated
     by `julia-config.jl` described below. This is not necessary when compiling a shared library.
 ```
 
 ### Using julia-config to automatically determine build parameters
-
+### استفاده از julia-config برای تعیین کردن پارامتر های ساخت به صورت خودکار 
+فایل `julia-config.jl` ساخته شده است که کمک کند در مشخص کردن اینکه چه پارامتر های ساختی برای یک برنامه ای که جولیا را تعبیه کرده است لازم است. این فایل از پارامتر های ساخت و از پیکر بندی سیستم توزیع خاص جولیا که توسط آن فراخوانی می شود استفاده می کند تا پرچم های اجرا (compiler flags)  های ضروری را برای برنامه ای که جولیا را تعبیه می کند صادر کند تا با آن توزیع تعامل کند. این فایل در دایرکتوری دیتا های اشتراکی جولیا قرار دارد.  
 The script `julia-config.jl` was created to aid in determining what build parameters are required
 by a program that uses embedded Julia.  This script uses the build parameters and system configuration
 of the particular Julia distribution it is invoked by to export the necessary compiler flags for
