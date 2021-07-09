@@ -43,12 +43,6 @@
  </div>
  
   [`pi`](@ref))
-  
-Writing code as a series of steps at the top level is a quick way to get started solving a problem,
-but you should try to divide a program into functions as soon as possible. Functions are more
-reusable and testable, and clarify what steps are being done and what their inputs and outputs
-are. Furthermore, code inside functions tends to run much faster than top level code, due to how
-Julia's compiler works.
 
 It is also worth emphasizing that functions should take arguments, instead of operating directly
 on global variables (aside from constants like [`pi`](@ref)).
@@ -62,7 +56,6 @@ on global variables (aside from constants like [`pi`](@ref)).
  .
  به جای رویه زیر
  </div>
-Code should be as generic as possible. Instead of writing:
 
 ```julia
 Complex{Float64}(x)
@@ -75,7 +68,6 @@ Complex{Float64}(x)
  استفاده شود
  .
  </div>
-it's better to use available generic functions:
 
 ```julia
 complex(float(x))
@@ -94,6 +86,12 @@ complex(float(x))
  برای مثال ما نوع ارگومان را
  `Int` 
  یا
+ <span style='color: blue'>Int32</span>
+ در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  
+اسم گذاری های تابع معتبر نباشد،یک ارور
+ <span style='color: blue'>MethodError</span>
+ به ما داده میشود
+ .
  </div>
  [`Int32`](@ref)
  در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  اسم گذاری های تابع معتبر نباشد،یک ارور   
