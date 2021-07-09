@@ -140,7 +140,7 @@ julia> x
         julia> x = 0x01; typeof(x)
         UInt8
 
-        julia> x *= 2 # Same as x = x * 2
+        julia> x *= 2 # x = x * 2 همان 
         2
 
         julia> typeof(x)
