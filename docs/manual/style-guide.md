@@ -41,10 +41,12 @@ Use 4 spaces per indentation level.
  global 
  از متغیر ها استفاده کنند
  .
+ )
  جدای از ثابت ها مانند
  
  </div>
-  [`pi`](@ref)
+  [`pi`](@ref))
+  
 Writing code as a series of steps at the top level is a quick way to get started solving a problem,
 but you should try to divide a program into functions as soon as possible. Functions are more
 reusable and testable, and clarify what steps are being done and what their inputs and outputs
@@ -89,6 +91,19 @@ complex(float(x))
  به جای اینکه همیشه به یک نوع تبدیل کند
  .
   </div>
+  <div dir="auto">
+ این طرز نوشتن مخصوصا مربوط به ورودی های تابع است
+ .
+ برای مثال ما نوع ارگومان را
+ `Int` 
+ یا
+ </div>
+ [`Int32`](@ref)
+ در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  اسم گذاری های تابع معتبر نباشد،یک ارور   
+ [`MethodError`](@ref)
+ به ما داده میشود
+ .
+ 
 The second version will convert `x` to an appropriate type, instead of always the same type.
 
 This style point is especially relevant to function arguments. For example, don't declare an argument
