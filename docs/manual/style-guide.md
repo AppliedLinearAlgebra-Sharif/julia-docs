@@ -1,5 +1,4 @@
-# Style Guide
-
+# Style Guide(راهنمای سبک نوشتن)
 <div dir="auto">
  در این بخش ها ما به بررسی بخش از عبارات اصطلاحی در نوشتن برنامه به زبان جولیا می پردازیم
     .
@@ -13,11 +12,40 @@ are absolute; they are only suggestions to help familiarize you with the languag
 you choose among alternative designs.
 
 ## Indentation
-
+<div dir="auto">
+ برای سطح های مختلف 
+ indentation
+ از 4 تا اسپیس می توانید استفاده کنید
+ .
+ </div>
 Use 4 spaces per indentation level.
 
-## Write functions, not just scripts
-
+## Write functions, not just scripts(نوشتن توابع)
+<div dir="auto">
+ یکی از راه های سریع حل یک مسئله، نوشتن کد به صورت یک سری گام در بالاترین سطح است ولی بهتر است هر چه سریعتر برنامه خود را به یکسری تابع تقسیم کنید
+ .
+ توابع بهتر از حالت قبل قابل استفاده مجدد و تست شدن هستند
+ ,
+ واینکه چه گام هایی  تمام شده اند و چه ورودی ها و خروجی هایی داشتند  را مشخص میکنند 
+ .
+ در ادامه در زبان جولیا کد های داخل توابع 
+ ،
+ سریعتر از کد های سطح اول اجرا می شوند
+ .
+ که این به عملکرد کامپایلر جولیا بازمی گردد
+ .
+ </div>
+ <div dir="auto">
+ همین طور تاکیید این نکته مهم است که توابع بهتر است 
+ ورودی بگیرند به جای اینکه  به صورت 
+ global 
+ از متغیر ها استفاده کنند
+ .
+ )جدای از ثابت ها مانند
+ [`pi`](@ref)
+ )
+ 
+ </div>
 Writing code as a series of steps at the top level is a quick way to get started solving a problem,
 but you should try to divide a program into functions as soon as possible. Functions are more
 reusable and testable, and clarify what steps are being done and what their inputs and outputs
@@ -29,6 +57,8 @@ on global variables (aside from constants like [`pi`](@ref)).
 
 ## Avoid writing overly-specific types
 
+<div dir="auto">
+ </div>
 Code should be as generic as possible. Instead of writing:
 
 ```julia
