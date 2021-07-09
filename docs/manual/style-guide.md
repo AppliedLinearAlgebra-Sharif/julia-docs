@@ -89,7 +89,7 @@ complex(float(x))
  <span style='color: blue'>Int32</span>
  در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  
 اسم گذاری های تابع معتبر نباشد،یک ارور
- <span style='color: blue'>MethodError</span>
+ <span style='color: lime'>MethodError</span>
  به ما داده میشود
  .
  </div>
