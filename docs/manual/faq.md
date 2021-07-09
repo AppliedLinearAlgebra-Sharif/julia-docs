@@ -320,8 +320,6 @@ julia> threearr()
  3
 ```
 
-<div dir="rtl">
-
 ## انواع، تعریف نوع و سازنده‌ها
 
 ### معنی type-stable چیست؟
@@ -333,8 +331,6 @@ julia> threearr()
  type-stable
  *نمی‌باشد*:
 
- </div>
-
 ```julia
 julia> function unstable(flag::Bool)
            if flag
@@ -345,7 +341,7 @@ julia> function unstable(flag::Bool)
        end
 unstable (generic function with 1 method)
 ```
-<div dir="rtl">
+
 کد بالا، با توجه به مقدار آرگومان‌های ورودی، خروجی‌اش از جنس  
 `Int`
 یا
@@ -361,7 +357,6 @@ unstable (generic function with 1 method)
 معقول و معنادار هستند
 اما در جولیا با خطا مواجه می‌شوند.
 مانند مثال زیر:
-</div>
 
 ```julia
 julia> sqrt(-2.0)
@@ -371,7 +366,6 @@ Stacktrace:
 [...]
 ```
 
-<div dir="rtl">
 این رفتار یکی از نتیجه‌های ناراحت کننده‌ی
 type-stability
 می‌باشد.
@@ -403,33 +397,21 @@ type-stability
  جنس خروجی
  قابل نمایش باشد. برای
  نمونه مشکل ذکر شده در بالا را می‌توان به این صورت رفع کرد:
-</div>
 
 ```julia
 julia> sqrt(-2.0+0im)
 0.0 + 1.4142135623730951im
 ```
 
-### How can I constrain or compute type parameters?
+### چگونه پارامترهای نوع را محدود یا محاسبه کنیم؟
 
-The parameters of a [parametric type](@ref Parametric-Types) can hold either
-types or bits values, and the type itself chooses how it makes use of these parameters.
-For example, `Array{Float64, 2}` is parameterized by the type `Float64` to express its
-element type and the integer value `2` to express its number of dimensions.  When
-defining your own parametric type, you can use subtype constraints to declare that a
-certain parameter must be a subtype (`<:`) of some abstract type or a previous
-type parameter.  There is not, however, a dedicated syntax to declare that a parameter
-must be a _value_ of a given type — that is, you cannot directly declare that a
-dimensionality-like parameter `isa` `Int` within the `struct` definition, for
-example.  
+پارامتر‌های یک نوع پارامتری (
+[parametric type](@ref Parametric-Types)
+) می‌توانند یا نوع و یا مقدار‌های بیتی را نگهداری کنند و خود تایپ تصمیم می‌گیرد که چگونه از این پارامترها استفاده کنند. به عنوان مثال، به `Array{Float64, 2}` پارامتر نوع `Float64` داده شده است که نوع المنت‌هایش را نشان دهد، و مقدار صحیح `2` که تعداد ابعادش را نشان دهد. وقتی نوع پارامتری خود را تعریف می‌کنید، می‌توانید از محدودیت‌های زیر نوع(subtype) استفاده کنید که اعلام کنید یک پارامتر باید زیرنوع (`<:`) یک نوع abstract یا یک پارامتر قبلی نوع باشد. با این حال، هیچ سینتکس مخصوصی برای اعلام اینکه یک پارامتر باید یک مقدار از یک نوع تعیین‌شده داشته باشد، وجود ندارد. برای مثال در تعریف `struct` نمی‌توانید برای یک پارامتر مثل تعداد بعدها، به طور مستقیم از `isa` `Int` استفاده کنید.
 
-<div dir="rtl">
-
-به طور مشابه نمی‌توانید بر روی پارامترهای تایپ، محاسبات (شامل عملیات‌های ساده مثل جمع یا تفریق) کنید. در عوض، این نوع محدودیت‌ها و روابط را می‌توانید از طریق پارامترهای تایپ دیگری که در سازنده(@ref man-constructors) آورده می‌شوند، اعمال کنید.
+به طور مشابه نمی‌توانید بر روی پارامترهای نوع، محاسبات (شامل عملیات‌های ساده مثل جمع یا تفریق) کنید. در عوض، این نوع محدودیت‌ها و روابط را می‌توانید از طریق پارامترهای نوع دیگری که در سازنده(@ref man-constructors) آورده می‌شوند، اعمال کنید.
 
 به عنوان مثال کد زیر را در نظر بگیرید:
-
-</div>
 
 ```julia
 struct ConstrainedType{T,N,N+1} # NOTE: INVALID SYNTAX
@@ -437,11 +419,8 @@ struct ConstrainedType{T,N,N+1} # NOTE: INVALID SYNTAX
     B::Array{T,N+1}
 end
 ```
-<div dir="rtl">
 
-در این مثال کاربر می‌خواهد همواره پارامتر سوم یک واحد بیشتر از پارامتر دوم باشد. این کار را می‌توان با استفاده از یک پارامتر تایپ که در سازنده درونی(@ref man-inner-constructor-methods) چک می‌شود، اعمال کرد (می‌توانید آن را با شروط دیگر نیز ترکیب کنید):
-
-</div>
+در این مثال کاربر می‌خواهد همواره پارامتر سوم یک واحد بیشتر از پارامتر دوم باشد. این کار را می‌توان با استفاده از یک پارامتر نوع که در سازنده درونی(@ref man-inner-constructor-methods) چک می‌شود، اعمال کرد (می‌توانید آن را با شروط دیگر نیز ترکیب کنید):
 
 ```julia
 struct ConstrainedType{T,N,M}
@@ -453,22 +432,16 @@ struct ConstrainedType{T,N,M}
     end
 end
 ```
-<div dir="rtl">
 
 این کار معمولا هزینه‌ای ندارد زیرا کامپایلر می‌تواند تست‌های معتبر بودن نوع‌های غیر انتزاعی را ترکیب کند. اگر چندتا از پارامترها نیاز به محاسبه داشته باشند، بهتر است تا از یک سازنده‌ی خارجی(@ref man-outer-constructor-methods) برای این محاسبات استفاده کنید:
-
-</div>
 
 ```julia
 ConstrainedType(A) = ConstrainedType(A, compute_B(A))
 ```
 
-<div dir="rtl">
-
 ### چرا جولیا از محاسبات ماشینی صحیح استفاده می‌کند؟
 
 جولیا برای محاسبات اعداد صحیح، از محاسبات ماشینی استفاده می‌کند. این به این معنی است که دامنه‌ی مقدارهای `Int` کران‌دار می‌باشد و دو طرف بازه به یکدیگر متصل هستند، به طوری که جمع و تفریق و ضرب کردن اعداد صحیح می‌تواند باعث سرریز یا زیرریز شدن شود و نتایج غیرمنتظره‌ای به وجود بیاورد:
-</div>
 
 ```julia
 julia> x = typemax(Int)
@@ -483,7 +456,7 @@ julia> z = -y
 julia> 2*z
 0
 ```
-<div dir="rtl">
+
 واضحا، این تفاوت زیادی با رفتار اعداد صحیح در ریاضیات دارد و به همین خاطر ممکن است فکر کنید برای یک زبان سطح بالا ایده‌آل نیست که این نتیجه را خروجی دهد. اما، در کارهای عددی که سرعت و دقت اولویت دارند، روش‌های جایگزین بدتر می‌باشند.
 
 یک راه جایگزین این است که هر محاسبات عددی را برای سرریز شدن چک کنیم و در صورت نیاز نتایج را در نوع‌های بزرگتر عدد صحیح، مانند `Int128` و `BigInt` ذخیره کنیم.
@@ -502,8 +475,6 @@ C و Fortran
 یک جایگزین برای استفاده از اعداد صحیح ترکیبی یا تغییر نوع نتایج به
 `BigInt`
 ، این است که از محاسبات اشباعی‌(Saturating integer arithmetic)‌ برای اعداد صحیح استفاده کنیم؛ یعنی افزودن به بزرگترین مقدار عدد صحیح و یا کاهیدن از کوچکترین مقدار صحیح، مقدار آن‌ها را تغییر نمی‌دهد. این دقیقا روشی‌است که متلب استفاده می‌کند:
-
-</div>
 
 ```
 >> int64(9223372036854775807)
@@ -531,16 +502,12 @@ ans =
  -9223372036854775808
 ```
 
-<div dir="rtl">
-
 در نگاه اول، این روش نسبتا منطقی به نظر می‌آید، زیرا 9223372036854775807 بسیار به 9223372036854775808 نسبت به -9223372036854775808 نزدیک‌تر است؛ و اعداد صحیح همچنان به روشی طبیعی با اندازه ثابت نمایش داده می‌شوند که با C و Fortran تطابق دارد. اما، محاسبات اشباعی اعداد صحیح، مشکلات عمیقی دارند.
 اولین و واضح‌ترین مشکل این است که این روشی نیست که محاسبات ماشینی اعداد صحیح طبق آن عمل می‌کنند، پس پیاده سازی عملکردهای اشباعی هنوز نیاز به نوشتن کد بعد از هر محاسبه برای چک کردن سرریز و زیرریز و در صورت نیاز جایگزینی نتیجه با
 `typemin(Int)`
  یا
 `typemax(Int)`
 دارد. همین به تنهایی، هر عملیات محاسباتی را از یک عملکرد سریع به چندین عملکرد، که احتمالا شامل شاخه‌های مختلف هستند، تبدیل می‌کند. اما بدتر هم می‌شود! محاسبات اشباعی اعداد صحیح، قابلیت شرکت‌پذیری ندارد. این محاسبات متلب را در نظر بگیرید:
-
-</div>
 
 ```
 >> n = int64(2)^62
@@ -553,8 +520,6 @@ ans =
 9223372036854775806
 ```
 
-<div dir="rtl">
-
 این باعث‌ ‌می‌شود نوشتن خیلی از الگوریتم‌های ساده اعداد صحیح به مشکل بخورد، زیرا بسیاری از تکنیک‌های معمول، به ویژگی شرکت‌پذیری جمع و تفریق ماشینی (با سرریز و زیرریز) وابسته هستند. فرض کنید می‌خواهیم از طریق عبارت
 `(lo + hi) >>> 1`
 ، مقدار میانی بین دو عدد صحیح
@@ -563,8 +528,6 @@ ans =
 `hi`
  را در جولیا پیدا کنیم:
 
-</div>
-
 ```julia
 julia> n = 2^62
 4611686018427387904
@@ -572,19 +535,16 @@ julia> n = 2^62
 julia> (n + 2n) >>> 1
 6917529027641081856
 ```
-<div dir="rtl">
 
 همانطور که مشاهده می‌کنید، نتیجه درست می‌باشد. با وجود اینکه
 `n + 2n`
  برابر
 -4611686018427387904
  است، نتیجه‌ی این محاسبات برابر با مقدار میانی صحیح بین دو عدد
-2^62
+62^2
  و
-2^63
+63^2
  است. حالا این کار را در متلب انجام می‌دهیم:
-
-</div>
 
 ```
 >> (n + 2*n)/2
@@ -593,8 +553,6 @@ ans =
 
   4611686018427387904
 ```
-
-<div dir="rtl">
 
 این‌‌بار، جواب درست نمی‌باشد. استفاده کردن از عملگر
 `>>>`
@@ -607,7 +565,6 @@ ans =
 عدم ‌شرکت‌پذیری، نه تنها برای برنامه‌نویس‌هایی که نمی‌توانند روی آن برای تکنیک‌های این‌چنینی تکیه کنند مشکل ساز است، که تقریبا از هر روشی که کامپیالر‌ها ممکن است برای بهینه‌سازی محاسبات عددی استفاده کنند، جلوگیری می‌کند. به عنوان مثال، از ‌آن‌جایی که جولیا از محاسبات عددی ماشینی استفاده می‌کند، LLVM آزاد است که تابع‌های ساده و کوتاهی مثل
 `f(k) = 5k-1`
  را به خوبی بهینه‌سازی کند. کد ماشینی برای این تابع به صورت زیر می‌باشد:
-</div>
 
 ```julia
 julia> code_native(f, Tuple{Int})
@@ -622,14 +579,11 @@ Source line: 1
   nopl  (%rax,%rax)
 ```
 
-<div dir="rtl">
-
 بدنه‌ی اصلی این تابع تنها یک عملیات
 `leaq`
 است، که ضرب و جمع صحیح را همزمان محاسبه می‌کند. وقتی که
 `f`
 در یک تابع دیگر به صورت در خط استفاده شود، این کد حتی مفیدتر است:
-</div>
 
 ```julia
 julia> function g(k, n)
@@ -663,15 +617,11 @@ L26:
   nop
 ```
 
-<div dir="rtl">
-
 از آن‌جایی که صدا زدن تابع
 `f`
 به صورت در خط انجام می‌شود، بدنه‌ی حلقه در نهایت تنها یک عملیات
 `leaq`
  است. حالا در نظر بگیرید چه اتفاقی می‌افتد وقتی تعداد تکرارهای حلقه را ثابت در نظر بگیریم:
-
-</div>
 
 ```julia
 julia> function g(k)
@@ -696,8 +646,6 @@ Source line: 5
   nopw  %cs:(%rax,%rax)
 ```
 
-<div dir="rtl">
-
 چون که کامپایلر می‌داند که جمع و ضرب شرکت‌پذیرند و ضرب روی جمع توزیع‌پذیری دارد (هیچ کدام از این دو در محاسبات اشباعی برقرار نیستند)، می‌تواند کل حلقه را بهینه‌سازی کند و تبدیل به تنها یک جمع و یک ضرب کند. محاسبات اشباعی، کاملا جلوی این نوع بهینه‌سازی را میگیرد، زیرا در هر تکرار، شرکت‌پذیری و توزیع‌پذیری می‌توانند برقرار نباشند و در نتیجه بر اساس اینکه این مشکل در کدام تکرار اتفاق می‌افتد، نتایج مختلفی ایجاد کنند. کامپایلر می‌تواند حلقه را باز کند
 (Loop Unrolling)
 ، ولی نمی‌تواند به طور جبری چند عملگر را با تعداد کمتری عملگر معادل‌سازی کند.
@@ -715,13 +663,9 @@ Dan Luu
 [اینجا](https://github.com/JuliaLang/julia/issues/855)
 دنبال کنید.
 
-</div>
+### دلایل ممکن یک `UndefVarError` در هنگام اجرای remote چه می‌باشند؟
 
-
-### What are the possible causes of an `UndefVarError` during remote execution?
-
-As the error states, an immediate cause of an `UndefVarError` on a remote node is that a binding
-by that name does not exist. Let us explore some of the possible causes.
+همان‌طور که خود خطا بیان می‌کند، یک دلیل اصلی پیش آمدن `UndefVarError` روی یک نود remote این است که یک binding با آن نام وجود ندارد. حال بعضی دلایل ممکن آن را بررسی می‌کنیم.
 
 ```julia
 julia> module Foo
@@ -735,11 +679,9 @@ Stacktrace:
 [...]
 ```
 
-The closure `x->x` carries a reference to `Foo`, and since `Foo` is unavailable on node 2,
-an `UndefVarError` is thrown.
+بستار `x->x` به `Foo` مرجعیت دارد، و از آن‌جایی که در نود ۲ `Foo` در دسترس نیست، یک `UndefVarError` برگردانده می‌شود.
 
-Globals under modules other than `Main` are not serialized by value to the remote node. Only a reference is sent.
-Functions which create global bindings (except under `Main`) may cause an `UndefVarError` to be thrown later.
+Global ها در ماژول‌های به جز `Main` با مقدارشان به نود remote سریال‌سازی (serialize) نمی‌شوند، بلکه تنها یک مرجع فرستاده می‌شود. تابع‌هایی که binding های سراسری (global) درست می‌کنند (به جز در `Main`) ممکن است باعث شوند در آینده یک `UndefVarError` ایجاد و برگردانده شود.
 
 ```julia
 julia> @everywhere module Foo
@@ -756,11 +698,9 @@ Stacktrace:
 [...]
 ```
 
-In the above example, `@everywhere module Foo` defined `Foo` on all nodes. However the call to `Foo.foo()` created
-a new global binding `gvar` on the local node, but this was not found on node 2 resulting in an `UndefVarError` error.
+در مثال بالا، `@everywhere module Foo` روی همه‌ی نودها، `Foo` را تعریف می‌کند. با این وجود، صدا کردن `Foo.foo()` یک binding سراسری `gvar` روی نود محلی می‌سازد، ولی این در نود ۲ پیدا نشد و باعث یک خطای `UndefVarError` شد.
 
-Note that this does not apply to globals created under module `Main`. Globals under module `Main` are serialized
-and new bindings created under `Main` on the remote node.
+توجه کنید که این درباره‌ی global های‌ ایجاد‌ شده در ماژول `Main` صدق نمی‌کند. Global های ماژول `Main` سریال‌سازی‌ می‌شوند و binding های جدید در `Main` روی نود remote درست می‌شوند.
 
 ```julia
 julia> gvar_self = "Node1"
@@ -778,8 +718,7 @@ Main               Module
 gvar_self 13 bytes String
 ```
 
-This does not apply to `function` or `struct` declarations. However, anonymous functions bound to global
-variables are serialized as can be seen below.
+این درباره‌ی تعریف‌های `function` یا `struct` صدق‌ نمی‌کند. با این وجود، همان‌طور که در زیر می‌بینید، تابع‌های ناشناس(anonymous) مقید شده به متغیرهای سراسری سریال‌سازی ‌می‌شوند:
 
 ```julia
 julia> bar() = 1
@@ -797,84 +736,110 @@ julia> remotecall_fetch(anon_bar, 2)
 1
 ```
 
-### Why does Julia use `*` for string concatenation? Why not `+` or something else?
+### چرا جولیا برای الحاق دو رشته از `*` استفاده می‌کند و از `+` یا چیزهای دیگر استفاده نمی‌کند؟
 
-The [main argument](@ref man-concatenation) against `+` is that string concatenation is not
-commutative, while `+` is generally used as a commutative operator. While the Julia community
-recognizes that other languages use different operators and `*` may be unfamiliar for some
-users, it communicates certain algebraic properties.
+[علت اصلی](@ref man-concatenation)
+ استفاده نکردن از نماد `+` این است که الحاق دو رشته خاصیت جابجایی ندارد در حالی که `+` در به طور کلی یک عملگر با خاصیت جابجایی می‌باشد. با اینکه جامعه‌ی جولیا می‌داند که زبان‌های برنامه‌نویسی دیگر از عملگرهای متفاوتی استفاده می‌کنند و احتمالا `*` برای بعضی از کاربران ناآشنا می‌باشد، اما این عملگر خاصیت‌های جبری خاصی را دارا می‌باشد.
 
-Note that you can also use `string(...)` to concatenate strings (and other values converted
-to strings); similarly, `repeat` can be used instead of `^` to repeat strings. The
-[interpolation syntax](@ref string-interpolation) is also useful for constructing strings.
+همچنین برای الحاق رشته‌ها می‌توانید از
+`string(...)`
+استفاده کنید(تمامی آرگومان‌های ورودی این تابع ابتدا به رشته تبدیل می‌شوند و سپس به یکدیگر الحاق می‌شوند). به طور مشابه برای تکرار یک رشته، می‌توان از
+`repeat`
+به جای
+`^`
+استفاده کرد. همچنین سینتکس
+[interpolation](@ref string-interpolation)
+برای ساختن رشته‌ها مفید می‌باشد.
 
-## Packages and Modules
+## بسته‌ها و ماژول‌ها
 
-### What is the difference between "using" and "import"?
+### تفاوت بین "using” و "import” چیست؟
 
-There is only one difference, and on the surface (syntax-wise) it may seem very minor. The difference
-between `using` and `import` is that with `using` you need to say `function Foo.bar(..` to
-extend module Foo's function bar with a new method, but with `import Foo.bar`,
-you only need to say `function bar(...` and it automatically extends module Foo's function bar.
+فقط یک تفاوت وجود دارد و به طور سطحی (در سینتکس)‌ ممکن است تفاوت بسیار کوچکی به نظر بیاید. تفاوت استفاده از `using` و `import` این است که هنگام استفاده از `using`، برای ارث بری از تابع bar ماژول Foo و جایگزینی آن با یک تابع جدید باید از عبارت
+ `function Foo.bar(..`
+استفاده کنید؛‌ اما هنگام استفاده از
+`import Foo.bar`
+، برای ارث بری و جایگزینی تابع، کافی‌ است بگویید
+`function bar(...`
+و به طور خودکار از تابع bar ماژول Foo ارث بری می‌شود.
 
-The reason this is important enough to have been given separate syntax is that you don't want
-to accidentally extend a function that you didn't know existed, because that could easily cause
-a bug. This is most likely to happen with a method that takes a common type like a string or integer,
-because both you and the other module could define a method to handle such a common type. If you
-use `import`, then you'll replace the other module's implementation of `bar(s::AbstractString)`
-with your new implementation, which could easily do something completely different (and break
-all/many future usages of the other functions in module Foo that depend on calling bar).
+دلیلی که این تفاوت اهمیت کافی برای وجود دو سینتکس مجزا دارد، این است که نمی‌خواهید به طور تصادفی تابعی را ارث بری کنید که نمی‌دانستید وجود دارد، زیرا این ‌می‌تواند به سادگی خطا ایجاد کند. احتمال این اتفاق در متدهایی که یک نوع متداول مثل رشته یا عدد صحیح را ورودی می‌گیرند، بیشتر است. زیرا ممکن است هم شما و هم آن ماژول دیگر، یک متد تعریف کنید که یک نوع به این متداولی را پشتیبانی کند. اگر از
+`import`
+استفاده کنید، آن‌گاه پیاده‌سازی
+ `bar(s::AbstractString)`
+ در آن ماژول دیگر را با پیاده‌سازی جدید خود جایگزین می‌کنید که به راحتی ممکن است کاری کاملا متفاوت انجام دهد (و همه‌/بسیاری از استفاده‌های آینده‌ از تابع‌های دیگر که تابع bar ماژول Foo را صدا می‌کنند را خراب کند).
 
-## Nothingness and missing values
+## مقدارهای nothingness و missing
 
-### How does "null", "nothingness" or "missingness" work in Julia?
+### چگونه "null" و "nothingness" و "missingness" در جولیا کار می‌کنند؟
 
-Unlike many languages (for example, C and Java), Julia objects cannot be "null" by default.
-When a reference (variable, object field, or array element) is uninitialized, accessing it
-will immediately throw an error. This situation can be detected using the
-`isdefined` or [`isassigned`](@ref Base.isassigned) functions.
+برخلاف بسیاری از زبان‌ها (مثل C و Java)، اشیا‌ء جولیا نمی‌توانند به طور پیشفرض "null" باشند. وقتی یک مرجع (متغیر، فیلد یک شیء، یا المنت یک آرایه) مقدار اولیه نداشته باشد، دسترسی به آن بلافاصله یک خطا ایجاد می‌کند. این موقعیت می‌تواند از طریق تابع‌های
+`isdefined`
+ یا
+[`isassigned`](@ref Base.isassigned)
+تشخیص داده شود.
 
-Some functions are used only for their side effects, and do not need to return a value. In these
-cases, the convention is to return the value `nothing`, which is just a singleton object of type
-`Nothing`. This is an ordinary type with no fields; there is nothing special about it except for
-this convention, and that the REPL does not print anything for it. Some language constructs that
-would not otherwise have a value also yield `nothing`, for example `if false; end`.
+بعضی تابع‌ها فقط برای اثرهای جانبی ‌آن‌ها استفاده می‌شوند، و نیازی به برگرداندن‌ یک مقدار ندارند. در این حالات، رسم این است که مقدار
+`nothing`
+ را برگردانیم، که تنها یک شی
+singleton
+ از نوع
+`nothing`
+ است. این یک نوع عادی بدون فیلد است و هیچ ویژگی خاصی جز این رسم، و اینکه REPL برای ‌آن چیزی چاپ نمی‌کند، ندارد. بعضی ساختار‌های زبان که در غیر این صورت مقداری نمی‌داشتند نیز `nothing` را برمی‌گردانند، به عنوان مثال
+`if false; end`
+.
 
-For situations where a value `x` of type `T` exists only sometimes, the `Union{T, Nothing}`
-type can be used for function arguments, object fields and array element types
-as the equivalent of [`Nullable`, `Option` or `Maybe`](https://en.wikipedia.org/wiki/Nullable_type)
-in other languages. If the value itself can be `nothing` (notably, when `T` is `Any`),
-the `Union{Some{T}, Nothing}` type is more appropriate since `x == nothing` then indicates
-the absence of a value, and `x == Some(nothing)` indicates the presence of a value equal
-to `nothing`. The `something` function allows unwrapping `Some` objects and
-using a default value instead of `nothing` arguments. Note that the compiler is able to
-generate efficient code when working with `Union{T, Nothing}` arguments or fields.
+در موقعیت‌هایی که یک مقدار `x` از نوع `T` فقط گاهی وجود دارد، نوع
+`Union{T, Nothing}`
+ می‌تواند برای آرگومان‌های تابع، فیلدهای شیء، یا نوع المنت آرایه استفاده شود. این معادل
+[`Nullable`, `Option` یا `Maybe`](https://en.wikipedia.org/wiki/Nullable_type)
+ در زبان‌های دیگر است. اگر خود مقدار می‌تواند
+`nothing`
+ باشد (مخصوصا‌ وقتی که
+`T`
+برابر با
+`Any`
+باشد)، نوع
+`Union{Some{T}, Nothing}`
+ مناسب‌تر است چون
+`x == nothing`
+ عدم وجود مقدار و
+`x == Some(nothing)`
+ وجود مقداری برابر با
+`nothing`
+ را نشان می‌دهد. تابع
+`something`
+ اجازه‌ی unwrap کردن شی‌های
+`Some`
+ و دادن یک مقدار پیش‌فرض به جای آرگومان‌های `nothing` می‌دهد. توجه کنید که کامپایلر توانایی تولید کد بهینه هنگام کار کردن با فیلدها یا آرگومان‌های
+`Union{T, Nothing}`
+ را دارد.
 
-To represent missing data in the statistical sense (`NA` in R or `NULL` in SQL), use the
-`missing` object. See the [`Missing Values`](@ref missing) section for more details.
+برای نمایش داده‌ی گم‌شده از نظر آماری (`Na` در R یا 'NULL' در SQL)، شی `missing` را استفاده کنید. بخش
+[`Missing Values`](@ref missing)
+را برای جزئیات بیشتر ببینید.
 
-In some languages, the empty tuple (`()`) is considered the canonical
-form of nothingness. However, in julia it is best thought of as just
-a regular tuple that happens to contain zero values.
+در بعضی زبان‌ها، برای بیان پوچی، از عبارت متعارف چندتایی خالی (`()`)‌ استفاده می‌شود. اما در جولیا، بهتر است به آن به عنوان یک چندتایی خالی که صرفا صفر مقدار دارد نگاه کنیم.
 
-The empty (or "bottom") type, written as `Union{}` (an empty union type), is a type with
-no values and no subtypes (except itself). You will generally not need to use this type.
+نوع خالی، که به صورت
+`Union{}`
+ (یک نوع اجتماع خالی) نوشته می‌شود، یک نوع با هیچ مقدار یا زیرنوع (به جز خودش) است. شما به طور کلی نیاز به استفاده از این نوع نخواهید داشت.
 
-## Memory
+## حافظه
 
-### Why does `x += y` allocate memory when `x` and `y` are arrays?
+### وقتی `x` و `y` آرایه‌ هستند، چرا `x += y`  حافظه را اشغال می‌کند؟
 
-In Julia, `x += y` gets replaced during parsing by `x = x + y`. For arrays, this has the consequence
-that, rather than storing the result in the same location in memory as `x`, it allocates a new
-array to store the result.
+در جولیا، هنگام خوانش اولیه کد (parse)، عبارت
+`x += y`
+ با
+`x = x + y`
+ جایگزین می‌شود. در مورد آرایه‌ها، نتیجه‌ی این موضوع این است که به جای ذخیره شدن نتیجه در همان مکان به عنوان `x`، برای ذخیره نتیجه، یک آرایه‌ی جدید در حافظه ایجاد می‌شود.
 
-While this behavior might surprise some, the choice is deliberate. The main reason is the presence
-of immutable objects within Julia, which cannot change their value once created.  Indeed, a
-number is an immutable object; the statements `x = 5; x += 1` do not modify the meaning of `5`,
-they modify the value bound to `x`. For an immutable, the only way to change the value is to reassign
-it.
+گرچه این رفتار ممکن است بعضی‌ها را متعجب کند، این انتخاب عمدی است. دلیل اصلی حضور اشیا غیرقابل تغییر (immutable) در جولیا است که پس از ایجاد نمی‌توان مقدارشان را عوض کرد. در حقیقت، یک عدد یک شی غیرقابل تغییر (immutable) است؛ عبارت های
+`x = 5; x += 1`
+ معنی `5` را عوض نمی‌کنند، بلکه مقداری که به متغیر `x` نسبت داده شده است را تغییر می‌دهند. برای یک شیء غیرقابل تغییر(immutable)، تنها روش عوض کردن مقدار آن این است که آن را از اول تعریف کنید.
 
-To amplify a bit further, consider the following function:
+برای درک بیشتر، تابع زیر را در نظر بگیرید:
 
 ```julia
 function power_by_squaring(x, n::Int)
@@ -887,28 +852,35 @@ function power_by_squaring(x, n::Int)
 end
 ```
 
-After a call like `x = 5; y = power_by_squaring(x, 4)`, you would get the expected result: `x == 5 && y == 625`.
- However, now suppose that `*=`, when used with matrices, instead mutated the left hand side.
- There would be two problems:
+بعد از صدا زدن عبارت  
+`x = 5; y = power_by_squaring(x, 4)`
+، نتیجه مورد نظر
+`x == 5 && y == 625`
+را می‌گیریم. اما فرض کنید که
+`*=`
+، هنگام استفاده با ماتریس‌ها، سمت چپ عبارت را قابل تغییر می‌کرد. این کار، دو مشکل را به وجود می‌آورد:
 
-  * For general square matrices, `A = A*B` cannot be implemented without temporary storage: `A[1,1]`
-    gets computed and stored on the left hand side before you're done using it on the right hand side.
-  * Suppose you were willing to allocate a temporary for the computation (which would eliminate most
-    of the point of making `*=` work in-place); if you took advantage of the mutability of `x`, then
-    this function would behave differently for mutable vs. immutable inputs. In particular, for immutable
-    `x`, after the call you'd have (in general) `y != x`, but for mutable `x` you'd have `y == x`.
++ برای یک ماتریس مربعی در حالت کلی،
+`A = A*b`
+ نمی‌تواند بدون حافظه‌ی موقت پیاده‌سازی شود:
+`A[1,1]`
+ محاسبه می‌شود و مقدار آن قبل از اینکه استفاده شما از آن در سمت راست عبارت تمام شود، در سمت چپ عبارت ذخیره می‌شود.
 
-Because supporting generic programming is deemed more important than potential performance optimizations
-that can be achieved by other means (e.g., using explicit loops), operators like `+=` and `*=`
-work by rebinding new values.
++ فرض کنید که حاضر به تخصیص حافظه‌ی موقت برای این محاسبات باشیم (که البته باعث از بین رفتن فایده‌ی کار کردن درجای(in-place) `*=` می‌شود)؛ در صورت استفاده از ویژگی قابل تغییر بودن `x`، این تابع برای ورودی‌های قابل تغییر و غیرقابل تغییر رفتار‌های متفاوتی دارد. به طور دقیق‌تر، وقتی که `x` غیرقابل تغییر باشد، بعد از اجرای تابع به طور کلی داریم `x != y`، ولی اگر `x` قابل تغییر باشد، آنگاه داریم `y == x`.
 
-## Asynchronous IO and concurrent synchronous writes
+به دلیل اینکه پشتیبانی از برنامه‌نویسی generic مهم‌تر از بهینه‌سازی‌های ممکن عملکرد (که از طریق‌های دیگر، مثل استفاده از حلقه‌های صریح، ممکن هستند) تلقی می‌شود، عملگرهایی مثل
+`+=`
+ و
+`*=`
+ از طریق مقداردهی کردن دوباه‌یر متغیر با مقدارهای جدید کار می‌کنند.
 
-### Why do concurrent writes to the same stream result in inter-mixed output?
+## ورودی و خروجی‌های غیرهمگام و نوشتن همزمان و همگام
 
-While the streaming I/O API is synchronous, the underlying implementation is fully asynchronous.
+### چرا نوشتن‌های همزمان در یک جریان یکسان (stream) باعث خروجی inter-mixed می‌شوند؟
 
-Consider the printed output from the following:
+با وجود اینکه جریان I/O API همگام است، پیاده‌سازی زیرین آن به طور کامل ناهمگام است.
+
+خروجی چاپ‌شده زیر را در نظر بگیرید:
 
 ```julia
 julia> @sync for i in 1:3
@@ -917,11 +889,12 @@ julia> @sync for i in 1:3
 123 Foo  Foo  Foo  Bar  Bar  Bar
 ```
 
-This is happening because, while the `write` call is synchronous, the writing of each argument
-yields to other tasks while waiting for that part of the I/O to complete.
+دلیل این اتفاق این است که با وجود اینکه صدا کردن `write` همگام است، نوشتن هرکدام از آرگومان‌ها به بخش‌های دیگر داده می‌شود و هم‌زمان با آن بقیه‌ی بخش‌های I/O انجام می‌گیرد.
 
-`print` and `println` "lock" the stream during a call. Consequently changing `write` to `println`
-in the above example results in:
+`print`
+و
+`println`
+هنگامی که صدا زده می‌شوند، جریان (stream) را "قفل" می‌کنند. در نتیجه عوض کردن `write` به `println` در مثال بالا نتیجه زیر را دارد:
 
 ```julia
 julia> @sync for i in 1:3
@@ -932,7 +905,9 @@ julia> @sync for i in 1:3
 3 Foo  Bar
 ```
 
-You can lock your writes with a `ReentrantLock` like this:
+شما می‌توانید `write` های خود را با یک
+`ReentrantLock`
+، به طور زیر قفل کنید:
 
 ```julia
 julia> l = ReentrantLock();
@@ -950,15 +925,13 @@ julia> @sync for i in 1:3
 1 Foo  Bar 2 Foo  Bar 3 Foo  Bar
 ```
 
-## Arrays
+## آرایه‌ها
 
-### What are the differences between zero-dimensional arrays and scalars?
+### تفاوت‌های بین آرایه‌های صفر بعدی و اسکالرها چیست؟
 
-Zero-dimensional arrays are arrays of the form `Array{T,0}`. They behave similar
-to scalars, but there are important differences. They deserve a special mention
-because they are a special case which makes logical sense given the generic
-definition of arrays, but might be a bit unintuitive at first. The following
-line defines a zero-dimensional array:
+آرایه‌های صفر بعدی، آرایه‌های از فرم
+`Array{T,0}`
+ هستند. آن‌ها مشابه اسکالرها رفتار می‌کنند، اما تفاوت‌های مهمی نیز دارند. توجه خاص به این نوع از آرایه‌ها مهم است، زیرا این آرایه‌ها یک حالت خاص هستند که با توجه به تعریف کلی آرایه‌ها منطقی هستند، ولی در نگاه اول ممکن است مشهود نباشند. خط زیر یک آرایه صفر بعدی تعریف می‌کند:
 
 ```
 julia> A = zeros()
@@ -966,37 +939,50 @@ julia> A = zeros()
 0.0
 ```
 
-In this example, `A` is a mutable container that contains one element, which can
-be set by `A[] = 1.0` and retrieved with `A[]`. All zero-dimensional arrays have
-the same size (`size(A) == ()`), and length (`length(A) == 1`). In particular,
-zero-dimensional arrays are not empty. If you find this unintuitive, here are
-some ideas that might help to understand Julia's definition.
+در مثال زیر، `A` یک نگهدارنده‌ی قابل تغییر (mutable container) است که یک المنت دارد. این المنت می‌تواند از طریق
+`A[] = 1.0`
+ مقداردهی شود و از طریق
+`A[]`
+ می‌توان به آن دسترسی داشت. همه آرایه‌های صفر بعدی سایز (
+`size(A) == ()`
+)‌ و طول (
+`length(A) == 1`
+) یکسانی دارند. توجه کنید که آرایه‌های صفر بعدی، خالی نیستند. اگر همچنان شهودی روی این موضوع ندارید، چند‌ ایده‌ی زیر ممکن است به درک تعریف جولیا به شما کمک کنند:
 
-* Zero-dimensional arrays are the "point" to vector's "line" and matrix's
-  "plane". Just as a line has no area (but still represents a set of things), a
-  point has no length or any dimensions at all (but still represents a thing).
-* We define `prod(())` to be 1, and the total number of elements in an array is
-  the product of the size. The size of a zero-dimensional array is `()`, and
-  therefore its length is `1`.
-* Zero-dimensional arrays don't natively have any dimensions into which you
-  index -- they’re just `A[]`. We can apply the same "trailing one" rule for them
-  as for all other array dimensionalities, so you can indeed index them as `A[1]`, `A[1,1]`, etc; see
-  Omitted and extra indices.
++ همان‌طور که بردار‌ها "خط" و ماتریس‌ها "صفحه" تلقی می‌شوند،‌ آرایه‌های صفر بعدی را نیز می‌توان "نقطه" در نظر گرفت. همان‌طور که یک خط مساحت ندارد (ولی هنوز یک مجموعه از اشیا را نمایش می‌دهد)، یک نقطه هم طول یا ابعاد ندارد (ولی هنوز یک شی را نمایش می‌دهد).
++ عبارت
+`prod(())`
+ را برابر با ۱ تعریف می‌کنیم، و تعداد کل المنت‌های یک آرایه برابر با حاصلضرب درایه‌های `size`  آن است. سایز یک آرایه صفر بعدی برابر با `()` است، و در نتیجه طول آن ۱ است.
++ آرایه‌های صفر بعدی به طور طبیعی هیچ ابعادی ندارند که بتوانیم با اندیس به آن‌ها دسترسی پیدا کنیم. تنها عضو آن ها
+`A[]`
+است. اما می‌توانیم برای آن‌ها، مشابه بقیه ابعاد آرایه‌ها، همان قانون "trailing one" را استفاده کنیم. پس می‌توانیم همچنان از اندیس‌های
+ `A[1]`
+و
+`A[1, 1]`
+ و غیره استفاده کنیم. بخش اندیس‌های حذف‌شده و اضافه را ببینید.
 
-It is also important to understand the differences to ordinary scalars. Scalars
-are not mutable containers (even though they are iterable and define things
-like `length`, `getindex`, *e.g.* `1[] == 1`). In particular, if `x = 0.0` is
-defined as a scalar, it is an error to attempt to change its value via
-`x[] = 1.0`. A scalar `x` can be converted into a zero-dimensional array
-containing it via `fill(x)`, and conversely, a zero-dimensional array `a` can
-be converted to the contained scalar via `a[]`. Another difference is that
-a scalar can participate in linear algebra operations such as `2 * rand(2,2)`,
-but the analogous operation with a zero-dimensional array
-`fill(2) * rand(2,2)` is an error.
+هم‌چنان لازم است تفاوت‌های آن‌ها را با اسکالرهای عادی بفهمیم. اسکالر‌ها نگهدارنده‌های تغییر پذیر (mutable containers) نیستند (هرچند که قابل پیمایش (iterable) هستند و چیز‌هایی مثل
+`length`
+و
+`getindex`
+ را تعریف می‌کنند، به عنوان مثال
+`1[] == 1`
+). به طور خاص، اگر
+`x = 0.0`
+ به طور اسکالر تعریف شده باشد، اگر برای تغییر مقدار آن بخواهیم از عبارت
 
-### Why are my Julia benchmarks for linear algebra operations different from other languages?
+`x[] = 1.0`
+استفاده کنیم، به خطا می‌خوریم. یک اسکالر `x` می‌تواند از طریق
+`fill(x)`
+ به یک آرایه‌ی صفر بعدی تعریف شود. از آن طرف، یک آرایه‌ی صفر بعدی `a` می‌تواند از طریق `a[]` به اسکالر تبدیل شود. یک تفاوت دیگر این است که یک اسکالر میتواند در محاسبات جبر خطی مثل
+`2 * rand(2,2)`
+شرکت کند، ولی عملیات مشابه
+`fill(2) * rand(2,2)`
+ با یک آرایه‌ی صفر بعدی باعث خطا می‌شود.
 
-You may find that simple benchmarks of linear algebra building blocks like
+### چرا benchmark های من در جولیا برای عملیات‌های جبرخطی با زبان‌های دیگر فرق دارند؟
+
+ممکن است ببینید که benchmark های ساده‌ی الگوریتم‌های پایه‌ای جبرخطی مثل
 
 ```julia
 using BenchmarkTools
@@ -1006,68 +992,71 @@ B = randn(1000, 1000)
 @btime $A * $B
 ```
 
-can be different when compared to other languages like Matlab or R.
+می‌توانند در مقایسه با زبان‌هایی مثل متلب یا R متفاوت باشند.
 
-Since operations like this are very thin wrappers over the relevant BLAS functions, the reason for the discrepancy is very likely to be
+از آن‌جایی که عملیات‌هایی مثل این پوشش‌های خیلی نازکی روی تابع‌های BLAS مرتبط هستند، دلیل این تفاوت به احتمال خیلی زیاد موارد زیر است:
 
-1. the BLAS library each language is using,
+۱. کتابخانه BLAS ای که هر زبان استفاده می‌کند،
 
-2. the number of concurrent threads.
+۲. تعداد تردهای هم‌زمان (concurrent threads).
 
-Julia compiles and uses its own copy of OpenBLAS, with threads currently capped at `8` (or the number of your cores).
+جولیا کپی خودش از OpenBLAS را کامپایل و استفاده می‌کند، و تردهای آن در حال حاضر سقف ۸ (یا به تعداد هسته‌های شما) را دارند.
 
-Modifying OpenBLAS settings or compiling Julia with a different BLAS library, eg [Intel MKL](https://software.intel.com/en-us/mkl), may provide performance improvements. You can use [MKL.jl](https://github.com/JuliaComputing/MKL.jl), a package that makes Julia's linear algebra use Intel MKL BLAS and LAPACK instead of OpenBLAS, or search the discussion forum for suggestions on how to set this up manually. Note that Intel MKL cannot be bundled with Julia, as it is not open source.
+تغییر دادن تنظیمات OpenBLAS یا کامپایل کردن جولیا با یک کتابخانه دیگر BLAS، به عنوان مثال
+[Intel MKL](https://software.intel.com/en-us/mkl)
+، ممکن است در بازدهی پیشرفت ایجاد کند. شما میتوانید
+[MKL.jl](https://github.com/JuliaComputing/MKL.jl)
+ را استفاده کنید، این یک بسته (package) است که باعث میشود جبرخطی جولیا به جای OpenBLAS از
+ Intel MKL BLAS
+ و LAPACK استفاده کند. همین‌طور می‌توانید در انجمن تبادل نظر، پیشنهادهایی برای انجام این کار به طور دستی پیدا کنید. توجه کنید که Intel MKL نمی‌تواند با جولیا بسته‌بندی شود، زیرا متن باز (open source) نیست.
 
-## Computing cluster
+## خوشه محاسبات
 
-### How do I manage precompilation caches in distributed file systems?
+### چگونه می‌توانم کش‌های پیش از کامپایل (precompilation) را در سیستم‌های پرونده‌ای توزیع شده (distributed file systems) مدیریت کنم؟
 
-When using `julia` in high-performance computing (HPC) facilities, invoking
-_n_ `julia` processes simultaneously creates at most _n_ temporary copies of
-precompilation cache files. If this is an issue (slow and/or small distributed
-file system), you may:
+وقتی‌که از جولیا برای محاسبات با عملکرد بالا (HPC) استفاده می‌کنید، استفاده‌ی هم‌زمان از n فرآیند `julia`، به طور همزمان حداکثر n کپی موقت از فایل‌های کش پیش از کامپایل ایجاد می‌کند. اگر این یک مشکل است (سیستم‌های پرونده‌ای توزیع شده کند و یا کوچک)، می‌توانید:
 
-1. Use `julia` with `--compiled-modules=no` flag to turn off precompilation.
-2. Configure a private writable depot using `pushfirst!(DEPOT_PATH, private_path)`
-   where `private_path` is a path unique to this `julia` process.  This
-   can also be done by setting environment variable `JULIA_DEPOT_PATH` to
-   `$private_path:$HOME/.julia`.
-3. Create a symlink from `~/.julia/compiled` to a directory in a scratch space.
+۱. از `julia` با
+flag
+ `--compiled-modules=no` استفاده کنید تا پیش-کامپایل کردن را خاموش کنید.
 
-## Julia Releases
+۲. با استفاده از `pushfirst!(DEPOT_PATH, private_path)`  یک منبع (depot) قابل نوشتن خصوصی ایجاد کنید، به طوری که `private_path` یک مسیر یکتا به این فرآیند `julia` است. این می‌تواند از طریق عوض کردن متغیر محیطی  `JULIA_DEPOT_PATH` به `$private_path:$HOME/.julia` نیز انجام شود.
 
-### Do I want to use the Stable, LTS, or nightly version of Julia?
+۳. یک symlink از `~/.julia/compiled` به یک پوشه در یک فضای scratch ایجاد کنید.
 
-The Stable version of Julia is the latest released version of Julia, this is the version most people will want to run.
-It has the latest features, including improved performance.
-The Stable version of Julia is versioned according to [SemVer](https://semver.org/) as v1.x.y.
-A new minor release of Julia corresponding to a new Stable version is made approximately every 4-5 months after a few weeks of testing as a release candidate.
-Unlike the LTS version the a Stable version will not normally recieve bugfixes after another Stable version of Julia has been released.
-However, upgrading to the next Stable release will always be possible as each release of Julia v1.x will continue to run code written for earlier versions.
+## نسخه‌های جولیا
 
-You may prefer the LTS (Long Term Support) version of Julia if you are looking for a very stable code base.
-The current LTS version of Julia is versioned according to SemVer as v1.0.x;
-this branch will continue to recieve bugfixes until a new LTS branch is chosen, at which point the v1.0.x series will no longer recieved regular bug fixes and all but the most conservative users will be advised to upgrade to the new LTS version series.
-As a package developer, you may prefer to develop for the LTS version, to maximize the number of users who can use your package.
-As per SemVer, code written for v1.0 will continue to work for all future LTS and Stable versions.
-In general, even if targetting the LTS, one can develop and run code in the latest Stable version, to take advantage of the improved performance; so long as one avoids using new features (such as added library functions or new methods).
+### خوب است نسخه‌ی پایدار، LTS یا nightly جولیا را استفاده کنم؟
 
-You may prefer the nightly version of Julia if you want to take advantage of the latest updates to the language, and don't mind if the version available today occasionally doesn't actually work.
-As the name implies, releases to the nightly version are made roughly every night (depending on build infrastructure stability).
-In general nightly released are fairly safe to use—your code will not catch on fire.
-However, they may be occasional regressions and or issues that will not be found until more thorough pre-release testing.
-You may wish to test against the nightly version to ensure that such regressions that affect your use case are caught before a release is made.
+نسخه‌ی پایدار جولیا جدیدترین نسخه منتشر شده از جولیا است، و این نسخه‌ای است که برای اکثر افراد بهتر است. این نسخه جدیدترین قابلیت‌ها را دارد و شامل بهتر شدن عملکرد نیز می‌باشد. نسخه‌های پایدار جولیا،‌ بر اساس
+[SemVer](https://semver.org/)
+ به صورت v1.x.y شماره‌گذاری می‌شوند. پس از چند‌ هفته تست شدن به عنوان یک کاندیدای توزیع، هر ۴ الی ۵ ماه تغییرات کوچکی به نسخه‌ی پایدار جولیا اضافه می‌شود.
+برخلاف نسخه‌ی LTS، نسخه‌ی پایدار به طور خودکار اصلاح‌های خطا ها را پس از توزیع یک نسخه‌ی پایدار جدید دریافت نمی‌کند.
+با این حال، ارتقا به نسخه‌ی پایدار بعدی همیشه ممکن خواهد بود، چون که هر نسخه‌ی v1.x همچنان کدهایی که برای نسخه‌های قبلی نوشته شده‌اند را اجرا می‌کند.
 
-Finally, you may also consider building Julia from source for yourself. This option is mainly for those individuals who are comfortable at the command line, or interested in learning.
-If this describes you, you may also be interested in reading our [guidelines for contributing](https://github.com/JuliaLang/julia/blob/master/CONTRIBUTING.md).
+اگر دنبال یک پایه‌ی بسیار پایدار برای کد خود هستید، ممکن است نسخه‌ی LTS (پشتیبانی بلند مدت) جولیا را ترجیح دهید. نسخه LTS کنونی طبق SemVer به صورت v1.0.x شماره‌دهی می‌شود. این شاخه ادامه به دریافت اصلاح‌های خطاها خواهد کرد، تا زمانی که یک شاخه LTS جدید انتخاب شود. از آن پس، سری v1.0.x دیگر اصلاح‌های خطاها را به طور معمول دریافت نخواهد کرد، و همه به استثنای محافظه‌کارترین کاربرها توصیه به استفاده از سری جدید نسخه‌های LTS می‌شوند.
+به عنوان یک توسعه‌دهنده بسته، احتمالا ترجیح خواهید داد که نسخه LTS را توسعه دهید، تا تعداد کاربرانی که می‌توانند بسته‌ی شما را استفاده کنند را بیشینه کنید. طبق SemVer، کدهای نوشته شده برای نسخه v1.0، برای همه‌ی نسخه‌های LTS و پایدار آینده ادامه به کار خواهند کرد.
+به طور کلی، حتی اگر هدف شما استفاده از LTS است، تا زمانی که از ویژگی‌های جدید (مثل تابع‌های اضافه‌شده به کتابخانه‌ها یا متدهای جدید) دوری کنید، می‌توانید برای استفاده از عملکرد ارتقا یافته، در جدیدترین نسخه‌ی پایدار کد خود را توسعه دهید و اجرا کنید.
 
-Links to each of these download types can be found on the download page at [https://julialang.org/downloads/](https://julialang.org/downloads/).
-Note that not all versions of Julia are available for all platforms.
+اگر می‌خواهید از جدیدترین به‌روز‌رسانی‌ها به زبان استفاده کنید، و به این که نسخه‌ای که امروز در دسترس است ممکن است گاهی در حقیقت کار نکند اهمیت نمی‌دهید، ممکن است ترجیح دهید از نسخه nightly جولیا استفاده کنید.
+همانطور که اسم آن اشاره می‌کند، تقریبا به طور شبانه (بسته به پایداری زیرساخت)،‌ نسخه‌ی nightly به‌روزرسانی می‌شود. به طور کلی نسخه‌های nightly به‌ میزان خوبی برای استفاده امن هستند، کد شما آتش نمی‌گیرد! با این حال، ممکن است گاه‌به‌گاه پسرفت‌ها یا مشکلاتی وجود داشته باشد که تا تست‌های پیش از توزیع بیشتری انجام شوند، تشخیص داده نمی‌شوند. ممکن است بخواهید کد خود را با نسخه‌ی دیگر چک کنید تا مطمئن شوید چنین پسرفت‌هایی که کاربرد شما را تحت تاثیر قرار می‌دهند، تشخیص داده شوند.
 
-### How can I transfer the list of installed packages after updating my version of Julia?
+در نهایت، ممکن است بخواهید ساختن جولیا برای خودتان از منبع را در نظر قرار دهید. این گزینه، عمدتا برای افرادی هست که با خط فرمان (command line) راحت هستند، یا علاقه‌مند به یاد گرفتن آن هستند. اگر این شما را توصیف می‌کند، ممکن است بخواهید
+[راهنمایی برای توسعه](https://github.com/JuliaLang/julia/blob/master/CONTRIBUTING.md)
+ ما را بخوانید.
 
-Each minor version of julia has its own default [environment](https://docs.julialang.org/en/v1/manual/code-loading/#Environments-1). As a result, upon installing a new minor version of Julia, the packages you added using the previous minor version will not be available by default. The environment for a given julia version is defined by the files `Project.toml` and `Manifest.toml` in a folder matching the version number in `.julia/environments/`, for instance, ` .julia/environments/v1.3`.
+لینک‌های دانلود هر کدام از نوع‌های مختلف را می‌توانید از صفحه‌ی دانلود، در
+[https://julialang.org/downloads/](https://julialang.org/downloads/)
+مشاهده کنید. توجه کنید که همه‌ی نسخه‌های جولیا برای همه‌ی پلتفرم‌ها موجود نیستند.
 
-If you install a new minor version of Julia, say `1.4`, and want to use in its default environment the same packages as in a previous version (e.g. `1.3`), you can copy the contents of the file `Project.toml` from the `1.3` folder to `1.4`. Then, in a session of the new Julia version, enter the "package management mode" by typing the key `]`, and run the command [`instantiate`](https://julialang.github.io/Pkg.jl/v1/api/#Pkg.instantiate).
+### چگونه می‌توانم بعد از به روز‌رسانی نسخه‌ی جولیای خود، لیست بسته‌های نصب‌شده‌ام را انتقال دهم؟
 
-This operation will resolve a set of feasible packages from the copied file that are compatible with the target Julia version, and will install or update them if suitable. If you want to reproduce not only the set of packages, but also the versions you were using in the previous Julia version, you should also copy the `Manifest.toml` file before running the Pkg command `instantiate`. However, note that packages may define compatibility constraints that may be affected by changing the version of Julia, so the exact set of versions you had in `1.3` may not work for `1.4`.
+هر نسخه‌ی جزئی جولیا،
+[محیط](https://docs.julialang.org/en/v1/manual/code-loading/#Environments-1)
+ پیش‌فرض خودش را دارد. در نتیجه، هنگامی که یک نسخه‌ی جزئی جولیا را نصب کنید، بسته‌هایی که به نسخه‌هایی جزئی قبلی جولیا اضافه کرده‌اید، به طور پیش‌فرض در دسترس نخواهند بود. محیط (environment) هر نسخه‌ی جولیا در پرونده‌های `Project.toml` و `Manifest.toml` در یک پوشه در `.julia/environments/` ذخیره می‌شوند که با شماره‌ی جولیا تطابق دارد، به عنوان مثال ` .julia/environments/v1.3` .
+
+اگر یک نسخه‌ی جزئی جدید جولیا، مثلا `1.4` را نصب کنید، و بخواهید در محیط پیش‌فرض ‌آن از همان بسته‌هایی که در یک نسخه‌ی قبلی (مثلا `1.3`) استفاده کرده‌اید استفاده کنید، می‌توانید محتوای پرونده‌ی `Project.toml` را از پوشه‌ی `1.3` به `1.4` کپی کنید. سپس در یک نشست (session) نسخه‌ی جدید جولیا، با وارد کردن `]`، به "package management mode" وارد شوید و فرمان
+[`instantiate`](https://julialang.github.io/Pkg.jl/v1/api/#Pkg.instantiate)
+ را انجام دهید.
+
+این عملیات یک مجموعه‌ از بسته‌ها در پرونده‌ی کپی‌شده که با نسخه‌ی مورد نظر جولیا تطابق دارند را انتخاب می‌کند، و در صورت امکان آن‌ها را نصب یا به‌روزرسانی می‌کند. اگر می‌خواهید نه تنها مجموعه‌ی بسته‌ها، که نسخه‌هایی از آن‌ها که در نسخه‌ی قدیم جولیا استفاده می‌کردید را بازسازی کنید، باید قبل از اجرای دستور `instantiate` در Pkg، پرونده‌ی `Manifest.toml` را نیز کپی کنید. اما توجه کنید که بسته‌ها ممکن است محدودیت‌های سازگاری‌ای تعریف کنند که با تغییر نسخه‌ی جولیا تحت‌تاثیر قرار بگیرند، پس مجموعه‌ی دقیق نسخه‌هایی که در `1.3` داشتید ممکن است برای `1.4` کار نکنند.
