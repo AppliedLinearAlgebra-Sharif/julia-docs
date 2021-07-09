@@ -135,6 +135,8 @@ combination of 3 flags:
 Usage: julia-config [--cflags|--ldflags|--ldlibs]
 ```
 
+اگر سورس مثال بالا در فایل `embed_example.c` ذخیره شود در این صورت دستور بعدی آن را به یک برنامه در حال اجرا روی لینوس و ویندوز (محیط MSYS2) کامپایل میکند یا اگر روی OS/X هستید کافیست `clang` را جایگزین `gcc` کنید.:
+    
 If the above example source is saved in the file `embed_example.c`, then the following command
 will compile it into a running program on Linux and Windows (MSYS2 environment), or if on OS/X,
 then substitute `clang` for `gcc`.:
@@ -144,7 +146,10 @@ then substitute `clang` for `gcc`.:
 ```
 
 #### Use in Makefiles
+#### استفاده در ساخت فایل ها
 
+اما در حالت عمومی تعبیه پروژه ها پیچیده تر از مثال بالا هستند بنابراین قسمت بعدی امکان پشتیبانی عمومی ساخت فایل را می دهد با فرض ساخت GNU به این دلیل  استفاده از بسط درشت (macro expansion) **shell**. علاوه بر این اگر چه ممکن است که `julia-config.jl` چندین بار در آدرس `/usr/local` پیدا شود این حالت ضرورتا پیش نمی آید اما جولیا می تواند استفاده شود تا `julia-config.jl` را قرار دهد و ساخت فایل (makefile)  می تواند برای این کار استفاده شود. در این جا مثال بالا گسترش پیدا کرده است تا در ساخت فایل استفاده شود:
+    
 But in general, embedding projects will be more complicated than the above, and so the following
 allows general makefile support as well – assuming GNU make because of the use of the **shell**
 macro expansions.  Additionally, though many times `julia-config.jl` may be found in the directory
@@ -164,20 +169,32 @@ all: embed_example
 
 Now the build command is simply `make`.
 
+حال دستور ساخت تنها دستور `make` است.
+
 ## High-Level Embedding on Windows with Visual Studio
 
+## تعبیه سطح بالا روی ویندوز از طریق ویژوال استودیو
+    
+
 If the `JULIA_DIR` environment variable hasn't been setup, add it using the System panel before
-starting Visual Studio. The `bin` folder under JULIA_DIR should be on the system PATH.
+starting Visual Studio. The `bin` folder under JULIA_DIR should be on the system PATH. 
+
+    
+اگر متغیر محیطی `JULIA_DIR` تنظیم نشده باشد آن را قبل از شروع کردن ویژوال استودیو با استفاده از پنل سیستم (System Panel) اضافه کنید. پوشه `bin` تحت JULIA_DIR باید در مسیر سیستم (system PATH) باشد.
 
 We start by opening Visual Studio and creating a new Console Application project. To the 'stdafx.h'
 header file, add the following lines at the end:
 
+با باز کردن ویژوال استودیو و ساختن یک پروژه برنامه کنسولی  (Console Application) جدید شروع می کنیم. به اخر هدر فایل 'stdafx.h' خط های بعدی را اضافه کنید: 
+    
 ```c
 #include <julia.h>
 ```
 
 Then, replace the main() function in the project with this code:
 
+سپس تابع main() را در پروژه با این کد جایگزین کنید:
+    
 ```c
 int main(int argc, char *argv[])
 {
@@ -201,20 +218,30 @@ The next step is to set up the project to find the Julia include files and the l
 know whether the Julia installation is 32- or 64-bits. Remove any platform configuration that doesn't correspond
 to the Julia installation before proceeding.
 
+قدم بعدی این است که پروژه را تنظیم کنید تا فایل های include جولیا را و کتابخانه ها را پیدا کنید. مهم است که بدانید که نسخه نصب شده جولیا شما ۳۲ بیت است یا ۶۴ بیت. هر هر پیکر بندی پلتفرم را که با نسخه نصب شده جولیا تطابق ندارد قبل از ادامه دادن حذف کنید.
+
 Using the project Properties dialog, go to `C/C++` | `General` and add `$(JULIA_DIR)\include\julia\` to the
 Additional Include Directories property. Then, go to the `Linker` | `General` section and add `$(JULIA_DIR)\lib`
 to the Additional Library Directories property. Finally, under `Linker` | `Input`, add `libjulia.dll.a;libopenlibm.dll.a;`
 to the list of libraries.
 
+با استفاده از دیالوگ ویژگی های پروژه (Properties)  به `C/C++` | `General` بروید و `$(JULIA_DIR)\include\julia\` را به ویژگی مسیرهای اضافی include (Additional Include Directories) اضافه کنید. سپس به قسمت `Linker` | `General` بروید و `$(JULIA_DIR)\lib` را به ویژگی مسیرهای اضافی کتابخانه (Additional Library Directories) اضافه کنید. در آخر تحت `Linker` | `Input` به لیست کتابخانه ها `libjulia.dll.a;libopenlibm.dll.a;` را اضافه کنید.
+
 At this point, the project should build and run.
 
+در این مرحله پروژه باید ساخته شود و اجرا شود.
+
 ## Converting Types
+
+## انواع تبدیل
 
 Real applications will not just need to execute expressions, but also return their values to the
 host program. `jl_eval_string` returns a `jl_value_t*`, which is a pointer to a heap-allocated
 Julia object. Storing simple data types like `Float64` in this way is called `boxing`,
 and extracting the stored primitive data is called `unboxing`. Our improved sample program that
 calculates the square root of 2 in Julia and reads back the result in C looks as follows:
+
+برنامه های واقعی تنها لازم ندارند که عبارت ها را اجرا کنند بلکه نیاز دارند که مقادیر خود را به برنامه میزبان برگرداند. `jl_eval_string` یک `jl_value_t*` را بر می گرداند که یک نشانگر است به یک شی جولیا پشته اختصاص داده شده (heap-allocated). ذخیره کردن انواع ساده داده ها برای مثال `Float64` به این روش `boxing` گفته می شود و استخراج داده های اولیه ذخیره شده `unboxing` گفته می شود. برنامه نمونه گسترش یافته ما که ریشه دوم  را در جولیا محاسبه می کند و نتیجه را در زبان C دوباره می خواند به شکل زیر است:
 
 ```c
 jl_value_t *ret = jl_eval_string("sqrt(2.0)");
@@ -234,7 +261,11 @@ By typing `typeof(sqrt(2.0))` into the Julia shell we can see that the return ty
 `Float64` (`double` in C). To convert the boxed Julia value into a C double the
 `jl_unbox_float64` function is used in the above code snippet.
 
+برای اینکه چک کنیم که ایا  `ret` یک نوع مشخص جولیا است می توانیم از توابع `jl_isa` یا `jl_typeis` و یا `jl_is_...` استفاده کنیم.
+با تایپ کردن `typeof(sqrt(2.0))` در Julia shell می توانیم ببینیم که نوع بازگشت شده `Float64` (`double` در C) است. برای اینکه مقدار ذخیره شده جولیا را تبدیل کنیم به یک رقم اعشاری (double) در C تابع `jl_unbox_float64` در قطعه کد بالا استفاده می شود.      
+    
 Corresponding `jl_box_...` functions are used to convert the other way:
+توابع متناظر `jl_box_...` برای تبدیل به نوع دیگری استفاده می شود :
 
 ```c
 jl_value_t *a = jl_box_float64(3.0);
@@ -243,12 +274,17 @@ jl_value_t *c = jl_box_int32(3);
 ```
 
 As we will see next, boxing is required to call Julia functions with specific arguments.
+همانطور که خواهیم دید ذخیره سازی (boxing) برای صدا زدن توابع جولیا با ارگومان های خاص لازم است.
 
 ## Calling Julia Functions
+
+## صدا زدن توابع جولیا
 
 While `jl_eval_string` allows C to obtain the result of a Julia expression, it does not allow
 passing arguments computed in C to Julia. For this you will need to invoke Julia functions directly,
 using `jl_call`:
+
+در حالی که `jl_eval_string` به زبان C اجازه می دهد که نتیجه یک عبارت جولیا را بگیرد اجازه رد شدن ارگومان های محاسبه شده در C را به جولیا نمی دهد.برای این کار نیاز دارید که به صورت مستقیم توابع جولیا را با استفاده از `jl_call` فراخوانی کنید.
 
 ```c
 jl_function_t *func = jl_get_function(jl_base_module, "sqrt");
@@ -262,12 +298,17 @@ is defined. Then, the double value is boxed using `jl_box_float64`. Finally, in 
 the function is called using `jl_call1`. `jl_call0`, `jl_call2`, and `jl_call3` functions also
 exist, to conveniently handle different numbers of arguments. To pass more arguments, use `jl_call`:
 
+در قدم اول یک فهم از تابع `sqrt`جولیا با صدا زدن `jl_get_function` بازیابی می شود.
+اولین ارگومانی که به `jl_get_function` فرستاده می شود یک نشانگر به ماژول `Base` است که `sqrt` در آن تعریف شده است. سپس مقدار اعشاری (double) توسط `jl_box_float64` ذخیره (boxing) می شود. در مرحله آخر تابع با استفاده از `jl_call1` صدا زده می شود. توابع  `jl_call0` و `jl_call2` و `jl_call3` هم وجود دارند برای مدیریت کردن آسان تعداد مختلف آرگومان ها. برای فرستادن تعداد بیش تر آرگومان ها از `jl_call` استفاده کنید :
+
 ```
 jl_value_t *jl_call(jl_function_t *f, jl_value_t **args, int32_t nargs)
 ```
 
 Its second argument `args` is an array of `jl_value_t*` arguments and `nargs` is the number of
 arguments.
+
+آرگومان دوم یعنی `args` یک آرایه از آرگومان های `jl_value_t*` است و `nargs` تعداد آرگومان ها است.
 
 ## Memory Management
 
