@@ -83,30 +83,24 @@ complex(float(x))
  برای مثال ما نوع ارگومان را
  `Int` 
  یا
- <span><a href="https://docs.julialang.org/en/v1/manual/methods/)/">Int32</a></span>
+ <span><a href="https://docs.julialang.org/en/v1/)/">Int32</a></span>
  
  در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  
 اسم گذاری های تابع معتبر نباشد،یک ارور
  <span><a href="https://docs.julialang.org/en/v1/manual/methods/)/">MethodError</a></span>
  به ما داده میشود
  .
- </div>
- [`Int32`](@ref)
- در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  اسم گذاری های تابع معتبر نباشد،یک ارور   
- [`MethodError`](@ref)
- به ما داده میشود
+ به این مسئله
+ <span><a href="https://en.wikipedia.org/wiki/Duck_typing">duck typing</a></span>
+ می گویند
  .
- <p><a href="https://en.wikipedia.org/wiki/Duck_typing)/">Duck typing</a></p>
-The second version will convert `x` to an appropriate type, instead of always the same type.
-
-This style point is especially relevant to function arguments. For example, don't declare an argument
-to be of type `Int` or [`Int32`](@ref) if it really could be any integer, expressed with the abstract
-type [`Integer`](@ref). In fact, in many cases you can omit the argument type altogether,
-unless it is needed to disambiguate from other method definitions, since a
-[`MethodError`](@ref) will be thrown anyway if a type is passed that does not support any
-of the requisite operations. (This is known as
-[duck typing](https://en.wikipedia.org/wiki/Duck_typing).)
-
+ </div>
+<div dir="auto">
+ برای مثال تعریف زیر را برای تابع 
+ addone
+ در نظر بگیرید که عدد یک را با ارگومان ورودیش جمع می کند
+ :
+</div>
 For example, consider the following definitions of a function `addone` that returns one plus its
 argument:
 
@@ -116,7 +110,42 @@ addone(x::Integer) = x + oneunit(x)    # any integer type
 addone(x::Number) = x + oneunit(x)     # any numeric type
 addone(x) = x + oneunit(x)             # any type supporting + and oneunit
 ```
-
+<div dir="auto">
+ اخرین تعریف 
+ addone
+ برای تمام ارگومان ها از نوع
+ <span><a href="https://docs.julialang.org/en/v1/)/">oneunit</a></span>
+ )
+ که یکی را برمی گرداند که هم نوع 
+ 'x'
+ باشد که از تایپی که مناسب نباشد و در نتیجه به ارور برخورد کردن خودداری میکند
+ وتابع
+ <span><a href="https://docs.julialang.org/en/v1/)/">'+'</a></span>
+ با ان ارگومان اجرا میشود
+ .
+ نکته مهم این است که ما هیچ مشکلی در اجرا و عملکرد
+ `addone(x) = x + oneunit(x)`
+ نسبت به حالتی که تایپ را بنویسیم نداریم 
+ )
+ به طور اصطلاح 
+we dont have  performance penalty
+ (
+ چون جولیا به طور اتوماتیک تابع 
+ `addone`
+ را به ازای ارگومان 
+ `x::Int`
+ صدا میزند
+ و
+ `oneunit`
+ با 
+ 1
+ جایگزین می شود
+ .
+ بنابراین هر سه تعریف اول از تابع 
+ `addone`
+ به طور کامل به تعریف چهارم کاهش می یابند
+ .
+</div>
 The last definition of `addone` handles any type supporting [`oneunit`](@ref) (which returns 1 in
 the same type as `x`, which avoids unwanted type promotion) and the [`+`](@ref) function with
 those arguments. The key thing to realize is that there is *no performance penalty* to defining
@@ -126,8 +155,12 @@ compile a specialized `addone` function for `x::Int` arguments, with the call to
 replaced by its inlined value `1`. Therefore, the first three definitions of `addone` above are
 completely redundant with the fourth definition.
 
-## Handle excess argument diversity in the caller
+## Handle excess argument diversity in the caller(تعدد ارگومان در تابع)
 
+<div dir="auto">
+ به جای 
+ :
+ </div>
 Instead of:
 
 ```julia
@@ -137,7 +170,10 @@ function foo(x, y)
 end
 foo(x, y)
 ```
-
+<div dir="auto">
+ از این کد استفاده کنید
+ :
+ </div>
 use:
 
 ```julia
@@ -146,16 +182,37 @@ function foo(x::Int, y::Int)
 end
 foo(Int(x), Int(y))
 ```
-
+<div dir="auto">
+ این سبک نوشتن بهتر است زیرا دیگر ارگومان هایی از نوع دیگر را قبول نمیکند و باعث اشتباه کمتر برنامه نویس می شود
+ .
+ وفقط نوع 
+ `Int`
+ را قبول میکند
+ .
+ </div>
 This is better style because `foo` does not really accept numbers of all types; it really needs
 `Int` s.
-
+<div dir="auto">
+ یک مسئله اینجا این است که این تابع به صورت ذاتی فقط 
+ integer
+ قبول میکند 
+ .
+ شاید بهتر بود تابع تضمیم بگیرد که با
+ non-integers
+ چگونه تصمیم بگیرد
+ (مانند کف یا سقف گرفتن عمل کند)
+ مسئله دیگر این است که این دقیق مشخص کردن نوع ورودی ارگومان توابع ابتکار عمل را برای تعاریف بدی تابع می گیرد
+ .
+ </div>
 One issue here is that if a function inherently requires integers, it might be better to force
 the caller to decide how non-integers should be converted (e.g. floor or ceiling). Another issue
 is that declaring more specific types leaves more "space" for future method definitions.
 
 ## [Append `!` to names of functions that modify their arguments]
-
+<div dir="auto">
+ به جای 
+ :
+ </div>
 Instead of:
 
 ```julia
@@ -166,7 +223,10 @@ function double(a::AbstractArray{<:Number})
     return a
 end
 ```
-
+<div dir="auto">
+ از این کد استفاده کنید
+ :
+ </div>
 use:
 
 ```julia
@@ -177,29 +237,68 @@ function double!(a::AbstractArray{<:Number})
     return a
 end
 ```
-
+<div dir="auto">
+Julia Base
+ از این روش مرسوم استفاده میکند و توابعی با هر دو صورت کپی شده و اصلاح شده استفاده میکند 
+ .
+ </div>
+ (e.g., [`sort`](@ref) and [`sort!`](@ref))
+ <div dir="auto">
+و بقیه فقط فزم اصلاح شده اند
+ .
+ و این برای چنین توابعی عادی است که ارایه اصلاح شده را برگردانند
+ .
+ </div>
+ (e.g., [`push!`](@ref), [`pop!`](@ref), [`splice!`](@ref))
+ 
 Julia Base uses this convention throughout and contains examples of functions
 with both copying and modifying forms (e.g., [`sort`](@ref) and [`sort!`](@ref)), and others
 which are just modifying (e.g., [`push!`](@ref), [`pop!`](@ref), [`splice!`](@ref)).  It
 is typical for such functions to also return the modified array for convenience.
 
-## Avoid strange type `Union`s
-
+## Avoid strange type `Union`s(از نوع های عجیب "اجتماع " دوری کنید)
+ <div dir="auto">
+ تایپ ها یا نوع هایی مثل
+ `Union{Function,AbstractString}`
+ نشانه هایی هستند که طراحی شما میتوانست بهتر و تمیز تر باشد
+ .
+ </div>
 Types such as `Union{Function,AbstractString}` are often a sign that some design could be cleaner.
 
-## Avoid elaborate container types
-
+## Avoid elaborate container types(از نوع های در برگیرنده پیچیده بپرهیزید)
+ <div dir="auto">
+ معمولا ساخت ارایه به صورت زیر کمک شایانی نمی کند
+ :
+  </div>
 It is usually not much help to construct arrays like the following:
 
 ```julia
 a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
 ```
-
+<div dir="auto">
+ در این حالت
+ `Vector{Any}(undef, n)`
+ بهتر است .
+ و همچنین برای کامپایلر کمک کننده تراست که یک حاشیه نویسی هایی به صورت زیر انجام دهد که
+ بسیاری از نوع های جایگزین را به یک نوع تبدیل کند
+ .
+  </div>
+  (e.g. `a[i]::Int`)
+  
 In this case `Vector{Any}(undef, n)` is better. It is also more helpful to the compiler to annotate specific
 uses (e.g. `a[i]::Int`) than to try to pack many alternatives into one type.
 
 ## Use naming conventions consistent with Julia `base/`
-
+<div dir="auto">
+ *
+ ماژول ها و نوع متغیر ها از حروف بزرگ تشکیل شده اند و در اصطلاح 
+ camel case
+ هستند برای مثال 
+ `module SparseArrays`
+ و
+ `struct UnitRange`
+ *
+  </div>
   * modules and type names use capitalization and camel case: `module SparseArrays`, `struct UnitRange`.
   * functions are lowercase ([`maximum`](@ref), [`convert`](@ref)) and, when readable, with multiple
     words squashed together ([`isequal`](@ref), [`haskey`](@ref)). When necessary, use underscores
@@ -208,6 +307,8 @@ uses (e.g. `a[i]::Int`) than to try to pack many alternatives into one type.
   * conciseness is valued, but avoid abbreviation ([`indexin`](@ref) rather than `indxin`) as
     it becomes difficult to remember whether and how particular words are abbreviated.
 
+<div dir="auto">
+  </div>
 If a function name requires multiple words, consider whether it might represent more than one
 concept and might be better split into pieces.
 
