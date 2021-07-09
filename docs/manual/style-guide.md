@@ -152,7 +152,7 @@ we dont have  performance penalty
  به جای 
  :
  </div>
-Instead of:
+
 
 ```julia
 function foo(x, y)
@@ -165,7 +165,6 @@ foo(x, y)
  از این کد استفاده کنید
  :
  </div>
-use:
 
 ```julia
 function foo(x::Int, y::Int)
@@ -199,7 +198,6 @@ foo(Int(x), Int(y))
  به جای 
  :
  </div>
-Instead of:
 
 ```julia
 function double(a::AbstractArray{<:Number})
@@ -213,7 +211,6 @@ end
  از این کد استفاده کنید
  :
  </div>
-use:
 
 ```julia
 function double!(a::AbstractArray{<:Number})
@@ -351,6 +348,7 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
   </div>
   
   [`sprint`](@ref)
+  
 3. **Input being mutated**.
  <div dir="auto">
 برای مثال در تابع
@@ -420,6 +418,7 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
  است
  .
   </div>
+  
 8. **Everything else**.
 <div dir="auto">
 هر ارگومان دیگری 
@@ -444,10 +443,6 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
  `Vararg`](@ref)s,
    e.g. `Matrix{T}(undef, 1, 2)`.
 </div>
-   This refers to arguments that can be listed indefinitely at the end of a function call.
-   For example, in `Matrix{T}(undef, dims)`, the dimensions can be given as a
-   [`Tuple`](@ref), e.g. `Matrix{T}(undef, (1,2))`, or as [`Vararg`](@ref)s,
-   e.g. `Matrix{T}(undef, 1, 2)`.
 
 10. **Keyword arguments**.
 <div dir="auto">
@@ -488,7 +483,6 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
  کنید
  .
 </div>
-It is better to avoid errors than to rely on catching them.
 
 ## Don't parenthesize conditions(شرط ها را با پرانتز ننویسید)
 <div dir="auto">
@@ -501,7 +495,6 @@ It is better to avoid errors than to rely on catching them.
  بنویسید
  :
 </div>
-Julia doesn't require parens around conditions in `if` and `while`. Write:
 
 ```julia
 if a == b
@@ -516,61 +509,123 @@ if a == b
 if (a == b)
 ```
 
-## Don't overuse `...`
+## Don't overuse `...`(دوباره استفاده نکنید)
 <div dir="auto">
+ اتصال
+ ارگومان توابع یا به اصطلاح 
+ (splicing)
+ میتواند کاری خطرناک باشد
+ .
+ به جای
+ [a..., b...]
+ به سادگی از 
+ [a; b]
+ استفاده کنید که خودش عمل 
+ concatation
+ را برای ارایه انجام میدهد.
+ collect(a)
+ بهتر از 
+ [a...]
+ است ولی زمانی که 
+ a
+  خودش قابل تکرار است ،معمولا بهتر است که انها را خودش انجام دهیم و به ارایه تبدیل نکنیم 
+ .
+ 
+ 
+ 
 </div>
-Splicing function arguments can be addictive. Instead of `[a..., b...]`, use simply `[a; b]`,
-which already concatenates arrays. [`collect(a)`](@ref) is better than `[a...]`, but since `a`
-is already iterable it is often even better to leave it alone, and not convert it to an array.
 
-## Don't use unnecessary static parameters
+## Don't use unnecessary static parameters(از پارامترهای غیر ضروری استاتیک استفاده نکنید)
 <div dir="auto">
+ امضای تابع
+ :
 </div>
-A function signature:
 
 ```julia
 foo(x::T) where {T<:Real} = ...
 ```
 <div dir="auto">
+ بهتر است بدین صورت نوشته شود
+ :
 </div>
-should be written as:
 
 ```julia
 foo(x::Real) = ...
 ```
 <div dir="auto">
+ در مقابل ،مخصوصا اگر 
+ T
+ در بدنه تابع استفاده نشده باشد، حتی اگر استفاده شدهباشد در صورت راحتی میتواند با 
+  <span><a href="https://docs.julialang.org/en/v1/)/">typeof(x)</a></span>
+ جایگزین شود 
+و از لحاظ عملکردی فرقی ندارند.
+ توجه داشته باشید که این یک احتیاط کلی و عمومی در برابر پارامترهای استاتیک نیست بلکه فقط درمقابل مواقعی است که استفاده از انها لازم نباشد.
+ <br>
+توجه داشته باشید که تایپ های دربرگیرنده 
+ container types
+ به طور ویژهاحتیاج به تایپ پارامتر در صدا زدن تابع دارند .
+ برای اطلاعات بیشتر به 
+ <span><a href="https://docs.julialang.org/en/v1/)/">Avoid fields with abstract containers</a></span>
+ مراجعه کنید.
+
 </div>
-instead, especially if `T` is not used in the function body. Even if `T` is used, it can be replaced
-with [`typeof(x)`](@ref) if convenient. There is no performance difference. Note that this is
-not a general caution against static parameters, just against uses where they are not needed.
 
-Note also that container types, specifically may need type parameters in function calls. See the
-FAQ [Avoid fields with abstract containers](@ref) for more information.
-
-## Avoid confusion about whether something is an instance or a type
+## Avoid confusion about whether something is an instance or a type(سردرگمی  تایپ و نمونه )
 <div dir="auto">
+ مجموعه ای از تعاریف مانند تعاریف زیر گیج کننده هستند 
+ :
 </div>
-Sets of definitions like the following are confusing:
 
 ```julia
 foo(::Type{MyType}) = ...
 foo(::MyType) = foo(MyType)
 ```
 <div dir="auto">
+ تصمیم بگیرید که ایا مفهوم و موضوع مورد سوال به صورت 
+ MyType
+ یا
+ MyType()
+ قابل نوشت است و از ان پیروی کنید.
+ <br>
+ استایل و طراحی موردنظر ما استفاده پیش فرض از نمونه ها واگر واقعا اضافه کردن انها برای حل مسئله لازم بود ،بعدا فقط افزودن متد هایی که شامل   
+ Type{MyType}
+ می شوند
+ .
+  <br>
+ اگر تایپ به صورت موثر یک شکارشگر 
+ enum
+ باشد بهتر است به صورت تایپ تکی 
+ (single type )
+ تعریف شود.
+ البته در حالت ایده ال) 
+ بهتر است 
+ immutable 
+ (باشد
+با مقدار شمارش شده 
+ (enumration value)
+ یک نمونه یا شی از ان باشد کانستراکتور ها و کانورژن ها می توانند چک کنند که لیل مقادیر قابل اطمینان هستندد یا خیر .
+ این طراحی نسبت به حالتی که 
+ enum
+ هارا یک تایپ ابسترکت تعریف کرده و "مقادیر" را به صورت زیر نوع تعریف کنیم ، بهتر است .
+ 
+
+
 </div>
-Decide whether the concept in question will be written as `MyType` or `MyType()`, and stick to
-it.
 
-The preferred style is to use instances by default, and only add methods involving `Type{MyType}`
-later if they become necessary to solve some problems.
-
-If a type is effectively an enumeration, it should be defined as a single (ideally immutable struct or primitive)
-type, with the enumeration values being instances of it. Constructors and conversions can check
-whether values are valid. This design is preferred over making the enumeration an abstract type,
-with the "values" as subtypes.
-
-## Don't overuse macros
+## Don't overuse macros(زیاد از کاکرو استفاده نکنید)
 <div dir="auto">
+ باید بدانیم که چه موقع یک ماکرو میتواند یک تابع به حساب اید .
+ <br>
+ صدا کردن 
+ <span><a href="https://docs.julialang.org/en/v1/)/">eval</a></span>
+ داخل یک ماکرو به طور خاص یک علامت خطرنام است .
+ به این معناست که ماکرو فقط در حالتی کار میکند که در بالاترین سطخ 
+ (top level)
+ صدا شده باشد.
+ اگر این ماکرو به صورت تابع نوشته شده باشد،به طور طبیعی به مقادیر
+ run-time
+ ای که نیاز دارد دسترسی دارد
+ .
 </div>
 Be aware of when a macro could really be a function instead.
 
