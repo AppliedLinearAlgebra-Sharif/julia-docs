@@ -447,7 +447,7 @@ julia> bitstring(nextfloat(x))
 
   * راهنمای صریح محاسبات ممیز شناور [استاندارد IEEE 754-2008](https://standards.ieee.org/standard/754-2008.html) است. که البته به صورت آنلاین رایگان در دسترس نیست.
   * برای ارائه مختصر اما شفاف نحوه نمایش اعداد ممیز شناور، به [مقاله John D. Cook](https://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/) یا [مقدمه](https://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/) نوشته شده توسط او که به بعضی از مسائل نمایش این اعداد و تفاوتشان با ایده انتزاعی که از اعداد حقیقی وجود دارد می‌پردازد، مراجعه کنید.  
-  * همچنین [مجموعه پستهای وبلاگ بروس داوسون در مورد اعداد شناور] (https://randomascii.wordpress.com/2012/05/20/thats-normalthe-performance-of-dd-floats/) نیز توصیه می شود.
+  * همچنین [مجموعه پستهای وبلاگ بروس داوسون در مورد اعداد شناور](https://randomascii.wordpress.com/2012/05/20/thats-normalthe-performance-of-dd-floats/) نیز توصیه می شود.
   * برای یک بحث عالی و عمیق در مورد اعداد ممیز شناور و مسائل مربوط به صحت عددی هنگام محاسبه با آنها، به مقاله دیوید گلدبرگ [آنچه دانشمندان کامپیوتر باید درباره حساب‌های ممیز شناور بدانند](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf) مراجعه کنید.
   * برای به دست آوردن مستندات گسترده تر تاریخچه، منطق و مسائل مربوط به اعداد با ممیز شناور و همچنین بحث درباره بسیاری از موضوعات دیگر در محاسبات عددی، به [نوشته‌های جمع آوری شده](https://people.eecs.berkeley.edu/~wkahan/) [William Kahan](https://en.wikipedia.org/wiki/William_Kahan)  که معمولاً به عنوان "پدر ممیز شناور" شناخته می‌شود مراجعه کنید.  [مصاحبه ای با پیرمرد نقطه شناور](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html) به صورت خاص ممکن است مورد توجه باشد.
   
