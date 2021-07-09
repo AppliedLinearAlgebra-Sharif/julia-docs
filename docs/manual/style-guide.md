@@ -280,31 +280,74 @@ uses (e.g. `a[i]::Int`) than to try to pack many alternatives into one type.
  `module SparseArrays`
  و
  `struct UnitRange`
+ <br>
  *
-  </div>
-  * modules and type names use capitalization and camel case: `module SparseArrays`, `struct UnitRange`.
-  * functions are lowercase ([`maximum`](@ref), [`convert`](@ref)) and, when readable, with multiple
-    words squashed together ([`isequal`](@ref), [`haskey`](@ref)). When necessary, use underscores
-    as word separators. Underscores are also used to indicate a combination of concepts ([`remotecall_fetch`](@ref)
-    as a more efficient implementation of `fetch(remotecall(...))`) or as modifiers.
-  * conciseness is valued, but avoid abbreviation ([`indexin`](@ref) rather than `indxin`) as
-    it becomes difficult to remember whether and how particular words are abbreviated.
+ توابع با حروف کوچک یا به اصطلاح 
+ lowercase
+ هستند
+ .
+ مانند
+ <span><a href="https://docs.julialang.org/en/v1/)/">`maximum`</a></span>
+ و
+ <span><a href="https://docs.julialang.org/en/v1/)/">`convert`</a></span>
+ و وقتی از چند کلمه تشکیل شده باشد
+ مانند
+ <span><a href="https://docs.julialang.org/en/v1/)/">`isequal`</a></span>
+ و
+ <span><a href="https://docs.julialang.org/en/v1/)/">`haskey`</a></span>
+ .
+ اگر لازم بود 
+ از 
+ underscore
+ به عنوان کلمه جدا کن استفاده منید
+ .
+  underscores
+ معمولا برای نشان دادن ترکیب چند موضوع استفاده می شوند
+ مثلا
+ <span><a href="https://docs.julialang.org/en/v1/)/">`remotecall_fetch`</a></span>
+ ورژن با عملکرد بهتر برای تابع
+  <span><a href="https://docs.julialang.org/en/v1/)/">`fetch(remotecall(...))`</a></span>
+ است
+ .
+ <br>
+ *
+ مختصر نوشتن خیلی خوب است ولی از خلاصه نویسی بپرهیزید برای مثال 
+ <span><a href="https://docs.julialang.org/en/v1/)/">`indexin`</a></span>
+ بهتر است از
+ <span><a href="https://docs.julialang.org/en/v1/)/">`indxin`</a></span>
+ چون باعث میشود سخت تر به یاد بیاوریم که هر لغت مختصر شده کدام کلمه است 
+ .
+ 
+</div>
 
 <div dir="auto">
+ اگربرای اسم یک تابع به چند کلمه نیاز داشتید ،این موضوع را که به چند تا موضوع مربوط است و بهتر است انها را به چند تا تابع تقسیم کنید
+ .
   </div>
-If a function name requires multiple words, consider whether it might represent more than one
-concept and might be better split into pieces.
 
 ## Write functions with argument ordering similar to Julia Base
-
+<div dir="auto">
+ به عنوان قانونی کلی کتابخانه 
+ BASE
+ از ترتیب زیر برای ارگومان های تابع استفاده میکند.
+ :
+  </div>
 As a general rule, the Base library uses the following order of arguments to functions,
 as applicable:
 
+1. **ارگومان تابع**.
+
 1. **Function argument**.
+<div dir="auto">
+
+  </div>
    Putting a function argument first permits the use of [`do`](@ref) blocks for passing
    multiline anonymous functions.
 
 2. **I/O stream**.
+ <div dir="auto">
+
+  </div>
    Specifying the `IO` object first permits passing the function to functions such as
    [`sprint`](@ref), e.g. `sprint(show, x)`.
 
