@@ -101,8 +101,7 @@ complex(float(x))
  در نظر بگیرید که عدد یک را با ارگومان ورودیش جمع می کند
  :
 </div>
-For example, consider the following definitions of a function `addone` that returns one plus its
-argument:
+
 
 ```julia
 addone(x::Int) = x + 1                 # works only for Int
@@ -238,12 +237,9 @@ end
  و این برای چنین توابعی عادی است که ارایه اصلاح شده را برگردانند
  .
  </div>
+ 
  (e.g., [`push!`](@ref), [`pop!`](@ref), [`splice!`](@ref))
  
-Julia Base uses this convention throughout and contains examples of functions
-with both copying and modifying forms (e.g., [`sort`](@ref) and [`sort!`](@ref)), and others
-which are just modifying (e.g., [`push!`](@ref), [`pop!`](@ref), [`splice!`](@ref)).  It
-is typical for such functions to also return the modified array for convenience.
 
 ## Avoid strange type `Union`s(از نوع های عجیب "اجتماع " دوری کنید)
  <div dir="auto">
@@ -252,14 +248,12 @@ is typical for such functions to also return the modified array for convenience.
  نشانه هایی هستند که طراحی شما میتوانست بهتر و تمیز تر باشد
  .
  </div>
-Types such as `Union{Function,AbstractString}` are often a sign that some design could be cleaner.
 
 ## Avoid elaborate container types(از نوع های در برگیرنده پیچیده بپرهیزید)
  <div dir="auto">
  معمولا ساخت ارایه به صورت زیر کمک شایانی نمی کند
  :
   </div>
-It is usually not much help to construct arrays like the following:
 
 ```julia
 a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
