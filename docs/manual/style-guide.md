@@ -44,9 +44,6 @@
  
   [`pi`](@ref))
 
-It is also worth emphasizing that functions should take arguments, instead of operating directly
-on global variables (aside from constants like [`pi`](@ref)).
-
 ## Avoid writing overly-specific types(جلوگیری از نوشتن تایپ های بیش از حد مشخص)
 
 <div dir="auto">
@@ -86,6 +83,7 @@ complex(float(x))
  برای مثال ما نوع ارگومان را
  `Int` 
  یا
+ <span><a href="https://docs.julialang.org/en/v1/manual/methods)/">Int32</a></span>
  <span style='color: blue'>Int32</span>
  در واقع  ،در بیشتر اوقات تایپ یا نوع ورودی را میتوانید اعلام نکنید مگر اینکه برای ابهام زدایی از سایر توابع لازم باشداگر نوعی که به ارگومان داده میشودتوسط هیچ یک از  
 اسم گذاری های تابع معتبر نباشد،یک ارور
