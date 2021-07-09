@@ -41,11 +41,10 @@ Use 4 spaces per indentation level.
  global 
  از متغیر ها استفاده کنند
  .
- )جدای از ثابت ها مانند
- [`pi`](@ref)
- )
+ جدای از ثابت ها مانند
  
  </div>
+  [`pi`](@ref)
 Writing code as a series of steps at the top level is a quick way to get started solving a problem,
 but you should try to divide a program into functions as soon as possible. Functions are more
 reusable and testable, and clarify what steps are being done and what their inputs and outputs
@@ -55,22 +54,41 @@ Julia's compiler works.
 It is also worth emphasizing that functions should take arguments, instead of operating directly
 on global variables (aside from constants like [`pi`](@ref)).
 
-## Avoid writing overly-specific types
+## Avoid writing overly-specific types(جلوگیری از نوشتن تایپ های بیش از حد مشخص)
 
 <div dir="auto">
+کد باید تا جایی که میتوانیم
+ generic
+ عمومی باشد
+ .
+ به جای رویه زیر
  </div>
 Code should be as generic as possible. Instead of writing:
 
 ```julia
 Complex{Float64}(x)
 ```
-
+<div dir="auto">
+ بهتر است که از توابع در دسترس عمومی
+ )
+ اصطلاحا
+ genenric
+ استفاده شود
+ .
+ </div>
 it's better to use available generic functions:
 
 ```julia
 complex(float(x))
 ```
-
+<div dir="auto">
+ رویه دوم 
+ `x`
+ را به تایپ مورد نظر تبدیل میکند 
+ .
+ به جای اینکه همیشه به یک نوع تبدیل کند
+ .
+  </div>
 The second version will convert `x` to an appropriate type, instead of always the same type.
 
 This style point is especially relevant to function arguments. For example, don't declare an argument
