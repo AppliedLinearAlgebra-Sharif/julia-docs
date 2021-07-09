@@ -144,6 +144,14 @@
     </tr>
     <tr>
       <td dir="ltr">
+        floating point
+      </td>
+      <td>
+        ممیز شناور
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr">
         fragment
       </td>
       <td>
@@ -268,6 +276,14 @@
       </td>
       <td>
         سطح بالا
+      </td>
+    </tr>
+    <tr>
+      <td dir="ltr">
+        type
+      </td>
+      <td>
+        نوع
       </td>
     </tr>
     <tr>
