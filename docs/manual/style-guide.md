@@ -146,14 +146,6 @@ we dont have  performance penalty
  به طور کامل به تعریف چهارم کاهش می یابند
  .
 </div>
-The last definition of `addone` handles any type supporting [`oneunit`](@ref) (which returns 1 in
-the same type as `x`, which avoids unwanted type promotion) and the [`+`](@ref) function with
-those arguments. The key thing to realize is that there is *no performance penalty* to defining
-*only* the general `addone(x) = x + oneunit(x)`, because Julia will automatically compile specialized
-versions as needed. For example, the first time you call `addone(12)`, Julia will automatically
-compile a specialized `addone` function for `x::Int` arguments, with the call to `oneunit`
-replaced by its inlined value `1`. Therefore, the first three definitions of `addone` above are
-completely redundant with the fourth definition.
 
 ## Handle excess argument diversity in the caller(تعدد ارگومان در تابع)
 
@@ -190,8 +182,6 @@ foo(Int(x), Int(y))
  را قبول میکند
  .
  </div>
-This is better style because `foo` does not really accept numbers of all types; it really needs
-`Int` s.
 <div dir="auto">
  یک مسئله اینجا این است که این تابع به صورت ذاتی فقط 
  integer
@@ -204,9 +194,6 @@ This is better style because `foo` does not really accept numbers of all types; 
  مسئله دیگر این است که این دقیق مشخص کردن نوع ورودی ارگومان توابع ابتکار عمل را برای تعاریف بدی تابع می گیرد
  .
  </div>
-One issue here is that if a function inherently requires integers, it might be better to force
-the caller to decide how non-integers should be converted (e.g. floor or ceiling). Another issue
-is that declaring more specific types leaves more "space" for future method definitions.
 
 ## [Append `!` to names of functions that modify their arguments]
 <div dir="auto">
@@ -238,10 +225,12 @@ function double!(a::AbstractArray{<:Number})
 end
 ```
 <div dir="auto">
-Julia Base
+همچنین
+ Julia Base
  از این روش مرسوم استفاده میکند و توابعی با هر دو صورت کپی شده و اصلاح شده استفاده میکند 
  .
  </div>
+ 
  (e.g., [`sort`](@ref) and [`sort!`](@ref))
  <div dir="auto">
 و بقیه فقط فزم اصلاح شده اند
