@@ -394,7 +394,6 @@ julia> greet * ", " * whom * ".\n"
 julia> "$greet, $whom.\n"
 "Hello, world.\n"
 ```
-
 این عملیات خواناتر و ساده‌تر است. به طور مثال روش سنتی مثال بالا برابر است با  `string(greet, ", ", whom, ".\n")`.
 
 عبارت کاملی که بعد از `$`	می‌آید تحت عنوان عبارتی برداشت می‌شود که مقدار آن قرار است درون رشته قرار بگیرد. برای سادگی و خوانا تر شدن می‌توانید از پرانتز استفاده کنید:
@@ -403,7 +402,7 @@ julia> "$greet, $whom.\n"
 julia> "1 + 2 = $(1 + 2)"
 "1 + 2 = 3"
 ```
-هر  دو عملیات الحاق و درون‌یابی، `string` را برای تبدیل اشیابه رشته صدا می‌زنند. اما `string` صرفا خروجی تابع `print` را برمی‌گرداند. پس تایپ‌های جدید باید متد‌های `print` یا `show` را به جای `string` اضافه کنند.
+هر  دو عملیات الحاق و درون‌یابی، درواقع `string` را برای تبدیل این اشیا به فرم رشته صدا می‌زنند. اما `string` صرفا خروجی تابع `print` را برمی‌گرداند. پس تایپ‌های جدید باید متد‌های `print` یا `show` را به جای `string` اضافه کنند.
 
 اکثر اشیا non-`AbstractString` به رشته‌هایی تبدیل می‌ شوند که نزدیک و مشابه حروف آن‌ها است:
 
@@ -437,8 +436,8 @@ I have $100 in my account.
 
 ## رشته‌ها با استفاده Triple-Quoted
 
-وقتی رشته‌ها توسط triple-quotes (`"""..."""`) ساخته می‌شوند، برخی عملیات‌های خاص بر رویشان تعریف می‌شود که سبب می‌شود برای متن‌ها و بلاک‌‌های متنی طولانی مورد استفاده قرار گیرند.
-این قابلیت برای رشته‌هایی که تو رفتگی و یا به صورت بلاکی هستند، مفید است:
+وقتی رشته‌ها توسط triple-quotes (`"""..."""`) ساخته می‌شوند، برخی عملیات‌های خاص بر رویشان تعریف می‌شود که سبب می‌شود برای متن‌ها و بلاک‌‌های متنی طولانی مورد استفاده قرار گیرند و بسیار مفید واقع شوند.
+ابتدا رشته‌های triple-quoted خط با کمترین تورفتگی اختصاص یافته اند. این قابلیت برای رشته‌هایی که تو رفتگی و یا به صورت بلاکی هستند، مفید است:
 
 ```julia
 julia> str = """
@@ -487,8 +486,529 @@ julia> """
          world."""
 "Hello,\nworld."
 ```
-
 فضای خالی دنباله ای بدون تغییر باقی مانده است.
 
 
 
+
+## Common Operations
+
+You can lexicographically compare strings using the standard comparison operators:
+
+```julia
+julia> "abracadabra" < "xylophone"
+true
+
+julia> "abracadabra" == "xylophone"
+false
+
+julia> "Hello, world." != "Goodbye, world."
+true
+
+julia> "1 + 2 = 3" == "1 + 2 = $(1 + 2)"
+true
+```
+
+You can search for the index of a particular character using the
+`findfirst` and `findlast` functions:
+
+```julia
+julia> findfirst(isequal('o'), "xylophone")
+4
+
+julia> findlast(isequal('o'), "xylophone")
+7
+
+julia> findfirst(isequal('z'), "xylophone")
+```
+
+You can start the search for a character at a given offset by using
+the functions `findnext` and `findprev`:
+
+```julia
+julia> findnext(isequal('o'), "xylophone", 1)
+4
+
+julia> findnext(isequal('o'), "xylophone", 5)
+7
+
+julia> findprev(isequal('o'), "xylophone", 5)
+4
+
+julia> findnext(isequal('o'), "xylophone", 8)
+```
+
+You can use the `occursin` function to check if a substring is found within a string:
+
+```julia
+julia> occursin("world", "Hello, world.")
+true
+
+julia> occursin("o", "Xylophon")
+true
+
+julia> occursin("a", "Xylophon")
+false
+
+julia> occursin('o', "Xylophon")
+true
+```
+
+The last example shows that `occursin` can also look for a character literal.
+
+Two other handy string functions are `repeat` and `join`:
+
+```julia
+julia> repeat(".:Z:.", 10)
+".:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:..:Z:."
+
+julia> join(["apples", "bananas", "pineapples"], ", ", " and ")
+"apples, bananas and pineapples"
+```
+
+Some other useful functions include:
+
+  * `firstindex(str)` gives the minimal (byte) index that can be used to index into `str` (always 1 for strings, not necessarily true for other containers).
+  * `lastindex(str)` gives the maximal (byte) index that can be used to index into `str`.
+  * `length(str)` the number of characters in `str`.
+  * `length(str, i, j)` the number of valid character indices in `str` from `i` to `j`.
+  * `ncodeunits(str)` number of [code units](https://en.wikipedia.org/wiki/Character_encoding#Terminology) in a string.
+  * `codeunit(str, i)` gives the code unit value in the string `str` at index `i`.
+  * `thisind(str, i)` given an arbitrary index into a string find the first index of the character into which the index points.
+  * `nextind(str, i, n=1)` find the start of the `n`th character starting after index `i`.
+  * `prevind(str, i, n=1)` find the start of the `n`th character starting before index `i`.
+
+## Non-Standard String Literals
+
+There are situations when you want to construct a string or use string semantics, but the behavior
+of the standard string construct is not quite what is needed. For these kinds of situations, Julia
+provides non-standard string literals. A non-standard string literal looks like a regular
+double-quoted string literal, but is immediately prefixed by an identifier, and doesn't behave
+quite like a normal string literal.  Regular expressions, byte array literals and version number
+literals, as described below, are some examples of non-standard string literals. Other examples
+are given in the Metaprogramming section.
+
+## Regular Expressions
+
+Julia has Perl-compatible regular expressions (regexes), as provided by the [PCRE](http://www.pcre.org/)
+library (a description of the syntax can be found [here](http://www.pcre.org/current/doc/html/pcre2syntax.html)). Regular expressions are related to strings in two ways: the obvious connection is that
+regular expressions are used to find regular patterns in strings; the other connection is that
+regular expressions are themselves input as strings, which are parsed into a state machine that
+can be used to efficiently search for patterns in strings. In Julia, regular expressions are input
+using non-standard string literals prefixed with various identifiers beginning with `r`. The most
+basic regular expression literal without any options turned on just uses `r"..."`:
+
+```julia
+julia> re = r"^\s*(?:#|$)"
+r"^\s*(?:#|$)"
+
+julia> typeof(re)
+Regex
+```
+
+To check if a regex matches a string, use `occursin`:
+
+```julia
+julia> occursin(r"^\s*(?:#|$)", "not a comment")
+false
+
+julia> occursin(r"^\s*(?:#|$)", "# a comment")
+true
+```
+
+As one can see here, `occursin` simply returns true or false, indicating whether a
+match for the given regex occurs in the string. Commonly, however, one wants to know not
+just whether a string matched, but also *how* it matched. To capture this information about
+a match, use the `match` function instead:
+
+```julia
+julia> match(r"^\s*(?:#|$)", "not a comment")
+
+julia> match(r"^\s*(?:#|$)", "# a comment")
+RegexMatch("#")
+```
+
+If the regular expression does not match the given string, `match` returns `nothing`
+-- a special value that does not print anything at the interactive prompt. Other than not printing,
+it is a completely normal value and you can test for it programmatically:
+
+```julia
+m = match(r"^\s*(?:#|$)", line)
+if m === nothing
+    println("not a comment")
+else
+    println("blank or comment")
+end
+```
+
+If a regular expression does match, the value returned by `match` is a `RegexMatch`
+object. These objects record how the expression matches, including the substring that the pattern
+matches and any captured substrings, if there are any. This example only captures the portion
+of the substring that matches, but perhaps we want to capture any non-blank text after the comment
+character. We could do the following:
+
+```julia
+julia> m = match(r"^\s*(?:#\s*(.*?)\s*$|$)", "# a comment ")
+RegexMatch("# a comment ", 1="a comment")
+```
+
+When calling `match`, you have the option to specify an index at which to start the
+search. For example:
+
+```julia
+julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",1)
+RegexMatch("1")
+
+julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",6)
+RegexMatch("2")
+
+julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",11)
+RegexMatch("3")
+```
+
+You can extract the following info from a `RegexMatch` object:
+
+  * the entire substring matched: `m.match`
+  * the captured substrings as an array of strings: `m.captures`
+  * the offset at which the whole match begins: `m.offset`
+  * the offsets of the captured substrings as a vector: `m.offsets`
+
+For when a capture doesn't match, instead of a substring, `m.captures` contains `nothing` in that
+position, and `m.offsets` has a zero offset (recall that indices in Julia are 1-based, so a zero
+offset into a string is invalid). Here is a pair of somewhat contrived examples:
+
+```julia
+julia> m = match(r"(a|b)(c)?(d)", "acd")
+RegexMatch("acd", 1="a", 2="c", 3="d")
+
+julia> m.match
+"acd"
+
+julia> m.captures
+3-element Vector{Union{Nothing, SubString{String}}}:
+ "a"
+ "c"
+ "d"
+
+julia> m.offset
+1
+
+julia> m.offsets
+3-element Vector{Int64}:
+ 1
+ 2
+ 3
+
+julia> m = match(r"(a|b)(c)?(d)", "ad")
+RegexMatch("ad", 1="a", 2=nothing, 3="d")
+
+julia> m.match
+"ad"
+
+julia> m.captures
+3-element Vector{Union{Nothing, SubString{String}}}:
+ "a"
+ nothing
+ "d"
+
+julia> m.offset
+1
+
+julia> m.offsets
+3-element Vector{Int64}:
+ 1
+ 0
+ 2
+```
+
+It is convenient to have captures returned as an array so that one can use destructuring syntax
+to bind them to local variables:
+
+```julia
+julia> first, second, third = m.captures; first
+"a"
+```
+
+Captures can also be accessed by indexing the `RegexMatch` object with the number or name of the
+capture group:
+
+```julia
+julia> m=match(r"(?<hour>\d+):(?<minute>\d+)","12:45")
+RegexMatch("12:45", hour="12", minute="45")
+
+julia> m[:minute]
+"45"
+
+julia> m[2]
+"45"
+```
+
+Captures can be referenced in a substitution string when using `replace` by using `\n`
+to refer to the nth capture group and prefixing the substitution string with `s`. Capture group
+0 refers to the entire match object. Named capture groups can be referenced in the substitution
+with `\g<groupname>`. For example:
+
+```julia
+julia> replace("first second", r"(\w+) (?<agroup>\w+)" => s"\g<agroup> \1")
+"second first"
+```
+
+Numbered capture groups can also be referenced as `\g<n>` for disambiguation, as in:
+
+```julia
+julia> replace("a", r"." => s"\g<0>1")
+"a1"
+```
+
+You can modify the behavior of regular expressions by some combination of the flags `i`, `m`,
+`s`, and `x` after the closing double quote mark. These flags have the same meaning as they do
+in Perl, as explained in this excerpt from the [perlre manpage](http://perldoc.perl.org/perlre.html#Modifiers):
+
+```
+i   Do case-insensitive pattern matching.
+
+    If locale matching rules are in effect, the case map is taken
+    from the current locale for code points less than 255, and
+    from Unicode rules for larger code points. However, matches
+    that would cross the Unicode rules/non-Unicode rules boundary
+    (ords 255/256) will not succeed.
+
+m   Treat string as multiple lines.  That is, change "^" and "$"
+    from matching the start or end of the string to matching the
+    start or end of any line anywhere within the string.
+
+s   Treat string as single line.  That is, change "." to match any
+    character whatsoever, even a newline, which normally it would
+    not match.
+
+    Used together, as r""ms, they let the "." match any character
+    whatsoever, while still allowing "^" and "$" to match,
+    respectively, just after and just before newlines within the
+    string.
+
+x   Tells the regular expression parser to ignore most whitespace
+    that is neither backslashed nor within a character class. You
+    can use this to break up your regular expression into
+    (slightly) more readable parts. The '#' character is also
+    treated as a metacharacter introducing a comment, just as in
+    ordinary code.
+```
+
+For example, the following regex has all three flags turned on:
+
+```julia
+julia> r"a+.*b+.*?d$"ism
+r"a+.*b+.*?d$"ims
+
+julia> match(r"a+.*b+.*?d$"ism, "Goodbye,\nOh, angry,\nBad world\n")
+RegexMatch("angry,\nBad world")
+```
+
+The `r"..."` literal is constructed without interpolation and unescaping (except for
+quotation mark `"` which still has to be escaped). Here is an example
+showing the difference from standard string literals:
+
+```julia
+julia> x = 10
+10
+
+julia> r"$x"
+r"$x"
+
+julia> "$x"
+"10"
+
+julia> r"\x"
+r"\x"
+
+julia> "\x"
+ERROR: syntax: invalid escape sequence
+```
+
+Triple-quoted regex strings, of the form `r"""..."""`, are also supported (and may be convenient
+for regular expressions containing quotation marks or newlines).
+
+The `Regex()` constructor may be used to create a valid regex string programmatically.  This permits using the contents of string variables and other string operations when constructing the regex string. Any of the regex codes above can be used within the single string argument to `Regex()`. Here are some examples:
+
+```julia
+julia> using Dates
+
+julia> d = Date(1962,7,10)
+1962-07-10
+
+julia> regex_d = Regex("Day " * string(day(d)))
+r"Day 10"
+
+julia> match(regex_d, "It happened on Day 10")
+RegexMatch("Day 10")
+
+julia> name = "Jon"
+"Jon"
+
+julia> regex_name = Regex("[\"( ]$name[\") ]")  # interpolate value of name
+r"[\"( ]Jon[\") ]"
+
+julia> match(regex_name," Jon ")
+RegexMatch(" Jon ")
+
+julia> match(regex_name,"[Jon]") === nothing
+true
+```
+
+## Byte Array Literals
+
+Another useful non-standard string literal is the byte-array string literal: `b"..."`. This
+form lets you use string notation to express read only literal byte arrays -- i.e. arrays of
+`UInt8` values. The type of those objects is `CodeUnits{UInt8, String}`.
+The rules for byte array literals are the following:
+
+  * ASCII characters and ASCII escapes produce a single byte.
+  * `\x` and octal escape sequences produce the *byte* corresponding to the escape value.
+  * Unicode escape sequences produce a sequence of bytes encoding that code point in UTF-8.
+
+There is some overlap between these rules since the behavior of `\x` and octal escapes less than
+0x80 (128) are covered by both of the first two rules, but here these rules agree. Together, these
+rules allow one to easily use ASCII characters, arbitrary byte values, and UTF-8 sequences to
+produce arrays of bytes. Here is an example using all three:
+
+```julia
+julia> b"DATA\xff\u2200"
+8-element Base.CodeUnits{UInt8, String}:
+ 0x44
+ 0x41
+ 0x54
+ 0x41
+ 0xff
+ 0xe2
+ 0x88
+ 0x80
+```
+
+The ASCII string "DATA" corresponds to the bytes 68, 65, 84, 65. `\xff` produces the single byte 255.
+The Unicode escape `\u2200` is encoded in UTF-8 as the three bytes 226, 136, 128. Note that the
+resulting byte array does not correspond to a valid UTF-8 string:
+
+```julia
+julia> isvalid("DATA\xff\u2200")
+false
+```
+
+As it was mentioned `CodeUnits{UInt8, String}` type behaves like read only array of `UInt8` and
+if you need a standard vector you can convert it using `Vector{UInt8}`:
+
+```julia
+julia> x = b"123"
+3-element Base.CodeUnits{UInt8, String}:
+ 0x31
+ 0x32
+ 0x33
+
+julia> x[1]
+0x31
+
+julia> x[1] = 0x32
+ERROR: setindex! not defined for Base.CodeUnits{UInt8, String}
+[...]
+
+julia> Vector{UInt8}(x)
+3-element Vector{UInt8}:
+ 0x31
+ 0x32
+ 0x33
+```
+
+Also observe the significant distinction between `\xff` and `\uff`: the former escape sequence
+encodes the *byte 255*, whereas the latter escape sequence represents the *code point 255*, which
+is encoded as two bytes in UTF-8:
+
+```julia
+julia> b"\xff"
+1-element Base.CodeUnits{UInt8, String}:
+ 0xff
+
+julia> b"\uff"
+2-element Base.CodeUnits{UInt8, String}:
+ 0xc3
+ 0xbf
+```
+
+Character literals use the same behavior.
+
+For code points less than `\u80`, it happens that the
+UTF-8 encoding of each code point is just the single byte produced by the corresponding `\x` escape,
+so the distinction can safely be ignored. For the escapes `\x80` through `\xff` as compared to
+`\u80` through `\uff`, however, there is a major difference: the former escapes all encode single
+bytes, which -- unless followed by very specific continuation bytes -- do not form valid UTF-8
+data, whereas the latter escapes all represent Unicode code points with two-byte encodings.
+
+If this is all extremely confusing, try reading ["The Absolute Minimum Every
+Software Developer Absolutely, Positively Must Know About Unicode and Character
+Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/).
+It's an excellent introduction to Unicode and UTF-8, and may help alleviate
+some confusion regarding the matter.
+
+## Version Number Literals
+
+Version numbers can easily be expressed with non-standard string literals of the form [`v"..."`](@ref @v_str).
+Version number literals create `VersionNumber` objects which follow the
+specifications of [semantic versioning](https://semver.org/),
+and therefore are composed of major, minor and patch numeric values, followed by pre-release and
+build alpha-numeric annotations. For example, `v"0.2.1-rc1+win64"` is broken into major version
+`0`, minor version `2`, patch version `1`, pre-release `rc1` and build `win64`. When entering
+a version literal, everything except the major version number is optional, therefore e.g.  `v"0.2"`
+is equivalent to `v"0.2.0"` (with empty pre-release/build annotations), `v"2"` is equivalent to
+`v"2.0.0"`, and so on.
+
+`VersionNumber` objects are mostly useful to easily and correctly compare two (or more) versions.
+For example, the constant `VERSION` holds Julia version number as a `VersionNumber` object, and
+therefore one can define some version-specific behavior using simple statements as:
+
+```julia
+if v"0.2" <= VERSION < v"0.3-"
+    # do something specific to 0.2 release series
+end
+```
+
+Note that in the above example the non-standard version number `v"0.3-"` is used, with a trailing
+`-`: this notation is a Julia extension of the standard, and it's used to indicate a version which
+is lower than any `0.3` release, including all of its pre-releases. So in the above example the
+code would only run with stable `0.2` versions, and exclude such versions as `v"0.3.0-rc1"`. In
+order to also allow for unstable (i.e. pre-release) `0.2` versions, the lower bound check should
+be modified like this: `v"0.2-" <= VERSION`.
+
+Another non-standard version specification extension allows one to use a trailing `+` to express
+an upper limit on build versions, e.g.  `VERSION > v"0.2-rc1+"` can be used to mean any version
+above `0.2-rc1` and any of its builds: it will return `false` for version `v"0.2-rc1+win64"` and
+`true` for `v"0.2-rc2"`.
+
+It is good practice to use such special versions in comparisons (particularly, the trailing `-`
+should always be used on upper bounds unless there's a good reason not to), but they must not
+be used as the actual version number of anything, as they are invalid in the semantic versioning
+scheme.
+
+Besides being used for the `VERSION` constant, `VersionNumber` objects are widely used
+in the `Pkg` module, to specify packages versions and their dependencies.
+
+## Raw String Literals
+
+Raw strings without interpolation or unescaping can be expressed with
+non-standard string literals of the form `raw"..."`. Raw string literals create
+ordinary `String` objects which contain the enclosed contents exactly as
+entered with no interpolation or unescaping. This is useful for strings which
+contain code or markup in other languages which use `$` or `\` as special
+characters.
+
+The exception is that quotation marks still must be escaped, e.g. `raw"\""` is equivalent
+to `"\""`.
+To make it possible to express all strings, backslashes then also must be escaped, but
+only when appearing right before a quote character:
+
+```julia
+julia> println(raw"\\ \\\"")
+\\ \"
+```
+
+Notice that the first two backslashes appear verbatim in the output, since they do not
+precede a quote character.
+However, the next backslash character escapes the backslash that follows it, and the
+last backslash escapes a quote, since these backslashes appear before a quote.
