@@ -201,27 +201,29 @@ better than `IdDict{Type, Vector}`
 
 See also the discussion under Parametric Types.
 
-## Type declarations
+<div dir="auto"> 
 
-In many languages with optional type declarations, adding declarations is the principal way to
-make code run faster. This is *not* the case in Julia. In Julia, the compiler generally knows
-the types of all function arguments, local variables, and expressions. However, there are a few
-specific instances where declarations are helpful.
+## تعریف‌کردن نوع داده
 
-### Avoid fields with abstract type
+در بسیاری از زبان‌ها با [قابلیت] اختیاری تعریف نوع، افزودن این تعاریف، روش اصلی برای سریع‌تر اجرا شدن کد است. در جولیا اینگونه نیست. در جولیا، کامپایلر به طور کلی نوع‌های تمام آرگومان‌های تابع، متغیرهای محلی و عبارات را می داند. اگر چه، چند مورد خاص وجود دارد که این تعاریف مفید هستند.
+    
+### از فیلدهای با نوع انتزاعی پرهیز کنید
 
-Types can be declared without specifying the types of their fields:
+نوع‌ها می‌توانند بدون مشخص‌کردن نوع‌های فیلدهای آن‌ها تعیین شوند:
 
+</div>
+    
 ```julia
 julia> struct MyAmbiguousType
            a
        end
 ```
 
-This allows `a` to be of any type. This can often be useful, but it does have a downside: for
-objects of type `MyAmbiguousType`, the compiler will not be able to generate high-performance
-code. The reason is that the compiler uses the types of objects, not their values, to determine
-how to build code. Unfortunately, very little can be inferred about an object of type `MyAmbiguousType`:
+<div dir="auto"> 
+
+ این اجازه می دهد تا `a` از هر نوع باشد. این اغلب می تواند مفید باشد ، اما یک نقطه ضعف هم دارد: برای اشیا از نوع `MyAmbiguousType`، کامپایلر قادر به ساخت کد با عملکرد بالا نخواهد بود. دلیل این امر این است که کامپایلر برای تعیین نحوه ساخت کد از نوع‌های اشیا، و نه مقادیر آن‌ها استفاده می کند. متأسفانه در مورد یک شی از نوع `MyAmbiguousType` چیزهای کمی قابل استنباط است:
+ 
+</div>
 
 ```julia
 julia> b = MyAmbiguousType("Hello")
@@ -237,14 +239,13 @@ julia> typeof(c)
 MyAmbiguousType
 ```
 
-The values of `b` and `c` have the same type, yet their underlying representation of data in memory is very
-different. Even if you stored just numeric values in field `a`, the fact that the memory representation
-of a `UInt8` differs from a `Float64` also means that the CPU needs to handle
-them using two different kinds of instructions. Since the required information is not available
-in the type, such decisions have to be made at run-time. This slows performance.
+<div dir="auto"> 
 
-You can do better by declaring the type of `a`. Here, we are focused on the case where `a` might
-be any one of several types, in which case the natural solution is to use parameters. For example:
+مقادیر `b` و `c`  نوع یکسانی دارند، اما بازنمایی اصلی داده‌های آنها در حافظه بسیار متفاوت است. حتی اگر فقط مقادیر عددی را در قسمت `a` ذخیره کرده باشید، این واقعیت که نمایش حافظه `UInt8` با `Float64` متفاوت است، به این معنی است که پردازنده باید با استفاده از دو نوع دستورالعمل مختلف آن‌ها را اداره کند. از آنجا که اطلاعات مورد نیاز در نوع موجود نیست، چنین تصمیماتی باید در زمان اجرا گرفته شوند. این عملکرد را کند می کند.
+  
+  با اعلام نوع `a` می توانید بهتر عمل کنید. در اینجا، ما بر روی مواردی متمرکز شده‌ایم که ممکن است یکی از نوع‌های مختلف باشد، در این صورت راه حل طبیعی استفاده از پارامترها است. برای مثال:
+    
+</div>
 
 ```julia
 julia> mutable struct MyType{T<:AbstractFloat}
@@ -252,7 +253,11 @@ julia> mutable struct MyType{T<:AbstractFloat}
        end
 ```
 
-This is a better choice than
+<div dir="auto">
+
+این انتخاب بهتری نسبت به مثال زیر است:
+
+</div>
 
 ```julia
 julia> mutable struct MyStillAmbiguousType
@@ -260,8 +265,11 @@ julia> mutable struct MyStillAmbiguousType
        end
 ```
 
-because the first version specifies the type of `a` from the type of the wrapper object. For
-example:
+<div dir="auto">
+
+زیرا نسخه اول نوع `a` را از نوع شی wrapper object مشخص می کند. برای مثال:
+    
+</div>
 
 ```julia
 julia> m = MyType(3.2)
@@ -277,8 +285,11 @@ julia> typeof(t)
 MyStillAmbiguousType
 ```
 
-The type of field `a` can be readily determined from the type of `m`, but not from the type of
-`t`. Indeed, in `t` it's possible to change the type of the field `a`:
+<div dir="auto">
+
+نوع فیلد `a` را می توان به راحتی از نوع `m` تعیین کرد، اما از نوع `t` نمی توان تعیین کرد. در واقع، در `t` امکان تغییر نوع فیلد `a` وجود دارد:
+
+</div>
 
 ```julia
 julia> typeof(t.a)
@@ -291,7 +302,11 @@ julia> typeof(t.a)
 Float32
 ```
 
-In contrast, once `m` is constructed, the type of `m.a` cannot change:
+<div dir="auto">
+
+در مقابل، هرگاه `m` ساخته شود، نوع `m.a` نمی‌تواند تغییر کند:
+
+</div>
 
 ```julia
 julia> m.a = 4.5f0
@@ -301,12 +316,12 @@ julia> typeof(m.a)
 Float64
 ```
 
-The fact that the type of `m.a` is known from `m`'s type—coupled with the fact that its type
-cannot change mid-function—allows the compiler to generate highly-optimized code for objects
-like `m` but not for objects like `t`.
+<div dir="auto">
 
-Of course, all of this is true only if we construct `m` with a concrete type. We can break this
-by explicitly constructing it with an abstract type:
+ این واقعیت که نوع `m.a` از روی نوع `m`شناخته شده است - همراه با این واقعیت که نوع آن نمی تواند تابع میانی را تغییر دهد - به کامپایلر اجازه می‌دهد برای اشیایی مانند `m` و نه برای اشیایی مانند `t` کد بسیار بهینه‌سازی شده تولید کند.
+  البته، همه این‌ها درست است اگر ما `m` را از نوعی واقعی بسازیم. ما می‌توانیم این را با ساختن صریح آن از یک نوع انتزاعی نقض کنیم:
+    
+</div>
 
 ```julia
 julia> m = MyType{AbstractFloat}(3.2)
@@ -322,28 +337,38 @@ julia> typeof(m.a)
 Float32
 ```
 
-For all practical purposes, such objects behave identically to those of `MyStillAmbiguousType`.
+<div dir="auto">
 
-It's quite instructive to compare the sheer amount code generated for a simple function
+ برای همه اهداف عملی، چنین اشیایی رفتار یکسانی با `MyStillAmbiguousType` دارند.
+  بسیار آموزنده است که این را با تابع ساده
 
+</div>
+    
 ```julia
 func(m::MyType) = m.a+1
 ```
 
-using
+<div dir="auto">
 
+با استفاده از
+
+</div>
+    
 ```julia
 code_llvm(func, Tuple{MyType{Float64}})
 code_llvm(func, Tuple{MyType{AbstractFloat}})
 ```
 
-For reasons of length the results are not shown here, but you may wish to try this yourself. Because
-the type is fully-specified in the first case, the compiler doesn't need to generate any code
-to resolve the type at run-time. This results in shorter and faster code.
+<div dir="auto">
 
-### Avoid fields with abstract containers
+مقایسه کرد.
+  به دلیل طولانی بودن، نتایج در اینجا نشان داده نمی شوند، اما ممکن است بخواهید خودتان این کار را انجام دهید. از آنجا که نوع در حالت اول کاملاً مشخص شده است، کامپایلر نیازی به تولید کدی برای حل نوع در زمان اجرا ندارد. این منجر به کد کوتاه‌تر و سریع‌تر می شود.
 
-The same best practices also work for container types:
+### از فیلدهایی که دارای container انتزاعی هستند خودداری کنید
+
+روش‌های  best practice مشابه برای نوع‌های `container` نیز کار می‌کند:
+    
+</div>
 
 ```julia
 julia> struct MySimpleContainer{A<:AbstractVector}
@@ -355,7 +380,11 @@ julia> struct MyAmbiguousContainer{T}
        end
 ```
 
-For example:
+<div dir="auto">
+
+برای مثال:
+
+</div>
 
 ```julia
 julia> c = MySimpleContainer(1:3);
@@ -379,12 +408,13 @@ julia> typeof(b)
 MyAmbiguousContainer{Int64}
 ```
 
-For `MySimpleContainer`, the object is fully-specified by its type and parameters, so the compiler
-can generate optimized functions. In most instances, this will probably suffice.
+<div dir="auto">
 
-While the compiler can now do its job perfectly well, there are cases where *you* might wish that
-your code could do different things depending on the *element type* of `a`. Usually the best
-way to achieve this is to wrap your specific operation (here, `foo`) in a separate function:
+برای `MySimpleContainer`،این شی با نوع و پارامترهای آن کاملاً مشخص شده است، بنابراین کامپایلر می‌تواند توابع بهینه شده‌ای را ایجاد کند. در بیشتر موارد، احتمالاً کافی است.
+  
+  در حالی که اکنون کامپایلر می‌تواند وظیفه خود را به خوبی انجام دهد، مواردی وجود دارد که شما ممکن است بخواهید کد شما بسته به نوع عنصر `a`، کارهای مختلفی انجام دهد. معمولاً بهترین راه برای رسیدن به این هدف این است که عملیات خاص خود را (در اینجا، `foo`) در یک تابع جداگانه قرار دهید:
+    
+</div>
 
 ```julia
 julia> function sumfoo(c::MySimpleContainer)
@@ -403,11 +433,13 @@ julia> foo(x::AbstractFloat) = round(x)
 foo (generic function with 2 methods)
 ```
 
-This keeps things simple, while allowing the compiler to generate optimized code in all cases.
+<div dir="auto">
 
-However, there are cases where you may need to declare different versions of the outer function
-for different element types or types of the `AbstractVector` of the field `a` in `MySimpleContainer`.
-You could do it like this:
+ این چیز‌ها را ساده نگه می‌دارد در حالی که به کامپایلر اجازه می‌دهد تا در همه موارد کد بهینه تولید کند.
+  
+  با این حال، مواردی وجود دارد که ممکن است لازم باشد نسخه‌های مختلفی از تابع خارجی را برای نوع‌های مختلف عناصر یا نوع‌های `AbstractVector` از فیلد `a` در `MySimpleContainer` تعیین کنید. می توانید این کار را این‌گونه انجام دهید:
+    
+</div>
 
 ```julia
 julia> function myfunc(c::MySimpleContainer{<:AbstractArray{<:Integer}})
@@ -437,11 +469,13 @@ julia> myfunc(MySimpleContainer([1:3;]))
 4
 ```
 
-### Annotate values taken from untyped locations
+<div dir="auto">
 
-It is often convenient to work with data structures that may contain values of any type (arrays
-of type `Array{Any}`). But, if you're using one of these structures and happen to know the type
-of an element, it helps to share this knowledge with the compiler:
+### مقدار‌های گرفته شده از مکان‌های با نوع تعیین نشده را حاشیه‌نویسی کنید
+
+ کار با ساختارهای داده‌ای که ممکن است حاوی مقادیر از هر نوع باشند (آرایه های نوع `Array {Any}`) اغلب راحت است. اما، اگر از یکی از این ساختارها استفاده می کنید و به طور اتفاقی نوع یک عنصر را می‌دانید، به اشتراک گذاری این دانش با کامپایلر کمک می کند:
+    
+</div>
 
 ```julia
 function foo(a::Array{Any,1})
@@ -451,21 +485,15 @@ function foo(a::Array{Any,1})
 end
 ```
 
-Here, we happened to know that the first element of `a` would be an `Int32`. Making
-an annotation like this has the added benefit that it will raise a run-time error if the
-value is not of the expected type, potentially catching certain bugs earlier.
+<div dir="auto">
 
-In the case that the type of `a[1]` is not known precisely, `x` can be declared via
-`x = convert(Int32, a1])::Int32`. The use of the [`convert` function allows `a[1]`
-to be any object convertible to an `Int32` (such as `UInt8`), thus increasing the genericity
-of the code by loosening the type requirement. Notice that `convert` itself needs a type
-annotation in this context in order to achieve type stability. This is because the compiler
-cannot deduce the type of the return value of a function, even `convert`, unless the types of
-all the function's arguments are known.
-
-Type annotation will not enhance (and can actually hinder) performance if the type is abstract,
-or constructed at run-time. This is because the compiler cannot use the annotation to specialize
-the subsequent code, and the type-check itself takes time. For example, in the code:
+ در اینجا، ما به طور تصادفی دانستیم که اولین عنصر `a` یک `Int32` است. ساختن حاشیه‌نویسی مانند این مزیت اضافه شده‌ای دارد که اگر مقدار از نوع مورد انتظار نباشد خطای زمان اجرا را ایجاد می‌کند و به طور بالقوه اشکالات خاصی را زودتر می‌گیرد.
+  
+  درصورتی که نوع `a[1]` دقیقاً مشخص نباشد، `x` را می‌توان از طریق `x = convert(Int32, a[1])::Int32` تعیین کرد. استفاده از تابع تبدیل به `[1]a` این امکان را می‌دهد که `[1]a`هر شی قابل تبدیل به `Int32` باشد (مانند `UInt8`)، بنابراین جامع‌بودن کد را با کم‌کردن قید‌های تعیین‌کردن نوع افزایش می‌دهد. توجه داشته باشید که convert خود برای دستیابی به پایداری نوع، به حاشیه‌نویسی نوع در این زمینه نیاز دارد. دلیل این امر این است که کامپایلر نمی تواند نوع مقدار بازگشتی یک تابع را حدس بزند، حتی تابع convert ،مگر اینکه نوع‌های تمام آرگومان‌های تابع شناخته شده باشد.
+  
+  حاشیه‌نویسی نوع اگر نوع انتزاعی باشد یا در زمان اجرا ساخته شود، عملکرد را افزایش نمی‌دهد (و در واقع می‌تواند مانع آن شود). دلیل این امر این است که کامپایلر نمی‌تواند از حاشیه‌نویسی برای تخصصی کردن کد بعدی استفاده کند و خود بررسی‌کردن تایپ نیز زمان بر است. به عنوان مثال، در کد:
+    
+</div>
 
 ```julia
 function nr(a, prec)
@@ -476,32 +504,27 @@ function nr(a, prec)
 end
 ```
 
-the annotation of `c` harms performance. To write performant code involving types constructed at
-run-time, use the [function-barrier technique](@ref kernel-functions) discussed below, and ensure
-that the constructed type appears among the argument types of the kernel function so that the kernel
-operations are properly specialized by the compiler. For example, in the above snippet, as soon as
-`b` is constructed, it can be passed to another function `k`, the kernel. If, for example, function
-`k` declares `b` as an argument of type `Complex{T}`, where `T` is a type parameter, then a type annotation
-appearing in an assignment statement within `k` of the form:
+<div dir="auto">
+
+حاشیه‌نویسی `c` به عملکرد آسیب می‌رساند. برای نوشتن کد تابع با نوع‌های ساخته شده در زمان اجرا، از تکنیک function-barrier استفاده شده و اطمینان حاصل کنید که نوع ساخته شده در میان نوع‌های آرگومان تابع هسته ظاهر می شود تا عملیات هسته به درستی توسط کامپایلر تخصصی شود. به عنوان مثال، در قطعه فوق، به محض ساخت `b`، می‌توان آن را به یک تابع دیگر `k`، هسته، منتقل کرد. اگر به عنوان مثال، تابع `k`، `b` را به عنوان آرگومان از نوع `Complex {T}` اعلام کند که `T` یک پارامتر نوع است، یک حاشیه‌نویسی نوع در یک عبارت انتساب که در `k` به فرم:
+    
+</div>
 
 ```julia
 c = (b + 1.0f0)::Complex{T}
 ```
 
-does not hinder performance (but does not help either) since the compiler can determine the type of `c`
-at the time `k` is compiled.
+<div dir="auto">
 
-### Be aware of when Julia avoids specializing
+ ظاهر می شود، مانع عملکرد نمی‌شود (اما کمکی هم نمی کند) زیرا کامپایلر می‌تواند نوع `c` را در زمان کامپایل `k` تعیین کند.
 
-As a heuristic, Julia avoids automatically specializing on argument type parameters in three
-specific cases: `Type`, `Function`, and `Vararg`. Julia will always specialize when the argument is
-used within the method, but not if the argument is just passed through to another function. This
-usually has no performance impact at runtime and
-[improves compiler performance](@ref compiler-efficiency-issues). If you find it does have a
-performance impact at runtime in your case, you can trigger specialization by adding a type
-parameter to the method declaration. Here are some examples:
+### حواستان باشد که چه زمانی جولیا از تخصصی‌کردن جلوگیری می‌کند
 
-This will not specialize:
+جولیا به عنوان یک ابتکار عمل، از تخصصی کردن خودکار آرگومان  پارامترهای نوع در سه حالت خاص: `Type` ، `Function` و `Vararg` جلوگیری می‌کند. جولیا همیشه وقتی اختصاصی‌ می‌کند که آرگومان در تابع استفاده شده باشد، اما اگر این آرگومان به یک تابع دیگر پاس داده نشوند، این کار را نمی‌کند. این معمولاً در زمان اجرا هیچ تاثیری بر عملکرد ندارد و [عملکرد کامپایلر را بهبود می بخشد]. اگر فهمیدید که در زمان اجرا در مورد شما در عملکرد تأثیر دارد، می توانید با افزودن یک پارامتر type به متد، تخصص را ایجاد کنید. در اینجا چند نمونه آورده شده است:
+    
+  این تخصصی نخواهد بود:
+    
+</div>
 
 ```julia
 function f_type(t)  # or t::Type
@@ -510,7 +533,11 @@ function f_type(t)  # or t::Type
 end
 ```
 
-but this will:
+<div dir="auto">
+
+ اما این تخصصی است:
+    
+</div>
 
 ```julia
 function g_type(t::Type{T}) where T
@@ -519,48 +546,68 @@ function g_type(t::Type{T}) where T
 end
 ```
 
-These will not specialize:
+<div dir="auto">
+
+  این تخصصی نخواهد بود:
+    
+</div>
 
 ```julia
 f_func(f, num) = ntuple(f, div(num, 2))
 g_func(g::Function, num) = ntuple(g, div(num, 2))
 ```
 
-but this will:
+<div dir="auto">
+
+ اما این تخصصی است:
+    
+</div>
 
 ```julia
 h_func(h::H, num) where {H} = ntuple(h, div(num, 2))
 ```
 
-This will not specialize:
+<div dir="auto">
+
+  این تخصصی نخواهد بود:
+    
+</div>
 
 ```julia
 f_vararg(x::Int...) = tuple(x...)
 ```
 
-but this will:
+<div dir="auto">
+
+ اما این تخصصی است:
+    
+</div>
 
 ```julia
 g_vararg(x::Vararg{Int, N}) where {N} = tuple(x...)
 ```
 
-One only needs to introduce a single type parameter to force specialization, even if the other types are unconstrained. For example, this will also specialize, and is useful when the arguments are not all of the same type:
+<div dir="auto">
+
+ فقط کافی است یک پارامتر نوع را برای اجبار به تخصصی کردن معرفی کنید ، حتی اگر نوع‌های دیگر قیدی نداشته باشند. به عنوان مثال، این نیز تخصصی خواهد بود و زمانی مفید خواهد بود که آرگومان‌ها همه از یک نوع نباشند:
+    
+</div>
+    
 ```julia
 h_vararg(x::Vararg{Any, N}) where {N} = tuple(x...)
 ```
 
-Note that `@code_typed` and friends will always show you specialized code, even if Julia
-would not normally specialize that method call. You need to check the
-[method internals](@ref ast-lowered-method) if you want to see whether specializations are generated
-when argument types are changed, i.e., if `(@which f(...)).specializations` contains specializations
-for the argument in question.
+<div dir="auto">
 
-## Break functions into multiple definitions
+ توجه داشته باشید که `code_typed@` و موارد مشابه همیشه کدهای تخصصی را به شما نشان می دهند، حتی اگر جولیا به طور معمول در آن فراخوانی متد تخصصی نداشته باشد. اگر می خواهید ببینید که آیا در هنگام تغییر نوع‌های آرگومان، تخصصی ایجاد می شود یا خیر، باید method internals را بررسی کنید به بیانی واضح‌تر اگر `((...)which f@)` شامل تخصصی کردن برای آرگومان‌های مورد بحث است.
 
-Writing a function as many small definitions allows the compiler to directly call the most applicable
-code, or even inline it.
+## توابع را به چندین تعریف تقسیم کنید
 
-Here is an example of a "compound function" that should really be written as multiple definitions:
+نوشتن یک تابع به همان تعداد تابع کوچک، به کامپایلر این امکان را می دهد تا مستقیم‌ترین کد کاربردی را فراخوانی کند، یا حتی آن را درون‌خطی کند.
+
+در اینجا مثالی از "تابع مرکب" آورده شده است که باید به صورت تعریف های متعدد نوشته شود
+    
+</div>
 
 ```julia
 using LinearAlgebra
@@ -576,40 +623,50 @@ function mynorm(A)
 end
 ```
 
-This can be written more concisely and efficiently as:
+<div dir="auto">
+
+این می تواند به طور خلاصه و کارآمد نوشته شود:
+    
+</div>
 
 ```julia
 norm(x::Vector) = sqrt(real(dot(x, x)))
 norm(A::Matrix) = maximum(svdvals(A))
 ```
+<div dir="auto">
 
-It should however be noted that the compiler is quite efficient at optimizing away the dead branches in code
-written as the `mynorm` example.
 
-## Write "type-stable" functions
+با این حال باید توجه داشت که کامپایلر در بهینه سازی شاخه‌های مرده در کدی که به عنوان مثال `mynorm` نوشته شده است کاملاً کارآمد است.
 
-When possible, it helps to ensure that a function always returns a value of the same type. Consider
-the following definition:
+## توابعی با پایداری نوع بنویسید
 
+ در صورت امکان،مفید است که اطمینان حاصل کنیم که یک تابع همیشه مقداری از همان نوع را برمی‌گرداند. تعریف زیر را در نظر بگیرید:
+
+</div>
+    
 ```julia
 pos(x) = x < 0 ? 0 : x
 ```
 
-Although this seems innocent enough, the problem is that `0` is an integer (of type `Int`) and
-`x` might be of any type. Thus, depending on the value of `x`, this function might return a value
-of either of two types. This behavior is allowed, and may be desirable in some cases. But it can
-easily be fixed as follows:
+<div dir="auto">
+
+ اگرچه این امر به اندازه کافی بی ضرر به نظر می رسد، اما مشکل این است که `0` یک عدد صحیح است (از نوع `Int`) و `x` ممکن است از هر نوع باشد. بنابراین، بسته به مقدار `x`، این تابع ممکن است مقداری از هر دو نوع را برگرداند. این رفتار مجاز است و ممکن است در بعضی موارد مطلوب باشد. اما به راحتی می توان به صورت زیر برطرف کرد:
+    
+</div>
 
 ```julia
 pos(x) = x < 0 ? zero(x) : x
 ```
 
-There is also a `oneunit` function, and a more general `oftype(x, y)` function, which
-returns `y` converted to the type of `x`.
+<div dir="auto">
 
-## Avoid changing the type of a variable
+ همچنین یک تابع واحد و یک نوع کلی تر از نوع `(x، y)` وجود دارد که `y` را به نوع `x` تبدیل می کند.
 
-An analogous "type-stability" problem exists for variables used repeatedly within a function:
+## از تغییر نوع متغیر خودداری کنید
+
+ یک مشکل مشابه "پایداری نوع" برای متغیرهایی که به طور مکرر در یک تابع استفاده می شوند وجود دارد
+    
+</div>
 
 ```julia
 function foo()
@@ -621,21 +678,20 @@ function foo()
 end
 ```
 
-Local variable `x` starts as an integer, and after one loop iteration becomes a floating-point
-number (the result of `/` operator). This makes it more difficult for the compiler to
-optimize the body of the loop. There are several possible fixes:
+<div dir="auto">
 
-  * Initialize `x` with `x = 1.0`
-  * Declare the type of `x` explicitly as `x::Float64 = 1`
-  * Use an explicit conversion by `x = oneunit(Float64)`
-  * Initialize with the first loop iteration, to `x = 1 / rand()`, then loop `for i = 2:10`
+ متغیر محلی x به عنوان یک عدد صحیح شروع می‌شود و بعد از یک حلقه تکرار به یک عدد اعشاری تبدیل می‌شود (نتیجه عملگر /). این امر بهینه سازی بدنه حلقه را برای کامپایلر دشوارتر می کند. چندین رفع احتمالی وجود دارد
+    
+  * ابتدا `x` را با `x = 1.0` مقداردهی اولیه کنید
+  * نوع x را صریحاً با  `x::Float64 = 1` اعلام کنید
+  * از تبدیل صریح `x = oneunit(Float64)` استفاده کنید
+  * ابتدا با تکرار حلقه اول، `()x = 1 / rand` را شروع کنید ، سپس برای `i = 2:10` حلقه را تکرار کنید
 
-## Separate kernel functions (aka, function barriers)
+## توابع هسته را جدا کنید(function barriers)
 
-Many functions follow a pattern of performing some set-up work, and then running many iterations
-to perform a core computation. Where possible, it is a good idea to put these core computations
-in separate functions. For example, the following contrived function returns an array of a randomly-chosen
-type:
+بسیاری از توابع از الگویی برای انجام برخی تنظیمات و سپس اجرای تکرارهای زیاد برای انجام یک محاسبه اصلی پیروی می‌کنند. در صورت امکان، بهتر است این محاسبات اصلی را در توابع جداگانه قرار دهید. به عنوان مثال، تابع ساختاری زیر، آرایه ای از نوع تصادفی را برمی گرداند:
+    
+</div>
 
 ```julia
 julia> function strange_twos(n)
@@ -653,7 +709,11 @@ julia> strange_twos(3)
  2.0
 ```
 
-This should be written as:
+<div dir="auto">
+
+این باید به صورت زیر نوشته شود:
+    
+</div>
 
 ```julia
 julia> function fill_twos!(a)
@@ -675,24 +735,21 @@ julia> strange_twos(3)
  2.0
 ```
 
-Julia's compiler specializes code for argument types at function boundaries, so in the original
-implementation it does not know the type of `a` during the loop (since it is chosen randomly).
-Therefore the second version is generally faster since the inner loop can be recompiled as part
-of `fill_twos!` for different types of `a`.
+<div dir="auto">
 
-The second form is also often better style and can lead to more code reuse.
+کامپایلر جولیا برای انواع آرگومان‌ها در مرزهای تابع کد را تخصصی  می‌کند، بنابراین در پیاده سازی اصلی، نوع `a` را در حین حلقه نمی‌داند (از آنجا که به صورت تصادفی انتخاب می شود). بنابراین نسخه دوم به طور کلی سریع‌تر است زیرا حلقه داخلی می‌تواند به عنوان بخشی از `fill_twos` برای انواع مختلف `a` دوباره کامپایل شود!
 
-This pattern is used in several places in Julia Base. For example, see `vcat` and `hcat`
-in [`abstractarray.jl`](https://github.com/JuliaLang/julia/blob/40fe264f4ffaa29b749bcf42239a89abdcbba846/base/abstractarray.jl#L1205-L1206),
-or the `fill!` function, which we could have used instead of writing our own `fill_twos!`.
+فرم دوم نیز اغلب سبک بهتری است و می تواند منجر به استفاده مجدد از کد شود.
 
-Functions like `strange_twos` occur when dealing with data of uncertain type, for example data
-loaded from an input file that might contain either integers, floats, strings, or something else.
+این الگو در چندین مکان در julia Base استفاده می شود. به عنوان مثال ، `vcat` و `hcat` را در `abstractarray.jl` یا تابع `!fill` را ببینید! تابع ، که می توانستیم به جای نوشتن `fill_twos` از آن استفاده کنیم!
 
-## Types with values-as-parameters
+توابعی مانند `strange_twos` هنگام کار با داده‌هایی از نوع نامشخص، به عنوان مثال داده‌هایی که از یک فایل ورودی بارگیری می‌شوند که ممکن است شامل اعداد صحیح، اعشاری، رشته ها یا موارد دیگر باشند، اتفاق می‌افتد.
 
-Let's say you want to create an `N`-dimensional array that has size 3 along each axis. Such arrays
-can be created like this:
+## نوع‌هایی با مقادیر به عنوان پارامتر
+
+فرض کنید شما می‌خواهید یک آرایه `N` بعدی ایجاد کنید که دارای اندازه 3 در هر محور باشد. چنین آرایه‌هایی را می‌توان به صورت زیر ایجاد کرد:
+    
+</div>
 
 ```julia
 julia> A = fill(5.0, (3, 3))
@@ -702,13 +759,13 @@ julia> A = fill(5.0, (3, 3))
  5.0  5.0  5.0
 ```
 
-This approach works very well: the compiler can figure out that `A` is an `Array{Float64,2}` because
-it knows the type of the fill value (`5.0::Float64`) and the dimensionality (`(3, 3)::NTuple{2,Int}`).
-This implies that the compiler can generate very efficient code for any future usage of `A` in
-the same function.
+<div dir="auto">
 
-But now let's say you want to write a function that creates a 3×3×... array in arbitrary dimensions;
-you might be tempted to write a function
+این روش بسیار خوب کار می‌کند: کامپایلر می‌تواند بفهمد که `A` یک آرایه است `Array{Float64,2}` زیرا نوع مقدار درحال پر شدن (`5.0::Float64`)  و ابعاد (`(3, 3)::NTuple{2,Int}`) را می‌داند. این بدان معنی است که کامپایلر می‌تواند برای هر استفاده بعدی از `A` در همان عملکرد، کد بسیار کارآمدی تولید کند.
+
+اما اکنون فرض کنید می‌خواهید تابعی بنویسید که یک آرایه   ...× 3 × 3 در ابعاد دلخواه ایجاد کند. ممکن است تمایل داشته باشید که یک تابع را بنویسید:
+    
+</div>
 
 ```julia
 julia> function array3(fillval, N)
@@ -723,16 +780,15 @@ julia> array3(5.0, 2)
  5.0  5.0  5.0
 ```
 
-This works, but (as you can verify for yourself using `@code_warntype array3(5.0, 2)`) the problem
-is that the output type cannot be inferred: the argument `N` is a *value* of type `Int`, and type-inference
-does not (and cannot) predict its value in advance. This means that code using the output of this
-function has to be conservative, checking the type on each access of `A`; such code will be very
-slow.
+<div dir="auto">
+    
+این کار می‌کند، اما (همانطور که با استفاده از `code_warntype array3(5.0, 2)@` می توانید خودتان تأیید کنید) این است که نمی توان نوع خروجی را حدس زد: آرگومان `N` یک مقدار از نوع `Int` است ، و حدس زدن نوع مقدار آن را از قبل پیش بینی نمی کند (نمی تواند). این به این معنی است که کدی که از خروجی این استفاده می کند باید عملکرد محافظه کارانه‌ای باشد ، اینکه نوع را در هر دسترسی `A` بررسی می‌کند، کد را بسیار کند می‌کند.
 
-Now, one very good way to solve such problems is by using the [function-barrier technique](@ref kernel-functions).
-However, in some cases you might want to eliminate the type-instability altogether. In such cases,
-one approach is to pass the dimensionality as a parameter, for example through `Val{T}()` (see
-"Value types"):
+اکنون ، یک راه بسیار خوب برای حل چنین مشکلاتی استفاده از [تکنیک function-barrier](ref kernel-functions@) است.
+با این حال ، در برخی موارد ممکن است بخواهید به طور کلی بی ثباتی نوع را از بین ببرید. در اینگونه موارد،
+یک روش پاس دادن dimensionality به عنوان یک پارامتر است، به عنوان مثال `(){T}Val` ("Value types" را ببینید):
+    
+</div>
 
 ```julia
 julia> function array3(fillval, ::Val{N}) where N
@@ -747,12 +803,13 @@ julia> array3(5.0, Val(2))
  5.0  5.0  5.0
 ```
 
-Julia has a specialized version of `ntuple` that accepts a `Val{::Int}` instance as the second
-parameter; by passing `N` as a type-parameter, you make its "value" known to the compiler.
-Consequently, this version of `array3` allows the compiler to predict the return type.
+<div dir="auto">
 
-However, making use of such techniques can be surprisingly subtle. For example, it would be of
-no help if you called `array3` from a function like this:
+جولیا یک نسخه تخصصی از `ntuple` دارد که نمونه `Val {:: Int}` را به عنوان پارامتر دوم می پذیرد. با پاس دادن `N` به عنوان یک پارامتر نوع، "مقدار" آن را برای کامپایلر مشخص می کنید. در نتیجه، این نسخه از `array3` به کامپایلر اجازه می‌دهد تا نوع بازگشت را پیش‌بینی کند.
+
+با این حال، استفاده از چنین تکنیک‌هایی می‌تواند به طرز شگفت‌انگیزی ظریف باشد. به عنوان مثال ، اگر `array3` را از تابعی مانند این فراخوانی کنید، فایده‌ای نخواهد داشت:
+    
+</div>
 
 ```julia
 function call_array3(fillval, n)
@@ -760,13 +817,13 @@ function call_array3(fillval, n)
 end
 ```
 
-Here, you've created the same problem all over again: the compiler can't guess what `n` is,
-so it doesn't know the *type* of `Val(n)`. Attempting to use `Val`, but doing so incorrectly, can
-easily make performance *worse* in many situations. (Only in situations where you're effectively
-combining `Val` with the function-barrier trick, to make the kernel function more efficient, should
-code like the above be used.)
+<div dir="auto">
 
-An example of correct usage of `Val` would be:
+در اینجا، شما مجدداً همین مشکل را ایجاد کرده‌اید: کامپایلر نمی‌تواند حدس بزند `n` چیست ، بنابراین نوع `Val (n)` را نمی‌داند. تلاش کردن برای استفاده از `Val`، اما با انجام چنین اشتباهی، به راحتی می‌تواند عملکرد را در بسیاری از شرایط بدتر کند. (فقط در شرایطی که شما به طور موثر `Val` را با ترفند function-barrier ترکیب می‌کنید، تا عملکرد هسته را کارآمدتر کنید، باید از کدی مانند موارد بالا استفاده شود.)
+
+مثالی از کاربرد صحیح `Val` این است:
+    
+</div>
 
 ```julia
 function filter3(A::AbstractArray{T,N}) where {T,N}
@@ -775,15 +832,15 @@ function filter3(A::AbstractArray{T,N}) where {T,N}
 end
 ```
 
-In this example, `N` is passed as a parameter, so its "value" is known to the compiler. Essentially,
-`Val(T)` works only when `T` is either hard-coded/literal (`Val(3)`) or already specified in the
-type-domain.
+<div dir="auto">
 
-## The dangers of abusing multiple dispatch (aka, more on types with values-as-parameters)
+در این مثال، `N` به عنوان یک پارامتر پاس داده می شود، بنابراین "مقدار" آن برای کامپایلر شناخته شده است. اساساً، `Val (T)` فقط زمانی کار می کند که `T` یا hard-code / به طور لفظی (`Val (3)`) باشد یا قبلاً در حوزه نوع مشخص شده باشد.
 
-Once one learns to appreciate multiple dispatch, there's an understandable tendency to go overboard
-and try to use it for everything. For example, you might imagine using it to store information,
-e.g.
+## خطرات سوء استفاده از multiple dispatch (به عبارت دیگر، مواردی بیشتر در مورد نوع‌هایی با مقادیر به عنوان پارامتر)
+
+هنگامی که فرد یاد گرفت که از multiple dispatch قدردانی کند، تمایل قابل فهم برای فراتر رفتن و تلاش برای استفاده از آن برای همه چیز وجود دارد. به عنوان مثال، ممکن است تصور کنید از آن برای ذخیره اطلاعات استفاده کنید. برای مثال:
+    
+</div>
 
 ```
 struct Car{Make, Model}
@@ -792,45 +849,28 @@ struct Car{Make, Model}
 end
 ```
 
-and then dispatch on objects like `Car{:Honda,:Accord}(year, args...)`.
+<div dir="auto">
 
-This might be worthwhile when either of the following are true:
+و سپس dispatch روی اشیائی مانند `(سال ، آرکومان‌ها ...)Car {: Honda،: Accord}`.
 
-  * You require CPU-intensive processing on each `Car`, and it becomes vastly more efficient if you
-    know the `Make` and `Model` at compile time and the total number of different `Make` or `Model`
-    that will be used is not too large.
-  * You have homogenous lists of the same type of `Car` to process, so that you can store them all
-    in an `Array{Car{:Honda,:Accord},N}`.
+این ممکن است باارزش باشد در صورتی که هر یک از موارد زیر درست باشد:
 
-When the latter holds, a function processing such a homogenous array can be productively specialized:
-Julia knows the type of each element in advance (all objects in the container have the same concrete
-type), so Julia can "look up" the correct method calls when the function is being compiled (obviating
-the need to check at run-time) and thereby emit efficient code for processing the whole list.
+  * شما به پردازش فشرده پردازنده در هر `Car` نیاز دارید و اگر از `Make` و `Model` در زمان کامپایل مطلع شوید  تعداد کل `Model` یا `Make`های مختلف مورد استفاده خیلی زیاد نباشد بسیار کارآمدتر می شود.
+  *  شما لیست های یکنواختی از همان نوع `Car`  برای پردازش دارید ، بنابراین می توانید همه آنها را در یک `Array{Car{:Honda,:Accord},N}` ذخیره کنید.
 
-When these do not hold, then it's likely that you'll get no benefit; worse, the resulting "combinatorial
-explosion of types" will be counterproductive. If `items[i+1]` has a different type than `item[i]`,
-Julia has to look up the type at run-time, search for the appropriate method in method tables,
-decide (via type intersection) which one matches, determine whether it has been JIT-compiled yet
-(and do so if not), and then make the call. In essence, you're asking the full type- system and
-JIT-compilation machinery to basically execute the equivalent of a switch statement or dictionary
-lookup in your own code.
+هنگامی که مورد دوم برقرار است ، عملکردی که چنین آرایه ای همگن را پردازش می کند می تواند به طور سازنده‌ای تخصصی باشد: جولیا نوع هر عنصر را از قبل می داند (همه اشیا موجود در container از نوع واقعی یکسانی هستند) ، بنابراین جولیا می تواند روش صحیح را "جستجو" کند هنگامی که تابع در حال کامپایل شدن است (برای نیاز نداشتن به بررسی در زمان اجرا) و در نتیجه کد کارآمد برای پردازش کل لیست منتشر می شود.
 
-Some run-time benchmarks comparing (1) type dispatch, (2) dictionary lookup, and (3) a "switch"
-statement can be found [on the mailing list](https://groups.google.com/forum/#!msg/julia-users/jUMu9A3QKQQ/qjgVWr7vAwAJ).
+وقتی اینها برقرار نباشند، احتمالاً هیچ سودی نخواهید برد. بدتر از آن ، "انفجار ترکیبی انواع" نتیجه معکوس خواهد داشت. اگر موارد [i + 1] نوع متفاوتی از مورد [i] داشته باشد، جولیا باید در زمان اجرا به جستجوی نوع بپردازد، روش مناسب را در جداول روش جستجو کند، تصمیم بگیرد (از طریق type intersection) کدام یک مطابقت دارد، تعیین کند که آیا هنوز JIT کامپایل شده است (و اگر نشده این کار را انجام دهد)، و سپس فراخوانی کند. در حقیقت، شما از type- system و JIT-compilation machinery می خواهید که اساساً معادل یک سوئیچ یا جستجوی دیکشنری را در کد خود اجرا کنند.
 
-Perhaps even worse than the run-time impact is the compile-time impact: Julia will compile specialized
-functions for each different `Car{Make, Model}`; if you have hundreds or thousands of such types,
-then every function that accepts such an object as a parameter (from a custom `get_year` function
-you might write yourself, to the generic `push!` function in Julia Base) will have hundreds
-or thousands of variants compiled for it. Each of these increases the size of the cache of compiled
-code, the length of internal lists of methods, etc. Excess enthusiasm for values-as-parameters
-can easily waste enormous resources.
+برخی از معیارهای زمان اجرا با مقایسه type dispatchِ ، جستجوی دیکشنری ، و عبارت "سوییچ" را می توان در لیست پستی یافت.
 
-## Access arrays in memory order, along columns
+شاید حتی بدتر از تأثیر زمان اجرا ، تأثیر زمان کامپایل باشد: جولیا توابع تخصصی را برای هر `Car{Make, Model}` متفاوت کامپایل می کند. اگر صدها یا هزاران نوع از این نوع را داشته باشید، پس هر تابعی که چنین جسمی را به عنوان یک پارامتر بپذیرد (از یک تابع `get_year` مرسوم که ممکن است خودتان بنویسید، تا تابع عمومی `!push` در Julia Base) برای این صدها یا هزاران نوع کامپایل دارد. هر یک از این موارد باعث افزایش اندازه حافظه cache کد کامپایل شده، طول لیست های داخلی متدها و غیره می شود. اشتیاق بیش از حد برای  مقادیر به عنوان پارامتر می تواند به راحتی منابع عظیم را هدر دهد.
 
-Multidimensional arrays in Julia are stored in column-major order. This means that arrays are
-stacked one column at a time. This can be verified using the `vec` function or the syntax `[:]`
-as shown below (notice that the array is ordered `[1 3 2 4]`, not `[1 2 3 4]`):
+## دسترسی به آرایه ها به ترتیب حافظه ، در امتداد ستون ها
+
+آرایه های چند بعدی در جولیا به ترتیب ستونی ذخیره می شوند. این بدان معنی است که آرایه ها هر بار یک ستون را روی بقیه قرار می‌دهند. همانطور که در زیر نشان داده شده است ، می توانید با استفاده از تابع `vec` یا syntax `[:]` این را ببینید (توجه داشته باشید که آرایه مرتب شده `[1 3 2 4]` است، نه `[4 3 2 1]`:
+    
+</div>
 
 ```julia
 julia> x = [1 2; 3 4]
@@ -846,19 +886,13 @@ julia> x[:]
  4
 ```
 
-This convention for ordering arrays is common in many languages like Fortran, Matlab, and R (to
-name a few). The alternative to column-major ordering is row-major ordering, which is the convention
-adopted by C and Python (`numpy`) among other languages. Remembering the ordering of arrays can
-have significant performance effects when looping over arrays. A rule of thumb to keep in mind
-is that with column-major arrays, the first index changes most rapidly. Essentially this means
-that looping will be faster if the inner-most loop index is the first to appear in a slice expression.
-Keep in mind that indexing an array with `:` is an implicit loop that iteratively accesses all elements within a particular dimension; it can be faster to extract columns than rows, for example.
+<div dir="auto">
 
-Consider the following contrived example. Imagine we wanted to write a function that accepts a
-`Vector` and returns a square `Matrix` with either the rows or the columns filled with copies
-of the input vector. Assume that it is not important whether rows or columns are filled with these
-copies (perhaps the rest of the code can be easily adapted accordingly). We could conceivably
-do this in at least four ways (in addition to the recommended call to the built-in `repeat`):
+این قرارداد برای ترتیب آرایه ها در بسیاری از زبانها مانند Fortran ، Matlab و R (برای نام بردن چند مورد) معمول است. گزینه جایگزینی برای ترتیب بر اساس ستون، ترتیب بر اساس ردیف است که قراردادی است که توسط C و Python (`numpy`) در میان زبان‌های دیگر تصویب شده است. به خاطر سپردن ترتیب آرایه ها هنگام اجرای حلقه روی آرایه ها می تواند تأثیرات قابل توجهی در عملکرد داشته باشد. یک قانون کلی که باید به خاطر داشته باشید این است که با آرایه های با ترتیب ستونی، اولین اندیس با سرعت بیشتری تغییر می کند. اساساً این بدان معناست که اگر اندیس داخلی ترین حلقه اولین‌ای باشد که در یک بخش از عبارت ظاهر می‌شود، حلقه سریعتر خواهد بود. به خاطر داشته باشید که اندیس‌گذاری آرایه با: یک حلقه ضمنی است که به طور تکراری به همه عناصر در یک بعد خاص دسترسی پیدا می کند. برای مثال می توان ستون ها را سریعتر از سطرها استخراج کرد.
+
+مثال ساختگی زیر را در نظر بگیرید. تصور کنید که می خواهیم تابعی بنویسیم که یک بردار را ورودی بگیرد و یک ماتریس مربعی را با ردیف ها یا ستون های مشابه بردار ورودی برگرداند. فرض کنید که پر کردن سطری یا ستونی با این نسخه‌ها مهم نیست (شاید بقیه کد را بتوان به راحتی بر این اساس تنظیم کرد). ما می توانیم این کار را حداقل از چهار طریق انجام دهیم (علاوه بر فراخوانی پیشنهادی برای built-in `repeat`):
+    
+</div>
 
 ```julia
 function copy_cols(x::Vector{T}) where T
@@ -898,7 +932,12 @@ function copy_row_col(x::Vector{T}) where T
 end
 ```
 
-Now we will time each of these functions using the same random `10000` by `1` input vector:
+<div dir="auto">
+
+اکنون زمان هر یک از این توابع را با استفاده از همان بردار ورودی تصادفی `10000` در `1` تعیین خواهیم کرد:
+
+    
+</div>
 
 ```julia
 julia> x = randn(10000);
@@ -912,18 +951,17 @@ copy_col_row: 0.415630047
 copy_row_col: 1.721531501
 ```
 
-Notice that `copy_cols` is much faster than `copy_rows`. This is expected because `copy_cols`
-respects the column-based memory layout of the `Matrix` and fills it one column at a time. Additionally,
-`copy_col_row` is much faster than `copy_row_col` because it follows our rule of thumb that the
-first element to appear in a slice expression should be coupled with the inner-most loop.
+<div dir="auto">
 
-## Pre-allocating outputs
+توجه داشته باشید که مجموعه های `copy_col` خیلی سریع‌تر از `copy_rows` است. این انتظار می رود زیرا `copy_cols` به طرح حافظه مبتنی بر ستون `Matrix` احترام می گذارد و آن را هر بار یک ستون پر می کند. علاوه بر این ، `copy_col_row` بسیار سریع‌تر از `copy_row_col` است زیرا از قانون کلی ما پیروی می‌کند که اولین عنصری که در یک بخش از عبارت ظاهر می شود، باید با داخلی‌ترین حلقه همراه شود.
 
-If your function returns an `Array` or some other complex type, it may have to allocate memory.
-Unfortunately, oftentimes allocation and its converse, garbage collection, are substantial bottlenecks.
+## از قبل تخصیص دادن خروجی ها
 
-Sometimes you can circumvent the need to allocate memory on each function call by preallocating
-the output. As a trivial example, compare
+اگر تابع شما یک آرایه یا نوع پیچیده دیگری را بازگرداند، ممکن است مجبور به اختصاص حافظه باشد. متأسفانه،اغلب اوقات تخصیص و معکوس آن، جمع آوری زباله، گلوگاه های قابل توجهی است.
+
+گاهی اوقات می توانید با تخصیص از قبل خروجی، نیاز به اختصاص حافظه را روی هر فراخوانی تابع دور بزنید. به عنوان یک مثال پیش پا افتاده، کد زیر را
+
+</div>
 
 ```julia
 julia> function xinc(x)
@@ -940,8 +978,12 @@ julia> function loopinc()
        end;
 ```
 
-with
+<div dir="auto">
 
+با این
+
+</div>
+    
 ```julia
 julia> function xinc!(ret::AbstractVector{T}, x::T) where T
            ret[1] = x
@@ -961,7 +1003,13 @@ julia> function loopinc_prealloc()
        end;
 ```
 
-Timing results:
+<div dir="auto">
+
+  مقایسه کنید.
+
+نتایج زمانی:
+
+</div>
 
 ```julia
 julia> @time loopinc()
@@ -973,14 +1021,13 @@ julia> @time loopinc_prealloc()
 50000015000000
 ```
 
-Preallocation has other advantages, for example by allowing the caller to control the "output"
-type from an algorithm. In the example above, we could have passed a `SubArray` rather than an
-`Array`, had we so desired.
+<div dir="auto">
 
-Taken to its extreme, pre-allocation can make your code uglier, so performance measurements and
-some judgment may be required. However, for "vectorized" (element-wise) functions, the convenient
-syntax `x .= f.(y)` can be used for in-place operations with fused loops and no temporary arrays
-(see the [dot syntax for vectorizing functions](@ref man-vectorized)).
+از قبل تخصیص دادن مزایای دیگری نیز دارد، به عنوان مثال اجازه دادن به مکان فراخوانی  برای کنترل نوع "خروجی" از یک الگوریتم. در مثال بالا، در صورت تمایل می‌توانستیم `SubArray` پاس دهیم  تا یک `Array`.
+
+از قبل تخصیص دادن، می تواند کد شما را زشت‌تر کند، بنابراین ممکن است اندازه گیری عملکرد و برخی قضاوت ها لازم باشد. با این حال، برای توابع "برداری شده" (از نظر عناصر)، از syntax راحت `x. = f. (y)` می توان برای عملیات درجا با fused loops و بدون آرایه های موقتی استفاده کرد (برای تنظیم بردار توابع به dot syntaxمراجعه کنید).
+    
+</div>
 
 ## More dots: Fuse vectorized operations
 
