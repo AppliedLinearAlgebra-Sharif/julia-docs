@@ -78,7 +78,7 @@ example program calls this before returning from `main`.
 ```eval_rst
 
 .. توجه::
-    
+    <div dir="rtl"> در حال حاضر لینک کردن با کتاب خانه اشتراکی `libjulia` به صورت پویا نیاز به رد شدن از `RTLD_GLOBAL` دارد. در پایتون این کار به صورت زیر است:</div> 
     Currently, dynamically linking with the `libjulia` shared library requires passing the `RTLD_GLOBAL`
     option. In Python, this looks like:
 
@@ -93,7 +93,8 @@ example program calls this before returning from `main`.
 
 ```eval_rst
 
-.. note::
+.. توجه::
+        
     If the julia program needs to access symbols from the main executable, it may be necessary to
     add `-Wl,--export-dynamic` linker flag at compile time on Linux in addition to the ones generated
     by `julia-config.jl` described below. This is not necessary when compiling a shared library.
