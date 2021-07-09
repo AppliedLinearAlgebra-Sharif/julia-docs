@@ -7,9 +7,6 @@
     انها تنها برای کمک  به اشنا شدن شما با زبان و کمک برای انتخاب بین راه حل های طراحی موجود است
     .
  </div>
-The following sections explain a few aspects of idiomatic Julia coding style. None of these rules
-are absolute; they are only suggestions to help familiarize you with the language and to help
-you choose among alternative designs.
 
 ## Indentation
 <div dir="auto">
@@ -18,7 +15,6 @@ you choose among alternative designs.
  از 4 تا اسپیس می توانید استفاده کنید
  .
  </div>
-Use 4 spaces per indentation level.
 
 ## Write functions, not just scripts(نوشتن توابع)
 <div dir="auto">
@@ -45,6 +41,7 @@ Use 4 spaces per indentation level.
  جدای از ثابت ها مانند
  
  </div>
+ 
   [`pi`](@ref))
   
 Writing code as a series of steps at the top level is a quick way to get started solving a problem,
@@ -103,7 +100,7 @@ complex(float(x))
  [`MethodError`](@ref)
  به ما داده میشود
  .
- 
+ <p><a href="https://en.wikipedia.org/wiki/Duck_typing)/">Duck typing</a></p>
 The second version will convert `x` to an appropriate type, instead of always the same type.
 
 This style point is especially relevant to function arguments. For example, don't declare an argument
