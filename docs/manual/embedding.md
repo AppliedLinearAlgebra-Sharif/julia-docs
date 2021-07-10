@@ -352,6 +352,9 @@ Several Julia values can be pushed at once using the `JL_GC_PUSH2` , `JL_GC_PUSH
 `JL_GC_PUSH5` , and `JL_GC_PUSH6` macros. To push an array of Julia values one can use the
 `JL_GC_PUSHARGS` macro, which can be used as follows:
 
+چندین مقدار جولیا می توانند یکجا فشرده (push) شوند با استفاده از دستورهای (macros) `JL_GC_PUSH2` , `JL_GC_PUSH3` , `JL_GC_PUSH4` , `JL_GC_PUSH5` و `JL_GC_PUSH6`.
+برای فشرده کردن (push) یک آرایه از مقادیر جولیا می توانید از دستور (macro)  `JL_GC_PUSHARGS`     استفاده کنید که می تواند به شکل زیر  به کار برده شود: 
+
 ```c
 jl_value_t **args;
 JL_GC_PUSHARGS(args, 2); // args can now hold 2 `jl_value_t*` objects
@@ -364,6 +367,8 @@ JL_GC_POP();
 Each scope must have only one call to `JL_GC_PUSH*`. Hence, if all variables cannot be pushed once by
 a single call to `JL_GC_PUSH*`, or if there are more than 6 variables to be pushed and using an array
 of arguments is not an option, then one can use inner blocks:
+
+هر حوزه (scope) فقط یکبار می تواند `JL_GC_PUSH*` را صدا کند.از این رو اگر همه متغیر ها نتوانند یکباره با یکبار فراخوانی `JL_GC_PUSH*` فشرده (push) شوند یا اگر بیش تر از شش متغیر این صورت می توان از بلوک های داخلی استفاده کرد :ر برای فشرده (push) شدن وجود داشته باشد و استفاده از آرایه ای از آرگومان ها قابل انتخاب نباشد  در یکی با اجرای JL_GC_PUSH* و یا اگر بیشتر از 6 متغیر فشرده شده باشند و استفاده از یک آرایه  ارگیومنت ها قابل انتخاب نباشد می توانید از بلوک های داخلی استفاده کنید.
 
 ```c
 jl_value_t *ret1 = jl_eval_string("sqrt(2.0)");
