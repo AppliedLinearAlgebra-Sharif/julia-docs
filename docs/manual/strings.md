@@ -493,6 +493,8 @@ julia> """
 
 You can lexicographically compare strings using the standard comparison operators:
 
+با استفاده از عملگرهای مقایسه گر استاندارد می توانید رشته ها را با هم مقایسه دانشمنامه ای كنید:
+
 ```julia
 julia> "abracadabra" < "xylophone"
 true
@@ -510,6 +512,8 @@ true
 You can search for the index of a particular character using the
 `findfirst` and `findlast` functions:
 
+با استفاده از توابع `findfirst` و `findlast` می توانید اندیس یک کاراکتر خاص را جستجو کنید:
+
 ```julia
 julia> findfirst(isequal('o'), "xylophone")
 4
@@ -522,6 +526,8 @@ julia> findfirst(isequal('z'), "xylophone")
 
 You can start the search for a character at a given offset by using
 the functions `findnext` and `findprev`:
+
+با استفاده از توابع `findnext` و `findprev` می توانید جستجوی یک کاراکتر را از یک آفست داده شده شروع کنید:
 
 ```julia
 julia> findnext(isequal('o'), "xylophone", 1)
@@ -537,6 +543,8 @@ julia> findnext(isequal('o'), "xylophone", 8)
 ```
 
 You can use the `occursin` function to check if a substring is found within a string:
+
+برای یافتن زیر رشته در یک رشته می توانید از تابع `occursin` استفاده کنید:
 
 ```julia
 julia> occursin("world", "Hello, world.")
@@ -555,6 +563,10 @@ true
 The last example shows that `occursin` can also look for a character literal.
 
 Two other handy string functions are `repeat` and `join`:
+
+آخرین مثال نشان می دهد که `occursin` نیز می تواند نماد کاراکتری را جستجو کند.
+دو تابع رشته ای مفید دیگر `repeat`  و `join` هستند:
+
 
 ```julia
 julia> repeat(".:Z:.", 10)
@@ -576,6 +588,19 @@ Some other useful functions include:
   * `nextind(str, i, n=1)` find the start of the `n`th character starting after index `i`.
   * `prevind(str, i, n=1)` find the start of the `n`th character starting before index `i`.
 
+برخی از توابع مفید دیگر عبارتند از:
+• `firstindex (str)` حداقل اندیس (بایت) را می دهد که می تواند برای رجوع در  `str` استفاده شود (همیشه 1 برای رشته ها ،و برای `container` های دیگر لزوماً صادق نیست.)
+`lastindex (str)`
+  حداکثر شاخص (بایت) را می دهد که می تواند برای رجوع در str استفاده شود.
+• `length (str)` تعداد کاراکترهای موجود در `str`  را می دهد 
+`Length (str, i, j)`  تعداد کاراکترهای معتبر در `str` از i تا j.
+• `ncodeunits (str)` تعداد   `code units`در یک رشته.
+• codeunit (str , i)مقدار  code unitرا در رشته str در اندیس i می دهد.
+  thisind(str, i)اولین اندیس کاراکتری که مطابق اندیس دلخواه داده شده است را پیدا می کند.
+  `nextind(str, i, n=1)`  شروع کاراکتر n ام بعد از اندیسi را پیدامی کند.
+  `Prevind(str, i, n=1)` شروع کاراکتر nام قبل از اندیس i را پیدا کنید.
+
+
 ## Non-Standard String Literals
 
 There are situations when you want to construct a string or use string semantics, but the behavior
@@ -585,6 +610,11 @@ double-quoted string literal, but is immediately prefixed by an identifier, and 
 quite like a normal string literal.  Regular expressions, byte array literals and version number
 literals, as described below, are some examples of non-standard string literals. Other examples
 are given in the Metaprogramming section.
+
+ 7.8 اصطلاحات رشته های غیر استاندارد
+شرایطی وجود دارد که شما می خواهید یک رشته بسازید یا از مفاهیم رشته استفاده کنید ، اما 
+ساختار رشته ای استاندارد رفتار مورد نیاز را دارا نیست. برای این نوع شرایط ، جولیا رشته های غیر استاندارد را ارائه می دهد. یک رشته غیر استاندارد به معنای یک رشته معمولی با دو ” " است ، اما بلافاصله قبل از آن به عنوان پیشوند یک شناسه می آید، و به طور کامل شبیه یک رشته عادی رفتار نمی کند. عبارات عادی، آرایه بایت و عدد واقعی نسخه ، همانطور که در زیر توضیح داده شده است ، برخی از نمونه های اصطلاحات رشته ای غیر استاندارد است.
+مثالهای دیگر در بخش Metaprogramming آورده شده است.
 
 ## Regular Expressions
 
@@ -596,6 +626,11 @@ can be used to efficiently search for patterns in strings. In Julia, regular exp
 using non-standard string literals prefixed with various identifiers beginning with `r`. The most
 basic regular expression literal without any options turned on just uses `r"..."`:
 
+ 7.9 عبارات منظم
+جولیا همانطور که توسط کتابخانه PCRE ارائه شده است ، عبارات منظم(regexes)  سازگار با پرل را دارد (توضیحاتی در مورد سینتکس را می توان در اینجا یافت). عبارات منظم از دو طریق با رشته ها مرتبط هستند: ارتباط آشکاراین است که از عبارات منظم برای یافتن الگوهای منظم در رشته ها استفاده می شود. ارتباط دیگر این است که عبارات منظم خود به صورت رشته ی ورودی یک ماشین حالت می شوند که می تواند به طور موثربرای پیدا کردن الگوهادر رشته مورد استفاده قرار گیرد. در جولیا ، عبارات منظم ورودی هایی به شکل رشته های غیر استاندارد ند با شناسه های مختلفی که با r شروع می شوند. ابتدایی ترین عبارت منظم تحت اللفظی بدون هیچ گزینه ای
+فقط از r "..." استفاده می کند:
+
+
 ```julia
 julia> re = r"^\s*(?:#|$)"
 r"^\s*(?:#|$)"
@@ -605,6 +640,8 @@ Regex
 ```
 
 To check if a regex matches a string, use `occursin`:
+
+برای بررسی اینکه آیا regex با یک رشته مطابقت دارد از  occursinاستفاده کنید:
 
 ```julia
 julia> occursin(r"^\s*(?:#|$)", "not a comment")
@@ -619,6 +656,8 @@ match for the given regex occurs in the string. Commonly, however, one wants to 
 just whether a string matched, but also *how* it matched. To capture this information about
 a match, use the `match` function instead:
 
+همانطور که در اینجا مشاهده می شود ،   occursinمقدار true یا false را برمی گرداند ، که نشان می دهد آیا مطابقت با regex داده شده در رشته رخ می دهد یا خیر. با این حال ، معمولاً ما نه تنها از انطباق رشته  ، بلکه همچنین از چگونگی آن می خواهیم مطلع شویم. برای گرفتن این اطلاعات در مورد یک تطبیق ، به جای آن از تابع  matchاستفاده کنید:
+
 ```julia
 julia> match(r"^\s*(?:#|$)", "not a comment")
 
@@ -629,6 +668,8 @@ RegexMatch("#")
 If the regular expression does not match the given string, `match` returns `nothing`
 -- a special value that does not print anything at the interactive prompt. Other than not printing,
 it is a completely normal value and you can test for it programmatically:
+
+اگر عبارت منظم با رشته داده شده مطابقت نداشته باشد ، خروجی  matchدر این صورت nothing  است - مقدار خاصی که در واقع چیزی را درخروجی چاپ نمی کند. غیر از چاپ نکردن ، این یک مقدارکاملاً طبیعی است و شما می تواند به صورت برنامه نویسی  آن را آزمایش کنید:
 
 ```julia
 m = match(r"^\s*(?:#|$)", line)
@@ -645,6 +686,8 @@ matches and any captured substrings, if there are any. This example only capture
 of the substring that matches, but perhaps we want to capture any non-blank text after the comment
 character. We could do the following:
 
+اگر یک عبارت منظم مطابقت داشته باشد ، مقدار برگشت داده شده توسط  matchیک  شیءRegexMatch  است. این اشیا چگونگی مطابقت را ثبت می کنند ، از جمله زیر رشته ای که با الگو مطابقت دارد و سایر زیر رشته های گرفته شده درصورت وجود. این مثال فقط بخشی از زیر رشته را مطابقت می دهد ، اما شاید ما بخواهیم متن غیر خالی پس ازcomment  را ضبط کنیم. ما می توانیم موارد زیر را انجام دهیم:
+
 ```julia
 julia> m = match(r"^\s*(?:#\s*(.*?)\s*$|$)", "# a comment ")
 RegexMatch("# a comment ", 1="a comment")
@@ -652,6 +695,8 @@ RegexMatch("# a comment ", 1="a comment")
 
 When calling `match`, you have the option to specify an index at which to start the
 search. For example:
+
+هنگام استفاده از  matchشما می توانید اندیسی را تعیین کنید که در آن جستجو شروع شود. مثلا:
 
 ```julia
 julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",1)
@@ -674,6 +719,15 @@ You can extract the following info from a `RegexMatch` object:
 For when a capture doesn't match, instead of a substring, `m.captures` contains `nothing` in that
 position, and `m.offsets` has a zero offset (recall that indices in Julia are 1-based, so a zero
 offset into a string is invalid). Here is a pair of somewhat contrived examples:
+
+می توانید اطلاعات زیر را از یک شی RegexMatch استخراج کنید:
+• کل زیرشاخه مطابقت دارد: m.match
+زیر رشته های گرفته شده به صورت آرایه ای از رشته ها m.captures : 
+• آفست که کل  matchدر آن آغاز می شود m.offset :  
+آفست زیر رشته های گرفته شده به عنوان بردارm.offsets :
+برای وقتی که مطابقت  وجود ندارد ، به جای یک زیر رشته ، m.captures حاوی چیزی در آن موقعیت نیست ،  m.offsetsیک آفست صفر دارد (یادآوری کنید که شاخص های جولیا بر پایه 1 هستند ، بنابراین جابجایی صفر به یک رشته نامعتبر است).
+در اینجا یک جفت نمونه تا حدودی ساختگی وجود دارد:
+
 
 ```julia
 julia> m = match(r"(a|b)(c)?(d)", "acd")
@@ -722,6 +776,8 @@ julia> m.offsets
 It is convenient to have captures returned as an array so that one can use destructuring syntax
 to bind them to local variables:
 
+راحت تر است که کپچرها به عنوان یک آرایه برگردانده شوند تا بشود از فرمت تخریب برای ارتباط آنها به متغیرهای محلی استفاده شود :
+
 ```julia
 julia> first, second, third = m.captures; first
 "a"
@@ -729,6 +785,8 @@ julia> first, second, third = m.captures; first
 
 Captures can also be accessed by indexing the `RegexMatch` object with the number or name of the
 capture group:
+
+با نمایه سازی شی RegexMatch با شماره یا نام گروه کاپچر، می توان به کاپچرها دسترسی داشت:
 
 ```julia
 julia> m=match(r"(?<hour>\d+):(?<minute>\d+)","12:45")
@@ -746,12 +804,19 @@ to refer to the nth capture group and prefixing the substitution string with `s`
 0 refers to the entire match object. Named capture groups can be referenced in the substitution
 with `\g<groupname>`. For example:
 
+با نمایه سازی شی RegexMatch با شماره یا نام گروه کاپچر، می توان به کاپچرها دسترسی داشت:
+در یک رشته جایگزین با استفاده از  replace و \n برای اشاره به nامین گروه کپچر  می توانید به کاپچرها در یک رشته جایگزینی ارجاع دهید پیشوند رشته جایگزینی با  sنشان داده می شود . 
+گروه کاپچر 0 به کل شیء  matchاشاره دارد. گروه های نامدار بصورت \g<groupname> می توانند مورد ارجاع واقع شوند . مثلا:
+
+
 ```julia
 julia> replace("first second", r"(\w+) (?<agroup>\w+)" => s"\g<agroup> \1")
 "second first"
 ```
 
 Numbered capture groups can also be referenced as `\g<n>` for disambiguation, as in:
+ 
+همچنین می توان به گروه های شماره گذاری شده برای گرفتن ابهام به صورت\ g <n>  اشاره کرد ، مانند:
 
 ```julia
 julia> replace("a", r"." => s"\g<0>1")
@@ -761,6 +826,8 @@ julia> replace("a", r"." => s"\g<0>1")
 You can modify the behavior of regular expressions by some combination of the flags `i`, `m`,
 `s`, and `x` after the closing double quote mark. These flags have the same meaning as they do
 in Perl, as explained in this excerpt from the [perlre manpage](http://perldoc.perl.org/perlre.html#Modifiers):
+ 
+ می توانید رفتار عبارات منظم را با ترکیبی از پرچم های i ، m ، s و x پس از بستن علامت نقل قول دوگانه تغییر دهید. این پرچم ها همان معنی را دارند که در پرل دارند ، همانطور که در این گزیده از صفحه پرلر توضیح داده شده است.
 
 ```
 i   Do case-insensitive pattern matching.
@@ -794,6 +861,8 @@ x   Tells the regular expression parser to ignore most whitespace
 
 For example, the following regex has all three flags turned on:
 
+به عنوان مثال ، regex زیر هر سه پرچم را روشن کرده است:
+
 ```julia
 julia> r"a+.*b+.*?d$"ism
 r"a+.*b+.*?d$"ims
@@ -806,6 +875,10 @@ The `r"..."` literal is constructed without interpolation and unescaping (except
 quotation mark `"` which still has to be escaped). Here is an example
 showing the difference from standard string literals:
 
+r” ...” . در اینجا مثالی وجود دارد که تفاوت آن را با اصطلاحات رشته ای استاندارد نشان می دهد:
+رشته های regex سه گانه از فرم r "" "..." "" نیز پشتیبانی می شوند (و ممکن است برای عبارات حاوی نقل قول یا خط جدید معمولی راحت باشد)
+ 
+ 
 ```julia
 julia> x = 10
 10
@@ -827,6 +900,10 @@ Triple-quoted regex strings, of the form `r"""..."""`, are also supported (and m
 for regular expressions containing quotation marks or newlines).
 
 The `Regex()` constructor may be used to create a valid regex string programmatically.  This permits using the contents of string variables and other string operations when constructing the regex string. Any of the regex codes above can be used within the single string argument to `Regex()`. Here are some examples:
+ 
+رشته های regex سه گانه از فرم r "" "..." "" نیز پشتیبانی می شوند (و ممکن است برای عبارات حاوی نقل قول یا خط جدید معمولی راحت باشد)
+ممکن است از سازنده Regex () برای ایجاد یک رشته معتبر regex به صورت برنامه نویسی استفاده شود. این اجازه می دهد تا با استفاده ازمحتویات متغیرهای رشته و سایر عملیات رشته هنگام ساخت رشته regex. هر کدام از regex ها کدهای بالا می توانند در آرگومان تک رشته Regex () استفاده شوند. در اینجا چند نمونه آورده شده است:
+
 
 ```julia
 julia> using Dates
@@ -868,6 +945,14 @@ There is some overlap between these rules since the behavior of `\x` and octal e
 0x80 (128) are covered by both of the first two rules, but here these rules agree. Together, these
 rules allow one to easily use ASCII characters, arbitrary byte values, and UTF-8 sequences to
 produce arrays of bytes. Here is an example using all three:
+ 
+ 7.10  آرایه ای از بایت ها
+یکی دیگر از رشته های مفید غیر استاندارد ، رشته  byte_arrayاست b "...": .این فرم به شما امکان می دهد از رشته برای فقط خواندن آرایه های بایت تحت اللفظی استفاده کنید- یعنی آرایه هایی  مقادیر .UInt8 نوع آن اشیا CodeUnits {UInt8. String}  . قوانین مربوط به اصطلاحات آرایه ای از بایتها به شرح زیر است:  
+کاراکترهای ASCII   و  ASCII escapes  یک بایت واحد تولید می کنند.
+توالی های \ x و octal escape بایت مربوط به مقدار escape را تولید می کنند.
+توالی های Unicode escapes توالی ازبایتها را کد می کنند که آن code pointرا در UTF-8 رمزگذاری می کند.
+برخی از موارد تداخل بین این قوانین وجود دارد از آنجا که رفتار \ x و  octal escapeکمتر از0x80 (128) تحت هر دو قانون اول است، اما در اینجا این قوانین موافق است. در کنار هم ، این قوانین به شما اجازه می دهد تا به راحتی از آن استفاده کنید. کاراکترهای ASCII ، مقادیر دلخواه بایت و توالی های UTF-8 برای تولید آرایه های بایت. مثالی با استفاده از هر سه:
+
 
 ```julia
 julia> b"DATA\xff\u2200"
@@ -885,6 +970,9 @@ julia> b"DATA\xff\u2200"
 The ASCII string "DATA" corresponds to the bytes 68, 65, 84, 65. `\xff` produces the single byte 255.
 The Unicode escape `\u2200` is encoded in UTF-8 as the three bytes 226, 136, 128. Note that the
 resulting byte array does not correspond to a valid UTF-8 string:
+ 
+رشته ASCII "DATA" مربوط به بایت های 68 ، 65 ، 84 ، 65 است \ xff . یک بایت 255 تولید می کند.
+فرار Unicode escape \ u2200 به عنوان سه بایت 226 ، 136 ، 128 در UTF-8 رمزگذاری شده است. توجه داشته باشید که آرایه بایت حاصل با رشته معتبر UTF-8 مطابقت ندارد:
 
 ```julia
 julia> isvalid("DATA\xff\u2200")
@@ -894,6 +982,8 @@ false
 As it was mentioned `CodeUnits{UInt8, String}` type behaves like read only array of `UInt8` and
 if you need a standard vector you can convert it using `Vector{UInt8}`:
 
+همانطور که ذکر شد نوع  String} ، CodeUnits {UInt8 مانند آرایه فقط خواندن UInt8 رفتار می کند و در صورت نیاز یک بردار استاندارد می توانید با استفاده از بردار {UInt8} آن را تبدیل کنید
+ 
 ```julia
 julia> x = b"123"
 3-element Base.CodeUnits{UInt8, String}:
@@ -918,6 +1008,8 @@ julia> Vector{UInt8}(x)
 Also observe the significant distinction between `\xff` and `\uff`: the former escape sequence
 encodes the *byte 255*, whereas the latter escape sequence represents the *code point 255*, which
 is encoded as two bytes in UTF-8:
+ 
+همچنین تمایز قابل توجه بین \ xff و \ uff را مشاهده کنید: توالی اولی بایت 255 را رمزگذاری می کند، در حالی که دنباله دومی نشان دهنده کد 255 است که به صورت دو بایت در UTF-8 مزگذاری می شود.
 
 ```julia
 julia> b"\xff"
@@ -944,6 +1036,11 @@ Software Developer Absolutely, Positively Must Know About Unicode and Character
 Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/).
 It's an excellent introduction to Unicode and UTF-8, and may help alleviate
 some confusion regarding the matter.
+ 
+کاراکترها از همان رفتار استفاده می کنند.
+برای کد نقطه های کمتر از \ u80 ، اتفاق می افتد که رمزگذاری UTF-8 هر کد نقطه .فقط یک بایت تولید شده توسط \ x مربوطه باشد ، بنابراین می توان با خیال راحت این تمایز را نادیده گرفت. برای  \x80از طریق \ xff در مقایسه با \ u80 از طریق \ uff ، با این حال ، یک تفاوت عمده وجود دارد:  escapeقبلی همه تک بایت ها را رمزگذاری می کنند ، که - مگر اینکه توسط بایت های ادامه دهنده بسیار خاص دنبال شوند UTF-8 - داده معتبر را تشکیل نمی دهند، در حالی که دومی همه نشان دهنده نقاط کد یونیکد با رمزگذاری دو بایت است.
+اگر همه اینها به شدت گیج کننده است ، سعی کنید "حداقل مطلقی که هر توسعه دهنده نرم افزار کاملاً
+باید درباره یونیکد و مجموعه کاراکتر بداند " بخوانید. این یک معرفی عالی برای Unicode و UTF-8 است ، و ممکن است به رفع برخی از سردرگمی ها در رابطه با موضوع کمک کند.
 
 ## Version Number Literals
 
@@ -960,6 +1057,11 @@ is equivalent to `v"0.2.0"` (with empty pre-release/build annotations), `v"2"` i
 `VersionNumber` objects are mostly useful to easily and correctly compare two (or more) versions.
 For example, the constant `VERSION` holds Julia version number as a `VersionNumber` object, and
 therefore one can define some version-specific behavior using simple statements as:
+ 
+7.11 عدد نسخه های 
+اعداد نسخه را می توان به راحتی با اصطلاحات رشته ای غیر استاندارد فرم v "..." بیان کرد. شماره نسخه اشیا VersionNumber را ایجاد می کنند که از مشخصات نسخه معنایی پیروی می کنند و بنابراین از مقادیر عددی عمده ، جزئی و پچ تشکیل شده اند و به دنبال آنها پیش انتشار و ساخت عدد آلفا ساخته می شوند .به عنوان مثال ، v "0.2.1-rc1 + win64" به نسخه اصلی 0 ، نسخه کوچک 2 ، نسخه پچ  1تقسیم می شود و  rc1نسخه  قبل از عرضه و win64. هنگام وارد کردن نسخه به معنای واقعی کلمه ، همه موارد به جز نسخه اصلی تعداد اختیاری است ، بنابراین به عنوان مثال v "0.2" معادل v "0.2.0" است (با حاشیه نویسی خالی قبل از انتشار / ساخت) ، v "2" معادل v "2.0.0" و غیره است. 
+اشیا VersionNumber اغلب برای مقایسه آسان و صحیح دو نسخه (یا بیشتر) مفید هستند. مثلا، VERSION  شماره نسخه جولیا را به عنوان یک شی VersionNumber نگه می دارد و بنابراین می توان برخی رفتارهای خاص نسخه را با استفاده از عبارات ساده به شرح زیر تعریف کرد:
+
 
 ```julia
 if v"0.2" <= VERSION < v"0.3-"
@@ -986,6 +1088,13 @@ scheme.
 
 Besides being used for the `VERSION` constant, `VersionNumber` objects are widely used
 in the `Pkg` module, to specify packages versions and their dependencies.
+ 
+توجه داشته باشید که در مثال بالا از شماره نسخه غیر استاندارد v "0.3-" استفاده شده است ، با یک دنباله -: این   notationیک پسوند استاندارد جولیا است و برای نشان دادن نسخه ای کمتر از 0.3 استفاده می شود از جمله تمام نسخه های پیش انتشار آن . بنابراین در مثال بالا کد فقط با نسخه پایدار 0.2 اجرا می شود. نسخه ها ، و نسخه هایی مانند v "0.3.0-rc1" را حذف کنید. به منظور اجازه دادن به نسخه ناپایدار 0.2 (یعنی قبل از انتشار) ، کنترل حد پایین باید به این صورت اصلاح شود: v "0.2-" <= VERSION.
+پسوند مشخصه دیگری برای نسخه غیر استاندارد به شما امکان می دهد تا از یک دنباله + برای بیان حد بالا در نسخه های ساخت استفاده کنید ، به عنوان مثال VERSION> v "0.2-rc1 +" می تواند به معنای هر نسخه ای بالاتر از-rc1 0.2 و هر یک ازساخت های آن باشد : 
+برای نسخه v”0.2-rc1+win64” نادرست و برای v "0.2-rc2" درست است.
+این روش خوبی است که از چنین نسخه های ویژه ای در مقایسه هااستفاده کنید (مخصوصاً دنباله ها_ همیشه باید در حدهای بالاتر استفاده شود مگر اینکه دلیل خوبی وجود داشته باشد) ، اما نباید از آنها به عنوان شماره نسخه واقعی هر چیز استفاده شود ، زیرا آنها در طرح  فرمت نسخه معتبر نیستند.
+علاوه بر این که برای ثابت VERSION استفاده می شود ، اشیا VersionNumber به طور گسترده ای در ماژول Pkg برای مشخص کردن نسخه های بسته ها و وابستگی آنها استفاده می شوند .
+
 
 ## Raw String Literals
 
@@ -1000,6 +1109,10 @@ The exception is that quotation marks still must be escaped, e.g. `raw"\""` is e
 to `"\""`.
 To make it possible to express all strings, backslashes then also must be escaped, but
 only when appearing right before a quote character:
+ 
+7.12  رشته های خام
+رشته های خام بدون درون یابی را می توان با نماد های رشته ای غیر استاندارد بیان کرد با فرم "..."raw.  رشته های خام اشیا String معمولی را ایجاد می کنند که حاوی محتوای محصور شده است دقیقاً به همان صورت و بدون درون یابی و  unscaping. این برای رشته هایی که حاوی کد یا نشانه گذاری در سایر زبانهایی که از $ یا \ به عنوان نویسه های خاص استفاده می کنند مفید است.
+استثنا این است که هنوز باید نقل قول ها  escapeشوند، به عنوان مثال "\" " raw معادل" \ "" است. برای داشتن امکان بیان همه رشته ها ، پس از  backslashهم باید escape کرد ، اما فقط وقتی که قبل از آن یک  “ظاهر می شود:
 
 ```julia
 julia> println(raw"\\ \\\"")
@@ -1010,3 +1123,5 @@ Notice that the first two backslashes appear verbatim in the output, since they 
 precede a quote character.
 However, the next backslash character escapes the backslash that follows it, and the
 last backslash escapes a quote, since these backslashes appear before a quote.
+ 
+توجه داشته باشید که دو backslashes اول به صورت کلمه به کلمه در خروجی ظاهر می شوند ، زیرا قبل از یک کاراکتر نقل قول نیستند.با این حال ، کاراکتربعدی بک اسلش از بک اسلش بعدی که به دنبال آن می آید صرف نظرمی کند ، و آخرین بک اسلش از یک " صرف نظرمی کند ، زیرا این بک اسلش ها قبل از " ظاهر می شوند.
