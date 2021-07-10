@@ -101,19 +101,14 @@ julia> print(stdout, 0x61)
 [نمایش دلخواه](@ref man-custom-pretty-printing)
 را ببینید.
 
-## IO Output Contextual Properties
+## ویژگی‌های متنی خروجی IO
 
-Sometimes IO output can benefit from the ability to pass contextual information into show methods.
-The `IOContext` object provides this framework for associating arbitrary metadata with an IO object.
-For example, `:compact => true` adds a hinting parameter to the IO object that the invoked show method
-should print a shorter output (if applicable). See the `IOContext` documentation for a list
-of common properties.
+گاهی اوقات خروجی IO می تواند از امکان انتقال اطلاعات متنی به متدهای نمایش بهره‌مند شود. شی `IOContext` این بستر را برای به اشتراک گذاشتن فراداده‌ی دلخواه با یک شی IO فراهم می‌کند. برای مثال، `:compact => true` یک پارامتر راهنما به شی IO اضافه می‌کند که روش نمایش مورد استفاده باید خروجی کوتاه‌تری چاپ کند (اگر چنین کاری انجام‌شدنی باشد). برای دیدن لیست ویژگی‌های متعارف مستندات را ببینید)
 
-## Working with Files
+## کار با فایل
 
-Like many other environments, Julia has an `open` function, which takes a filename and
-returns an `IOStream` object that you can use to read and write things from the file. For example,
-if we have a file, `hello.txt`, whose contents are `Hello, World!`:
+مثل بسیاری از محیط‌های دیگر، جولیا دارای یک تابع `open` است که یک نام فایل می‌گیرد و یک شی `IOStream` برمی‌گرداند که با استفاده از آن می‌توانید از آن فایل بخوانید یا در آن بنویسید. برای مثال اگر ما یک فایل به نام `hello.txt` داشته باشیم که محتوایش `Hello, World!` باشد:
+
 
 ```julia
 julia> f = open("hello.txt")
@@ -124,7 +119,7 @@ julia> readlines(f)
  "Hello, World!"
 ```
 
-If you want to write to a file, you can open it with the write (`"w"`) flag:
+اگر می‌خواهید در یک فایل چیزی بنویسید، می‌توانید آن را با نشانه‌ی `"w"` باز کنید:
 
 ```julia
 julia> f = open("hello.txt","w")
