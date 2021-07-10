@@ -155,8 +155,7 @@ julia> open(read_and_capitalize, "hello.txt")
 
 برای باز کردن `hello.txt` تابع `read_and_capitalize` را روی آن فراخوانی کنید، فایل `hello.txt` را ببندید و محتوایی را که حروف به حروف بزرگ تبدیل شدن را خروجی بگیرید.
 
-To avoid even having to define a named function, you can use the `do` syntax, which creates an
-anonymous function on the fly:
+برای جلوگیری از تعریف یک تابع مشخص اسم‌دار، می‌توانید از دستور `do` استفاده کنید که یک تابع مخفی مجازی می‌سازد:
 
 ```julia
 julia> open("hello.txt") do f
@@ -165,7 +164,7 @@ julia> open("hello.txt") do f
 "HELLO AGAIN."
 ```
 
-## A simple TCP example
+## یک مثال ساده از TCP
 
 Let's jump right in with a simple example involving TCP sockets.
 This functionality is in a standard library package called `Sockets`.
