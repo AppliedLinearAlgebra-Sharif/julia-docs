@@ -129,15 +129,13 @@ julia> write(f,"Hello again.")
 12
 ```
 
-If you examine the contents of `hello.txt` at this point, you will notice that it is empty; nothing
-has actually been written to disk yet. This is because the `IOStream` must be closed before the
-write is actually flushed to disk:
+اگر بعد از اجرای کد بالا محتوای فایل `hello.txt` را بررسی کنید، متوجه خواهید شد که خالی است. در واقع هنوز هیچ چیزی بر روی حافظه نوشته نشده است. این به این خاطر است که `IOStream` باید قبل از این که نوشته بر روی حافظه وارد شود، بسته شود:
 
 ```julia
 julia> close(f)
 ```
 
-Examining `hello.txt` again will show its contents have been changed.
+بررسی مجدد `hello.txt` نشان خواهد داد که محتوای آن تغییر کرده است.
 
 Opening a file, doing something to its contents, and closing it again is a very common pattern.
 To make this easier, there exists another invocation of `open` which takes a function
