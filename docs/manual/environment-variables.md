@@ -233,89 +233,45 @@ If set to anything besides `0`, then Julia's thread policy is consistent with
 running on a dedicated machine: the master thread is on proc 0, and threads are
 affinitized. Otherwise, Julia lets the operating system handle thread policy.
 
-## REPL formatting
 ## قالب بندی REPL
-
-Environment variables that determine how REPL output should be formatted at the
-terminal. Generally, these variables should be set to [ANSI terminal escape
-sequences](http://ascii-table.com/ansi-escape-sequences.php). Julia provides
-a high-level interface with much of the same functionality; see the section on
-The Julia REPL.
 
 متغیر های محیطی که مشخص می کنند که چطور خروجی REPL باید در نرمینال قالب بندی شده باشد. به صورت عمومی این متغیر ها باید روی [ANSI terminal escape sequences](http://ascii-table.com/ansi-escape-sequences.php) قرار داده شوند. جولیا یک واسط سطح بالا با بیش تر شباهت از لحاظ کارکردی ارائه می کند. قسمت REPL جولیا (The Julia REPL) را مشاهده کنید.
 
 ### `JULIA_ERROR_COLOR`
-The formatting `Base.error_color()` (default: light red, `"\033[91m"`) that
-errors should have at the terminal.
 
 قالب بندی `Base.error_color()` (default: light red, `"\033[91m"`) که ارورها باید در ترمینال داشته باشند.
 
 ### `JULIA_WARN_COLOR`
 
-The formatting `Base.warn_color()` (default: yellow, `"\033[93m"`) that warnings
-should have at the terminal.
-
 قالب بندی `Base.warn_color()` (default: yellow, `"\033[93m"`) که هشدار ها باید در ترمینال داشته باشند.
 
 ### `JULIA_INFO_COLOR`
-
-The formatting `Base.info_color()` (default: cyan, `"\033[36m"`) that info
-should have at the terminal.
 
 قالب بندی `Base.info_color()` (default: cyan, `"\033[36m"`) که اطلاعات باشد در ترمینال داشته باشند.
 
 ### `JULIA_INPUT_COLOR`
 
-The formatting `Base.input_color()` (default: normal, `"\033[0m"`) that input
-should have at the terminal.
-
 قالب بندی `Base.input_color()` (default: normal, `"\033[0m"`) که ورودی ها باید در ترمینال داشته باشند.
 
 ### `JULIA_ANSWER_COLOR`
 
-The formatting `Base.answer_color()` (default: normal, `"\033[0m"`) that output
-should have at the terminal.
-
 قالب بندی `Base.answer_color()` (default: normal, `"\033[0m"`) که خروجی ها باید در ترمینال داشته باشند.
-
-## Debugging and profiling
 
 ## دیباگ کردن و بازرسی
 
 ### `JULIA_DEBUG`
 
-Enable debug logging for a file or module, see [`Logging`](@ref Logging) for more information.
-
 امکان رویداد نگاری (logging) دیباگ کردن را برای یک قایل یا یک ماژول می دهد. برای اطلاعات بیش تر [`Logging`](@ref Logging) را مشاهده کنید.
 
 ### `JULIA_GC_ALLOC_POOL`, `JULIA_GC_ALLOC_OTHER`, `JULIA_GC_ALLOC_PRINT`
 
-If set, these environment variables take strings that optionally start with the
-character `'r'`, followed by a string interpolation of a colon-separated list of
-three signed 64-bit integers (`int64_t`). This triple of integers `a:b:c`
-represents the arithmetic sequence `a`, `a + b`, `a + 2*b`, ... `c`.
-
 اگر قرار داده شوند این متغیر های محیطی رشته ها را که به صورت اختیاری با کاراکتر `'r'` شروع می شوند و در ادامه الحاق یک رشته از لیستی از سه عدد صحیح ۶۴ بیتی علامت دار (`int64_t`) که توسط دو نقطه (:) جدا شده اند را می گیرد. این سه گانه از اعداد صحیح `a:b:c` نشان دهنده دنباله حسابی `a`, `a + b`, `a + 2*b`, ... `c` هستند.
 
-*   If it's the `n`th time that `jl_gc_pool_alloc()` has been called, and `n`
-    belongs to the arithmetic sequence represented by `$JULIA_GC_ALLOC_POOL`,
-    then garbage collection is forced.
 *   اگر این دفعه `n` ام است که `jl_gc_pool_alloc()` صدا زده شده است و `n` متعلق به دنباله حسابی که توسط `$JULIA_GC_ALLOC_POOL` نشان داده شده است باشد پس جمع آوری زباله (garbage collection)  اجبار شده است.
 
-*   If it's the `n`th time that `maybe_collect()` has been called, and `n` belongs
-    to the arithmetic sequence represented by `$JULIA_GC_ALLOC_OTHER`, then garbage
-    collection is forced.
 *   اگر این دفعه `n` ام باشد که `maybe_collect()` صدا زده شده است و `n` متعلق به دنباله حسابی ای باشد که توسط `$JULIA_GC_ALLOC_OTHER` نشان داده می شود پس زباله رویی (garbage collection) اجبار شده است.
-   
-*   If it's the `n`th time that `jl_gc_collect()` has been called, and `n` belongs
-    to the arithmetic sequence represented by `$JULIA_GC_ALLOC_PRINT`, then counts
-    for the number of calls to `jl_gc_pool_alloc()` and `maybe_collect()` are
-    printed.
 
 *   اگر این دفعه `n` ام باشد که `jl_gc_collect()` صدا زده شده باشد و `n` متعلق به دنباله حسابی ای باشد که `$JULIA_GC_ALLOC_PRINT` نشان می دهد پس شمارش برای تعداد دا زدن های `jl_gc_pool_alloc()` و `maybe_collect()` نمایش داده شده اند.
-     
-If the value of the environment variable begins with the character `'r'`, then
-the interval between garbage collection events is randomized.
 
 اگر مقدار متغیر محیطی با کاراکتر `'r'` شروع شود پس  فاصله بین اتفاق های زباله رویی (garbage collection events) به صورت رندوم است.
 
@@ -323,28 +279,17 @@ the interval between garbage collection events is randomized.
 
 .. توجه::
 
-    These environment variables only have an effect if Julia was compiled with
-    garbage-collection debugging (that is, if `WITH_GC_DEBUG_ENV` is set to `1`
-    in the build configuration).
-    
     این متغیر های محیطی فقط وقتی تاثیر دارند که جولیا با دیباگ زباله رویی (garbage-collection debugging) اجرا شود. (یعنی اگر `WITH_GC_DEBUG_ENV` در پیکر بندی ساخت برابر با `1` قرار داده شده است )
     
 ```
 
 ### `JULIA_GC_NO_GENERATIONAL`
 
-If set to anything besides `0`, then the Julia garbage collector never performs
-"quick sweeps" of memory.
-
 اگر به غیر از `0` روی هر چیزی قرار داده شده باشد پس زباله روب (garbage collector) جولیا هرگز جاروی سریع ("quick sweeps") حافظه را اجرا نمی کند.
 
 ```eval_rst
 
 .. توجه::
-
-    This environment variable only has an effect if Julia was compiled with
-    garbage-collection debugging (that is, if `WITH_GC_DEBUG_ENV` is set to `1`
-    in the build configuration).
     
     این متغیر محیطی تنها وقتی تاثیر دارد که جولیا همراه با دیباگ کردن توسط زیاله رویی (garbage-collection debugging) اجرا شده باشد. ( یعنی اگر `WITH_GC_DEBUG_ENV` در پیکر بندی ساخت برابر با `1` قرار داده شده باشد.)
     
@@ -352,18 +297,11 @@ If set to anything besides `0`, then the Julia garbage collector never performs
 
 ### `JULIA_GC_WAIT_FOR_DEBUGGER`
 
-If set to anything besides `0`, then the Julia garbage collector will wait for
-a debugger to attach instead of aborting whenever there's a critical error.
-
 اگر برابر با چیزی جز `0` قرار داده شده باشد پس زباله روب جولیا برای یک دیباگ کننده خواهد ایستاد تا وقتی که یک ارور مهم وجود دارد به جای حذف کردن متصل کند.
 
 ```eval_rst
 
 .. توجه::
-
-    This environment variable only has an effect if Julia was compiled with
-    garbage-collection debugging (that is, if `WITH_GC_DEBUG_ENV` is set to `1`
-    in the build configuration).
     
     این متغیر محیطی تنها وقتی تاثیر دارد که جولیا همراه با دیباگ کردن به صورت زباله رویی (garbage-collection debugging) اجرا شده باشد. (یعنی اگر `WITH_GC_DEBUG_ENV` در پیکر بندی ساخت برابر با `1` قرار داده شده باشد )
     
@@ -371,17 +309,11 @@ a debugger to attach instead of aborting whenever there's a critical error.
 
 ### `ENABLE_JITPROFILING`
 
-If set to anything besides `0`, then the compiler will create and register an
-event listener for just-in-time (JIT) profiling.
-
 اگر برابر با چیزی جز `0` قرار داده شده باشد پس کامپایلر یک listener  را برای بازرسی just-in-time (JIT) می سازد و قرار می دهد.
 
 ```eval_rst
 
 .. توجه::
-
-    This environment variable only has an effect if Julia was compiled with JIT
-    profiling support, using either
 
     این متغیر محیطی تنها وقتی تاثیر دارد که جولیا همراه با پشتیبانی بازرسی JIT اجرا شده باشد با استفاده از یکی از 
     
@@ -398,13 +330,9 @@ event listener for just-in-time (JIT) profiling.
 
 ### `ENABLE_GDBLISTENER`
 
-If set to anything besides `0` enables GDB registration of Julia code on release builds.
-On debug builds of Julia this is always enabled. Recommended to use with `-g 2`.
  اگر برابر با هر چیزی به غیر از `0` قرار داده شود ثبت GDB کد جولیا را در ساخته های منتشر شده امکان پذیر می کند. رو ساخته های دیباگ جولیا این متغیر همیشه فعال شده است و پیشنهاد می شود که همراه با `-g 2` استفاده شود.   
 
 ### `JULIA_LLVM_ARGS`
-
-Arguments to be passed to the LLVM backend.
 
  آرگومان هایی که باید به بک اند LLVM منتقل شوند. 
 
