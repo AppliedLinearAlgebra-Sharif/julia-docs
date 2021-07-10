@@ -212,7 +212,7 @@ Sockets.PipeServer(active)
 ```
 توجه کنید که نوع خروجی فراخوانی آخر متفاوت است. این به خاطر این است که این سرور به TCP گوش نمی‌دهد. بلکه به یک سوکت تحت عنوان پایپ (ویندوز) یا UNIX گوش می‌دهد. همچنین توجه کنید که ویندوزی که تحت عنوان پایپ است یک الگوی مشخص دارد  مثل اسم پیشوند (`\\.\pipe\`) که به طور یکتا
 [نوع فایل](https://docs.microsoft.com/windows/desktop/ipc/pipe-names).
-مشخص می‌کند.
+را مشخص می‌کند.
 The difference between TCP and named pipes or
 UNIX domain sockets is subtle and has to do with the `accept` and `connect`
 methods. The `accept` method retrieves a connection to the client that is connecting on
