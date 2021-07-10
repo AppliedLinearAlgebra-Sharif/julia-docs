@@ -137,10 +137,7 @@ julia> close(f)
 
 بررسی مجدد `hello.txt` نشان خواهد داد که محتوای آن تغییر کرده است.
 
-Opening a file, doing something to its contents, and closing it again is a very common pattern.
-To make this easier, there exists another invocation of `open` which takes a function
-as its first argument and filename as its second, opens the file, calls the function with the
-file as an argument, and then closes it again. For example, given a function:
+باز کردن یک فایل، اعمال یک سری تغییرات بر محتوای آن و سپس بستن آن یک الگوی بسیار مرسوم است. برای راحت‌تر کردن این کار فراخوانی دیگری از `open` وجود دارد که یک تابع را به عنوان ورودی اول خود و اسم فایل را به عنوان ورودی دوم می‌گیرد، فایل را باز می‌کند، تابع را با ورودی فایل مورد نظر فراخوانی می‌کند و سپس دوباره آن را می‌بندد. برای مثال، تابع داده شده:
 
 ```julia
 function read_and_capitalize(f::IOStream)
@@ -148,15 +145,15 @@ function read_and_capitalize(f::IOStream)
 end
 ```
 
-You can call:
+می‌توانید به این شکل فرخوانی کنید:
 
 ```julia
 julia> open(read_and_capitalize, "hello.txt")
 "HELLO AGAIN."
 ```
 
-to open `hello.txt`, call `read_and_capitalize` on it, close `hello.txt` and return the capitalized
-contents.
+
+برای باز کردن `hello.txt` تابع `read_and_capitalize` را روی آن فراخوانی کنید، فایل `hello.txt` را ببندید و محتوایی را که حروف به حروف بزرگ تبدیل شدن را خروجی بگیرید.
 
 To avoid even having to define a named function, you can use the `do` syntax, which creates an
 anonymous function on the fly:
