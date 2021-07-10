@@ -311,14 +311,18 @@ arguments.
 آرگومان دوم یعنی `args` یک آرایه از آرگومان های `jl_value_t*` است و `nargs` تعداد آرگومان ها است.
 
 ## Memory Management
-
+## مدیریت حافظه
 As we have seen, Julia objects are represented in C as pointers. This raises the question of who
 is responsible for freeing these objects.
 
+    همانطور که دیدیم اشیای جولیا در C به عنوان نشانگر نمایش داده می شوند. این موضوع این سوال را مطرح می کند که چه کسی مسئول آزاد کردن این اشیاء هست.
+    
 Typically, Julia objects are freed by a garbage collector (GC), but the GC does not automatically
 know that we are holding a reference to a Julia value from C. This means the GC can free objects
 out from under you, rendering pointers invalid.
 
+معمولا اشیای جولیا توسط زباله رو (garbage collector (GC)) آزاد می شوند اما GC بطور خودکار نمی داند که ما یک ارجاع به مقدار جولیا از C را نگه داشته ایم. این بدین معنی است GC می تواند اشیا را از دست شما آزاد کند. و منجر به نمایش نشانگر های نامعتبر شود.
+    
 The GC can only run when Julia objects are allocated. Calls like `jl_box_float64` perform allocation,
 and allocation might also happen at any point in running Julia code. However, it is generally
 safe to use pointers in between `jl_...` calls. But in order to make sure that values can survive
@@ -328,6 +332,9 @@ called "GC rooting". Rooting a value will ensure that the garbage collector does
 identify this value as unused and free the memory backing that value. This can be done using the
 `JL_GC_PUSH` macros:
 
+GC فقط زمانی اجرا می شود که اشیا جولیا تخصیص داده شده اند. فراخوانی شبیه `jl_box_float64` تخصیص را انجام می دهد و تخصیص ممکن است در حین اجرای جولیا در هر نقطه ای اتفاق بیافتد. هرچند معمولا استفاده از نشانگر بین فراخوانی `jl_...` امن است. اما برای اطمینان از زنده نگه داشتن مقادیر از فراخوانی های  `jl_...` ما باید به جولیا بگوییم که ما هنوز یک ارجاع به ریشه ([root](https://www.cs.purdue.edu/homes/hosking/690M/p611-fenichel.pdf)) داریم که یک پروسه به نام (GC rooting) است.    ریشه یابی یک مقدار این اطمینان را می دهد که زباله رو(garbage collector) تصادفا یک مقدار را به عنوان مقدار استفاده نشده تشخیص داده و حافظه را ازادسازی کند. این می تواند با استفاده از دستور (macro) `JL_GC_PUSH` اتفاق بیافتد.
+
+    
 ```c
 jl_value_t *ret = jl_eval_string("sqrt(2.0)");
 JL_GC_PUSH1(&ret);
@@ -339,6 +346,8 @@ The `JL_GC_POP` call releases the references established by the previous `JL_GC_
 `JL_GC_PUSH` stores references on the C stack, so it must be exactly paired with a `JL_GC_POP`
 before the scope is exited. That is, before the function returns, or control flow otherwise
 leaves the block in which the `JL_GC_PUSH` was invoked.
+
+فراخوانی `JL_GC_POP`  ارجاع های استفاده شده توسط `JL_GC_PUSH` قبلی را آزاد می کند. توجه کنید که `JL_GC_PUSH` ارجاع ها را در استک C نگه داری میکند. که می بایستی دقیقا متناسب باشد با L_GC_POP  قبل از خروج از اسکوپ. یعنی قبل از اینکه یا جریان کنترل عملکرد بازگردد ، در غیر این صورت از بولکی که JL_GC_PUSH استناد کرده بود خارج می شود.
 
 Several Julia values can be pushed at once using the `JL_GC_PUSH2` , `JL_GC_PUSH3` , `JL_GC_PUSH4` ,
 `JL_GC_PUSH5` , and `JL_GC_PUSH6` macros. To push an array of Julia values one can use the
