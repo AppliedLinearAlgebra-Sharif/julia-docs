@@ -329,16 +329,41 @@ julia> x # x is unchanged!
 ```
 
 <div dir="auto">
- 
+ در جولیا،
+مقداری که به یک متغیر نسبت داده شده یا 
+ binding of a variable
+ x
+ نمیتواند در اثر پاس دادن به یک ارگومان تابع تغییر کند .
+ وقتی تابع
+  hange_value!(x)
+ در مثال بالا را صدا می زنیم،متغیر 
+ y
+ یک متغیر است که به سادگی ساخته شده است .
+ که اول در تابع یک مقدار به مقدار 
+ x
+ می دهد  مقدار 10 
+ سپس 
+ y
+ مقدار 17 میگیرد.
+ هنگامی که متغیر 
+ x
+ در لایه خارجی هنوز دست نخورده است.
+ <br>
+ درحالیکه،اگر 
+ x
+ به یک شی از ارایه 
+ assign
+ میشد 
+ (یا هر تایپ 
+ mutable(
+ از داخل تابع ،نمیتوانید اشاره گر  
+ x
+ را عوض کنید یا به اصطلاح 
+ unbind
+ اش کنید ولی میتوانید مقدارش را عوض کنید.
+ برای مثال
+ :
 </div>
-In Julia, the binding of a variable `x` cannot be changed by passing `x` as an argument to a function.
-When calling `change_value!(x)` in the above example, `y` is a newly created variable, bound initially
-to the value of `x`, i.e. `10`; then `y` is rebound to the constant `17`, while the variable
-`x` of the outer scope is left untouched.
-
-However, if `x` is bound to an object of type `Array`
-(or any other *mutable* type). From within the function, you cannot "unbind" `x` from this Array,
-but you *can* change its content. For example:
 
 ```jldoctest
 julia> x = [1,2,3]
@@ -362,18 +387,38 @@ julia> x
  3
 ```
 
-Here we created a function `change_array!`, that assigns `5` to the first element of the passed
-array (bound to `x` at the call site, and bound to `A` within the function). Notice that, after
-the function call, `x` is still bound to the same array, but the content of that array changed:
-the variables `A` and `x` were distinct bindings referring to the same mutable `Array` object.
+<div dir="auto">
+ اینجا ما یک تابع 
+ change_array!
+ ساختیم که به خانه اول ارایه مقدار 
+ '5'
+ را نسبت میدهد.
+ دقت کنید بعد از فراخوانی تابع،
+ x
+ هنوز به همان ارایه اشاره میکند.
+ ولی مقادیر ارایه فرق کرده است .
+ متغیر های
+ A
+ و
+ x
+ دو اشاره گر متمایز بودند که به یک ارایه تغییر پیدا کرده اشاره میکردند.
+</div>
 
-### Can I use `using` or `import` inside a function?
+### Can I use `using` or `import` inside a function?(ایا میتوانیم از این دو لفظ درون  تابع استفاده کنیم؟)
 
-No, you are not allowed to have a `using` or `import` statement inside a function.  If you want
-to import a module but only use its symbols inside a specific function or set of functions, you
-have two options:
-
-1. Use `import`:
+<div dir="auto">
+ نه ! ما اجازه نداریم که از کلیدواژه های 
+ using
+ یا
+ import
+ درون تابع استفاده کنیم.
+ اگر میخواهید که یک ماژول را ایمپورت کنید ولی فقط از سمبل های درون  یک تابع مشخص یا مجموعه ای از تابع ها استفاده کنید.
+ دو تا راه دارید
+ :
+ <br>
+ <br>
+ 1.از ایمپورت استفاده کنید:
+</div>
 
    ```julia
    import Foo
@@ -381,11 +426,23 @@ have two options:
        # ... refer to Foo symbols via Foo.baz ...
    end
    ```
-
-   This loads the module `Foo` and defines a variable `Foo` that refers to the module, but does not
-   import any of the other symbols from the module into the current namespace.  You refer to the
-   `Foo` symbols by their qualified names `Foo.bar` etc.
-2. Wrap your function in a module:
+<div dir="auto">
+ این کد ماژول 
+ Foo
+ را لود میکند و یک متغیر 
+ Foo
+ را تعریف میکند .
+ که به ماژول برمیگردد  ولی هنوز هیچکدام از سیمبل های دیگر از ماژول را به 
+ namespace
+ فعلی ایمپورت نمیکند.
+ شما با  اسم های واجدشرایط 
+ qualified names `Foo.bar`
+ به 
+ Foo
+ اشاره می کنید.
+ <br>
+ 2.تابع خود را در یک ماژول قرار دهید:
+</div>
 
    ```julia
    module Bar
@@ -398,20 +455,35 @@ have two options:
    using Bar
    ```
 
-   This imports all the symbols from `Foo`, but only inside the module `Bar`.
+<div dir="auto">
+ این کد تمام 
+ symbol
+ ها را از
+ Foo
+ ایمپورت میکند  ولی فقط درون ماژول 
+ Bar.
+</div>
 
 ### What does the `...` operator do?
 
 #### The two uses of the `...` operator: slurping and splatting
-
-Many newcomers to Julia find the use of `...` operator confusing. Part of what makes the `...`
-operator confusing is that it means two different things depending on context.
+<div dir="auto">
+ بسیاری از افرادی که به تازگی با جولیا کد میزنند،در استفاده از عملگر 
+ ...
+ گیج میشوند.
+ یکی از دلایلی که این عملگر پیچیده است این است که با توجه به کانتکس مفهوم متفاوتی دارد.
+</div>
 
 #### `...` combines many arguments into one argument in function definitions
-
-In the context of function definitions, the `...` operator is used to combine many different arguments
-into a single argument. This use of `...` for combining many different arguments into a single
-argument is called slurping:
+<div dir="auto">
+ برخلاف استفاده عملگر
+ ...
+ که اجازه میدهد هرچقدر ارکومان که خواستیم ورودی بدهیم،همان عملگر همچنین برای ایجاد یک تابع که فقط یک ارگومان داردکه باید از سایر ارگومان ها جدا باشدوقتی در کانتکستفراخوانی تابع از ان صحبت می شود.
+ این استفاده از این عملگر 
+ slurping
+ نام دارد
+ :
+</div>
 
 ```jldoctest
 julia> function printargs(args...)
@@ -428,16 +500,31 @@ Arg #1 = 1
 Arg #2 = 2
 Arg #3 = 3
 ```
+<div dir="auto">
+ اگر جولیا یک زبان بود که با استفاده از کاراکتر های
+ ASCII
+ حرف های بیشتری میساخت،
+عملگر 
+ slurping
+ باید به جای 
+ ...
+ به صورت 
+<-...
+ نوشته میشد.
+</div>
 
-If Julia were a language that made more liberal use of ASCII characters, the slurping operator
-might have been written as `<-...` instead of `...`.
+#### `...` splits one argument into many different arguments in function calls(جدا کردن یک ارگومان از دیگر ارگومان ها در هنگام صدا کردن ان )
 
-#### `...` splits one argument into many different arguments in function calls
-
-In contrast to the use of the `...` operator to denote slurping many different arguments into
-one argument when defining a function, the `...` operator is also used to cause a single function
-argument to be split apart into many different arguments when used in the context of a function
-call. This use of `...` is called splatting:
+<div dir="auto">
+ برخلاف استفاده عملگر
+ ...
+ که اجازه میدهد هرچقدر ارکومان که خواستیم ورودی بدهیم،همان عملگر همچنین برای ایجاد یک تابع که فقط یک ارگومان داردکه باید از سایر ارگومان ها جدا باشدوقتی در کانتکستفراخوانی تابع از ان صحبت می شود.
+ این استفاده از این عملگر 
+ splatting
+ نام دارد
+ :
+ 
+</div>
 
 ```jldoctest
 julia> function threeargs(a, b, c)
@@ -458,13 +545,26 @@ a = 1::Int64
 b = 2::Int64
 c = 3::Int64
 ```
-
-If Julia were a language that made more liberal use of ASCII characters, the splatting operator
-might have been written as `...->` instead of `...`.
+<div dir="auto">
+ اگر جولیا یک زبان بود که با استفاده از کاراکتر های
+ ASCII
+ حرف های بیشتری میساخت،
+عملگر 
+ splatting
+ باید به جای 
+ ...
+ به صورت 
+ ...->
+ نوشته میشد.
+</div>
 
 ### What is the return value of an assignment?
-
-The operator `=` always returns the right-hand side, therefore:
+<div dir="auto">
+ عملگر 
+ =
+ همیشه نتیجه محاسبه  سمت راست خود را برمیگرداند
+ :
+</div>
 
 ```jldoctest
 julia> function threeint()
@@ -484,8 +584,11 @@ julia> threeint()
 julia> threefloat()
 3.0
 ```
+<div dir="auto">
+ و به طور مشابه 
+ :
+</div>
 
-and similarly:
 
 ```jldoctest
 julia> function threetup()
