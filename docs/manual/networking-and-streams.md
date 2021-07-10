@@ -80,18 +80,16 @@ while !eof(stdin)
 end
 ```
 
-## Text I/O
+## ورودی/خروچی متنی
 
-Note that the `write` method mentioned above operates on binary streams. In particular,
-values do not get converted to any canonical text representation but are written out as is:
+توجه کنید که متد `write` که در بالا به آن اشاره شد روی مسیرهای دودویی عمل می‌کند. به طور خاص، مقادیر هیچ نمایش متنی متعارفی تبدیل نمی‌شود بلکه به شکل زیر نوشته می‌شود:
 
 ```julia
 julia> write(stdout, 0x61);  # suppress return value 1 with ;
 a
 ```
 
-Note that `a` is written to `stdout` by the `write` function and that the returned
-value is `1` (since `0x61` is one byte).
+توجه کنید که `a` به وسیله‌ی تابع `write` در `stdout` نوشته شده است و مقدار خروجی برابر با ‍‍`1` است (زیرا `0x61` یک بایت است).
 
 For text I/O, use the `print` or `show` methods, depending on your needs (see
 the documentation for these two methods for a detailed discussion of the difference between them):
