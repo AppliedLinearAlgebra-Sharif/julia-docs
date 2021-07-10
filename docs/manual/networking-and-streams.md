@@ -166,9 +166,10 @@ julia> open("hello.txt") do f
 
 ## یک مثال ساده از TCP
 
-Let's jump right in with a simple example involving TCP sockets.
-This functionality is in a standard library package called `Sockets`.
-Let's first create a simple server:
+اجازه دهید سراغ یک مثال ساده از به‌کار‌گیری سوکت‌های TCP برویم.
+این ساختار در یک بسته‌ی کتابخانه‌‌ی استاندارد به نام `Sockets` موجود است.
+ابتدا بیایید یک سرور ساده بسازیم:
+
 
 ```
 julia> using Sockets
@@ -183,10 +184,9 @@ julia> @async begin
 Task (runnable) @0x00007fd31dc11ae0
 ```
 
-To those familiar with the Unix socket API, the method names will feel familiar, though their
-usage is somewhat simpler than the raw Unix socket API. The first call to `listen` will
-create a server waiting for incoming connections on the specified port (2000) in this case. The
-same function may also be used to create various other kinds of servers:
+برای کسانی که با API سوکت Unix آشنایی دارند، نام متد آشنا خواهد بود، اگر چه استفاده‌ی آن‌ها قدری ساده‌تر از API خام سوکت Unix است. فراخوانی اول `listen` سروری خواهد ساخت که آماده‌ی دریافت کانکشن ورودی روی یک پورت مشخص، (۲۰۰۰) در این مثال، 
+است. همچنین ممکن است همین تابع برای ساختن انواع مختلف سرور استفاده شود:
+
 
 ```julia
 julia> listen(2000) # Listens on localhost:2000 (IPv4)
