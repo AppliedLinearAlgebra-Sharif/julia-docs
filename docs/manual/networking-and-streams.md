@@ -1,15 +1,11 @@
-# Networking and Streams
+# شبکه و مسیرها
+جولیا یک رابط قدرتمند برای کار کردن با اشیا مسیری ورودی/خروجی مثل ترمینال‌ها، پایپ‌ها و سوکت‌های TCP فراهم می‌کند. این رابط، اگر چه در سطح دستگاه غیرهمزمان است، اما به صورت همزمان به برنامه‌نویس ارائه می‌شود و معمولا هم توجه به عملیات‌های غیرهمزمان لایه‌های زیرین ضروری نیست. این ویژگی به وسیله‌ی استفاده‌ی مکرر از رشته‌های همکارانه‌ی جولیا
+([coroutine](@ref man-tasks))
+حاصل می‌شود.
 
-Julia provides a rich interface to deal with streaming I/O objects such as terminals, pipes and
-TCP sockets. This interface, though asynchronous at the system level, is presented in a synchronous
-manner to the programmer and it is usually unnecessary to think about the underlying asynchronous
-operation. This is achieved by making heavy use of Julia cooperative threading ([coroutine](@ref man-tasks))
-functionality.
+## مسیر پایه‌ای ورودی/خروجی
 
-## Basic Stream I/O
-
-All Julia streams expose at least a `read` and a `write` method, taking the
-stream as their first argument, e.g.:
+همه‌ی مسیر‌های جولیا حداقل به شکل یکی از متدهای `read` یا `write` ظاهر می‌شوند که مسیر را به عنوان ورودی اول‌شان می‌گیرند. برای مثال:
 
 ```julia
 julia> write(stdout, "Hello World");  # suppress return value 11 with ;
@@ -19,8 +15,8 @@ julia> read(stdin, Char)
 '\n': ASCII/Unicode U+000a (category Cc: Other, control)
 ```
 
-Note that `write` returns 11, the number of bytes (in `"Hello World"`) written to `stdout`,
-but this return value is suppressed with the `;`.
+
+توجه کنید که `write` ۱۱ را خروجی می‌دهد که برابر است با تعداد بایت‌های `Hello World` که  در مسیر `stdout` نوشته شده است ولی این مقدار خروجی به وسیله‌ی `;` کنترل می‌شود.
 
 Here Enter was pressed again so that Julia would read the newline. Now, as you can see from this
 example, `write` takes the data to write as its second argument, while `read`
