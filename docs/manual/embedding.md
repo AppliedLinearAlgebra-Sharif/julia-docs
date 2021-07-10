@@ -368,7 +368,7 @@ Each scope must have only one call to `JL_GC_PUSH*`. Hence, if all variables can
 a single call to `JL_GC_PUSH*`, or if there are more than 6 variables to be pushed and using an array
 of arguments is not an option, then one can use inner blocks:
 
-هر حوزه (scope) فقط یکبار می تواند `JL_GC_PUSH*` را صدا کند.از این رو اگر همه متغیر ها نتوانند یکباره با یکبار فراخوانی `JL_GC_PUSH*` فشرده (push) شوند یا اگر بیش تر از شش متغیر این صورت می توان از بلوک های داخلی استفاده کرد :ر برای فشرده (push) شدن وجود داشته باشد و استفاده از آرایه ای از آرگومان ها قابل انتخاب نباشد  در یکی با اجرای JL_GC_PUSH* و یا اگر بیشتر از 6 متغیر فشرده شده باشند و استفاده از یک آرایه  ارگیومنت ها قابل انتخاب نباشد می توانید از بلوک های داخلی استفاده کنید.
+هر حوزه (scope) فقط یکبار می تواند `JL_GC_PUSH*` را صدا کند.از این رو اگر همه متغیر ها نتوانند یکباره با یکبار فراخوانی `JL_GC_PUSH*` فشرده (push) شوند یا اگر بیش تر از شش متغیر برای فشرده (push) شدن وجود داشته باشد و استفاده از آرایه ای از آرگومان ها قابل انتخاب نباشد  در این صورت می توان از بلوک های داخلی استفاده کرد :
 
 ```c
 jl_value_t *ret1 = jl_eval_string("sqrt(2.0)");
@@ -390,6 +390,8 @@ variable in the Julia global scope. One simple way to accomplish this is to use 
 will hold the references, avoiding deallocation by the GC. However, this method will only work
 properly with mutable types.
 
+اگر لازم است که یک نشانگر به یک متغیر را بین توابع یا حدوده های بلوک نگه داریم پس غیر ممکن است که از `JL_GC_PUSH*` استفاده کنیم.در این شرایط لازم است که یک ارجاع به متغیر را  در حوزه جهانی (global) جولیا بسازیم و نگه داری کنیم.یک راه ساده برای اجرای این کار این است که از `IdDict` جهانی (global) که ارجاع را نگه می دارد استفاده کنیم برای جلوگیری از تخلیه تخصیص توسط GC.   هر چند این روش با انواع قابل تغییر (mutable) فقط بدرستی کار می کند.
+    
 ```c
 // This functions shall be executed only once, during the initialization.
 jl_value_t* refs = jl_eval_string("refs = IdDict()");
@@ -413,6 +415,8 @@ If the variable is immutable, then it needs to be wrapped in an equivalent mutab
 preferably, in a `RefValue{Any}` before it is pushed to `IdDict`. In this approach, the container has
 to be created or filled in via C code using, for example, the function `jl_new_struct`. If the
 container is created by `jl_call*`, then you will need to reload the pointer to be used in C code.
+
+اگر متغیر غیر قابل تغییر (immutable) باشد لازم است تا در بسته (container) قابل تغییر معادل قرارداده شود و یا ترجیحا در یک `RefValue{Any}` قبل از اینکه به `IdDict`. وارد (push) شود. در این روش بسته باید با استفاده از کد C ایجاد و یا پر شود. برای مثال فانکشن `jl_new_struct`. اگر بسته توسط `jl_call*` ایجاد شده باشد پس لازم است که شما نشانگر را مجددا بارگذاری کنید تا در کد C استفاده شود.
 
 ```c
 // This functions shall be executed only once, during the initialization.
@@ -443,6 +447,8 @@ jl_call3(setindex, refs, rvar, rvar);
 The GC can be allowed to deallocate a variable by removing the reference to it from `refs` using
 the function `delete!`, provided that no other reference to the variable is kept anywhere:
 
+به GC می تواند اجازه داده بشود تا یک متغیر را از حالت تخصیص خارج کند به وسیله حذف ارجاع به آن از `refs` با استفاده از تابع `delete!` به شرطی که هیچ ارجاع دیگری به متغیر در هیچ جایی نگه داری نشود :
+    
 ```c
 jl_function_t* delete = jl_get_function(jl_base_module, "delete!");
 jl_call2(delete, refs, rvar);
@@ -452,15 +458,20 @@ As an alternative for very simple cases, it is possible to just create a global 
 `Vector{Any}` and fetch the elements from that when necessary, or even to create one global variable
 per pointer using
 
+به عنوان یک جایگزین برای موارد خیلی ساده می توان فقط یک بسته جهانی (global) از نوع `Vector{Any}` ایجاد کرد و عناصر را هر زمان که واجب بود از آن بیرون اورد یا حتی می توان یک متغیر جهانی (global) برای هر نشانگر ساخت با استفاده از :
+    
 ```c
 jl_set_global(jl_main_module, jl_symbol("var"), var);
 ```
 
 ### Updating fields of GC-managed objects
+### بروز رسانی فیلد های اشیای مدیریت شده توسط GC (GC-managed objects)
 
 The garbage collector operates under the assumption that it is aware of every old-generation
 object pointing to a young-generation one. Any time a pointer is updated breaking that assumption,
 it must be signaled to the collector with the `jl_gc_wb` (write barrier) function like so:
+    
+زباله رو با این فرض اجرا می شود که از هر نسل قدیمی نشانگر های اشیا تا نسل جدید آگاه است. هر زمانی که یک اشاره گر بروز می شود این فرض از بین می رود و باید به زباله رو توسط تابع`jl_gc_wb` (مانع نوشتن) (write barrier)  مانند زیر اطلاع داده شود :
 
 ```c
 jl_value_t *parent = some_old_value, *child = some_young_value;
@@ -476,6 +487,13 @@ can sometimes invoke garbage collection.
 The write barrier is also necessary for arrays of pointers when updating their data directly.
 For example:
 
+    
+در حالت عادی غیر ممکن است  که پیش بینی کنید چه مقدارهایی در زمان اجرا قدیمی خواهد بود. پس مانع نوشتن (write barrier) باید پس از همه ذخیره سازی های واضح درج شود. یک استثنا قابل توجه این است که اگر شی `parent` تنها تخصیص داده شده باشد و زباله روبی از آن پس اجرا نشده باشد. به یاد داشته باشید که اغلب توابع `jl_...` می توانند بعضی وقت ها زباله روبی را فرا بخوانند.
+
+    
+مانع نوشتن (write barrier) همچنین برای آرایه هایی از نشانگر ها هنگام بروز رسانی داده هایشان به صورت مستقیم لازم است.
+برای مثال :
+
 ```c
 jl_array_t *some_array = ...; // e.g. a Vector{Any}
 void **data = (void**)jl_array_data(some_array);
@@ -486,28 +504,43 @@ jl_gc_wb(some_array, some_value);
 
 ### Manipulating the Garbage Collector
 
+### دستکاری کردن زباله روب
+
 There are some functions to control the GC. In normal use cases, these should not be necessary.
+چند تابع برای کنترل GC وجود دارد. در حالت های نرمال این ها الزامی نیستند.
+
 
 | Function             | Description                                  |
 |:-------------------- |:-------------------------------------------- |
-| `jl_gc_collect()`    | Force a GC run                               |
-| `jl_gc_enable(0)`    | Disable the GC, return previous state as int |
-| `jl_gc_enable(1)`    | Enable the GC,  return previous state as int |
-| `jl_gc_is_enabled()` | Return current state as int                  |
+| `jl_gc_collect()`    | اجبار به اجرای GC                           
+| `jl_gc_enable(0)`    | از کار انداختن GC و بازگرداندن حالت قبلی به عنوان عدد صحیح
+| `jl_gc_enable(1)`    | به کار انداختن GC و بازگرداندن حالت قبلی به عنوان عدد صحیح
+| `jl_gc_is_enabled()` | بازگرداندن حالت فعلی به عنوان عدد صحیح 
 
 ## Working with Arrays
 
+## کار با آرایه ها
+
 Julia and C can share array data without copying. The next example will show how this works.
+
+جولیا و C می توانند بدون کپی کردن داده های آرایه را به اشتراک بگذارند. مثال بعدی نشان می دهد که این چگونه کار می کند.
 
 Julia arrays are represented in C by the datatype `jl_array_t*`. Basically, `jl_array_t` is a
 struct that contains:
 
+آرایه های جولیا در C با نوع داده `jl_array_t*` نشان داده می شوند. به صورت پایه ای `jl_array_t` ساختاری است که شامل این موارد می شود:
+
   * Information about the datatype
+  * اطلاعات در مورد نوع دیتا
   * A pointer to the data block
+  * یک نشانگر به بلوک دیتا
   * Information about the sizes of the array
+  * اطلاعات در مورد اندازه آرایه
 
 To keep things simple, we start with a 1D array. Creating an array containing Float64 elements
 of length 10 is done by:
+
+برای ساده بودن با یک آرایه یک بعدی شروع میکنیم. ایجاد یک آرایه شامل عناصر Float64 با طول ده به صورت زیر است :
 
 ```c
 jl_value_t* array_type = jl_apply_array_type((jl_value_t*)jl_float64_type, 1);
@@ -516,6 +549,8 @@ jl_array_t* x          = jl_alloc_array_1d(array_type, 10);
 
 Alternatively, if you have already allocated the array you can generate a thin wrapper around
 its data:
+
+ از سوی دیگر اگر شما آرایه را تخصیص داده اید می توانید یک بسته بندی (wrapper) نازک اطراف داده ها تولید کنید :
 
 ```c
 double *existingArray = (double*)malloc(sizeof(double)*10);
@@ -526,13 +561,18 @@ The last argument is a boolean indicating whether Julia should take ownership of
 this argument is non-zero, the GC will call `free` on the data pointer when the array is no longer
 referenced.
 
+آخرین آرگومان یک شاخص منطقی (boolean) است که نشان می دهد آیا جولیا باید مالکیت داده را داشته باشد یا نه. اگر این آرگومان غیر صفر باشد GC `free` را روی نشانگر داده وقتی که آرایه دیگر ارجاع داده نمی شود صدا می زند.
+
 In order to access the data of x, we can use `jl_array_data`:
+
+برای دسترسی به دیتا x می توانیم از `jl_array_data` استفاده کنیم :
 
 ```c
 double *xData = (double*)jl_array_data(x);
 ```
 
 Now we can fill the array:
+حال می توانیم آرایه را پرکنیم :
 
 ```c
 for(size_t i=0; i<jl_array_len(x); i++)
@@ -541,18 +581,26 @@ for(size_t i=0; i<jl_array_len(x); i++)
 
 Now let us call a Julia function that performs an in-place operation on `x`:
 
+اکنون یک تابع جولیا را که یک عملیات در جا را روی `x` اجرا می کند صدا می زنیم :
+                                   
 ```c
 jl_function_t *func = jl_get_function(jl_base_module, "reverse!");
 jl_call1(func, (jl_value_t*)x);
 ```
 
 By printing the array, one can verify that the elements of `x` are now reversed.
+با پرینت آرایه می توان مشخص کرد که المانهای `x` رزرو شده اند.
 
 ### Accessing Returned Arrays
 
+### دسترسی به آرایه های بازگشت شده
+                                   
 If a Julia function returns an array, the return value of `jl_eval_string` and `jl_call` can be
 cast to a `jl_array_t*`:
 
+اگر یک تابع جولیا یک آرایه را برگرداند مقدار بازگشتی  `jl_eval_string` و  `jl_call` می تواند به یک   `jl_array_t*` شکل  داده شود :
+
+                                   
 ```c
 jl_function_t *func  = jl_get_function(jl_base_module, "reverse");
 jl_array_t *y = (jl_array_t*)jl_call1(func, (jl_value_t*)x);
@@ -561,10 +609,15 @@ jl_array_t *y = (jl_array_t*)jl_call1(func, (jl_value_t*)x);
 Now the content of `y` can be accessed as before using `jl_array_data`. As always, be sure to
 keep a reference to the array while it is in use.
 
+اکنون محتوی `y` مانند قبل  قابل دسترسی است  با استفاده از `jl_array_data` مثل همیشه مطمئن شوید که یک ارجاع  به آرایه را وقتی که در حال استفاده است نگه دارید.                                   
 ### Multidimensional Arrays
 
+### آرایه های چندبعدی
+                                   
 Julia's multidimensional arrays are stored in memory in column-major order. Here is some code
 that creates a 2D array and accesses its properties:
+
+آرایه های چند بعدی جولیا در حافظه به ترتیب ستون اصلی مرتب می شوند. اینجا کدی قرار دارد که یک آرایه 2 بعدی را ایجاد می کند و به ویژگی های آن دسترسی پیدا دارد :
 
 ```c
 // Create 2D array of float64 type
@@ -588,9 +641,14 @@ for(size_t i=0; i<size1; i++)
 Notice that while Julia arrays use 1-based indexing, the C API uses 0-based indexing (for example
 in calling `jl_array_dim`) in order to read as idiomatic C code.
 
+دقت کنید که درحالی که آرایه های جولیا اندیس گذاری پایه یک (i-based indexing) را استفاده می کنند API C ا ندیس گذاری  پایه صفر (0-based indexing) را استفاده می کند. (برای مثال برای صدا زدن `jl_array_dim` ) برای خواندن اصطلاحی (idiomotic) کد C.
+
 ## Exceptions
+## اکسپشن ها
 
 Julia code can throw exceptions. For example, consider:
+
+کد جولیا می توانداکسپشن هایی را بدهد . برای مثال  در نظر بگیرید :
 
 ```c
 jl_eval_string("this_function_does_not_exist()");
@@ -598,6 +656,7 @@ jl_eval_string("this_function_does_not_exist()");
 
 This call will appear to do nothing. However, it is possible to check whether an exception was
 thrown:
+این فراخوانی به نظر می رسد کاری انجام نمی دهد. اما می توان بررسی کرد  که آیا اکسپشن داده شده است  یا خیر :
 
 ```c
 if (jl_exception_occurred())
@@ -608,10 +667,15 @@ If you are using the Julia C API from a language that supports exceptions (e.g. 
 it makes sense to wrap each call into `libjulia` with a function that checks whether an exception
 was thrown, and then rethrows the exception in the host language.
 
+اگر شما API C جولیا را از یک زبان که اکسپشن  ها را پشتیانی کند استفاده می کنید ( برای مثال (python  , C , C++ این کار خوبی  است که هر فراخوانی به `libjulia` را به یک تابع دهیم تا چک کند که آیا یک اکسپشن داده شده است یا نه و آن اکسپشن را دوباره به زبان میزبان بدهد.
+
 ### Throwing Julia Exceptions
+### ارسال اکسپشن های جولیا
 
 When writing Julia callable functions, it might be necessary to validate arguments and throw exceptions
 to indicate errors. A typical type check looks like:
+
+زمان نوشتن توابع قابل فراخوانی جولیا ممکن است لازم شود تا آرگومان ها را اعتبار سنجی کنید و اکسپشن هایی برای نشان دادن خطاها داده شود. یک کنترل نوع (type) معمولی به این شکل است :
 
 ```c
 if (!jl_typeis(val, jl_float64_type)) {
@@ -621,6 +685,8 @@ if (!jl_typeis(val, jl_float64_type)) {
 
 General exceptions can be raised using the functions:
 
+اکسپشن های عمومی می توانند با استفاده از توابع ایجاد شوند :
+
 ```c
 void jl_error(const char *str);
 void jl_errorf(const char *fmt, ...);
@@ -628,8 +694,12 @@ void jl_errorf(const char *fmt, ...);
 
 `jl_error` takes a C string, and `jl_errorf` is called like `printf`:
 
+`jl_error` یک رشته C را می گیرد و `jl_errorf` مانند `printf` صدا زده می شود :
+
 ```c
 jl_errorf("argument x = %d is too large", x);
 ```
 
 where in this example `x` is assumed to be an integer.
+
+که در این مثال `x` یک عدد صحیح در نظر گرفته شده است.
