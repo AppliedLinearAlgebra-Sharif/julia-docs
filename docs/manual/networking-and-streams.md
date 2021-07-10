@@ -91,8 +91,7 @@ a
 
 توجه کنید که `a` به وسیله‌ی تابع `write` در `stdout` نوشته شده است و مقدار خروجی برابر با ‍‍`1` است (زیرا `0x61` یک بایت است).
 
-For text I/O, use the `print` or `show` methods, depending on your needs (see
-the documentation for these two methods for a detailed discussion of the difference between them):
+برای ورودی/خروجی متنی بسته به نیازهای‌تان از متدهای `print` یا `show` استفاده کنید (برای دیدن این دو متد و جزئیات تفاوت بین آن‌ها مستندات را ببینید):
 
 ```julia
 julia> print(stdout, 0x61)
