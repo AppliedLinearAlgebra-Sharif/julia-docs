@@ -52,7 +52,7 @@ abcd
  0x64
 ```
 
-or if we had wanted to read the entire line instead:
+یا اگر می‌خواستیم به جای این کار، کل سطر را بخوانیم:
 
 ```julia
 julia> readline(stdin)
@@ -60,10 +60,10 @@ abcd
 "abcd"
 ```
 
-Note that depending on your terminal settings, your TTY may be line buffered and might thus require
-an additional enter before the data is sent to Julia.
+توجه کنید بسته به تنظیمات ترمینال شما، TTY شما ممکن است خط بافر شده باشد و بنابراین ممکن است یک انتر اضافی قبل از ارسال داده‌ها به جولیا لازم باشد.
 
-To read every line from `stdin` you can use `eachline`:
+
+برای خواندن هر خط از `stdin` می‌توانید از `eachline` استفاده کنید:
 
 ```julia
 for line in eachline(stdin)
@@ -71,7 +71,7 @@ for line in eachline(stdin)
 end
 ```
 
-or `read` if you wanted to read by character instead:
+یا از `read` اگر می‌خواستید به جای این کار با کاراکتر بخوانید:
 
 ```julia
 while !eof(stdin)
