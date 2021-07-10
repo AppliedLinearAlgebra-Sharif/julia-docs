@@ -174,8 +174,6 @@ jl_value_t *a = jl_box_float64(3.0);
 jl_value_t *b = jl_box_float32(3.0f);
 jl_value_t *c = jl_box_int32(3);
 ```
-
-As we will see next, boxing is required to call Julia functions with specific arguments.
 همانطور که خواهیم دید ذخیره سازی (boxing) برای صدا زدن توابع جولیا با ارگومان های خاص لازم است.
 
 ## صدا زدن توابع جولیا
