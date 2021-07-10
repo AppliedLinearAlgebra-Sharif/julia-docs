@@ -210,11 +210,9 @@ Sockets.PipeServer(active)
 julia> listen("\\\\.\\pipe\\testsocket") # Listens on a Windows named pipe
 Sockets.PipeServer(active)
 ```
-
-Note that the return type of the last invocation is different. This is because this server does not
-listen on TCP, but rather on a named pipe (Windows) or UNIX domain socket. Also note that Windows
-named pipe format has to be a specific pattern such that the name prefix (`\\.\pipe\`) uniquely
-identifies the [file type](https://docs.microsoft.com/windows/desktop/ipc/pipe-names).
+توجه کنید که نوع خروجی فراخوانی آخر متفاوت است. این به خاطر این است که این سرور به TCP گوش نمی‌دهد. بلکه به یک سوکت تحت عنوان پایپ (ویندوز) یا UNIX گوش می‌دهد. همچنین توجه کنید که ویندوزی که تحت عنوان پایپ است یک الگوی مشخص دارد  مثل اسم پیشوند (`\\.\pipe\`) که به طور یکتا
+[نوع فایل](https://docs.microsoft.com/windows/desktop/ipc/pipe-names).
+مشخص می‌کند.
 The difference between TCP and named pipes or
 UNIX domain sockets is subtle and has to do with the `accept` and `connect`
 methods. The `accept` method retrieves a connection to the client that is connecting on
