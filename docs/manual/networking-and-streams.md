@@ -18,11 +18,10 @@ julia> read(stdin, Char)
 
 توجه کنید که `write` ۱۱ را خروجی می‌دهد که برابر است با تعداد بایت‌های `Hello World` که  در مسیر `stdout` نوشته شده است ولی این مقدار خروجی به وسیله‌ی `;` کنترل می‌شود.
 
-Here Enter was pressed again so that Julia would read the newline. Now, as you can see from this
-example, `write` takes the data to write as its second argument, while `read`
-takes the type of the data to be read as the second argument.
 
-For example, to read a simple byte array, we could do:
+در اینجا انتر دوباره فشار داده شد تا جولیا خط بعدی را بخواند. حالا، همانطور که در این مثال می‌بینید، `write` داده‌ای را که قرار است بنویسد به عنوان ورودی دومش می‌گیرد در حالی که `read` نوع داده‌ای که قرار است بخواند را به عنوان ورودی دوم می‌گیرد.
+
+برای مثال، برای خواندن یک آرایه ساده از نوع بایت، می‌توانیم این‌گونه عمل کنیم:
 
 ```julia
 julia> x = zeros(UInt8, 4)
@@ -41,8 +40,7 @@ abcd
  0x64
 ```
 
-However, since this is slightly cumbersome, there are several convenience methods provided. For
-example, we could have written the above as:
+هر چند، از آن جا که این کار کمی زحمت دارد، چندین متد مناسب دیگر آماده شده است. برای مثال، کد بالا را می‌توانستیم به این شکل بنویسیم:
 
 ```julia
 julia> read(stdin, 4)
