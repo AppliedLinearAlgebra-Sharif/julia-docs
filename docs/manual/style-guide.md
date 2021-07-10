@@ -423,7 +423,6 @@ a = Vector{Union{Int,AbstractString,Tuple,Array}}(undef, n)
 <div dir="auto">
 هر ارگومان دیگری 
   </div>
-   Any other arguments.
 
 9. **Varargs**.
 
@@ -612,7 +611,7 @@ foo(::MyType) = foo(MyType)
 
 </div>
 
-## Don't overuse macros(زیاد از کاکرو استفاده نکنید)
+## Don't overuse macros(زیاد از ماکرو استفاده نکنید)
 <div dir="auto">
  باید بدانیم که چه موقع یک ماکرو میتواند یک تابع به حساب اید .
  <br>
@@ -645,7 +644,6 @@ end
  تعاریف را مانند مثال زیر ننویسید
  :
 </div>
-don't write definitions like the following:
 
 ```julia
 getindex(x::NativeType, i) = unsafe_load(x.p, i)
@@ -672,22 +670,34 @@ getindex(x::NativeType, i) = unsafe_load(x.p, i)
 show(io::IO, v::Vector{MyType}) = ...
 ```
 <div dir="auto">
+ این ممکن است یک نمایشی از بردار ها بدهد که نوع اعضای ان یک نوع جدید باشد.
+ در حالیکه این کار وسوسه کننده است باید از ان خودداری شود.
+ مشکل این اسن که کاربر انتظار نوع مشهوری مثل 
+ Vector()
+ را دارد  پس به روش بالا عمل کردن و زیاد شخصی سازی توابع  کار با ان ها را سخت تر می کند.
 </div>
-This would provide custom showing of vectors with a specific new element type. While tempting,
-this should be avoided. The trouble is that users will expect a well-known type like `Vector()`
-to behave in a certain way, and overly customizing its behavior can make it harder to work with.
 
-## Avoid type piracy
+
+## Avoid type piracy(از سطح امنیت دادن به تایپ ها بپرهیزید)
 <div dir="auto">
+ کلمه 
+ "Type piracy"
+ یا سطح امنیت تایپ 
+ به عمل گسترش یا تعریف مجدد روش ها در 
+ Base
+ اشاره دارد.
+ در بعضی از حالات ،با کمی تاثیر بد  میتوانید با ان کنار بیایید ولی در حالات خیلی اکستریم، حتی میتواند منجر به  خراب شدن جولیا شود 
+اگر تعریف مجدد یا اکستنشن تابع شما منجر به تولید ورودی غیر قابل قبولی که به تابع مثلا) 
+ <span><a href="https://docs.julialang.org/en/v1/)/">ccall</a></span>
+ شود.
+ (
+ Type piracy
+ میتواند منجر به پیچیده شدن کد و ایجاد مشکلاتی که به سختی قابل پیش بینی وتشخیص باشند ، شود.
+ <br>
+ به عنوان مثال ،فرض کنید میخواهی د عمل ضرب را بر روی سمبل ها در یک ماژول تعریف کنید 
+ :
+ 
 </div>
-"Type piracy" refers to the practice of extending or redefining methods in Base
-or other packages on types that you have not defined. In some cases, you can get away with
-type piracy with little ill effect. In extreme cases, however, you can even crash Julia
-(e.g. if your method extension or redefinition causes invalid input to be passed to a
-`ccall`). Type piracy can complicate reasoning about code, and may introduce
-incompatibilities that are hard to predict and diagnose.
-
-As an example, suppose you wanted to define multiplication on symbols in a module:
 
 ```julia
 module A
@@ -696,30 +706,60 @@ import Base.*
 end
 ```
 <div dir="auto">
-</div>
-The problem is that now any other module that uses `Base.*` will also see this definition.
-Since `Symbol` is defined in Base and is used by other modules, this can change the
-behavior of unrelated code unexpectedly. There are several alternatives here, including
-using a different function name, or wrapping the `Symbol`s in another type that you define.
+ مشکل این است که الان هر ماژول دیگری که از 
+ Base
+ استفاده میکند هم این تعریف یا تابع را میبیند و تا زمانی که 
+ Symbol
+ در 
+ Base
+ تعریف شده باشد،توسط دیگر ماژول ها استفاده میشود.
+ و این میتواند رفتار و عملکرد کد های در ضاهر بی ربط به ان را تغییر دهد و یا مختل کند .
+ یکسری راه های دیگر نیز برای این حالت وجود دارد، مانند در نظر گرفتن یک اسم دیگر برای تابع
+ و یا دسته بندی 
+ (wrapping)
+  نماد 
+ Symbol
+ در نوع دیگری که تعریف کردید.
+ <br>
+ بعضی اوقات  پکیج های 
+ coupled
+ ممکن است به نوعی از 
+ type piracy
+ برای جداکردن ویژگی هایی از تعاریف استفاده کرده باشند مخصوصا وقتی که ان بکیج ها توسط تعدادی برنامه نویس طراحی شده باشند.
+ که با هم همکاری داشتند وقتی که تعاریف و یا تابع ها قابل استفاده مجدد هستند .
+ برای مثال فرض کنید یک پکیج یکسری تایپ  برای کار با رنگ ها فراهم میکند و پکیج دیگر میتواند یکسری تابع برای ان تایپ های که اجازه تبدیل بین فضا های رنگ را دارد ، تعریف کند 
+ مثال دیگر ممکن است این باشد که یک پکیجیک 
+ wrapper
+ برای کد ها به زبان 
+ c 
+ باشد درحالیکه دیگری باید یک 
+ API
+ سطح بالا به زبان جولیا پیاده سازی مند.
 
-Sometimes, coupled packages may engage in type piracy to separate features from definitions,
-especially when the packages were designed by collaborating authors, and when the
-definitions are reusable. For example, one package might provide some types useful for
-working with colors; another package could define methods for those types that enable
-conversions between color spaces. Another example might be a package that acts as a thin
-wrapper for some C code, which another package might then pirate to implement a
-higher-level, Julia-friendly API.
+</div>
 
 ## Be careful with type equality(در برابر بودن تایپ دقت کنید)
 <div dir="auto">
- ما به صورت کلی از 
- 
+ ما به صورت کلی دوست داریم که از 
+ <span><a href="https://docs.julialang.org/en/v1/)/">isa</a></span>
+ و
+ <span><a href="https://docs.julialang.org/en/v1/)/"><:</a></span>
+ برای چک کردن نوع ارگومان استفاده کنیم .
+ و نه 
+  <span><a href="https://docs.julialang.org/en/v1/)/">==</a></span>
+  چک کردن نوع به صورت  تساوی دقیق با نماد قبل فقط موقعی خوب و منطقی به نظر میرسد که که با یک 
+  concrete
+  تایپ داده شده مقایسه شود.
+  مثل
+  `T == Float64`
+  ویا حتما حتما حتما بدانید که چگونه از ان استفاده می کنید.
+  
+  
 </div>
-You generally want to use [`isa`](@ref) and [`<:`](@ref) for testing types,
-not `==`. Checking types for exact equality typically only makes sense when comparing to a known
-concrete type (e.g. `T == Float64`), or if you *really, really* know what you're doing.
+
 
 ## Do not write `x->f(x)`(این را ننویسید)
+ 
 <div dir="auto">
  تا جایی که توابع با ترتیب بالاتر در اجرا معمولا به وسیله توابع ناشناس 
  anonymous
@@ -737,20 +777,19 @@ concrete type (e.g. `T == Float64`), or if you *really, really* know what you're
  .
  
 </div>
-Since higher-order functions are often called with anonymous functions, it is easy to conclude
-that this is desirable or even necessary. But any function can be passed directly, without being
-"wrapped" in an anonymous function. Instead of writing `map(x->f(x), a)`, write [`map(f, a)`](@ref).
 
 ## Avoid using floats for numeric literals in generic code when possible
 <div dir="auto">
+ اگر شما یک کد عمومی یا 
+ generic
+ بنویسید که روی اعداد کار میکند و انتظار دارید روی تمام ارگومان های تایپ عددی کار کند،سعی کنید از حرف های تایپ های عددی استفاده کنید که باعث میشود دامنه نوع  ارگومان های قابل قبول مینیمال شود. 
+ 
+ 
 </div>
-If you write generic code which handles numbers, and which can be expected to run with many different
-numeric type arguments, try using literals of a numeric type that will affect the arguments as
-little as possible through promotion.
 
 <div dir="auto">
  به عنوان مثال 
- ,
+ 
 </div>
 
 ```jldoctest
@@ -803,10 +842,6 @@ promote_type(Int, Float64) == Float64
 
 
 </div>
-As you can see, the second version, where we used an `Int` literal, preserved the type of the
-input argument, while the first didn't. This is because e.g. `promote_type(Int, Float64) == Float64`,
-and promotion happens with the multiplication. Similarly, [`Rational`](@ref) literals are less type disruptive
-than [`Float64`](@ref) literals, but more disruptive than `Int`s:
 
 ```jldoctest
 julia> h(x) = 2//1 * x
@@ -830,5 +865,3 @@ julia> h(1)
  استفاده کنید
  .
 </div>
-Thus, use `Int` literals when possible, with `Rational{Int}` for literal non-integer numbers,
-in order to make it easier to use your code.
