@@ -347,8 +347,7 @@ The `JL_GC_POP` call releases the references established by the previous `JL_GC_
 before the scope is exited. That is, before the function returns, or control flow otherwise
 leaves the block in which the `JL_GC_PUSH` was invoked.
 
-فراخوانی `JL_GC_POP`  ارجاع های استفاده شده توسط `JL_GC_PUSH` قبلی را آزاد می کند. توجه کنید که `JL_GC_PUSH` ارجاع ها را در استک C نگه داری میکند. که می بایستی دقیقا متناسب باشد با L_GC_POP  قبل از خروج از اسکوپ. یعنی قبل از اینکه یا جریان کنترل عملکرد بازگردد ، در غیر این صورت از بولکی که JL_GC_PUSH استناد کرده بود خارج می شود.
-
+فراخوانی `JL_GC_POP`  ارجاع های ایجاد شده توسط `JL_GC_PUSH` قبلی را آزاد می کند. توجه کنید که `JL_GC_PUSH` ارجاع ها را در استک C نگه داری میکند. پس می بایستی دقیقا جفت شده باشد با `JL_GC_POP` قبل از این که از محدوده خارج شود.یعنی قبل از اینکه تابع چیزی را برگرداند یا در غیر اینصورت کنترل جریان بلوکی را که `JL_GC_PUSH` در آن فراخوانی شده بود ترک می کند.
 Several Julia values can be pushed at once using the `JL_GC_PUSH2` , `JL_GC_PUSH3` , `JL_GC_PUSH4` ,
 `JL_GC_PUSH5` , and `JL_GC_PUSH6` macros. To push an array of Julia values one can use the
 `JL_GC_PUSHARGS` macro, which can be used as follows:
