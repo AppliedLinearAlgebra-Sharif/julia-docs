@@ -97,9 +97,9 @@ a
 julia> print(stdout, 0x61)
 97
 ```
-
-See [Custom pretty-printing](@ref man-custom-pretty-printing) for more information on how to
-implement display methods for custom types.
+برای اطلاعات بیشتر در مورد چگونگی پیاده‌سازی متدهای نمایش به شکل دلخواه
+[نمایش دلخواه](@ref man-custom-pretty-printing)
+را ببینید.
 
 ## IO Output Contextual Properties
 
