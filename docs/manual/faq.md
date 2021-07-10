@@ -98,31 +98,75 @@ Fortran
 ## Sessions and the REPL
 
 ### How do I delete an object in memory?(چگونه یک شی را از مموری پاک کنیم ؟)
+<div dir="auto">
+ جولیا مانند 
+ mathlab
+ یک تابع 
+ clear
+ ندارد . 
+ وقتی که یک اسم در یک 
+ session
+ جولیا تعریف شد.
+ (
+ دقیق تر در ماژول 
+ main
+ )
+ همیشه انجا وجود دارد.
+<br>
+اگر استفاده از مموری جز نگرانی های شماست ،میتوانید همیشه اشیای خود را با ان هایی که فضا یا مموری کمتری می گیرند جا به جا کنید.
+ <br>
+ برای مثال اگر 
+ A
+ یک ارایه با سایز اردر گیگابایت باشد و دیگر در برنامه نیازی به ان نباشد،میتوانید با دستور 
+   A = nothing  
+ مموری را خالی کنید.
+ و ان فضا دفعه بعدی که 
+ garbage collector
+ اجرا شد فضا را خالی میکند.
+ و همینطور میتوانید با تابع زیر ان  را مجبور به اجرا کنید .
+ <br>
+ <span><a href="https://docs.julialang.org/en/v1/manual/methods/)/">GC.gc()</a></span>
+ که در 
+ Base
+ قرار دارد 
+ همین طور استفاده از 
+ َA
+ به احتمال زیاد در این حالت منجر به  خطا میشود.
+ زیرا بیشتر توابع بر روی تایپ 
+ nothing 
+ تعریف نشده اند .
+ 
+</div>
 
-Julia does not have an analog of MATLAB's `clear` function; once a name is defined in a Julia
-session (technically, in module `Main`), it is always present.
+### How can I modify the declaration of a type in my session?(چگونه تایپ را عوض میکنم؟)
+<div dir="auto">
+ شاید شما نوعی را تعریف کرده باشید و سپس متوجه شوید که باید یک قسمت جدید اضافه کنید.
+ اگر اینکار را بر روی 
+ REPL 
+ امتحان کرده باشید ، خطای زیر را دریافت می کنید
+ :
+</div>
 
-If memory usage is your concern, you can always replace objects with ones that consume less memory.
- For example, if `A` is a gigabyte-sized array that you no longer need, you can free the memory
-with `A = nothing`.  The memory will be released the next time the garbage collector runs; you can force
-this to happen with [`GC.gc()`](@ref Base.GC.gc). Moreover, an attempt to use `A` will likely result in an error, because most methods are not defined on type `Nothing`.
-
-### How can I modify the declaration of a type in my session?
-
-Perhaps you've defined a type and then realize you need to add a new field.  If you try this at
-the REPL, you get the error:
 
 ```
 ERROR: invalid redefinition of constant MyType
 ```
-
-Types in module `Main` cannot be redefined.
-
-While this can be inconvenient when you are developing new code, there's an excellent workaround.
- Modules can be replaced by redefining them, and so if you wrap all your new code inside a module
-you can redefine types and constants.  You can't import the type names into `Main` and then expect
-to be able to redefine them there, but you can use the module name to resolve the scope.  In other
-words, while developing you might use a workflow something like this:
+<div dir="auto">
+ تایپ ها در ماژول 
+ main
+ نمیتوانند دوباره تعریف شوند.
+ <br>
+ اگرچه این کار در هنگام نوشتن کد جدید ناخوشایند است ، اما یک راه حل عالی وجود دارد.
+ماژول ها میتوانند با دوباره تعریف کردنشان جا به جا شوند.
+ پس اگر شما کد خود را دورن یک ماژول بپیچید
+ به اصطلاح
+ wrap
+ کنید میتوانید ثابت ها و تایپ ها را دوباره تعریف کنید.
+، 
+ نمی توانید نام نوع را در "Main" وارد کنید و سپس انتظار داشته باشید
+برای اینکه بتوانید در آنجا دوباره تعریف کنید ، اما می توانید از نام ماژول برای حل محدوده استفاده کنید. در دیگر
+سخن  ، در حالی که شما ممکن است از گردش کار مانند این استفاده کنید:
+</div>
 
 ```julia
 include("mynewcode.jl")              # this defines a module MyModule
@@ -138,31 +182,72 @@ obj3 = MyModule.someotherfunction(obj2, c)
 
 ## [Scripting]
 
-### How do I check if the current file is being run as the main script?
-
-When a file is run as the main script using `julia file.jl` one might want to activate extra
-functionality like command line argument handling. A way to determine that a file is run in
-this fashion is to check if `abspath(PROGRAM_FILE) == @__FILE__` is `true`.
+### How do I check if the current file is being run as the main script?(چگونه چک کنم این فایل دارد روی جریان اصلی اجرا میشود یا نه؟)
+<div dir="auto">
+ زمانی که یک فایل با استفاده از 
+ julia file.jl
+ بر روی 
+ main script
+ اجرا میشود،
+یک نفر ممکن است بخواهد عملکردهای دیگری اضافه بر سازمان مانند کنترل ارگومتن در
+ command line
+ را فعال کند .
+ روشی برای  تعیین اینکه یک فایل به این صورت اجرا شده است ، این است که ایا
+</div>
+ 
+`abspath(PROGRAM_FILE) == @__FILE__` is `true`.
 
 ### [How do I catch CTRL-C in a script?]
-
-Running a Julia script using `julia file.jl` does not throw
-[`InterruptException`](@ref) when you try to terminate it with CTRL-C
-(SIGINT).  To run a certain code before terminating a Julia script,
-which may or may not be caused by CTRL-C, use [`atexit`](@ref).
-Alternatively, you can use `julia -e 'include(popfirst!(ARGS))'
-file.jl` to execute a script while being able to catch
-`InterruptException` in the [`try`](@ref) block.
+<div dir="auto">
+ اجرا کردن یک اسکریپت جولیا با استفاده از 
+ julia file.jl
+ اکسپشن 
+ <span><a href="https://docs.julialang.org/en/v1/manual/methods/)/">InterruptExeption</a></span>
+ را پرت نمیکند.
+زمانی که شما این پروسه را با زدن 
+ CTRL-C
+(SIGINT)
+ تمام میکنید.
+ برای اجرا کردن کد قبل از بستن یک اسکریپت جولیا که ممکن است با 
+ CTRL-C
+ ویا بدون ان ایجاد شده باشد،
+از 
+<span><a href="https://docs.julialang.org/en/v1/manual/methods/)/">atexit</a></span>
+ استفاده کنید همین طور ، میتوانید از
+julia -e 'include(popfirst!(ARGS))
+file.jl
+برای اجرا کردن یک اسکریپت زمانی که میتوانید اکسپشن 
+ <span><a href="https://docs.julialang.org/en/v1/manual/methods/)/">InterruptExeption</a></span>
+ را در بلاک 
+ try
+ catch 
+ کنید.
+</div>
 
 ### How do I pass options to `julia` using `#!/usr/bin/env`?
-
-Passing options to `julia` in so-called shebang by, e.g.,
-`#!/usr/bin/env julia --startup-file=no` may not work in some
-platforms such as Linux.  This is because argument parsing in shebang
-is platform-dependent and not well-specified.  In a Unix-like
-environment, a reliable way to pass options to `julia` in an
-executable script would be to start the script as a `bash` script and
-use `exec` to replace the process to `julia`:
+<div dir="auto">
+ پاس دادن اپشن ها به 
+ `julia`
+در اصطلاح 
+ shebang
+ گفته میشود.
+#!/usr/bin/env julia --startup-file=no
+ ممکن است در بعضی از پلتفرم ها مثل لینوکس کار نکند.
+ که این به این خاطر است که ارگومانی که در 
+shebang
+ کار 
+ parsing
+ بر روی ان انجام شده است  نسبت به پلتفرم مستقل نیست و به ان بستگی دارد.
+ یک راه قابل اطمینان برای پاس دادن اپشن ها به 
+`julia`
+ در یک اسکریپت قابل اجرا میتواند این باشد که اسکریپت را مانند 
+ bash 
+ اسکریت شروع کنند و از 
+ exec
+ برای انتقال پروسه به 
+ julia
+ استفاده کنند.
+</div>
 
 ```julia
 #!/bin/bash
@@ -173,13 +258,40 @@ exec julia --color=yes --startup-file=no "${BASH_SOURCE[0]}" "$@"
 @show ARGS  # put any Julia code here
 ```
 
-In the example above, the code between `#=` and `=#` is run as a `bash`
-script.  Julia ignores this part since it is a multi-line comment for
-Julia.  The Julia code after `=#` is ignored by `bash` since it stops
-parsing the file once it reaches to the `exec` statement.
+<div dir="auto">
+ در مثال بالا ، کدی که بین 
+ #=
+ و
+ =#
+ بود به صورت 
+ `bash`
+script
+ اجرا شد.
+ جولیا به این بخش کاری ندارد تا وقتیی که یک کامنت چند خطه برای جولیاست.
+ کد های جولیا بعد از علامت 
+   =#  
+ توسط
+ bash
+ ایگنور میشوند (ران نمیشوند)
+ تا زمانی که در
+ parse
+ کردن فایل متوقف شود زمانی که 
+ state
+ ما یعنی 
+ exec
+ میرسد.
+ <br>
+ توجه کنید برای 
+</div>
 
-!!! note
-    In order to [catch CTRL-C](@ref catch-ctrl-c) in the script you can use
+
+    [catch CTRL-C](@ref catch-ctrl-c)
+    
+    
+  <div dir="auto">
+    بر روی اسکریپت میتوانید 
+</div>
+   
     ```julia
     #!/bin/bash
     #=
@@ -191,11 +303,14 @@ parsing the file once it reaches to the `exec` statement.
     ```
     instead. Note that with this strategy [`PROGRAM_FILE`](@ref) will not be set.
 
-## Functions
+## Functions(توابع)
 
-### I passed an argument `x` to a function, modified it inside that function, but on the outside, the variable `x` is still unchanged. Why?
+### I passed an argument `x` to a function, modified it inside that function, but on the outside, the variable `x` is still unchanged. Why?(چرا من یک متغیر را درون تابع تغییر دادم ولی بیرون ان تغییر نکرده است؟)
 
-Suppose you call a function like this:
+<div dir="auto">
+ فرض کنید چنین تابعی را صدا کرده اید
+ :
+</div>
 
 ```jldoctest
 julia> x = 10
@@ -213,6 +328,9 @@ julia> x # x is unchanged!
 10
 ```
 
+<div dir="auto">
+ 
+</div>
 In Julia, the binding of a variable `x` cannot be changed by passing `x` as an argument to a function.
 When calling `change_value!(x)` in the above example, `y` is a newly created variable, bound initially
 to the value of `x`, i.e. `10`; then `y` is rebound to the constant `17`, while the variable
