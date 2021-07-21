@@ -220,13 +220,14 @@ alone is a matter of coding style.
 دو فرم کوتاه ممکن برای بیان عبارت nothing وجود دارد. از یک طرف ، کلمه کلیدی  returnبه طور ضمنی چیزی را بر نمی گرداند ، بنابراین می تواند به تنهایی استفاده شود. از طرف دیگر ، از آنجا که توابع به طور ضمنی آخرین عبارتی که ارزیابی می شودرا برمی گردانند ، nothing به تنهایی قابل استفاده است  ،وقتی آخرین عبارت است. ترجیح برای کدام روش به موضوع سبک کد گذاری بستگی دارد .
 
 
-## Operators Are Functions
+## عملگرها تابع هستند
 
-In Julia, most operators are just functions with support for special syntax. (The exceptions are
-operators with special evaluation semantics like `&&` and `||`. These operators cannot be functions
-since Short-Circuit Evaluation requires that their operands are not evaluated before evaluation
-of the operator.) Accordingly, you can also apply them using parenthesized argument lists, just
-as you would any other function:
+در جولیا اکثر عملگرها صرفا توابعی هستند که با سینتکس خاصی حمایت میشوند.
+(استثناها عملگرهایی به خصوصی که برای ارزیابی منطقی بکار میروند هستند مانند
+`&&` و `||`.
+این عملگرها نمیتوانند تابع باشند.
+از آنجا که این عملگرها نیاز دارند که عملوندهایی آنها قبل از ارزیابی آنها، ارزیابی نشده باشند.)
+بر این اساس میتوان از آنها به شکل آرگومان-پرانتز نیز استفاده کرد مانند خیلی دیگر از توابع :
 
 8.3   عملگرها تابع هستند
 در جولیا ، اکثر عملگرها فقط توابع با پشتیبانی از سینتکس ویژه هستند. (استثنائات عملگرهایی که دارای ارزیابی ویژه هستند مانند && و ||. این عملگرها به دلیل ارزیابی اتصال کوتاه نمی توانند توابع باشند مستلزم آن است که عملوندهای آنها قبل از ارزیابی اپراتور ارزیابی نشوند.) بر این اساس ، شما همچنین می توانید آنها را با استفاده از لیست های آرگومان پرانتز اعمال کنید ، دقیقاً مانند سایر توابع:
@@ -240,9 +241,10 @@ julia> +(1,2,3)
 6
 ```
 
-The infix form is exactly equivalent to the function application form -- in fact the former is
-parsed to produce the function call internally. This also means that you can assign and pass around
-operators such as `+` and `*` just like you would with other function values:
+فرم infix 
+دقیقا معادل است با فرم کاربرد توابع در حقیقت فرم دهنده تبدیل شده است به تولید کردن فراخوانی تابع
+و این به این معنی است که شما میتوانید به هر کس بسپارید و بعد بگذرید.
+عملگرهایی مانند `+` و `*` دقیقا همانند بقیه عملگرها به همین شکل هستند:
 
 فرم infix دقیقاً معادل تابع فرم است - در واقع فرم اول برای تولید به صورت فراخوانی داخلی تابع تجزیه می شود. این همچنین به این معنی است که شما می توانید اپراتورهایی مانند + و * را تعیین و دقیقاً مانند سایر مقادیر توابع وارد کنید:
 
@@ -253,13 +255,13 @@ julia> f(1,2,3)
 6
 ```
 
-Under the name `f`, the function does not support infix notation, however.
+زیر اسم `f`, تابع نمادگذاری infix را پشتیبانی نمیکند .
 
 با این حال ، با نام f ، این تابع از نماد infix  پشتیبانی نمی کند.
 
-## Operators With Special Names
+## عملگرهایی با اسامی خاص
 
-A few special expressions correspond to calls to functions with non-obvious names. These are:
+چند اسم و عبارت خاص نیز متناظر با توابعی هستند که اسم مشخضی ندارند به مانند زیر :
 
 | Expression        | Calls                   |
 |:----------------- |:----------------------- |
@@ -272,13 +274,13 @@ A few special expressions correspond to calls to functions with non-obvious name
 | `A.n`             | [`getproperty`](@ref Base.getproperty) |
 | `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
 
-## Anonymous Functions
+## توابع ناشناس
 
-Functions in Julia are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen):
-they can be assigned to variables, and called using the standard function call syntax from the
-variable they have been assigned to. They can be used as arguments, and they can be returned as
-values. They can also be created anonymously, without being given a name, using either of these
-syntaxes:
+توابع در جولیا [اشیا کلاس اولیه هستند](https://en.wikipedia.org/wiki/First-class_citizen):
+
+آنها میتوانند به متغیرها نسبت داده شونذ, و بوسیله توابع استاندارد مخصوص از متغیرها فراخوانی شوند.
+آنها میتوانند به عنوان آرگومان استفاده شوند و به عنوان مقدار برگردانده شوند.
+همچنین بوسیله سینتکس زیر میتوان توابعی بدون اسم را به صورت ناشناس ساخت.
 
 ```julia
 julia> x -> x^2 + 2x - 1
@@ -290,13 +292,15 @@ julia> function (x)
 #3 (generic function with 1 method)
 ```
 
-This creates a function taking one argument `x` and returning the value of the polynomial `x^2 +
-2x - 1` at that value. Notice that the result is a generic function, but with a compiler-generated
-name based on consecutive numbering.
+به این شکل تابعی با ورودی  `x` میسازیم که مقدار چندجمله ای  `x^2 +
+2x - 1`را خروجی میدهد. توجه کنید که نتیجه یک generic function است, ولی با compiler-generated
+بر اساس اعداد متوالی.
 
-The primary use for anonymous functions is passing them to functions which take other functions
-as arguments. A classic example is `map`, which applies a function to each value of
-an array and returns a new array containing the resulting values:
+استفاده اصلی توابع ناشناس، انتقال دادن آن به بقیه توابع به عنوان ورودی است.
+یک مثال معروف
+`map`,
+است که به هر جزیی از آرایه یک تابع نسبت میدهد
+و یک آرایه خروجی میدهد که متناظر با مقادیر خروجی همان آرایه هاست:
 
 ```julia
 julia> map(round, [1.2, 3.5, 1.7])
@@ -306,10 +310,12 @@ julia> map(round, [1.2, 3.5, 1.7])
  2.0
 ```
 
-This is fine if a named function effecting the transform already exists to pass as the first argument
-to `map`. Often, however, a ready-to-use, named function does not exist. In these
-situations, the anonymous function construct allows easy creation of a single-use function object
-without needing a name:
+این اشکالی ندارد اگر یک تابع نامدار روی انتقالی که همین الان در وجود دارد تاثیر بگذارد به عنوان اولین ورودی
+`map`. 
+به هر حال یک تابع آمده برای استفاده اسم دار وجود ندارد.
+ در این موقعیت، ساختار توابع ناشناس به ما اجاه میدهد
+که به راحتی یک تابع تک مصرف بدون نیاز به نام بسازیم :
+
 
 ```julia
 julia> map(x -> x^2 + 2x - 1, [1, 3, -1])
@@ -318,13 +324,13 @@ julia> map(x -> x^2 + 2x - 1, [1, 3, -1])
  14
  -2
 ```
+تابع ناشناسی که میتواند چند ورودی را بگیرید میتواند به وسیله سینتکس رو به رو نوشته شود
+ `(x,y,z)->2x+y-z`.
+ یک تابع بدون ورودی ناشناس به شکل رو به رو نوشته میشود :
+ `()->3`. 
+ ایده استفاده از تابع بدون ورودی شاید عجیب بنظر برسد اما برای به تاخیر انداختن یک محاصبه بسیار کارا است. در این مورد قسمتی از کد درون یک تابع بدون ورودی گیر می افتد.
 
-An anonymous function accepting multiple arguments can be written using the syntax `(x,y,z)->2x+y-z`.
-A zero-argument anonymous function is written as `()->3`. The idea of a function with no arguments
-may seem strange, but is useful for "delaying" a computation. In this usage, a block of code is
-wrapped in a zero-argument function, which is later invoked by calling it as `f`.
-
-As an example, consider this call to `get`:
+برای مثال تابع `get`:
 
 ```julia
 get(dict, key) do
@@ -332,24 +338,28 @@ get(dict, key) do
     time()
 end
 ```
-
-The code above is equivalent to calling `get` with an anonymous function containing the code
-enclosed between `do` and `end`, like so:
+کد بالا معادل است با صدا زدن
+ `get`
+ با استفاده از تابع ناشناسی که کد
+ مابین
+ `do` و `end`
+ را در بردارد مانند :
 
 ```julia
 get(()->time(), dict, key)
 ```
 
-The call to `time` is delayed by wrapping it in a 0-argument anonymous function
-that is called only when the requested key is absent from `dict`.
+صدا زدن
+`time`
+با استفاده از تابع بدون ورودی ناشناسی به تاخیر افتاده است و وقتی صدا زده میشود که کلید درخواست شده در
+ `dict`نباشد.
 
-## Tuples
+## چندتایی ها
+جولیا یک ساختار داخلی به اسم "چندتایی ها" دارد که بسیار به ورودی های توابع و خروجی های آن ها نیز مرتبط است.
+یک "چندتایی" عبارت است از نگهدارنده ای با طول ثابت که میتواند هر مقداری را درخود نگه دارد
+اما نمیتواند اصلاح شود یا به عبارتی اصلاح پذیر نیست.
+چندتایی ها یوسیله کاما و پرانتزها ساخته میشوند و میتوانند با عدد دهی مدیریت شوند.
 
-Julia has a built-in data structure called a *tuple* that is closely related to function
-arguments and return values.
-A tuple is a fixed-length container that can hold any values, but cannot be modified
-(it is *immutable*).
-Tuples are constructed with commas and parentheses, and can be accessed via indexing:
 
 ```julia
 julia> (1, 1+1)
@@ -365,14 +375,21 @@ julia> x[2]
 "hello"
 ```
 
-Notice that a length-1 tuple must be written with a comma, `(1,)`, since `(1)` would just
-be a parenthesized value.
-`()` represents the empty (length-0) tuple.
+توجه کنید که یک چندتایی به طول یک باید بوسیله کاما و به شکل
+ `(1,)`
+ نوشته شود در حالی که
+ `(1)` 
+ صرفا یک مقدار پرانتز شده است.
 
-## Named Tuples
+`()` 
+نشان دهنده یک چندتایی به طول صفر است.
 
-The components of tuples can optionally be named, in which case a *named tuple* is
-constructed:
+
+## چندتایی های اسم دار
+
+
+مولفه های یک چندتایی میتوانند نامگذاری شوند، به این ترتیب یک "چندتایی اسم دار" بدست می آید :
+
 
 ```julia
 julia> x = (a=2, b=1+2)
@@ -385,16 +402,13 @@ julia> x.a
 2
 ```
 
-Named tuples are very similar to tuples, except that fields can additionally be accessed by name
-using dot syntax (`x.a`) in addition to the regular indexing syntax
+چندتایی های اسم دار بسیار شبیه به چندتایی ها هستند غیر از اینکه به قسمت های مختلف میتوان بوسیله اسم آنها دسترسی داشت بوسیله سینتکس
+ (`x.a`) البته علاوه بر سیستم دسترسی عادی که بوسیله پلاک هر عضو انجام میشد.
 (`x[1]`).
 
-## Multiple Return Values
+## مقادیر بازگشتی چندگانه
 
-In Julia, one returns a tuple of values to simulate returning multiple values. However, tuples
-can be created and destructured without needing parentheses, thereby providing an illusion that
-multiple values are being returned, rather than a single tuple value. For example, the following
-function returns a pair of values:
+در جولیا میتوان یک چندتایی را برگرداند برای شبیه سازی برگرداندن چندین مقدار. همچنین چندتایی ها میتوانند ساخته یا محذوف شوند بدون نیاز به پرانتز به این ترتیب این تفکر بوجود میآید که چند مقدار مختلف به صورت یک چندتایی واحد برگردانده میشود. برای مثال تابع زیر یک حفت مقدار برمیگرداند : 
 
 ```julia
 julia> function foo(a,b)
@@ -402,6 +416,7 @@ julia> function foo(a,b)
        end
 foo (generic function with 1 method)
 ```
+
 
 If you call it in an interactive session without assigning the return value anywhere, you will
 see the tuple returned:
@@ -411,8 +426,9 @@ julia> foo(2,3)
 (5, 6)
 ```
 
-A typical usage of such a pair of return values, however, extracts each value into a variable.
-Julia supports simple tuple "destructuring" that facilitates this:
+یک استفاده معمول از این جفت مقدارها، زمانی است که بخواهید یک مقدار را یه یکسری مقدار دیگر تجزیه کنید.
+جولیا امکان استفاده از چندتایی های مخرب را به شما میدهد که اتفاقاتی مانند زیر را تسهیل میکند :
+
 
 ```julia
 julia> x, y = foo(2,3)
@@ -425,7 +441,9 @@ julia> y
 6
 ```
 
-You can also return multiple values using the `return` keyword:
+همچنین شما میتوانید چند مقدار مختلف را به استفاده از کلیدوازه 
+`return`
+برگردانید:
 
 ```julia
 function foo(a,b)
@@ -433,13 +451,19 @@ function foo(a,b)
 end
 ```
 
-This has the exact same effect as the previous definition of `foo`.
+این دقیقا همان تاثیری را دارد که تعریف قبلی 
+`foo`
+داشت.
 
-## Argument destructuring
+## تخریب متغیر
 
-The destructuring feature can also be used within a function argument.
-If a function argument name is written as a tuple (e.g. `(x, y)`) instead of just
-a symbol, then an assignment `(x, y) = argument` will be inserted for you:
+قابلیت تخریب میتواند در ساختار یک توابع استفاده شود.
+اگر اسم یک ساختار تابع به عتوان چندتایی نوشته شود
+ (e.g. `(x, y)`)
+ بجای یک نماد، آنگاه نامگذاری
+`(x, y) = argument`
+میتواند یک جایگزین برای ما باشد :
+
 
 ```julia
 julia> minmax(x, y) = (y < x) ? (y, x) : (x, y)
@@ -450,23 +474,40 @@ julia> gap(minmax(10, 2))
 8
 ```
 
-Notice the extra set of parentheses in the definition of `gap`. Without those, `gap`
-would be a two-argument function, and this example would not work.
+به پرانتزهای اضافی در تعریف
+`gap`
+توجه کنید.
+بدون آن
+`gap`
+ یک تابع دو متغیره میشود
+و این مثال کار نمیکند.
 
-## Varargs Functions
 
-It is often convenient to be able to write functions taking an arbitrary number of arguments.
-Such functions are traditionally known as "varargs" functions, which is short for "variable number
-of arguments". You can define a varargs function by following the last positional argument with an ellipsis:
+## Varargs توابع
+
+معمولا این کار راحتی است که شما تابعی بنویسید که تعداد تصادفی ورودی دریافت کند.
+این توابع را به صورت سنتی توابع
+ "varargs"
+ مینامند که کوتاه شده عبارت
+ "variable number
+of arguments"
+است.
+شما میتوانید به این شکل همچین توابعی را تعریف کنید :
+
 
 ```julia
 julia> bar(a,b,x...) = (a,b,x)
 bar (generic function with 1 method)
 ```
 
-The variables `a` and `b` are bound to the first two argument values as usual, and the variable
-`x` is bound to an iterable collection of the zero or more values passed to `bar` after its first
-two arguments:
+متغیرهای
+ `a` و `b` 
+کران های دو متغیر اول هستند و متغیر
+
+`x` 
+یک کران برای مجموعه قابل تکراری از صفر یا مقادیر بیشتری است که به
+`bar`
+داده شده انذ بعد از دو ورودی اول :
 
 ```julia
 julia> bar(1,2)
@@ -482,14 +523,23 @@ julia> bar(1,2,3,4,5,6)
 (1, 2, (3, 4, 5, 6))
 ```
 
-In all these cases, `x` is bound to a tuple of the trailing values passed to `bar`.
+در همه این موارد
+`x` 
+یک کران برای برای چندتایی ای است که به 
+ `bar`
+ داده شده است.
+میتوان تعداد متغیرهایی که به عنوان ورودی داده میشوند را محدود کرد.
+به این موضوع بعدا در قسمت
+ Parametrically-constrained Varargs methods
+ میپردازیم.
+در روی دیگر سکه معمولا
+ "splat" 
+ مقادیر نگه داشته شده درون یک مجموعه تکرارشونده به یک تابع
+ بازخوانی به عنوان یک متغیر خاص کار راحتی است.
+برای انجام این میتوان از
+ `...` 
+ استفاده کرد در تابع فراخوانی :
 
-It is possible to constrain the number of values passed as a variable argument; this will be discussed
-later in Parametrically-constrained Varargs methods.
-
-On the flip side, it is often handy to "splat" the values contained in an iterable collection
-into a function call as individual arguments. To do this, one also uses `...` but in the function
-call instead:
 
 ```julia
 julia> x = (3, 4)
@@ -499,8 +549,10 @@ julia> bar(1,2,x...)
 (1, 2, (3, 4))
 ```
 
-In this case a tuple of values is spliced into a varargs call precisely where the variable number
-of arguments go. This need not be the case, however:
+در این مورد یک چندتایی از مفادیر به یک  
+ varargs call
+ متصل میشوند دقیقا جایی که تعداد متغیرهای ورودی میرود.
+ هر چند که این مورد لازم نیست.
 
 ```julia
 julia> x = (2, 3, 4)
@@ -516,7 +568,7 @@ julia> bar(x...)
 (1, 2, (3, 4))
 ```
 
-Furthermore, the iterable object splatted into a function call need not be a tuple:
+همچنین آبجکت تکرارشونده که به صورت یک تابع فراخوانی آمده است نباید لزوما چندتایی باشد :
 
 ```julia
 julia> x = [3,4]
@@ -538,8 +590,9 @@ julia> bar(x...)
 (1, 2, (3, 4))
 ```
 
-Also, the function that arguments are splatted into need not be a varargs function (although it
-often is):
+همچنین تابعی که ورودی هایش به صورت پراکنده باشند نباید لزوما varagas باشد. 
+البته معمولا هست! :
+
 
 ```julia
 julia> baz(a,b) = a + b;
@@ -564,17 +617,24 @@ Closest candidates are:
   baz(::Any, ::Any) at none:1
 ```
 
-As you can see, if the wrong number of elements are in the splatted container, then the function
-call will fail, just as it would if too many arguments were given explicitly.
 
-## Optional Arguments
+همانطور که میتوانید ببینید اگر تعداد اشتباهی المنت در یک نگهدارنده پراکنده باشند آنگاه تابع فراخوانی از درست کار نمیکند دقیقا همانطور که اگر به تعداد بیش از حد ورودی بگیرد کار نمیکند.
 
-It is often possible to provide sensible default values for function arguments.
-This can save users from having to pass every argument on every call.
-For example, the function `Date(y, [m, d])`
-from `Dates` module constructs a `Date` type for a given year `y`, month `m` and day `d`.
-However, `m` and `d` arguments are optional and their default value is `1`.
-This behavior can be expressed concisely as:
+
+## ورودی های اختیاری
+
+معمولا میتوان متغیرهای پیشفرض مناسبی را برای ورودی های تابع تهیه کرد. این میتواند کاربر را از اینکه بخواهد در هر فراخوانی مقدارهای یکسانی را به صورت اضافه وارد کند آسوده کند.
+برای مثال تابع
+ `Date(y, [m, d])`
+از `Dates` 
+میسازد یک
+ `Date` 
+برای سال داده شده `y`, ماه داده شده `m` و روز داده شده `d`.
+همچنین ورودی های
+`m` و `d` 
+اخیتاری هستند و مقدار پیشفرضشان `1`
+میباشد.
+این ایده میتواند به شکل بیان شود:
 
 ```julia
 function Date(y::Int64, m::Int64=1, d::Int64=1)
@@ -584,11 +644,15 @@ function Date(y::Int64, m::Int64=1, d::Int64=1)
 end
 ```
 
-Observe, that this definition calls another method of the `Date` function that takes one argument
-of type `UTInstant{Day}`.
+نگاه کنید این تعریف متدهای دیگری از
+ `Date` 
+ را فراخوانی میکند.
+ تابع هایی که یک متغیر به عنوان ورودی میگیرند از نوع `UTInstant{Day}`.
 
-With this definition, the function can be called with either one, two or three arguments, and
-`1` is automatically passed when only one or two of the arguments are specified:
+با این تعریف، تابع میتواند به همراه یک یا دو یا سه متغیر فراخوانی شود و  
+`1` 
+به صورت اتوماتیک وقتی یک متعیر یا دو متغیر آمده باشند جایگذاری میشود :
+
 
 ```julia
 julia> using Dates
@@ -603,24 +667,26 @@ julia> Date(2000)
 2000-01-01
 ```
 
-Optional arguments are actually just a convenient syntax for writing multiple method definitions
-with different numbers of arguments (see Note on Optional and keyword Arguments).
-This can be checked for our `Date` function example by calling `methods` function.
+متغیرهای اختیاری در حقیقت صرفا یک سیتکس برای نوشتن چندین متد مختلف با تعداد مختلف ورودی میباشند.
+(نت درون متغیرهای اختیاری و کلیدی را ببینید)
+این میتواند برای تابع
+ `Date` چک شود با فراخوانی تابع `methods`.
 
-## Keyword Arguments
+## ورودی های کلیدی
 
-Some functions need a large number of arguments, or have a large number of behaviors. Remembering
-how to call such functions can be difficult. Keyword arguments can make these complex interfaces
-easier to use and extend by allowing arguments to be identified by name instead of only by position.
+بعضی از تابع ها به تعداد زیادی ورودی نیاز دارند یا اینکه تعداد زیادی behavior دارند.
+با یادآوری اینکه فراخوانی این توابع بسیار سخت بود.
+ورودی های کلیدی میتوانند این اینترفیس های پیچیده را راحت تر کنند برای استفاده و گسترش پیدا کنند بوسیله شناساندن نام ها بجای جایگاه ها.
 
-For example, consider a function `plot` that plots a line. This function might have many options,
-for controlling line style, width, color, and so on. If it accepts keyword arguments, a possible
-call might look like `plot(x, y, width=2)`, where we have chosen to specify only line width. Notice
-that this serves two purposes. The call is easier to read, since we can label an argument with
-its meaning. It also becomes possible to pass any subset of a large number of arguments, in any
-order.
+برای مثال تابع
+`plot`
+را در نظر بگیرید که یک خط را برای ما رسم میکند. 
+این تابع شاید تعداد زیادی آپشن داشته باشد برای کنترل کرد استایل خط، ذخامت، رنگ و غیره. اگر این تابع ورودی های کلیدی را بپذیرد یک فراخوانی ممکن میتواند به این شکل باشد
+ `plot(x, y, width=2)`,
+ که یعنی تصمیم گرفتیم فقط ذخامت آن را تعیین کنیم. توجه کنید که این کار دو هدف را براورده میکند. این فراخوانی راحت تر است برای خوانده شدن  و همچنین میتوان هر تعداد ورودی را به هر ترتیب دلخواهی وارد کرد.
 
-Functions with keyword arguments are defined using a semicolon in the signature:
+ورودی های این توابع بوسیله سمیکالم از هم جدا میشوند :
+
 
 ```julia
 function plot(x, y; style="solid", width=1, color="black")
@@ -628,15 +694,15 @@ function plot(x, y; style="solid", width=1, color="black")
 end
 ```
 
-When the function is called, the semicolon is optional: one can either call `plot(x, y, width=2)`
-or `plot(x, y; width=2)`, but the former style is more common. An explicit semicolon is required
-only for passing varargs or computed keywords as described below.
+زمانی که تابع فراخوانی میشود سمیکالم اختیاری است : یک نفر میتواند به هر دو شکل رو به رو فراخوانی را انجام دهد.
+ `plot(x, y, width=2)`
+و`plot(x, y;dth=2)`,
+ولی حالت اول معمول تر است.
+سمیکالم ها به صورت قطعی وقتی نیازند که میخواهیم به تابع های varargs متغیر را پاس دهیم یا اینکه کلمه کیلیدی را به شکل زیر محاسبه کنیم.
 
-Keyword argument default values are evaluated only when necessary (when a corresponding keyword
-argument is not passed), and in left-to-right order. Therefore default expressions may refer to
-prior keyword arguments.
+مقادیر پیشفرض متغیرهای کلیدی فقط وقتی تهیه میشوند که ضروری باشد و با ترتیب چپ به راست. همچنین میتواند به ورودی های کلیدی قبلی ربط داشت باشند.
 
-The types of keyword arguments can be made explicit as follows:
+انواع ورودی های کلیدی میتوانند به شکل زیر ساخته شوند.
 
 ```julia
 function f(;x::Int=1)
@@ -644,7 +710,7 @@ function f(;x::Int=1)
 end
 ```
 
-Keyword arguments can also be used in varargs functions:
+ورودی های کلیدی همچنین میتوانند در تابع های varargs نیز استفاده شوند.
 
 ```julia
 function plot(x...; style="solid")
@@ -652,7 +718,9 @@ function plot(x...; style="solid")
 end
 ```
 
-Extra keyword arguments can be collected using `...`, as in varargs functions:
+کلمات کلیدی اضافی نیز میتوانند با استفاده
+ `...`, 
+ در توابع varargs جمع آوری شوند :
 
 ```julia
 function f(x; y=0, kwargs...)
@@ -660,13 +728,16 @@ function f(x; y=0, kwargs...)
 end
 ```
 
-Inside `f`, `kwargs` will be an immutable key-value iterator over a named tuple.
-Named tuples (as well as dictionaries with keys of `Symbol`) can be passed as
-keyword arguments using a semicolon in a call, e.g. `f(x, z=1; kwargs...)`.
+درون `f`, `kwargs` 
+یک متغیر کلیدی تکرار شونده تغییرناپذیر روی یک چندتایی اسم دار خواهد بود.
+چندتایی های نامدار(به خوبی لغتنامه با کلید `Symbol`) میتوانند به شکل ورودی کلیذی به وسیله سمیکالم در یک فراخوانی بیایند مانند
+`f(x, z=1; kwargs...)`.
 
-If a keyword argument is not assigned a default value in the method definition,
-then it is *required*: an `UndefKeywordError` exception will be thrown
-if the caller does not assign it a value:
+اگر یک ورودی کلیدی در تعریف متد به صورت مقدار پیشفرض نباشد، آنگاه یک چیز خواسته شده است: یک
+ `UndefKeywordError` 
+ که یک خطا است پرتاب خواهد شد اگر مقدار آن را مشخص نکنید :
+
+
 ```julia
 function f(x; y)
     ###
@@ -675,26 +746,34 @@ f(3, y=5) # ok, y is assigned
 f(3)      # throws UndefKeywordError(:y)
 ```
 
-One can also pass `key => value` expressions after a semicolon. For example, `plot(x, y; :width => 2)`
-is equivalent to `plot(x, y, width=2)`. This is useful in situations where the keyword name is computed
-at runtime.
+میتوان `key => value` اکسپرشن بعد از یک سمیکالم. برای مثال, `plot(x, y; :width => 2)`
+معادل است با `plot(x, y, width=2)`. 
+در مواقعی که اسم کلیدی در هنگام ران تایم محاسبه شده این کار بسیار کاربردی است.
 
-When a bare identifier or dot expression occurs after a semicolon, the keyword argument name is
-implied by the identifier or field name. For example `plot(x, y; width)` is equivalent to
-`plot(x, y; width=width)` and `plot(x, y; options.width)` is equivalent to `plot(x, y; width=options.width)`.
+هنگامی که یک شناساننده یا یک اکسپرشن نقطه ای بعد سمیکالم داریم، اسم متغیر ورودی کلیدی توسط شناساننده تعیین میشود یا توسط اسم فیلد.
+برای مثال
+`plot(x, y; width)` معادل است با
+`plot(x, y; width=width)` و `plot(x, y; options.width)` معادل است با `plot(x, y; width=options.width)`.
 
-The nature of keyword arguments makes it possible to specify the same argument more than once.
-For example, in the call `plot(x, y; options..., width=2)` it is possible that the `options` structure
-also contains a value for `width`. In such a case the rightmost occurrence takes precedence; in
-this example, `width` is certain to have the value `2`. However, explicitly specifying the same keyword
-argument multiple times, for example `plot(x, y, width=2, width=3)`, is not allowed and results in
-a syntax error.
+طبیعت کلمات کلیدی این امکان را به ما میدهد که بتوانیم چندین ورودی را همزمان داشته باشیم برای مثال در فراخوانی
+ `plot(x, y; options..., width=2)`
+ میشود که ساختار
+ `options` 
+ همچنین یک مقدار برای 
+ `width`نگه دارد. 
+ در این مواقع سما راستی ترین دستور تقدم را خواهد داشت.
 
-## Evaluation Scope of Default Values
+در این مثال, `width` 
+مقدار
+`2`را میگیرد. 
+اگر چه نمیتوان یک ورودی کلیدی را چندین بار مشخض کرد برای مثال
+ `plot(x, y, width=2, width=3)`, 
+مجاز نیست و خطای سینتکس دارد.
 
-When optional and keyword argument default expressions are evaluated, only *previous* arguments are in
-scope.
-For example, given this definition:
+## ارزیابی دامنه مقادیر پیشفرض
+
+هنگامی اکسپرشن های پیشفرض یک متغیر اختیاری و کلیدی تایین میشوند فقط ورودی پیشین در دامنه است.
+برای مثال این تعریف داده شده اسن :
 
 ```julia
 function f(x, a=b, b=1)
@@ -702,14 +781,15 @@ function f(x, a=b, b=1)
 end
 ```
 
-the `b` in `a=b` refers to a `b` in an outer scope, not the subsequent argument `b`.
+ `b` در `a=b` ارجاع دارد به یک `b` در دامنه بیرونی, نه ورودی درونی `b`.
 
-## Do-Block Syntax for Function Arguments
+## سینتکس Do-Block برای ورودی توابع
 
-Passing functions as arguments to other functions is a powerful technique, but the syntax for
-it is not always convenient. Such calls are especially awkward to write when the function argument
-requires multiple lines. As an example, consider calling `map` on a function with several
-cases:
+دادن توابع به عنوان ورودی به یک تابع دیگر یک تکنیک قوی است اما سینتکس آن همیشه ساده نیست. هنگامی که توابع موردنظر از چندین خط نوشته شده اند نوشتن چنین تکنیکی بسیار بدشکل است.
+برای مثال صدا زدن 
+ `map`
+ را در یک تابع با چند case در نظر بگیرید :
+
 
 ```julia
 map(x->begin
@@ -724,7 +804,10 @@ map(x->begin
     [A, B, C])
 ```
 
-Julia provides a reserved word `do` for rewriting this code more clearly:
+جولیا یک کلمه رزرو شده
+ `do` 
+ را برای بازنویسی این کدها به صورت تمیز تر در نظر گرفته است :
+ 
 
 ```julia
 map([A, B, C]) do x
@@ -738,18 +821,24 @@ map([A, B, C]) do x
 end
 ```
 
-The `do x` syntax creates an anonymous function with argument `x` and passes it as the first argument
-to `map`. Similarly, `do a,b` would create a two-argument anonymous function, and a
-plain `do` would declare that what follows is an anonymous function of the form `() -> ...`.
+ `do x` یک تابع ناشناس با ورودی `x` میسازد و آن را به عنوان ورودی اول به `map` میدهد.
+ مشابها, `do a,b` یک تابع دو ورودی ناشناس میسازد, 
+ و
+ `do` 
+ شکل تابع ناشناس را از شکل قبلی خود متمایز میسازد :
+`() -> ...`.
 
-How these arguments are initialized depends on the "outer" function; here, `map` will
-sequentially set `x` to `A`, `B`, `C`, calling the anonymous function on each, just as would happen
-in the syntax `map(func, [A, B, C])`.
+اینکه این ورودی ها چگونه ساخته میشوند به توابع بیرونی مربوط است;در اینجا, `map`
+مجموعه `x` به `A`, `B`, `C`, برای هر کدام یک تابع ناشناس میاورد, همانطور که در سینتکس  `map(func, [A, B, C])`رخ میداد.
 
-This syntax makes it easier to use functions to effectively extend the language, since calls look
-like normal code blocks. There are many possible uses quite different from `map`, such
-as managing system state. For example, there is a version of `open` that runs code ensuring
-that the opened file is eventually closed:
+این سینتکس استفاده از تابع را و گسترش زبان را ساده تر میکند تا وفتی که فراخوانی ها شبیه کدهای نرمال و عادی باشند.
+استفاده های متنوعی برای
+ `map`, 
+ وجود دارد
+ برای مثال مدریت وضعیت سیستم
+برای مثاب در اینجا ورژنی از
+`open` 
+که با اجرا شدنش فایل های باز شده فورا بسته میشوند.
 
 ```julia
 open("outfile", "w") do io
@@ -770,38 +859,45 @@ function open(f::Function, args...)
 end
 ```
 
-Here, `open` first opens the file for writing and then passes the resulting output stream
-to the anonymous function you defined in the `do ... end` block. After your function exits, `open`
-will make sure that the stream is properly closed, regardless of whether your function exited
-normally or threw an exception. (The `try/finally` construct will be described in Control Flow.)
+در اینجا, 
+`open`
+ابتدا فایل ها را برای نوشتن باز میکند بعد نتیجه را به یک تابع ناشناس ارجاع میدهد که شمت تعریف کردید در
+ `do ... end`بلاک.
+ بعد از وجود تابع, `open`
+مطمین میشود که استریم بسته شده است بدون توجه به اینکه در حالت عادی تابع شما وجود دارد یا اینکه اروری پرت شده باشد ( ساختار`try/finally` در کنترل فلو توضیح داده خواهد شد)
 
-With the `do` block syntax, it helps to check the documentation or implementation to know how
-the arguments of the user function are initialized.
+بوسیله `do` بلاک سینتکس, کمک میکند به چک کردن اسناد
 
-A `do` block, like any other inner function, can "capture" variables from its
-enclosing scope. For example, the variable `data` in the above example of
-`open...do` is captured from the outer scope. Captured variables
-can create performance challenges as discussed in [performance tips](@ref man-performance-captured).
+یا پیاده سازی برای فهمیدن چگونگی ورودی های  تابع کاربر اینتیالایز شده اند.
 
-## Function composition and piping
+یک بلاک `do`,
+مانند هر تابع درونی دیگری میتواند مقادیر را دامنه اش بگیرد برای مثال مقدار
+ `data` در مثال بالا
+`open...do` از دامنه بیرونی گرفته شده است.گرفتن متغیرها میتواند باعث بوجود آمدن کارایی شود. [performance tips](@ref man-performance-captured).
 
-Functions in Julia can be combined by composing or piping (chaining) them together.
+## ترکیب و اتصال توابع
 
-Function composition is when you combine functions together and apply the resulting composition to arguments.
-You use the function composition operator (`∘`) to compose the functions, so `(f ∘ g)(args...)` is the same as `f(g(args...))`.
+توابع در جولیا میتوانند ترکیب یا متصل شوند.
 
-You can type the composition operator at the REPL and suitably-configured editors using `\circ<tab>`.
+ترکیب وفتی است که نتیحع یک تابع را به عنوان ورودی به تایع دیگیری میدهید.
+برای اینکار از عملگر ترکیب توابع
+ (`∘`)
+ استفاده میکنید پس
+ `(f ∘ g)(args...)`همان`f(g(args...))`است.
 
-For example, the `sqrt` and `+` functions can be composed like this:
+میتوانید عملگر ترکیب را در REPL یا در
+suitably-configured editors بوسیله `\circ<tab>`تایپ کنید.
+
+برای مثال `sqrt` و `+` میتوانند ترکیب شوند:
 
 ```julia
 julia> (sqrt ∘ +)(3, 6)
 3.0
 ```
 
-This adds the numbers first, then finds the square root of the result.
+این اول اعداد را جمع میکند و سپس از آنها جذر میگیرد..
 
-The next example composes three functions and maps the result over an array of strings:
+مثال بعدی سه تابع را ترکیب و جواب را در یک مپ آرایه رشته خروجی میدهد.:
 
 ```julia
 julia> map(first ∘ reverse ∘ uppercase, split("you can compose functions like this"))
@@ -814,21 +910,24 @@ julia> map(first ∘ reverse ∘ uppercase, split("you can compose functions lik
  'S': ASCII/Unicode U+0053 (category Lu: Letter, uppercase)
 ```
 
-Function chaining (sometimes called "piping" or "using a pipe" to send data to a subsequent function) is when you apply a function to the previous function's output:
+زنجیر کردن توابع )گاهی اوقات لوله کردن یا متصل کردن نیست گفته میشود) وقتی است که میخواهید یک تابع را روی خروجی تابع قبلی اعمال کنید
+
 
 ```julia
 julia> 1:10 |> sum |> sqrt
 7.416198487095663
 ```
 
-Here, the total produced by `sum` is passed to the `sqrt` function. The equivalent composition would be:
+در اینجا مجموع یا همان
+ `sum` به تابع `sqrt` پاس داده میشود. ترکیب معادل آن به این شکل است:
 
 ```julia
 julia> (sqrt ∘ sum)(1:10)
 7.416198487095663
 ```
 
-The pipe operator can also be used with broadcasting, as `.|>`, to provide a useful combination of the chaining/piping and dot vectorization syntax (described next).
+عملگر لوله میتواند برای برادکستتینگ(؟) نیز استفاده شود از طریق
+ `.|>`, برای تهیه ترکیبی کار آمد از زنجیرها و سینتکس برداری دات
 
 ```julia
 julia> ["a", "list", "of", "strings"] .|> [uppercase, reverse, titlecase, length]
@@ -839,17 +938,22 @@ julia> ["a", "list", "of", "strings"] .|> [uppercase, reverse, titlecase, length
  7
 ```
 
-## Dot Syntax for Vectorizing Functions
+## سینتکس دات برای توابع برداری کننده
 
-In technical-computing languages, it is common to have "vectorized" versions of functions, which
-simply apply a given function `f(x)` to each element of an array `A` to yield a new array via
-`f(A)`. This kind of syntax is convenient for data processing, but in other languages vectorization
-is also often required for performance: if loops are slow, the "vectorized" version of a function
-can call fast library code written in a low-level language. In Julia, vectorized functions are
-*not* required for performance, and indeed it is often beneficial to write your own loops (see
-[Performance Tips](@ref man-performance-tips)), but they can still be convenient. Therefore, *any* Julia function
-`f` can be applied elementwise to any array (or other collection) with the syntax `f.(A)`.
-For example, `sin` can be applied to all elements in the vector `A` like so:
+در زبان محاسبه تکنیکال بسیار معمول است که از یک تابع ورژن برداری شده ان را داشته باشیم که بتواند روی تابع داده شده
+ `f(x)` روی هر عضو آرایه `A` برای ساخت آرایه جدید
+`f(A)`. این سینتکس برای بررسی داده ها بسیار خوب است, اما در بقیه زبان ها برداری کردن برای نمایش نیر بکار میرود: 
+اگر حلقه ها کند هستند, ورژن برداری یکی تابه میتواند یک کتابخانه سریع در زبان سطح پایین نامیده شود.
+در جولیا توابع برداری برای نمایش نیاز نیستند و قطعا گاهی سودمند است که شما خودتان یک حلقه طراحی کنید
+ (ببینید
+[Performance Tips](@ref man-performance-tips)), 
+اما آن هم همچنان میتواند خوبی باشد.
+همچنین هر تابعی در جولیا مانند
+
+`f` 
+میتواند به صورت تکی روی هر المنت از یک آرایه اعمال شود بوسیله دستور
+ `f.(A)`.
+برای مثال, `sin` میتواند روی همه اعضای بردار `A` اعمال شود:
 
 ```julia
 julia> A = [1.0, 2.0, 3.0]
@@ -865,16 +969,22 @@ julia> sin.(A)
  0.1411200080598672
 ```
 
-Of course, you can omit the dot if you write a specialized "vector" method of `f`, e.g. via `f(A::AbstractArray) = map(f, A)`,
-and this is just as efficient as `f.(A)`. The advantage of the `f.(A)` syntax is that which functions are vectorizable need not be decided upon
-in advance by the library writer.
+البته شما میتوانید دات را حذف کنید اگر ساختار خاص برداری تابع
+ `f`را نوشته باشید, برای مثال `f(A::AbstractArray) = map(f, A)`, 
+و اینکار دقیقا مانند`f.(A)`کاربرد دارد. 
+خوبی استفاده از دستور
+`f.(A)` 
+این است که هر تابعی که برداری شونده باشد نیازی ندارد که تصمیم گیری شود بوسیله کتابخانه نویسنده.
 
-More generally, `f.(args...)` is actually equivalent to `broadcast(f, args...)`, which allows
-you to operate on multiple arrays (even of different shapes), or a mix of arrays and scalars (see
-Broadcasting). For example, if you have `f(x,y) = 3x + 4y`, then `f.(pi,A)` will return
-a new array consisting of `f(pi,a)` for each `a` in `A`, and `f.(vector1,vector2)` will return
-a new vector consisting of `f(vector1[i],vector2[i])` for each index `i` (throwing an exception
-if the vectors have different length).
+در حالت کلی
+, `f.(args...)`معادل است با `broadcast(f, args...)`, 
+که مارا مجاز میسازد تا آرایه های مختلفی را حتی به اشکال مختلف یا حتی ترکیبی از آرایه ها و اسکالر ها را اپریت کنیم
+.
+برای مثال اگر شما `f(x,y) = 3x + 4y`را داشته باشید,
+آنگاه `f.(pi,A)` آرایه ای شامل `f(pi,a)` به ازای هر `a` در `A`را برمیگرداند,
+و `f.(vector1,vector2)` 
+یک بردار شامل `f(vector1[i],vector2[i])` برای هر عدد `i`
+را برمیگرداند(ارور پرتاب میشود اگر سایزشان یکی نبود).
 
 ```julia
 julia> f(x,y) = 3x + 4y;
@@ -896,30 +1006,41 @@ julia> f.(A, B)
  33.0
 ```
 
-Moreover, *nested* `f.(args...)` calls are *fused* into a single `broadcast` loop. For example,
-`sin.(cos.(X))` is equivalent to `broadcast(x -> sin(cos(x)), X)`, similar to `[sin(cos(x)) for x in X]`:
-there is only a single loop over `X`, and a single array is allocated for the result. [In contrast,
-`sin(cos(X))` in a typical "vectorized" language would first allocate one temporary array for
-`tmp=cos(X)`, and then compute `sin(tmp)` in a separate loop, allocating a second array.] This
-loop fusion is not a compiler optimization that may or may not occur, it is a *syntactic guarantee*
-whenever nested `f.(args...)` calls are encountered. Technically, the fusion stops as soon as
-a "non-dot" function call is encountered; for example, in `sin.(sort(cos.(X)))` the `sin` and `cos`
-loops cannot be merged because of the intervening `sort` function.
+همچنین, *nested* `f.(args...)`  *fused*نامیده میشوند  درون یک حلقه `broadcast`.برای مثال,
+`sin.(cos.(X))`
+معادل است با
+`broadcast(x -> sin(cos(x)), X)`,
+مشابه با `[sin(cos(x)) for x in X]`:
+یک در اینجا فقط یک حلقه تکی `X`,
+و یک آرایه تکی برای نتیجه است. 
+[در ساختار,
+`sin(cos(X))`
+در یک زبان برداری معمول اول باید یک آرایه ضروری
+`tmp=cos(X)`را بسازیم
+, و بعد `sin(tmp)` را در آرایه دوم حساب کنیم] 
+این حلقه یک اپتیمیزیشن برای کامپایلر نیست که شاید بتوان و شاید نتوان بدستش آورد, بلکه آن یک
+*syntactic guarantee*
+هروقت تابع تو در تو
+ `f.(args...)` تماس برقرار می شود تکنیکالی ، همجوشی به محض متوقف می شود
+با یک تماس عملکرد "غیر دات" مواجه می شود; 
+برای مثال در تابع `sin.(sort(cos.(X)))`، `sin`و `cos`
+نمیتوانند ادغام شوند بدلیل مداخله تابع  `sort` .
 
-Finally, the maximum efficiency is typically achieved when the output array of a vectorized operation
-is *pre-allocated*, so that repeated calls do not allocate new arrays over and over again for
-the results (see Pre-allocating outputs). A convenient syntax for this is `X .= ...`, which
-is equivalent to `broadcast!(identity, X, ...)` except that, as above, the `broadcast!` loop is
-fused with any nested "dot" calls. For example, `X .= sin.(Y)` is equivalent to `broadcast!(sin, X, Y)`,
-overwriting `X` with `sin.(Y)` in-place. If the left-hand side is an array-indexing expression,
-e.g. `X[begin+1:end] .= sin.(Y)`, then it translates to `broadcast!` on a `view`, e.g.
+در نهایت بیشترین بازدهی وقتی است که آرایه خروجی یک تابع برداری شده *pre-allocated* باشد,
+تا فراخوانی های جدید آرایه های جدیدی را نیاز نباشد که اختیار کنند برای نگه داری نتیجه ها و خروجی ها
+(ببینید Pre-allocating outputs). 
+یک دستور راحت برای اینکار `X .= ...`است, 
+که معادل است با`broadcast!(identity, X, ...)` به جز این, مانند بالا, حلقه `broadcast!` هر فراخوانی تودرتو را به هم میجوشاند.
+
+برای مثال, `X .= sin.(Y)` معادل است با `broadcast!(sin, X, Y)`,
+بازنویسی `X`با  `sin.(Y)` . اگر سمت چپ یک اکسپرشن آرایه باشد
+e.g. `X[begin+1:end] .= sin.(Y)`, آنگاه ترجمه میشود بع=ه `broadcast!` در `view`, e.g.
 `broadcast!(sin, view(X, firstindex(X)+1:lastindex(X)), Y)`,
-so that the left-hand side is updated in-place.
+پس سمت چپ همانجا آپدیت میشود.
 
-Since adding dots to many operations and function calls in an expression
-can be tedious and lead to code that is difficult to read, the macro
-[`@.`](@ref @__dot__) is provided to convert *every* function call,
-operation, and assignment in an expression into the "dotted" version.
+از آنجا که اضافه کردن دات به خیلی از عملگرها و توابع در اکسپرشن میتواند ما را به یک کد که خواندنش سخت است ببرد پس
+[`@.`](@ref @__dot__) تهیه شده است برای تبدیل فراخوان هر تابعی و هر نسبت دهی در یک اکسپرشن به یک ورژن نقطه دار شده!,
+
 
 ```
 julia> Y = [1.0, 2.0, 3.0, 4.0];
@@ -934,12 +1055,13 @@ julia> @. X = sin(cos(Y)) # equivalent to X .= sin.(cos.(Y))
  -0.6080830096407656
 ```
 
-Binary (or unary) operators like `.+` are handled with the same mechanism:
-they are equivalent to `broadcast` calls and are fused with other nested "dot" calls.
- `X .+= Y` etcetera is equivalent to `X .= X .+ Y` and results in a fused in-place assignment;
- see also [dot operators](@ref man-dot-operators).
+عملگرهای دودویی مانند
+ `.+` با همان مکانیسم قبلی مدیریت میشوند:
+آنها معادلند با`broadcast`و با بقیه دات های تودرتوی دیگر همجوشی میکنند.
+ `X .+= Y` معادل است با `X .= X .+ Y` و نتیجه همان جا نسبت دهی میشود
+ همچنین اینجا را ببینید [dot operators](@ref man-dot-operators).
 
-You can also combine dot operations with function chaining using `|>`, as in this example:
+همچنین میتوان عملگراهای دات را با هم ترکیب کرد بوسیله `|>`, مانند مثال زیر:
 ```julia
 julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
 5-element Vector{Real}:
@@ -952,8 +1074,11 @@ julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
 
 ## Further Reading
 
-We should mention here that this is far from a complete picture of defining functions. Julia has
-a sophisticated type system and allows multiple dispatch on argument types. None of the examples
-given here provide any type annotations on their arguments, meaning that they are applicable to
-all types of arguments. The type system is described in [Types](@ref man-types) and defining a function
-in terms of methods chosen by multiple dispatch on run-time argument types is described in Methods.
+در اینجا باید یادآور شویم که مطالبی که گفته شد بسیار از تصویر کامل تعریف توابع دور است.
+جولیا سیستم پیچیده ای دارد و اجازه میدهد که انواع مختلفی از ورودی ها را ارسال کنید.
+هیچکدام از مثالهایی که زده شد و حاشیه نویسی هایی که گفته شد درباره ورودی ها نشان دهنده این نیستند که آنکار را میتوان با همه ی انواع ورودی ها انجام داد.
+نوع سیستم در
+[Types](@ref man-types)
+شرح داده شده
+و تعریف توابع به منظور متد ها انتخاب میشوند بوسیله انواع ورودی ها که در ران تایم و متد ها ارسال میشوند
+
