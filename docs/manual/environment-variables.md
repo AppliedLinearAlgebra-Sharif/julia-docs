@@ -277,7 +277,7 @@ affinitized. Otherwise, Julia lets the operating system handle thread policy.
 
 ```eval_rst
 
-.. توجه::
+.. note::
 
     این متغیر های محیطی فقط وقتی تاثیر دارند که جولیا با دیباگ زباله رویی (garbage-collection debugging) اجرا شود. (یعنی اگر `WITH_GC_DEBUG_ENV` در پیکر بندی ساخت برابر با `1` قرار داده شده است )
     
@@ -289,7 +289,7 @@ affinitized. Otherwise, Julia lets the operating system handle thread policy.
 
 ```eval_rst
 
-.. توجه::
+.. note::
     
     این متغیر محیطی تنها وقتی تاثیر دارد که جولیا همراه با دیباگ کردن توسط زیاله رویی (garbage-collection debugging) اجرا شده باشد. ( یعنی اگر `WITH_GC_DEBUG_ENV` در پیکر بندی ساخت برابر با `1` قرار داده شده باشد.)
     
@@ -301,7 +301,7 @@ affinitized. Otherwise, Julia lets the operating system handle thread policy.
 
 ```eval_rst
 
-.. توجه::
+.. note::
     
     این متغیر محیطی تنها وقتی تاثیر دارد که جولیا همراه با دیباگ کردن به صورت زباله رویی (garbage-collection debugging) اجرا شده باشد. (یعنی اگر `WITH_GC_DEBUG_ENV` در پیکر بندی ساخت برابر با `1` قرار داده شده باشد )
     
@@ -313,7 +313,7 @@ affinitized. Otherwise, Julia lets the operating system handle thread policy.
 
 ```eval_rst
 
-.. توجه::
+.. note::
 
     این متغیر محیطی تنها وقتی تاثیر دارد که جولیا همراه با پشتیبانی بازرسی JIT اجرا شده باشد با استفاده از یکی از 
     
