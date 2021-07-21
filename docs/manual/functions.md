@@ -4,6 +4,10 @@ In Julia, a function is an object that maps a tuple of argument values to a retu
 functions are not pure mathematical functions, because they can alter and be affected
 by the global state of the program. The basic syntax for defining functions in Julia is:
 
+فصل 8  توابع
+در جولیا ، یک تابع یک شی است که تعداد زیادی از مقادیر آرگومان را به یک مقدار بازگشتی ترسیم می کند. توابع جولیا توابع ریاضی خالص نیستند ، زیرا آنها می توانند وضعیت کلوبال برنامه را تغییر داده و تحت تأثیر قرار دهند. سینتکس اساسی برای تعریف توابع در جولیا عبارت است از:
+
+
 ```julia
 julia> function f(x,y)
            x + y
@@ -17,6 +21,12 @@ of the last expression evaluated, which is `x + y`.
 There is a second, more terse syntax for defining a function in Julia. The traditional function
 declaration syntax demonstrated above is equivalent to the following compact "assignment form":
 
+این تابع دو آرگومان x و y را می پذیرد و مقدار آخرین عبارت ارزیابی شده را برمی گرداند ، یعنی
+x + y .
+یک نحو دوم و مختصر برای تعریف یک تابع در جولیا وجود دارد. نحو بیان تابع سنتی
+نشان داده شده در بالا معادل "فرم واگذاری" فشرده زیر است:
+
+
 ```julia
 julia> f(x,y) = x + y
 f (generic function with 1 method)
@@ -29,6 +39,11 @@ both typing and visual noise.
 
 A function is called using the traditional parenthesis syntax:
 
+در فرم انتساب assigment، بدنه تابع باید یک عبارت واحد باشد ، اگرچه می تواند یک ترکیب باشد بیان (نگاه کنید به ترکیب 
+اصطلاحات). تعریف کوتاه و ساده تابع در جولیا معمول است. تابع کوتاه   بر این اساس کاملا کاربردی است و به طور قابل توجهی هم تایپ و هم سر و صدای بصری را کاهش می دهد.
+یک تابع با استفاده از نحو پرانتز سنتی فراخوانی می شود:
+
+
 ```julia
 julia> f(2,3)
 5
@@ -36,6 +51,8 @@ julia> f(2,3)
 
 Without parentheses, the expression `f` refers to the function object, and can be passed around
 like any other value:
+
+بدون پرانتز ، عبارت f به شی تابع اشاره دارد و می تواند مانند سایر مقادیر به اطراف منتقل شود:
 
 ```julia
 julia> g = f;
@@ -45,6 +62,8 @@ julia> g(2,3)
 ```
 
 As with variables, Unicode can also be used for function names:
+
+همانند متغیرها ، از Unicode می توان برای نام تابع نیز استفاده کرد:
 
 ```julia
 julia> ∑(x,y) = x + y
@@ -63,6 +82,9 @@ are identical to the passed values. Modifications to mutable values (such as `Ar
 a function will be visible to the caller. This is the same behavior found in Scheme, most Lisps,
 Python, Ruby and Perl, among other dynamic languages.
 
+8.1  چگونگی دادن آرگومان ها
+آرگومان های توابع جولیا از قراردادی پیروی می کنند که گاهی اوقات "گذر از طریق به اشتراک گذاری" نامیده می شود ، به این معنی که مقادیروقتی به توابع منتقل می شوند ، کپی نمی شوند. آرگومان های تابعی خود به عنوان صحافی متغیر جدید عمل می کنند (مکانهای جدیدی که می توانند به مقادیر اشاره کنند) ، اما مقادیری که آنها به آنها اشاره می کنند با مقادیر داده شده یکسان هستند. اصلاحات به مقادیر قابل تغییر (مانند آرایه ها) ساخته شده در یک تابع برای صدا کننده قابل مشاهده است. این است همان رفتاری که در Scheme ، بیشتر Lisps ، Python ، Ruby و Perl و سایر زبانهای پویا مشاهده می شود.
+
 ## The `return` Keyword
 
 The value returned by a function is the value of the last expression evaluated, which, by default,
@@ -71,6 +93,10 @@ the previous section this is the value of the expression `x + y`.
 As an alternative, as in many other languages,
 the `return` keyword causes a function to return immediately, providing
 an expression whose value is returned:
+
+8.2   کلید واژه return
+مقدار برگردانده شده توسط یک تابع مقدار آخرین عبارت ارزیابی شده است که به طور پیش فرض آخرین عبارت بیان شده در متن و بدنه تعریف تابع است. در تابع مثال ، f ، از بخش قبلی این  مقدار عبارت x + y است .به عنوان یک گزینه ، مانند بسیاری از زبانهای دیگر ، کلمه کلیدی return باعث بازگشت فوری تابع می شود با ارائه عبارتی که مقدار آن برگردانده می شود:
+
 
 ```julia
 function g(x,y)
@@ -81,6 +107,8 @@ end
 
 Since function definitions can be entered into interactive sessions, it is easy to compare these
 definitions:
+
+از آنجا که تعاریف تابع را می توان در جلسات تعاملی وارد کرد ، مقایسه این تعاریف آسان است:
 
 ```julia
 julia> f(x,y) = x + y
@@ -104,6 +132,8 @@ the expression `x + y` is never evaluated and we could simply make `x * y` the l
 in the function and omit the `return`. In conjunction with other control flow, however, `return`
 is of real use. Here, for example, is a function that computes the hypotenuse length of a right
 triangle with sides of length `x` and `y`, avoiding overflow:
+
+البته ، در یک بدنه تابع کاملاً خطی مانند g ، ، استفاده از  returnبی معنی است از آنجا که عبارت x + y هرگز ارزیابی نمی شود و ما می توانیم به سادگی x * y را به آخرین عبارت در تابع تبدیل کنیم و بازگشت را حذف کنیم. همراه با جریان کنترل دیگر ،  return کاربرد واقعی دارد. به عنوان مثال ، در اینجا تابعی وجود دارد که طول هیپوتنوز مثلث قائم الزاویه را با اضلاع طول x و y محاسبه می کند ، و جلوگیری از سرریز:
 
 ```julia
 julia> function hypot(x,y)
@@ -129,10 +159,18 @@ There are three possible points of return from this function, returning the valu
 expressions, depending on the values of `x` and `y`. The `return` on the last line could be omitted
 since it is the last expression.
 
+سه نقطه بازگشت ممکن از این تابع وجود دارد که مقادیر سه عبارت مختلف را برمی گرداند ،و
+به مقادیر x و y بستگی دارد. بازگشت در آخرین خط ممکن است حذف شود زیرا آخرین عبارت است.
+
+
 ### Return type
 
 A return type can be specified in the function declaration using the `::` operator. This converts
 the return value to the specified type.
+
+نوع بازگشت return 
+با استفاده از عملگر :: می توان یک نوع  returnرا در تابع مشخص کرد. این مقدار برگشتی را به نوع مشخص شده تبدیل می کند.
+
 
 ```julia
 julia> function g(x, y)::Int8
@@ -146,10 +184,16 @@ Int8
 This function will always return an `Int8` regardless of the types of `x` and `y`.
 See Type Declarations for more on return types.
 
+این تابع بدون توجه به انواع x و y همیشه یک Int8 را برمی گرداند. برای اطلاعات بیشتر به
+   Type declarationمراجعه کنید
+
+
 ### Returning nothing
 
 For functions that do not need to return a value (functions used only for some side effects),
 the Julia convention is to return the value `nothing`:
+
+برای توابعی که نیازی به بازگشت مقدار ندارند (توابع فقط برای برخی از عوارض جانبی استفاده می شوند) ، قرارداد جولیا این است که مقدارnothing را بازگرداند:
 
 ```julia
 function printx(x)
@@ -170,6 +214,12 @@ On the other hand, since functions implicitly return their last expression evalu
 The preference for the expression `return nothing` as opposed to `return` or `nothing`
 alone is a matter of coding style.
 
+برگرداندن nothing
+برای توابعی که نیازی به بازگشت مقدار ندارند (توابع فقط برای برخی از عوارض جانبی استفاده می شوند) ، قرارداد جولیا این است که مقدارnothing را بازگرداند:
+این یک قرارداد است به این معنا که nothing  یک کلمه کلیدی در جولیا نیست بلکه تنها یک شی از نوع Nothing است.همچنین ، ممکن است متوجه شوید که تابع printx در بالا ساخته شده است ، زیرا println از قبل nothing برمی گرداند ، به طوری که خط بازگشت اضافی است.
+دو فرم کوتاه ممکن برای بیان عبارت nothing وجود دارد. از یک طرف ، کلمه کلیدی  returnبه طور ضمنی چیزی را بر نمی گرداند ، بنابراین می تواند به تنهایی استفاده شود. از طرف دیگر ، از آنجا که توابع به طور ضمنی آخرین عبارتی که ارزیابی می شودرا برمی گردانند ، nothing به تنهایی قابل استفاده است  ،وقتی آخرین عبارت است. ترجیح برای کدام روش به موضوع سبک کد گذاری بستگی دارد .
+
+
 ## عملگرها تابع هستند
 
 در جولیا اکثر عملگرها صرفا توابعی هستند که با سینتکس خاصی حمایت میشوند.
@@ -178,6 +228,10 @@ alone is a matter of coding style.
 این عملگرها نمیتوانند تابع باشند.
 از آنجا که این عملگرها نیاز دارند که عملوندهایی آنها قبل از ارزیابی آنها، ارزیابی نشده باشند.)
 بر این اساس میتوان از آنها به شکل آرگومان-پرانتز نیز استفاده کرد مانند خیلی دیگر از توابع :
+
+8.3   عملگرها تابع هستند
+در جولیا ، اکثر عملگرها فقط توابع با پشتیبانی از سینتکس ویژه هستند. (استثنائات عملگرهایی که دارای ارزیابی ویژه هستند مانند && و ||. این عملگرها به دلیل ارزیابی اتصال کوتاه نمی توانند توابع باشند مستلزم آن است که عملوندهای آنها قبل از ارزیابی اپراتور ارزیابی نشوند.) بر این اساس ، شما همچنین می توانید آنها را با استفاده از لیست های آرگومان پرانتز اعمال کنید ، دقیقاً مانند سایر توابع:
+
 
 ```julia
 julia> 1 + 2 + 3
@@ -192,6 +246,8 @@ julia> +(1,2,3)
 و این به این معنی است که شما میتوانید به هر کس بسپارید و بعد بگذرید.
 عملگرهایی مانند `+` و `*` دقیقا همانند بقیه عملگرها به همین شکل هستند:
 
+فرم infix دقیقاً معادل تابع فرم است - در واقع فرم اول برای تولید به صورت فراخوانی داخلی تابع تجزیه می شود. این همچنین به این معنی است که شما می توانید اپراتورهایی مانند + و * را تعیین و دقیقاً مانند سایر مقادیر توابع وارد کنید:
+
 ```julia
 julia> f = +;
 
@@ -200,6 +256,8 @@ julia> f(1,2,3)
 ```
 
 زیر اسم `f`, تابع نمادگذاری infix را پشتیبانی نمیکند .
+
+با این حال ، با نام f ، این تابع از نماد infix  پشتیبانی نمی کند.
 
 ## عملگرهایی با اسامی خاص
 

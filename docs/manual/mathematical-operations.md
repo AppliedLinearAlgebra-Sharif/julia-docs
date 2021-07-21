@@ -1,34 +1,29 @@
-# Mathematical Operations and Elementary Functions
+# عملیات ریاضی و توابع اولیه
 
-Julia provides a complete collection of basic arithmetic and bitwise operators across all of its
-numeric primitive types, as well as providing portable, efficient implementations of a comprehensive
-collection of standard mathematical functions.
+زبان برنامه نویسی جولیا یک مجموعه کامل از عملگرهای محاسباتی و بیتی اولیه برای کار بر روی نوع‌های عددی اولیه را فراهم نموده است. همچنین پیاده‌سازی‌های بهینه از یک مجموعه همه جانبه از توابع استاندارد ریاضی ارائه می‌دهد.
 
-## Arithmetic Operators
+## عملگرهای محاسباتی
 
-The following [arithmetic operators](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations)
-are supported on all primitive numeric types:
+[عملگرهای محاسباتی](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations) زیر برای تمامی نوع‌های عددی اولیه پشتیبانی می‌شوند:
 
-| Expression | Name           | Description                            |
+| نماد | نام           | توضیحات                            |
 |:---------- |:-------------- |:-------------------------------------- |
-| `+x`       | unary plus     | the identity operation                 |
-| `-x`       | unary minus    | maps values to their additive inverses |
-| `x + y`    | binary plus    | performs addition                      |
-| `x - y`    | binary minus   | performs subtraction                   |
-| `x * y`    | times          | performs multiplication                |
-| `x / y`    | divide         | performs division                      |
-| `x ÷ y`    | integer divide | x / y, truncated to an integer         |
-| `x \ y`    | inverse divide | equivalent to `y / x`                  |
-| `x ^ y`    | power          | raises `x` to the `y`th power          |
-| `x % y`    | remainder      | equivalent to `rem(x,y)`               |
+| `+x`       | جمع یگانی     |  عمل همانی                |
+| `-x`       | تفریق یگانی    | مقادیر را به وارون جمعی‌شان تبدیل می‌کند |
+| `x + y`    | جمع باینری     | عمل جمع                      |
+| `x - y`    | تفریق باینری   | عمل تفریق                   |
+| `x * y`    | ضرب          | عمل ضرب                |
+| `x / y`    | تقسیم         | عمل تقسیم                      |
+| `x ÷ y`    | تقسیم صحیح | قسمت صحیح `x / y` را بر می‌گرداند         |
+| `x \ y`    | تقسیم بالعکس | معادل با `x / y` است                  |
+| `x ^ y`    | توان          | `x` را به توان `y` می‌رساند   |
+| `x % y`    | باقیمانده      | معادل با `rem(x,y)` است      |
 
-A numeric literal placed directly before an identifier or parentheses, e.g. `2x` or `2(x+y)`, is treated as a multiplication, except with higher precedence than other binary operations.  See [Numeric Literal Coefficients](@ref man-numeric-literal-coefficients) for details.
+یک لیترال عددی که دقیقا قبل از یک متغیر یا پرانتز قرار گرفته است، برای مثال در `2x`  یا  `2(x+y)`، به صورت عمل ضرب در نظر گرفته می‌شود، که اولویت بالاتری نسبت به سایر عملیات‌های باینری دارد. 
 
-Julia's promotion system makes arithmetic operations on mixtures of argument types "just work"
-naturally and automatically. See [Conversion and Promotion](@ref conversion-and-promotion) for details of the promotion
-system.
+سیستم ارتقاء جولیا به صورت طبیعی و خود به خودی(اتوماتیک) عملگرهای محاسباتی را برای مخلوطی از نوع‌‌ها مدیریت کرده و به درستی کار می‌کنند. برای اطلاع بیشتر در مورد سیستم ارتقاء، بخش [تبدیل و ارتقاء](@ref conversion-and-promotion) را ببیند.
 
-Here are some simple examples using arithmetic operators:
+چند مثال ساده را در زیر مشاهده می‌کنید:
 
 ```julia
 julia> 1 + 2 + 3
@@ -41,11 +36,10 @@ julia> 3*2/12
 0.5
 ```
 
-(By convention, we tend to space operators more tightly if they get applied before other nearby
-operators. For instance, we would generally write `-x + 2` to reflect that first `x` gets negated,
-and then `2` is added to that result.)
 
-When used in multiplication, `false` acts as a *strong zero*:
+(طبق قرار داد، برای استحکام بیشتر در بیان عملگرها، ما آن‌ها را در نزدیکترین حالت به عملوندشان، قبل از عملوند قرار می‌دهیم. برای مثال، ما معمولاً باید بنویسیم `x+2-`تا ابتدا مقدار `x` را منفی کرده و سپس `2` را به آن اضافه کنیم.)
+
+در عمل ضرب، `false` به صورت یک *صفر قوی* عمل می‌کند.
 
 ```julia
 julia> NaN * false
@@ -55,38 +49,39 @@ julia> false * Inf
 0.0
 ```
 
-This is useful for preventing the propagation of `NaN` values in quantities that are known to be zero. See [Knuth (1992)](https://arxiv.org/abs/math/9205211) for motivation.
+این کار برای پیشگیری از انتشار مقادیر  `NaN` در کمیت‌هایی که می‌دانیم برابر صفر هستند، استفاده می‌شود. برای اطلاعات بیشتر [Knuth (1992)](https://arxiv.org/abs/math/9205211) را ببینید.
 
-## Boolean Operators
 
-The following Boolean operators](https://en.wikipedia.org/wiki/Boolean_algebra#Operations) are supported on [`Bool` types:
+## عملگرهای بولی
 
-| Expression | Name                                                    |
+[عملگر‌های بولی](https://en.wikipedia.org/wiki/Boolean_algebra#Operations) زیر روی نوع‌ `Bool`  اعمال می شوند:
+
+| نماد | توضیحات                                                    |
 |:---------- |:--------------------------------------------------------|
-| `!x`       | negation                                                |
-| `x && y`   | [short-circuiting and](@ref man-conditional-evaluation) |
-| `x \|\| y` | [short-circuiting or](@ref man-conditional-evaluation)  |
+|     `!x`  |            منفی کردن                                  |
+| `x && y`   | [و اتصال کوتاه](@ref man-conditional-evaluation) |
+| `x \|\| y` | [یا اتصال کوتاه](@ref man-conditional-evaluation)  |
 
-Negation changes `true` to `false` and vice versa. The short-circuiting opeations are explained on the linked page.
+عمل منفی کردن `true` را به `false` تبدیل می‌کند و برعکس. عملیات‌های اتصال کوتاه در صفحه‌ی لینک‌شده توضیح داده شده‌اند.
 
-Note that `Bool` is an integer type and all the usual promotion rules and numeric operators are also defined on it.
+توجه کنید که  `Bool` یک نوع‌ از عدد صحیح است و همه‌ روابط ارتقا و عملگر‌های عددی روی آن تعریف می‌شوند.
 
-## Bitwise Operators
 
-The following [bitwise operators](https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators)
-are supported on all primitive integer types:
+## عملگر‌های بیتی
 
-| Expression | Name                                                                     |
+[عملگرهای محاسباتی](https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators) زیر برای تمامی نوع‌‌های صحیح اولیه پشتیبانی می‌شوند:
+
+| توضیحات | نماد                                                                     |
 |:---------- |:------------------------------------------------------------------------ |
-| `~x`       | bitwise not                                                              |
-| `x & y`    | bitwise and                                                              |
-| `x \| y`   | bitwise or                                                               |
-| `x ⊻ y`    | bitwise xor (exclusive or)                                               |
-| `x >>> y`  | [logical shift](https://en.wikipedia.org/wiki/Logical_shift) right       |
-| `x >> y`   | [arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift) right |
-| `x << y`   | logical/arithmetic shift left                                            |
+| `~x`       | عمل not به صورت بیت به بیت                                                              |
+| `x & y`    | عمل and به صورت بیتی                                                              |
+| `x \| y`   | عمل or به صورت بیتی                                                               |
+| `x ⊻ y`    | عمل xor بیتی                                               |
+| `x >>> y`  | [شیفت منطقی](https://en.wikipedia.org/wiki/Logical_shift) به سمت راست       |
+| `x >> y`   | [شیفت محاسباتی](https://en.wikipedia.org/wiki/Arithmetic_shift) به سمت راست |
+| `x << y`   | شیفت منطقی/محاسباتی به سمت چپ                                      |
 
-Here are some examples with bitwise operators:
+مثال‌هایی از عملگرهای بیتی در جولیا:
 
 ```julia
 julia> ~123
@@ -111,12 +106,10 @@ julia> ~UInt8(123)
 0x84
 ```
 
-## Updating operators
 
-Every binary arithmetic and bitwise operator also has an updating version that assigns the result
-of the operation back into its left operand. The updating version of the binary operator is formed
-by placing a `=` immediately after the operator. For example, writing `x += 3` is equivalent to
-writing `x = x + 3`:
+## عملگرهای بروزرسان
+
+تمام عملگرهای باینری محاسباتی و بیتی یک حالت بروز رسانی دارند که نتایج عملیات را در عملوند سمت چپ خود می‌ریزند. حالت بروزرسانی عملگرهای باینری به وسیله استفاده بدون واسطه از `=` پس از عملگر، به کار گرفته می‌شود. برای نمونه، نوشتن `x+=3` معادل است با نوشتن `x=x+3`:
 
 ```julia
 julia> x = 1
@@ -129,7 +122,8 @@ julia> x
 4
 ```
 
-The updating versions of all the binary arithmetic and bitwise operators are:
+
+حالت بروزرسانی تمام عملگرهای محاسباتی و بیتی به صورت زیر هستند:
 
 ```
 +=  -=  *=  /=  \=  ÷=  %=  ^=  &=  |=  ⊻=  >>>=  >>=  <<=
@@ -139,15 +133,14 @@ The updating versions of all the binary arithmetic and bitwise operators are:
 
 .. note::
 
-    An updating operator rebinds the variable on the left-hand side. As a result, the type of the
-    variable may change.
+    یک عملگر بروزرسانی متغیر سمت چپ را بازنویسی می‌کند. در نتیجه، ممکن است نوع آن متغیر عوض شود.
 
     .. code-block:: julia
 
         julia> x = 0x01; typeof(x)
         UInt8
 
-        julia> x *= 2 # Same as x = x * 2
+        julia> x *= 2 # x = x * 2 همان 
         2
 
         julia> typeof(x)
@@ -155,17 +148,9 @@ The updating versions of all the binary arithmetic and bitwise operators are:
 
 ```
 
-## Vectorized "dot" operators
+## عملگرهای نقطه‌ای برداری
 
-For *every* binary operation like `^`, there is a corresponding
-"dot" operation `.^` that is *automatically* defined
-to perform `^` element-by-element on arrays. For example,
-`[1,2,3] ^ 3` is not defined, since there is no standard
-mathematical meaning to "cubing" a (non-square) array, but
-`[1,2,3] .^ 3` is defined as computing the elementwise
-(or "vectorized") result `[1^3, 2^3, 3^3]`.  Similarly for unary
-operators like `!` or `√`, there is a corresponding `.√` that
-applies the operator elementwise.
+برای تمامی عملیات‌های باینری مانند `^`، یک عملیات متناظر نقطه‌ای `^.` وجود دارد که به صورت خود به خودی(اتوماتیک) عمل `^` را بر روی تک تک المان‌های یک آرایه اعمال می‌کند. برای مثال، عبارت `3^[1,2,3]` تعریف نشده است زیرا مکعب یک ارایه‌ (ارایه غیر مربعی) تعریف استاندارد ریاضیاتی ندارد. اما `3^.[1,2,3]` به صورت محاسبه‌ی المانی(یا برداری) `[3^3, 3^2, 3^1]` تعریف شده است. به طور مشابه برای عملگرهای یگانی مانند `!` یا `√` نیز  `√.` وجود دارد که عملیات را به صورت المانی اجرا می‌کند.
 
 ```julia
 julia> [1,2,3] .^ 3
@@ -175,47 +160,30 @@ julia> [1,2,3] .^ 3
  27
 ```
 
-More specifically, `a .^ b` is parsed as the ["dot" call](@ref man-vectorized)
-`(^).(a,b)`, which performs a [broadcast](@ref Broadcasting) operation:
-it can combine arrays and scalars, arrays of the same size (performing
-the operation elementwise), and even arrays of different shapes (e.g.
-combining row and column vectors to produce a matrix). Moreover, like
-all vectorized "dot calls," these "dot operators" are
-*fusing*. For example, if you compute `2 .* A.^2 .+ sin.(A)` (or
-equivalently `@. 2A^2 + sin(A)`, using the [`@.`](@ref @__dot__) macro) for
-an array `A`, it performs a *single* loop over `A`, computing `2a^2 + sin(a)`
-for each element of `A`. In particular, nested dot calls like `f.(g.(x))`
-are fused, and "adjacent" binary operators like `x .+ 3 .* x.^2` are
-equivalent to nested dot calls `(+).(x, (*).(3, (^).(x, 2)))`.
 
-Furthermore, "dotted" updating operators like `a .+= b` (or `@. a += b`) are parsed
-as `a .= a .+ b`, where `.=` is a fused *in-place* assignment operation
-(see the [dot syntax documentation](@ref man-vectorized)).
+به طور دقیق‌تر، `a.^b`(این عبارت یعنی تک تک المان‌های آرایه `a` به توان المان متناظر آن در آرایه `b` برسد. یعنی المان اول `a` به توان المان اول `b` و المان دوم `a` به توان المان دوم `b` و…) به صورت [فراخوانی نقطه‌ای](@ref man-vectorized)
+ `(a,b).(^)` شناخته می‌شود که یک عملیات [گسترش](@ref Broadcasting) را اجرا می‌کند: این عملیات می‌تواند میان آرایه‌ها و اسکالرها، آرایه‌های هم اندازه (انجام عملیات به صورت المانی) و  حتی میان آرایه‌هایی با اشکال مختلف(مثلاً ترکیب بردار‌های ستونی و ردیفی برای ساخت ماتریس) اعمال شود. علاوه بر این، مانند تمام فراخوانی‌های نقطه‌ای برداری(المانی)، این عملگرهای نقطه‌ای نیز همپوش هستند. برای مثال، اگر شما `2 .* A.^2 .+ sin.(A)` (که معادل با `@. 2A^2 + sin(A)` است و ماکروی [`.@`](@ref @__dot__) macro) در آن استفاده شده است) را برای آرایه‌ای مانند `A` محاسبه کنید، یک تک حلقه روی `A` اجرا می‌شود که `2a^2 + sin(a)` را برای هر المان از `A` محاسبه می‌کند. به طور خاص، فراخوانی نقطه‌ای تودرتو مانند `f.(g.(x))` همپوشانی شده‌ است و این یعنی عملگرهای باینری مجاور مانند `x.+ 3.*x.^2` با فراخوانی نقطه‌ای تودرتوی `(+).(x, (*).(3, (^).(x, 2)))` معادل هستند.
 
-Note the dot syntax is also applicable to user-defined operators.
-For example, if you define `⊗(A,B) = kron(A,B)` to give a convenient
-infix syntax `A ⊗ B` for Kronecker products (`kron`), then
-`[A,B] .⊗ [C,D]` will compute `[A⊗C, B⊗D]` with no additional coding.
+علاوه بر این‌ موارد، عملگرهای بروز‌رسان نقطه‌ای مانند `a.+=b` (یا `a+=b.@`) به صورت `a.=a.+b` اجرا می‌شوند، که در آن `=.` یک عملیات تخصیص در محل همپوشانی شده است (نوشته [نحو نقطه‌ای]((@ref man-vectorized)) را ببینید).
 
-Combining dot operators with numeric literals can be ambiguous.
-For example, it is not clear whether `1.+x` means `1. + x` or `1 .+ x`.
-Therefore this syntax is disallowed, and spaces must be used around
-the operator in such cases.
+دقت کنید که نحو(سینتکس) نقطه‌ای برای عملگرهای تعریف شده توسط کاربر نیز قابل استفاده است. برای مثال اگر شما `⊗(A,B) = kron(A,B)` را به منظور عمل  `A ⊗ B` برای داشتن یک سینتکس راحت برای ضرب کرونر تعریف کنید، پس از آن بدون هیچ کد اضافه‌ای شما می‌توانید `[C,D]⊗.[A,B]` را برای محاسبه `[A⊗C,B⊗D]` بیان کنید. 
 
-## Numeric Comparisons
+ترکیب عملگرهای نقطه‌ای با لیترال‌های عددی می‌تواند ابهام آور باشد. به طور مثال، معلوم نیست که منظور از عبارت `1.+x` به صورت `1. + x` است یا `1 .+ x`. در نتیجه این نوع نحوه بیان مجاز نیست و حتماً باید به وسیله فضای خالی میان عملگر نقطه و عملوندهایش در چنین مواردی فاصله ایجاد کنید.
 
-Standard comparison operations are defined for all the primitive numeric types:
+## مقایسات عددی
 
-| Operator                     | Name                     |
+عملگرهای مقایسه‌ای استاندارد برای تمام نوع‌‌های عددی اولیه تعریف شده‌اند:
+
+| عملگر                     | توضیحات                     |
 |:---------------------------- |:------------------------ |
-| `==`                 | equality                 |
-| `!=`, [`≠`](@ref !=) | inequality               |
-| `<`                  | less than                |
-| `<=`, [`≤`](@ref <=) | less than or equal to    |
-| `>`                  | greater than             |
-| `>=`, [`≥`](@ref >=) | greater than or equal to |
+| `==`                 | برابری                 |
+| `!=`, [`≠`](@ref !=) | نابرابری               |
+| `<`                  | کوچکتر                 |
+| `<=`, [`≤`](@ref <=) | کوچتر یا مساوی    |
+| `>`                  | بزرگتر              |
+| `>=`, [`≥`](@ref >=) | بزرگتر یا مساوی |
 
-Here are some simple examples:
+در اینجا چند مثال ساده را مشاهده می‌کنید:
 
 ```julia
 julia> 1 == 1
@@ -252,16 +220,16 @@ julia> 3 < -0.5
 false
 ```
 
-Integers are compared in the standard manner -- by comparison of bits. Floating-point numbers
-are compared according to the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008):
 
-  * Finite numbers are ordered in the usual manner.
-  * Positive zero is equal but not greater than negative zero.
-  * `Inf` is equal to itself and greater than everything else except `NaN`.
-  * `-Inf` is equal to itself and less than everything else except `NaN`.
-  * `NaN` is not equal to, not less than, and not greater than anything, including itself.
+اعداد صحیح به صورت استاندارد با مقایسه‌ی بیت‌ها مورد سنجش قرار داده می‌شوند. اعداد ممیز شناور نیز با توجه به [استاندارد IEEE 754](https://en.wikipedia.org/wiki/IEEE_754-2008) مقایسه می شوند:
 
-The last point is potentially surprising and thus worth noting:
++ ترتیب اعداد متناهی، به همان صورت معمول است.
++ صفر مثبت برابر است با صفر منفی اما از آن بزرگتر نیست.
++ `Inf` با خودش برابر و از هر چیز دیگری بجز  `NaN` بزرگتر است.
++ `Inf` با خودش برابر و از هر چیز دیگری بجز `NaN` کوچکتر است.
++ `NaN` نه با چیزی برابر، نه از چیزی بزرگتر و نه کوچکتر است. این گزاره شامل خودش هم می‌شود.
+
+نکته آخر بسیار شگفت انگیز است و ارزش دقت دارد:
 
 ```julia
 julia> NaN == NaN
@@ -277,24 +245,25 @@ julia> NaN > NaN
 false
 ```
 
-and can cause headaches when working with [arrays](@ref man-multi-dim-arrays):
+
+این نکته در کار با [آرایه‌ها](@ref man-multi-dim-arrays) می‌تواند موجب کمی سردرد شود:
 
 ```julia
 julia> [1 NaN] == [1 NaN]
 false
 ```
 
-Julia provides additional functions to test numbers for special values, which can be useful in
-situations like hash key comparisons:
 
-| Function                | Tests if                  |
+جولیا توابعی اضافی برای آزمون اعداد در مقادیر خاص فراهم کرده است که می‌تواند در موقعیت‌هایی مانند مقایسه‌‌های کلید هش استفاده شود:
+
+| تابع                | تست می‌کند که                  |
 |:----------------------- |:------------------------- |
-| `isequal(x, y)` | `x` and `y` are identical |
-| `isfinite(x)`   | `x` is a finite number    |
-| `isinf(x)`      | `x` is infinite           |
-| `isnan(x)`      | `x` is not a number       |
+| `isequal(x, y)` | آیا `x` و `x` یکسان هستند؟ |
+| `isfinite(x)`   | آیا `x` یک عدد متناهی است؟    |
+| `isinf(x)`      | آیا `x` بی‌نهایت است؟           |
+| `isnan(x)`      | آیا `x` یک عدد نیست؟       |
 
-`isequal` considers `NaN`s equal to each other:
+`isequal` متغیر `NaN` را برابر با خودش در نظر می‌گیرد:
 
 ```julia
 julia> isequal(NaN, NaN)
@@ -307,7 +276,8 @@ julia> isequal(NaN, NaN32)
 true
 ```
 
-`isequal` can also be used to distinguish signed zeros:
+
+`isequal` همچنین می‌تواند برای تمییز دادن صفرهای علامت‌دار استفاده شود:
 
 ```julia
 julia> -0.0 == 0.0
@@ -317,30 +287,24 @@ julia> isequal(-0.0, 0.0)
 false
 ```
 
-Mixed-type comparisons between signed integers, unsigned integers, and floats can be tricky. A
-great deal of care has been taken to ensure that Julia does them correctly.
 
-For other types, `isequal` defaults to calling `==`, so if you want to define
-equality for your own types then you only need to add a `==` method.  If you define
-your own equality function, you should probably define a corresponding `hash` method
-to ensure that `isequal(x,y)` implies `hash(x) == hash(y)`.
+مقایسات ترکیبی میان اعداد صحیح علامت‌دار، اعداد صحیح بدون علامت و اعداد اعشاری می‌تواند گول زننده باشد. مراقبت‌های زیادی انجام شده است تا اطمینان حاصل شود که جولیا آن‌ها را به درستی انجام می‌دهد.
 
-### Chaining comparisons
+برای بقیه نوع‌‌ها، `isequal` به صورت پیشفرض `==` را صدا می‌زند؛ بنابراین اگر شما می‌خواهید برابری برای نوع‌‌های خود را بسنجید، کافیست از متد `==` استفاده کنید. اگر شما می‌خواهید تابع سنجش برابری خودتان را تعریف کنید، بهتر است یک تابع `hash` متناظر تعریف کنید تا اطمینان حاصل شود که `(isequal(x,y` برابری `(hash(x)==hash(y` را می‌رساند.
 
-Unlike most languages, with the [notable exception of Python](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators),
-comparisons can be arbitrarily chained:
+### مقایسه‌های زنجیره‌ای
+
+بر خلاف بسیاری از زبان ها [به استثنای پایتون](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators)، مقایسه‌ها می‌توانند به طور دلخواه به صورت زنجیره‌ای استفاده شوند:
 
 ```julia
 julia> 1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
 true
 ```
 
-Chaining comparisons is often quite convenient in numerical code. Chained comparisons use the
-`&&` operator for scalar comparisons, and the `&` operator for elementwise comparisons,
-which allows them to work on arrays. For example, `0 .< A .< 1` gives a boolean array whose entries
-are true where the corresponding elements of `A` are between 0 and 1.
 
-Note the evaluation behavior of chained comparisons:
+استفاده از مقایسه‌های زنجیره‌ای در کدهای عددی، اغلب باعث راحتی بسیاری می‌شود. این مقایسه‌ها از عملگر `&&` برای سنجش‌های اسکالر و از عملگر `&` برای سنجش‌های المانی استفاده می‌کنند که این کار اجازه می‌دهد تا بر روی آرایه‌ها نیز عمل کنند. برای مثال عبارت  `0 .< A .< 1` یک ارایه بولی نتیجه می‌دهد که درایه‌هایی که true هستند، نشان می‌دهند که درایه‌‌های متناظر آن در `A` بین صفر و یک هستند.
+
+به نحوه‌ی رفتار ارزیابی در مقایسه‌های زنجیره‌ای توجه داشته باشید:
 
 ```julia
 julia> v(x) = (println(x); x)
@@ -358,55 +322,45 @@ julia> v(1) > v(2) <= v(3)
 false
 ```
 
-The middle expression is only evaluated once, rather than twice as it would be if the expression
-were written as `v(1) < v(2) && v(2) <= v(3)`. However, the order of evaluations in a chained
-comparison is undefined. It is strongly recommended not to use expressions with side effects (such
-as printing) in chained comparisons. If side effects are required, the short-circuit `&&` operator
-should be used explicitly (see Short-Circuit Evaluation).
 
-### Elementary Functions
+عبارتی که در وسط آمده است فقط یک بار ارزیابی می‌شود، و اگر عبارت به صورت  `v(1) < v(2) && v(2) <= v(3)` نوشته شده‌بود، دوبار ارزیابی می‌شد. با این حال، ترتیب ارزیابی‌ها در یک مقایسه زنجیره‌ای تعریف نشده است. به شدت توصیه می‌شود که از عباراتی با عوارض جانبی (مانند چاپ) در مقایسه‌های زنجیره‌ای بپرهیزید. اگر به عباراتی برای عوارض جانبی نیاز داشتید، از عملگر `&&` اتصال-کوتاه به طور صریح استفاده کنید (نوشته ارزیابی اتصال-کوتاه را ببینید).
 
-Julia provides a comprehensive collection of mathematical functions and operators. These mathematical
-operations are defined over as broad a class of numerical values as permit sensible definitions,
-including integers, floating-point numbers, rationals, and complex numbers,
-wherever such definitions make sense.
+### توابع ابتدایی
 
-Moreover, these functions (like any Julia function) can be applied in "vectorized" fashion to
-arrays and other collections with the [dot syntax](@ref man-vectorized) `f.(A)`,
-e.g. `sin.(A)` will compute the sine of each element of an array `A`.
+جولیا یک مجموعه‌ی جامع از توابع و عملگر‌های ریاضی را فراهم کرده است. این عملگرهای ریاضی به عنوان یک کلاس گسترده از مقادیر عددی به عنوان تعاریف منطقی اولیه تعریف شده و اعداد صحیح، ممیز شناور، حقیقی و مختلط را، هر کجایی که این تعاریف معنی داشته باشند، ارائه می‌دهد.
 
-## Operator Precedence and Associativity
+علاوه بر این، این توابع(مانند هر تابع دیگر جولیا) می‌توانند با استفاده از [نحو(سینتکس) نقطه‌ای](@ref man-vectorized) 
+`f.(A)` به صورت برداری(المانی) بر روی آرایه‌ها و دیگر مجموعه‌ها اعمال شوند. برای مثال `sin.(A)`، تابع سینوس را بر روی تمام المان‌های آرایه‌ی `A` اعمال می‌کند.
 
-Julia applies the following order and associativity of operations, from highest precedence to lowest:
+## تقدم و شرکت‌پذیری عملگرها
 
-| Category       | Operators                                                                                         | Associativity              |
+جولیا شرکت پذیری و ترتیب عملگرها را به صورت زیر اعمال می‌کند. ترتیب جدول زیر از بیشترین تقدم‌ به کمترین تقدم‌ است:
+
+| دسته       | عملگر                                                                                         | شرکت‌پذیری              |
 |:-------------- |:------------------------------------------------------------------------------------------------- |:-------------------------- |
-| Syntax         | `.` followed by `::`                                                                              | Left                       |
-| Exponentiation | `^`                                                                                               | Right                      |
-| Unary          | `+ - √`                                                                                           | Right[^1]                  |
-| Bitshifts      | `<< >> >>>`                                                                                       | Left                       |
-| Fractions      | `//`                                                                                              | Left                       |
-| Multiplication | `* / % & \ ÷`                                                                                     | Left[^2]                   |
-| Addition       | `+ - \| ⊻`                                                                                        | Left[^2]                   |
-| Syntax         | `: ..`                                                                                            | Left                       |
-| Syntax         | `\|>`                                                                                             | Left                       |
-| Syntax         | `<\|`                                                                                             | Right                      |
-| Comparisons    | `> < >= <= == === != !== <:`                                                                      | Non-associative            |
-| Control flow   | `&&` followed by `\|\|` followed by `?`                                                           | Right                      |
-| Pair           | `=>`                                                                                              | Right                      |
-| Assignments    | `= += -= *= /= //= \= ^= ÷= %= \|= &= ⊻= <<= >>= >>>=`                                            | Right                      |
+| نحو(سینتکس)         | `.` به دنبال `::`                                         | چپ                |
+| توان | `^`                                                                                               | راست                      |
+| یگانی          | `+ - √`                                                                                           | راست[^1]                  |
+| بیت شیفت‌ها      | `<< >> >>>`                                                                                       | چپ                       |
+| کسر‌ها      | `//`                                                                                              | چپ                       |
+| ضرب | `* / % & \ ÷`                                                                                     | چپ[^2]                   |
+| جمع       | `+ - \| ⊻`                                                                                        | چپ[^2]                   |
+| نحو         | `: ..`                                                                                            | چپ                       |
+| نحو         | `\|>`                                                                                             | چپ                       |
+| نحو         | `<\|`                                                                                             | راست                      |
+| مقایسه‌ها    | `> < >= <= == === != !== <:`                                                                      | بدون شرکت‌پذیری            |
+| کنترل روند   | `&&` followed by `\|\|` followed by `?`                                                      | راست                      |
+| جفت کردن           | `=>`                                                                                              | راست                      |
+| تخصیص‌ها    | `= += -= *= /= //= \= ^= ÷= %= \|= &= ⊻= <<= >>= >>>=`                                            | راست                      |
 
 [^1]:
-    The unary operators `+` and `-` require explicit parentheses around their argument to disambiguate them from the operator `++`, etc. Other compositions of unary operators are parsed with right-associativity, e. g., `√√-a` as `√(√(-a))`.
+    عملگرهای یگانی `+` و `-` باید به وسیله‌ پرانتز اطراف آرگومانشان مطرح شوند تا از بی‌مفهومی عملگر `++` و… دور شوند. ترکیب‌های دیگر عملگرهای یگانی به وسیله شرکت‌پذیری راست جدا می‌شوند. برای مثال، `a√√-` به این شکل `((a)√)√-` اعمال می‌شود.
 [^2]:
-    The operators `+`, `++` and `*` are non-associative. `a + b + c` is parsed as `+(a, b, c)` not `+(+(a, b),
-    c)`. However, the fallback methods for `+(a, b, c, d...)` and `*(a, b, c, d...)` both default to left-associative evaluation.
+    عملگرهای `+`، `++` و `*` بدون شرکت‌پذیری هستند. `a + b + c` به صورت `(a,b,c)+` اعمال می‌شود و نه `((a,b)+,c)+`. با این حال، روش‌های بازگشت برای `(...a,b,c,d)+` و `(...a,b,c,d)*` به صورت پیش‌فرض با شرکت‌پذیری چپ ارزیابی می‌شود.
 
-For a complete list of *every* Julia operator's precedence, see the top of this file:
-[`src/julia-parser.scm`](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm). Note that some of the operators there are not defined
-in the `Base` module but may be given definitions by standard libraries, packages or user code.
+برای اطلاع از تمامی تقدمات عملگرهای جولیا، ابتدای فایل [`src/julia-parser.scm`](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm) را ببینید. توجه کنید که برخی عملگر‌ها ممکن است در ماژول `Base` تعریف نشده باشند، اما در کتابخانه‌های استاندارد، پکیج‌ها یا کد کاربر تعریف شده باشند.
 
-You can also find the numerical precedence for any given operator via the built-in function `Base.operator_precedence`, where higher numbers take precedence:
+شما همچنین می توانید تقدم به صورت عددی برای هر عملگر داده شده را از طریق تابع پیش ساخته‌ `Base.operator_precedence` پیدا کنید؛ اعداد بالاتر دارای تقدم بالاتری هستند:
 
 ```julia
 julia> Base.operator_precedence(:+), Base.operator_precedence(:*), Base.operator_precedence(:.)
@@ -416,7 +370,8 @@ julia> Base.operator_precedence(:sin), Base.operator_precedence(:+=), Base.opera
 (0, 1, 1)
 ```
 
-A symbol representing the operator associativity can also be found by calling the built-in function `Base.operator_associativity`:
+
+نماد بیان‌کننده شرکت‌پذیری عملگر را نیز می‌توانید به وسیله فراخوانی تابع پیش ساخته `Base.operator_associativity` بیابید:
 
 ```julia
 julia> Base.operator_associativity(:-), Base.operator_associativity(:+), Base.operator_associativity(:^)
@@ -426,10 +381,10 @@ julia> Base.operator_associativity(:⊗), Base.operator_associativity(:sin), Bas
 (:left, :none, :right)
 ```
 
-Note that symbols such as `:sin` return precedence `0`. This value represents invalid operators and not
-operators of lowest precedence. Similarly, such operators are assigned associativity `:none`.
 
-[Numeric literal coefficients](@ref man-numeric-literal-coefficients), e.g. `2x`, are treated as multiplications with higher precedence than any other binary operation, with the exception of `^` where they have higher precedence only as the exponent.
+دقت کنید که نماد‌هایی همچون `sin:` تقدم `0` را برمی‌گردانند. این مقدار نشان می‌دهد که عملگرها بی‌اعتبار هستند و منظور از آن عملگرهای با کمترین میزان تقدم نیست. به همین ترتیب، برای چنین عملگرهایی شرکت پذیری آن‌ها `none:` اختصاص داده می‌شود.
+
+[ضرایب لیترال عددی](@ref man-numeric-literal-coefficients)، مثلا `2x`، همانند عمل ضرب دارای بالاترین میزان تقدم نسبت به سایر عملگر‌های باینری هستند، به استثنای عملگر `^`  که به عنوان عمل به توان‌رسانی بالاترین تقدم را دارد.
 
 ```julia
 julia> x = 3; 2x^2
@@ -439,25 +394,21 @@ julia> x = 3; 2^2x
 64
 ```
 
-Juxtaposition parses like a unary operator, which has the same natural asymmetry around exponents: `-x^y` and `2x^y` parse as `-(x^y)` and `2(x^y)` whereas `x^-y` and `x^2y` parse as `x^(-y)` and `x^(2y)`.
 
-## Numerical Conversions
+قرار گرفتن در کنار هم مانند یک عملگر یگانی تجزیه می شود، که دارای همان عدم تقارن طبیعی در مجاورت توان است:`-x^y`  و`2x^y`  به ترتیب به صورت `-(x^y)`  و `2(x^y)` اعمال می‌شوند، در حالی که  `x^-y` و `x^2y` به صورت`x^(-y)` و `x^(2y)` اعمال می‌شوند.
 
-Julia supports three forms of numerical conversion, which differ in their handling of inexact
-conversions.
+## تبدیل‌های عددی
 
-  * The notation `T(x)` or `convert(T,x)` converts `x` to a value of type `T`.
+زبان برنامه نویسی جولیا از تبدیلات عددی به سه شکل پشتیبانی می‌کند که تفاوت این شکل‌ها در صحت دقت تبدیل‌هایشان است.
 
-      * If `T` is a floating-point type, the result is the nearest representable value, which could be
-        positive or negative infinity.
-      * If `T` is an integer type, an `InexactError` is raised if `x` is not representable by `T`.
-  * `x % T` converts an integer `x` to a value of integer type `T` congruent to `x` modulo `2^n`,
-    where `n` is the number of bits in `T`. In other words, the binary representation is truncated
-    to fit.
-  * The Rounding functions take a type `T` as an optional argument. For example, `round(Int,x)`
-    is a shorthand for `Int(round(x))`.
++ نماد `T(x)`  یا `convert(T,x)` ، درواقع `x` را به مقداری با نوع‌ `T` تبدیل می‌کند.
+    + اگر `T` یک نوع‌ ممیز شناور باشد، نتیجه نزدیکترین مقدار قابل ارائه است، که می‌تواند مثبت یا منفی بی‌نهایت باشد.
+    + اگر `T` یک نوع‌ صحیح باشد، در صورتی که `x` به وسیله `T` قابل نماایش نباشد، یک `InexactError` به وجود می‌آید .
++ `x % T` یک عدد صحیح `x` را به یک مقدار با نوع‌ صحیح `T` تبدیل می‌کند، به صورتی که این مقدار برابر با `x` به پیمانه `2^n` است، که در آن `n` تعداد بیت‌ها در `T` است. به عبارت دیگر، نمایش باینری کوتاه شده است تا سازگاری ایجاد شود.
++ تابع گرد کردن، می‌تواند یک نوع‌ `T` را به صورت اختیاری به عنوان یک آرگومان بگیرد. مثلاً، `round(Int,x)`  کوتاه شده‌ی عبارت `Int(round(x))`  است.
 
-The following examples show the different forms.
+
+مثال زیر تفاوت این شکل‌ها را روشن می‌سازد:
 
 ```julia
 julia> Int8(127)
@@ -496,73 +447,73 @@ Stacktrace:
 [...]
 ```
 
-See [Conversion and Promotion](@ref conversion-and-promotion) for how to define your own conversions and promotions.
 
-### Rounding functions
+[نوشته تغییر و ترویج](@ref conversion-and-promotion) را برای چگونگی تعریف تغییرات و ترویج‌های خود ببینید.
 
-| Function              | Description                      | Return type |
+### توابع گرد کننده
+
+| تابع              | توضیحات                      | نوع‌ بازگشتی |
 |:--------------------- |:-------------------------------- |:----------- |
-| `round(x)`    | round `x` to the nearest integer | `typeof(x)` |
-| `round(T, x)` | round `x` to the nearest integer | `T`         |
-| `floor(x)`    | round `x` towards `-Inf`         | `typeof(x)` |
-| `floor(T, x)` | round `x` towards `-Inf`         | `T`         |
-| `ceil(x)`     | round `x` towards `+Inf`         | `typeof(x)` |
-| `ceil(T, x)`  | round `x` towards `+Inf`         | `T`         |
-| `trunc(x)`    | round `x` towards zero           | `typeof(x)` |
-| `trunc(T, x)` | round `x` towards zero           | `T`         |
+| `round(x)`    | مقدار `x` را به نزدیک‌ترین عدد صحیح گرد می‌کند |  `typeof(x)` |
+| `round(T, x)` | مقدار `x` را به نزدیک‌ترین عدد صحیح گرد می‌کند | `T`         |
+| `floor(x)`    | مقدار `x` را به سمت `-Inf` گرد می‌کند         | `typeof(x)` |
+| `floor(T, x)` | مقدار `x` را به سمت `-Inf` گرد می‌کند         | `T`         |
+| `ceil(x)`     | مقدار `x` را به سمت `+Inf` گرد می‌کند         | `typeof(x)` |
+| `ceil(T, x)`  | مقدار `x` را به سمت `+Inf` گرد می‌کند         | `T`         |
+| `trunc(x)`    | مقدار `x` را به سمت صفر گرد می‌کند           | `typeof(x)` |
+| `trunc(T, x)` | مقدار `x` را به سمت صفر گرد می‌کند           | `T`         |
 
-### Division functions
+### توابع تقسیم
 
-| Function                  | Description                                                                                               |
+| تابع                  | توضیحات                                           |
 |:------------------------- |:--------------------------------------------------------------------------------------------------------- |
-| `div(x,y)`, `x÷y` | truncated division; quotient rounded towards zero                                                         |
-| `fld(x,y)`        | floored division; quotient rounded towards `-Inf`                                                         |
-| `cld(x,y)`        | ceiling division; quotient rounded towards `+Inf`                                                         |
-| `rem(x,y)`        | remainder; satisfies `x == div(x,y)*y + rem(x,y)`; sign matches `x`                                       |
-| `mod(x,y)`        | modulus; satisfies `x == fld(x,y)*y + mod(x,y)`; sign matches `y`                                         |
-| `mod1(x,y)`       | `mod` with offset 1; returns `r∈(0,y]` for `y>0` or `r∈[y,0)` for `y<0`, where `mod(r, y) == mod(x, y)`   |
-| `mod2pi(x)`       | modulus with respect to 2pi;  `0 <= mod2pi(x) < 2pi`                                                      |
-| `divrem(x,y)`     | returns `(div(x,y),rem(x,y))`                                                                             |
-| `fldmod(x,y)`     | returns `(fld(x,y),mod(x,y))`                                                                             |
-| `gcd(x,y...)`     | greatest positive common divisor of `x`, `y`,...                                                          |
-| `lcm(x,y...)`     | least positive common multiple of `x`, `y`,...                                                            |
+| `div(x,y)`, `x÷y` | تقسیم truncated؛ خارج قسمت را به سمت `0` گرد می‌کند                                                  |
+| `fld(x,y)`        | تقسیم floored؛ خارج قسمت را به سمت `Inf-` گرد می‌کند                                                         |
+| `cld(x,y)`        | تقسیم ceiling؛ خارج قسمت را به سمت `Inf+` گرد می‌کند                                                         |
+| `rem(x,y)`        | باقی‌مانده؛ در شرط `x == div(x,y)*y + rem(x,y)`صدق می‌کند; علامت آن با `x` یکسان است |
+| `mod(x,y)`        | حساب پیمانه‌ای(modulus) ؛ در شرط `x == fld(x,y)*y + mod(x,y)` صدق می‌کند ; علامت آن با `y` یکسان است |
+| `mod1(x,y)`       |مقدار `mod` با وزن متعادل کننده 1؛ در صورتی که 
+`mod(r, y) == mod(x, y)` باشد، `[r∈(0,y` را برای `y>0` یا `(r∈[y,0` را برای `y<0` باز می‌گرداند.   |
+| `mod2pi(x)`       | حساب به پیمانه 2pi(مانند تابع سینوس);  `0 <= mod2pi(x) < 2pi`                                                      |
+| `divrem(x,y)`     | مقدار `(div(x,y),rem(x,y))` را بر می‌گرداند                                                                             |
+| `fldmod(x,y)`     | مقدار `(fld(x,y),mod(x,y))` را بر می‌گرداند                                                                            |
+| `gcd(x,y...)`     | بزرگترین مقسوم‌علیه مشترک `x`, `y`, ... را بر می‌گرداند                                              |
+| `lcm(x,y...)`     | کوچکترین مضرب مشترک `x`, `y`,... را بر می‌گرداند                                                              |
 
-### Sign and absolute value functions
+### توابع علامت و قدرمطلق
 
-| Function                | Description                                                |
+| تابع                | توضیحات                                                |
 |:----------------------- |:---------------------------------------------------------- |
-| `abs(x)`        | a positive value with the magnitude of `x`                 |
-| `abs2(x)`       | the squared magnitude of `x`                               |
-| `sign(x)`       | indicates the sign of `x`, returning -1, 0, or +1          |
-| `signbit(x)`    | indicates whether the sign bit is on (true) or off (false) |
-| `copysign(x,y)` | a value with the magnitude of `x` and the sign of `y`      |
-| `flipsign(x,y)` | a value with the magnitude of `x` and the sign of `x*y`    |
+| `abs(x)`        | یک مقدار مثبت با اندازه‌ی `x`                |
+| `abs2(x)`       | توان دوم اندازه‌ی `x`                               |
+| `sign(x)`       | علامت `x` را نشان می‌دهد؛ 1+، 0 یا 1- را برمی‌گرداند          |
+| `signbit(x)`    | نشان می‌دهد که آیا بیتِ علامت روشن(true) یا خاموش(false) است |
+| `copysign(x,y)` | یک مقدار با اندازه `x` و با علامت `y` را برمی‌گرداند      |
+| `flipsign(x,y)` | یک مقدار با اندازه `x` و با علامت `x*y` را برمی‌گرداند    |
 
-### Powers, logs and roots
+### توان‌ها، لگاریتم‌ها و ریشه‌ها
 
-| Function                 | Description                                                                |
+| تابع                 | توضیحات                                                                |
 |:------------------------ |:-------------------------------------------------------------------------- |
-| `sqrt(x)`, `√x`  | square root of `x`                                                         |
-| `cbrt(x)`, `∛x`  | cube root of `x`                                                           |
-| `hypot(x,y)`     | hypotenuse of right-angled triangle with other sides of length `x` and `y` |
-| `exp(x)`         | natural exponential function at `x`                                        |
-| `expm1(x)`       | accurate `exp(x)-1` for `x` near zero                                      |
-| `ldexp(x,n)`     | `x*2^n` computed efficiently for integer values of `n`                     |
-| `log(x)`         | natural logarithm of `x`                                                   |
-| `log(b,x)`       | base `b` logarithm of `x`                                                  |
-| `log2(x)`        | base 2 logarithm of `x`                                                    |
-| `log10(x)`       | base 10 logarithm of `x`                                                   |
-| `log1p(x)`       | accurate `log(1+x)` for `x` near zero                                      |
-| `exponent(x)`    | binary exponent of `x`                                                     |
-| `significand(x)` | binary significand (a.k.a. mantissa) of a floating-point number `x`        |
+| `sqrt(x)`, `√x`  | ریشه‌ی دوم `x`                                               |
+| `cbrt(x)`, `∛x`  | ریشه‌ی سوم `x`                                               |
+| `hypot(x,y)`     | وتر مثلث قائم الزاویه‌ای را می‌دهد که اضلاع دیگر آن `y` و `x` هستند(اگر بیش از دو آرگومان به آن بدهید، ریشه دوم مجموع مربعات آرگومان‌ها `x_i^2∑√` را می‌دهد) |
+| `exp(x)`         | تابع `e^x`                                        |
+| `expm1(x)`       | مقدار دقیق `exp(x)-1` برای `x` نزدیک به صفر                                      |
+| `ldexp(x,n)`     | مقدار `x*2^n` را برای `n`‌های صحیح محاسبه می‌کند                     |
+| `log(x)`         | لگاریتم طبیعی(بر مبنای عدد نپر) را برای `x` می‌دهد                                                   |
+| `log(b,x)`       | لگاریتم `x` بر مبنای `b`                                   |
+| `log2(x)`        | لگاریتم `x` بر مبنای `2`                                                    |
+| `log10(x)`       | لگاریتم `x` بر مبنای `10`                                  |
+| `log1p(x)`       | به دقت `log(1+x)` را برای `x`های نزدیک به صفر حساب می‌کند                                      |
+| `exponent(x)`    | توان باینری `x`                                                     |
+| `significand(x)` | مانتیس عدد ممیز شناور `x`     |
 
-For an overview of why functions like `hypot`, `expm1`, and `log1p`
-are necessary and useful, see John D. Cook's excellent pair of blog posts on the subject: [expm1, log1p, erfc](https://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/),
-and [hypot](https://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/).
+برای اینکه بدانید توابعی مانند `hypot`، `expm1` و `log1p` چرا ضروری هستند و به چه کاری می‌آیند، به لینک‌های [expm1, log1p, erfc](https://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/), and [hypot](https://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/) مراجعه کنید.
 
-### Trigonometric and hyperbolic functions
+### توابع مثلثاتی و هایپربولیک
 
-All the standard trigonometric and hyperbolic functions are also defined:
+تمامی توابع استاندارد مثلثاتی و هایپربولیک در جولیا تعریف شده‌اند:
 
 ```
 sin    cos    tan    cot    sec    csc
@@ -572,22 +523,21 @@ asinh  acosh  atanh  acoth  asech  acsch
 sinc   cosc
 ```
 
-These are all single-argument functions, with `atan` also accepting two arguments
-corresponding to a traditional [`atan2`](https://en.wikipedia.org/wiki/Atan2) function.
 
-Additionally, `sinpi(x)` and `cospi(x)` are provided for more accurate computations
-of `sin(pi*x)` and `cos(pi*x)` respectively.
+تمامی این توابع، تک آرگومانی هستند، که البته `atan` می‌تواند دو آرگومان را متناظر با تابع 
+[`atan2`](https://en.wikipedia.org/wiki/Atan2) بپذیرد.
 
-In order to compute trigonometric functions with degrees instead of radians, suffix the function
-with `d`. For example, `sind(x)` computes the sine of `x` where `x` is specified in degrees.
-The complete list of trigonometric functions with degree variants is:
+علاوه بر این‌ها، `sinpi(x)` و `cospi(x)` به ترتیب دقت بیشتری را برای محاسبه `sin(pi*x)` و `cos(pi*x)` فراهم می‌کنند.
+
+به منظور محاسبه توابع مثلثاتی با درجه به جای رادیان، تابع را با پسوند `d` بیان کنید. برای مثال `sind(x)` سینوس `x` را محاسبه می‌کند که `x` برحسب درجه بیان شده است. لیست کامل توابع مثلثاتی با دریافت آرگومان درجه‌ای را در زیر مشاهده می‌کنید:
 
 ```
 sind   cosd   tand   cotd   secd   cscd
 asind  acosd  atand  acotd  asecd  acscd
 ```
 
-### Special functions
 
-Many other special mathematical functions are provided by the package
-[SpecialFunctions.jl](https://github.com/JuliaMath/SpecialFunctions.jl).
+### توابع خاص
+
+بسیاری توابع خاص ریاضیاتی دیگر در  پکیج [SpecialFunctions.jl](https://github.com/JuliaMath/SpecialFunctions.jl)
+ فراهم شده‌اند.
