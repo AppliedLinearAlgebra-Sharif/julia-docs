@@ -2,25 +2,18 @@
 
 Julia provides a variety of control flow constructs:
 
-  * [Compound Expressions](@ref man-compound-expressions): `begin` and `;`.
-  * [Conditional Evaluation](@ref man-conditional-evaluation): `if`-`elseif`-`else` and `?:` (ternary operator).
-  * Short-Circuit Evaluation: logical operators `&&` (“and”) and `||` (“or”), and also chained comparisons.
-  * [Repeated Evaluation: Loops](@ref man-loops): `while` and `for`.
-  * Exception Handling: `try`-`catch`, `error` and `throw`.
-  * Tasks (aka Coroutines)](@ref man-tasks): [`yieldto`.
+  * [عبارات مرکب]: `begin` و `;`.
+  * [ارزیابی شرطی]: `if`-`elseif`-`else` و `?:` (عملگر سه تایی).
+  * ارزیابی اتصال کوتاه: عملگر های منطقی `&&` (“and”) و `||` (“or”) و همچنین مقایسه های زنجیری.
+  * [ارزیابی تکراری : حلقه ها]: `while` و `for`.
+  * مدیریت استثنا ها: `try`-`catch`، `error` و `throw`.
+  * کار ها : `yieldto`.
 
-The first five control flow mechanisms are standard to high-level programming languages. `Task`s
-are not so standard: they provide non-local control flow, making it possible to switch between
-temporarily-suspended computations. This is a powerful construct: both exception handling and
-cooperative multitasking are implemented in Julia using tasks. Everyday programming requires no
-direct usage of tasks, but certain problems can be solved much more easily by using tasks.
+پنج تای اول از مکانیزم های کنترل جریان که گفته شد در زمره استاندارد های زبان های سطح بالا قرار دارند. اما برای مورد آخر اینگونه نیست:این مورد یک کنترل جریان غیر محلی فراهم می کند به طوری که تغییر وضعیت بین محاسبات به طور موقت معلق را امکان پذیر می کند. این یک ساختار قدرتمند است: به طوری که مدیریت استثنا ها و cooperative multitasking توسط آن پیاده سازی شده اند. در برنامه نویسی روزمره نیازی به استفاده مستقیم از tasks نیست اما بعضی مسيله ها را می توان با استفاده از tasks بسیار راحت تر حل کرد. 
 
-## Compound Expressions
+## عبارت های مرکب
 
-Sometimes it is convenient to have a single expression which evaluates several subexpressions
-in order, returning the value of the last subexpression as its value. There are two Julia constructs
-that accomplish this: `begin` blocks and `;` chains. The value of both compound expression constructs
-is that of the last subexpression. Here's an example of a `begin` block:
+بعضی اوقات مناسب است که یک عبارت واحد داشته باشید که چندین زیر عبارت را به ترتیب ارزیابی کند و مقدار آخرین زیر عبارت را به عنوان مقدار خود برگرداند. دو ساختار در جولیا وجود دارند که این را انجام می دهند: قطعه های 'begin' و زنجیر های ';'. مقدار هر دو ساختار برابر است با مقدار آخرین زیر عبارت. اینجا یک مثال از قطعه 'begin' می بینیم:
 
 ```julia
 julia> z = begin
@@ -30,18 +23,13 @@ julia> z = begin
        end
 3
 ```
-
-Since these are fairly small, simple expressions, they could easily be placed onto a single line,
-which is where the `;` chain syntax comes in handy:
+همین طور چون این عبارت ها کوتاه و ساده هستند می توان آن ها را در یک خط نوشت.این جاست که ساختار زنجیری ';' استفاده می شود:
 
 ```julia
 julia> z = (x = 1; y = 2; x + y)
 3
 ```
-
-This syntax is particularly useful with the terse single-line function definition form introduced
-in [Functions](@ref man-functions). Although it is typical, there is no requirement that `begin` blocks be multiline
-or that `;` chains be single-line:
+به ویژه این سینتکس مفید است زمانی که با فرم تعریف تابع در یک خط استفاده شود که در قسمت های قبل معرفی شد. اگر چه که این مرسوم است ولی نیازی نیست حتما قطعه های 'begin' چند خطه باشند و یا زنجیر های ';' یک خط باشد:
 
 ```julia
 julia> begin x = 1; y = 2; x + y end
@@ -53,10 +41,9 @@ julia> (x = 1;
 3
 ```
 
-## Conditional Evaluation
+## ارزیابی شرطی
 
-Conditional evaluation allows portions of code to be evaluated or not evaluated depending on the
-value of a boolean expression. Here is the anatomy of the `if`-`elseif`-`else` conditional syntax:
+ارزیابی شرطی با توجه به مقدار بولی عبارت اجازه می دهد که یک قسمت از کد ارزیابی بشود یا نشود. اینجا مثالی از ساختار بدنه `if`-`elseif`-`else` است:  
 
 ```julia
 if x < y
@@ -68,9 +55,7 @@ else
 end
 ```
 
-If the condition expression `x < y` is `true`, then the corresponding block is evaluated; otherwise
-the condition expression `x > y` is evaluated, and if it is `true`, the corresponding block is
-evaluated; if neither expression is true, the `else` block is evaluated. Here it is in action:
+  اگر عبارت شرطی`x < y`  صحیح باشد، بلوک وابسته به آن ارزیابی می شود در غیر این صورت عبارت `x > y`ارزیابی می شود اگر صحیح باشد بلوک وابسته به آن ارزیابی می شود و در غیر این صورت عبارت  بلوک `else` ارزیابی می شود.  در عمل به صورت زیر است:
 
 ```julia
 julia> function test(x, y)
@@ -94,14 +79,9 @@ julia> test(1, 1)
 x is equal to y
 ```
 
-The `elseif` and `else` blocks are optional, and as many `elseif` blocks as desired can be used.
-The condition expressions in the `if`-`elseif`-`else` construct are evaluated until the first
-one evaluates to `true`, after which the associated block is evaluated, and no further condition
-expressions or blocks are evaluated.
+قطعه های `elseif` و `else` اختیاری هستند همچنین از هر تعداد از `elseif` می توان استفاده کرد.عبارت های شرطی در ساختار `if`-`elseif`-`else` ارزیابی می شوند تا اینکه یکی از آن ها صحیح شود سپس بلوک مربوط به آن عبارت ارزیابی می شود و عبارت های شرطی و بلوک های دیگر بررسی نمی شوند.
 
-`if` blocks are "leaky", i.e. they do not introduce a local scope. This means that new variables
-defined inside the `if` clauses can be used after the `if` block, even if they weren't defined
-before. So, we could have defined the `test` function above as
+بلوک `if` به صورت "leaky" است به این معنا که یک محدوده محلی نیست. این به این معناست که اگر متغیری درون بلوک `if` تعریف شود می توان بعد از بلوک `if`  استفاده کرد حتی اگر قبل از آن تعریف نشده باشد. پس ما می توانیم تابع `test` را به صورت زیر تعریف کنیم:
 
 ```julia
 julia> function test(x,y)
@@ -120,9 +100,7 @@ julia> test(2, 1)
 x is greater than y.
 ```
 
-The variable `relation` is declared inside the `if` block, but used outside. However, when depending
-on this behavior, make sure all possible code paths define a value for the variable. The following
-change to the above function results in a runtime error
+متغیر `relation` داخل بلوک `if`  ظاهر شده است اما بیرون آن استفاده شده است. با این حال، اطمینان حاصل کنید که در تمام مسیر های ممکنی که کد ممکن است اجرا شود مقداری برای متغیر در نظر گرفته شده باشد. تغییر زیر در تعریف تابع بالا موجب بروز خطای زمان اجرا می شود
 
 ```julia
 julia> function test(x,y)
@@ -144,9 +122,7 @@ Stacktrace:
  [1] test(::Int64, ::Int64) at ./none:7
 ```
 
-`if` blocks also return a value, which may seem unintuitive to users coming from many other languages.
-This value is simply the return value of the last executed statement in the branch that was chosen,
-so
+بلوک `if` همچنین یک خروجی بر می گرداند که ممکن است برای کسانی که از زبان های دیگر آمده اند غیر شهودی به نظر برسد. این مقدار برابر است با مقداری که آخرین دستور اجرا شده در شاخه ای که انتخاب شده است، بنابراین
 
 ```julia
 julia> x = 3
@@ -160,11 +136,9 @@ julia> if x > 0
 "positive!"
 ```
 
-Note that very short conditional statements (one-liners) are frequently expressed using Short-Circuit
-Evaluation in Julia, as outlined in the next section.
+توجه کنید که عبارت های شرطی کوتاه که به صورت پر تکرار هستند با استفاده از ارزیابی اتصال کوتاه پیاده سازی می شوند که در قسمت بعدی توضیح داده می شود.
 
-Unlike C, MATLAB, Perl, Python, and Ruby -- but like Java, and a few other stricter, typed languages
--- it is an error if the value of a conditional expression is anything but `true` or `false`:
+بر خلاف زبان هایی مثل C، MATLAB، Perl، Pythonو Ruby و مثل زبان های Javaو تعداد دیگری از زبان ها این یک خطاست که مقدار یک عبارت شرطی هر چیزی باشد به جز `true`و `false`: 
 
 ```julia
 julia> if 1
@@ -173,28 +147,17 @@ julia> if 1
 ERROR: TypeError: non-boolean (Int64) used in boolean context
 ```
 
-This error indicates that the conditional was of the wrong type: `Int64` rather
-than the required `Bool`.
+این خطا می گوید که عبارت شرط نوع اشتباهی داشته است : نوعش `Int64` بوده در صورتی که `Bool` نیاز بوده است.
 
-The so-called "ternary operator", `?:`, is closely related to the `if`-`elseif`-`else` syntax,
-but is used where a conditional choice between single expression values is required, as opposed
-to conditional execution of longer blocks of code. It gets its name from being the only operator
-in most languages taking three operands:
+عملگر ۳ تایی `?:` خیلی نزدیک و مرتبط است به سینتکس `if`-`elseif`-`else`، اما جایی استفاده می شود که یک انتخاب شرطی روی مقدار یک عبارت نیاز است بر خلاف اجرای شرطی بلوک های طولانی کد. اسمش از آن جایی آمده است که در اکثر زبان ها تنها عملگری است که فقط ۳ عملوند می گیرد:
 
 ```julia
 a ? b : c
 ```
 
-The expression `a`, before the `?`, is a condition expression, and the ternary operation evaluates
-the expression `b`, before the `:`, if the condition `a` is `true` or the expression `c`, after
-the `:`, if it is `false`. Note that the spaces around `?` and `:` are mandatory: an expression
-like `a?b:c` is not a valid ternary expression (but a newline is acceptable after both the `?` and
-the `:`).
+عبارت `a` قبل از `?` یک عبارت شرطی است و عملگر سه تایی اختصاص می دهد عبارت `b` قبل از `:` اگر `a` درست باشد یا `c` بعد از `:` اگر غلط باشد. توجه کنید که فضا های خالی دور `?` و `:` اجباری است به طوری که یک عبارت به شکل `a?b:c` یک عبارت معتبر سه تایی نیست ( اما یک خط جدید بعد از هر دو `?` و `:` قابل قبول است).
 
-The easiest way to understand this behavior is to see an example. In the previous example, the
-`println` call is shared by all three branches: the only real choice is which literal string to
-print. This could be written more concisely using the ternary operator. For the sake of clarity,
-let's try a two-way version first:
+راحت ترین راه برای فهم درست رفتار این عملگر دیدن مثالی از آن است. در مثال قبلی، `println` مشترک بود در همه شاخه ها و تنها تفاوت در مقدار رشته های ورودی بود. می توان این مورد را با استفاده از عملگر سه تایی پیاده سازی کرد. به خاطر وضوح بیشتر، ابتدا دو حالت را امتحان می کنیم:
 
 ```julia
 julia> x = 1; y = 2;
@@ -208,9 +171,7 @@ julia> println(x < y ? "less than" : "not less than")
 not less than
 ```
 
-If the expression `x < y` is true, the entire ternary operator expression evaluates to the string
-`"less than"` and otherwise it evaluates to the string `"not less than"`. The original three-way
-example requires chaining multiple uses of the ternary operator together:
+اگر عبارت `x < y` صحیح باشد، داخل عملگر سه تایی `"less than"` را اختصاص می دهد و در غیر این صورت `"not less than"`. برای صورت اصلی مثال راه ۳ تایی نیازمند استفاده پیاپی و زنجیری از عملگر سه تایی هستیم: 
 
 ```julia
 julia> test(x, y) = println(x < y ? "x is less than y"    :
@@ -227,10 +188,9 @@ julia> test(1, 1)
 x is equal to y
 ```
 
-To facilitate chaining, the operator associates from right to left.
+برای ساده سازی زنجیری نوشتن، عملگر به صورت راست به چپ کار می کند. 
 
-It is significant that like `if`-`elseif`-`else`, the expressions before and after the `:` are
-only evaluated if the condition expression evaluates to `true` or `false`, respectively:
+این قابل ملاحظه است که مثل `if`-`elseif`-`else`، عبارت قبل و بعد از `:` ارزیابی می شود اگر عبارت شرطی مقدار `true` یا `false` داشته باشد:
 
 ```julia
 julia> v(x) = (println(x); x)
@@ -245,27 +205,16 @@ no
 "no"
 ```
 
-## Short-Circuit Evaluation
+## ارزیابی اتصال کوتاه
 
-The `&&` and `||` operators in Julia correspond to logical “and” and “or” operations, respectively,
-and are typically used for this purpose.  However, they have an additional property of *short-circuit*
-evaluation: they don't necessarily evaluate their second argument, as explained below.  (There
-are also bitwise `&` and `|` operators that can be used as logical “and” and “or” *without*
-short-circuit behavior, but beware that `&` and `|` have higher precedence than `&&` and `||` for evaluation order.)
+به ترتیب عملگر های `&&` و `||` درجولیا برابرند با ٬و٬ و ٬یا٬ منطقی. آن ها یک ویژگی اضافه ای دارند به نام ارزیابی اتصال کوتاه به طوری که در آن لزوما ورودی دوم مورد بررسی قرار نمی گیرد همچنان که در پایین توضیح داده شده است ( همچنین عملگر های بیتی `&` و `|` وجود دارند که از آن ها در به عنوان با ٬و٬ و ٬یا٬ منطقی بدون اتصال کوتاه می توان استفاده کرد اما هشیار باشد که `&` و `|` اولویت بیشتری نسبت به `&&` و `||` دارند).
 
-Short-circuit evaluation is quite similar to conditional evaluation. The behavior is found in
-most imperative programming languages having the `&&` and `||` boolean operators: in a series
-of boolean expressions connected by these operators, only the minimum number of expressions are
-evaluated as are necessary to determine the final boolean value of the entire chain. Explicitly,
-this means that:
+ارزیابی اتصال کوتاه کاملا شبیه ارزیابی شرطی است. این رفتار در اکثر زبان های برنامه نویسی که  عملگر های  `&&` و `||` را دارند پیدا می شود به طوری که یک سری عبارت بولی با استفاده از این عملگر ها به هم متصل شده اند و فقط کمترین تعداد از عبارت ها که نیاز به بررسی جهت ارزیابی عبارت کل دارد مورد بررسی قرار می گیرد. به طور صریح معنی اش این است که:
 
-  * In the expression `a && b`, the subexpression `b` is only evaluated if `a` evaluates to `true`.
-  * In the expression `a || b`, the subexpression `b` is only evaluated if `a` evaluates to `false`.
+  * در عبارت `a && b`، زیر عبارت `b` فقط زمانی ارزیابی می شود که `a` صحیح باشد.
+  * در عبارت `a || b`، زیر عبارت `b` فقط زمانی ارزیابی می شود که `a` غلط باشد.
 
-The reasoning is that `a && b` must be `false` if `a` is `false`, regardless of the value of
-`b`, and likewise, the value of `a || b` must be true if `a` is `true`, regardless of the value
-of `b`. Both `&&` and `||` associate to the right, but `&&` has higher precedence than `||` does.
-It's easy to experiment with this behavior:
+دلیلش این است که `a && b` باید غلط باشد اگر `a` غلط باشد صرف نظر از مقدار `b`. مشابها مقدار `a || b` باید صحیح باشد اگر `a` صحیح باشد صرف نظر از مقدار `b`. هر دو عملگر `&&` و `||` از راست اعمال می شوند، اما `&&` الویت بالاتری نسبت به `||` دارد. آسان است این رفتار را آزمایش کنیم:
 
 ```julia
 julia> t(x) = (println(x); true)
@@ -311,15 +260,11 @@ julia> f(1) || f(2)
 false
 ```
 
-You can easily experiment in the same way with the associativity and precedence of various combinations
-of `&&` and `||` operators.
+شما می توانید به سادگی مانند بالا وابستگی و اولویت ترکیب های مختلف از `&&` و `||` را بررسی کنید.
 
-This behavior is frequently used in Julia to form an alternative to very short `if` statements.
-Instead of `if <cond> <statement> end`, one can write `<cond> && <statement>` (which could be
-read as: <cond> *and then* <statement>). Similarly, instead of `if ! <cond> <statement> end`,
-one can write `<cond> || <statement>` (which could be read as: <cond> *or else* <statement>).
+این رفتار به صورت پر تکرار در جولیا استفاده می شود که یک فرم جایگزین برای `if` های کوتاه است. به جای `if <cond> <statement> end`، می توان نوشت `<cond> && <statement>`(که خوانده می شود <cond> و <statement>). به طور مشابه به جای `if ! <cond> <statement> end` می توان نوشت `<cond> || <statement>`(که خوانده می شود <cond> یا <statement>).
 
-For example, a recursive factorial routine could be defined like this:
+برای مثال تابع بازگشتی فاکتوریل را می توان به صورت زیر تعریف کرد
 
 ```julia
 julia> function fact(n::Int)
@@ -343,6 +288,7 @@ Stacktrace:
  [3] top-level scope
 ```
 
+ 
 Boolean operations *without* short-circuit evaluation can be done with the bitwise boolean operators
 introduced in Mathematical Operations and Elementary Functions: `&` and `|`. These are
 normal functions, which happen to support infix operator syntax, but always evaluate their arguments:
