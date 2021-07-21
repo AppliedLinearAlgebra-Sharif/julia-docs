@@ -1,15 +1,11 @@
-# Networking and Streams
+# شبکه و مسیرها
+جولیا یک رابط قدرتمند برای کار کردن با اشیا مسیری ورودی/خروجی مثل ترمینال‌ها، پایپ‌ها و سوکت‌های TCP فراهم می‌کند. این رابط، اگر چه در سطح دستگاه غیرهمزمان است، اما به صورت همزمان به برنامه‌نویس ارائه می‌شود و معمولا هم توجه به عملیات‌های غیرهمزمان لایه‌های زیرین ضروری نیست. این ویژگی به وسیله‌ی استفاده‌ی مکرر از رشته‌های همکارانه‌ی جولیا
+([coroutine](@ref man-tasks))
+حاصل می‌شود.
 
-Julia provides a rich interface to deal with streaming I/O objects such as terminals, pipes and
-TCP sockets. This interface, though asynchronous at the system level, is presented in a synchronous
-manner to the programmer and it is usually unnecessary to think about the underlying asynchronous
-operation. This is achieved by making heavy use of Julia cooperative threading ([coroutine](@ref man-tasks))
-functionality.
+## مسیر پایه‌ای ورودی/خروجی
 
-## Basic Stream I/O
-
-All Julia streams expose at least a `read` and a `write` method, taking the
-stream as their first argument, e.g.:
+همه‌ی مسیر‌های جولیا حداقل به شکل یکی از متدهای `read` یا `write` ظاهر می‌شوند که مسیر را به عنوان ورودی اول‌شان می‌گیرند. برای مثال:
 
 ```julia
 julia> write(stdout, "Hello World");  # suppress return value 11 with ;
@@ -19,14 +15,13 @@ julia> read(stdin, Char)
 '\n': ASCII/Unicode U+000a (category Cc: Other, control)
 ```
 
-Note that `write` returns 11, the number of bytes (in `"Hello World"`) written to `stdout`,
-but this return value is suppressed with the `;`.
 
-Here Enter was pressed again so that Julia would read the newline. Now, as you can see from this
-example, `write` takes the data to write as its second argument, while `read`
-takes the type of the data to be read as the second argument.
+توجه کنید که `write` ۱۱ را خروجی می‌دهد که برابر است با تعداد بایت‌های `Hello World` که  در مسیر `stdout` نوشته شده است ولی این مقدار خروجی به وسیله‌ی `;` کنترل می‌شود.
 
-For example, to read a simple byte array, we could do:
+
+در اینجا انتر دوباره فشار داده شد تا جولیا خط بعدی را بخواند. حالا، همانطور که در این مثال می‌بینید، `write` داده‌ای را که قرار است بنویسد به عنوان ورودی دومش می‌گیرد در حالی که `read` نوع داده‌ای که قرار است بخواند را به عنوان ورودی دوم می‌گیرد.
+
+برای مثال، برای خواندن یک آرایه ساده از نوع بایت، می‌توانیم این‌گونه عمل کنیم:
 
 ```julia
 julia> x = zeros(UInt8, 4)
@@ -45,8 +40,7 @@ abcd
  0x64
 ```
 
-However, since this is slightly cumbersome, there are several convenience methods provided. For
-example, we could have written the above as:
+هر چند، از آن جا که این کار کمی زحمت دارد، چندین متد مناسب دیگر آماده شده است. برای مثال، کد بالا را می‌توانستیم به این شکل بنویسیم:
 
 ```julia
 julia> read(stdin, 4)
@@ -58,7 +52,7 @@ abcd
  0x64
 ```
 
-or if we had wanted to read the entire line instead:
+یا اگر می‌خواستیم به جای این کار، کل سطر را بخوانیم:
 
 ```julia
 julia> readline(stdin)
@@ -66,10 +60,10 @@ abcd
 "abcd"
 ```
 
-Note that depending on your terminal settings, your TTY may be line buffered and might thus require
-an additional enter before the data is sent to Julia.
+توجه کنید بسته به تنظیمات ترمینال شما، TTY شما ممکن است خط بافر شده باشد و بنابراین ممکن است یک انتر اضافی قبل از ارسال داده‌ها به جولیا لازم باشد.
 
-To read every line from `stdin` you can use `eachline`:
+
+برای خواندن هر خط از `stdin` می‌توانید از `eachline` استفاده کنید:
 
 ```julia
 for line in eachline(stdin)
@@ -77,7 +71,7 @@ for line in eachline(stdin)
 end
 ```
 
-or `read` if you wanted to read by character instead:
+یا از `read` اگر می‌خواستید به جای این کار با کاراکتر بخوانید:
 
 ```julia
 while !eof(stdin)
@@ -86,43 +80,35 @@ while !eof(stdin)
 end
 ```
 
-## Text I/O
+## ورودی/خروچی متنی
 
-Note that the `write` method mentioned above operates on binary streams. In particular,
-values do not get converted to any canonical text representation but are written out as is:
+توجه کنید که متد `write` که در بالا به آن اشاره شد روی مسیرهای دودویی عمل می‌کند. به طور خاص، مقادیر هیچ نمایش متنی متعارفی تبدیل نمی‌شود بلکه به شکل زیر نوشته می‌شود:
 
 ```julia
 julia> write(stdout, 0x61);  # suppress return value 1 with ;
 a
 ```
 
-Note that `a` is written to `stdout` by the `write` function and that the returned
-value is `1` (since `0x61` is one byte).
+توجه کنید که `a` به وسیله‌ی تابع `write` در `stdout` نوشته شده است و مقدار خروجی برابر با ‍‍`1` است (زیرا `0x61` یک بایت است).
 
-For text I/O, use the `print` or `show` methods, depending on your needs (see
-the documentation for these two methods for a detailed discussion of the difference between them):
+برای ورودی/خروجی متنی بسته به نیازهای‌تان از متدهای `print` یا `show` استفاده کنید (برای دیدن این دو متد و جزئیات تفاوت بین آن‌ها مستندات را ببینید):
 
 ```julia
 julia> print(stdout, 0x61)
 97
 ```
+برای اطلاعات بیشتر در مورد چگونگی پیاده‌سازی متدهای نمایش به شکل دلخواه
+[نمایش دلخواه](@ref man-custom-pretty-printing)
+را ببینید.
 
-See [Custom pretty-printing](@ref man-custom-pretty-printing) for more information on how to
-implement display methods for custom types.
+## ویژگی‌های متنی خروجی IO
 
-## IO Output Contextual Properties
+گاهی اوقات خروجی IO می تواند از امکان انتقال اطلاعات متنی به متدهای نمایش بهره‌مند شود. شی `IOContext` این بستر را برای به اشتراک گذاشتن فراداده‌ی دلخواه با یک شی IO فراهم می‌کند. برای مثال، `:compact => true` یک پارامتر راهنما به شی IO اضافه می‌کند که روش نمایش مورد استفاده باید خروجی کوتاه‌تری چاپ کند (اگر چنین کاری انجام‌شدنی باشد). برای دیدن لیست ویژگی‌های متعارف مستندات را ببینید)
 
-Sometimes IO output can benefit from the ability to pass contextual information into show methods.
-The `IOContext` object provides this framework for associating arbitrary metadata with an IO object.
-For example, `:compact => true` adds a hinting parameter to the IO object that the invoked show method
-should print a shorter output (if applicable). See the `IOContext` documentation for a list
-of common properties.
+## کار با فایل
 
-## Working with Files
+مثل بسیاری از محیط‌های دیگر، جولیا دارای یک تابع `open` است که یک نام فایل می‌گیرد و یک شی `IOStream` برمی‌گرداند که با استفاده از آن می‌توانید از آن فایل بخوانید یا در آن بنویسید. برای مثال اگر ما یک فایل به نام `hello.txt` داشته باشیم که محتوایش `Hello, World!` باشد:
 
-Like many other environments, Julia has an `open` function, which takes a filename and
-returns an `IOStream` object that you can use to read and write things from the file. For example,
-if we have a file, `hello.txt`, whose contents are `Hello, World!`:
 
 ```julia
 julia> f = open("hello.txt")
@@ -133,7 +119,7 @@ julia> readlines(f)
  "Hello, World!"
 ```
 
-If you want to write to a file, you can open it with the write (`"w"`) flag:
+اگر می‌خواهید در یک فایل چیزی بنویسید، می‌توانید آن را با نشانه‌ی `"w"` باز کنید:
 
 ```julia
 julia> f = open("hello.txt","w")
@@ -143,20 +129,15 @@ julia> write(f,"Hello again.")
 12
 ```
 
-If you examine the contents of `hello.txt` at this point, you will notice that it is empty; nothing
-has actually been written to disk yet. This is because the `IOStream` must be closed before the
-write is actually flushed to disk:
+اگر بعد از اجرای کد بالا محتوای فایل `hello.txt` را بررسی کنید، متوجه خواهید شد که خالی است. در واقع هنوز هیچ چیزی بر روی حافظه نوشته نشده است. این به این خاطر است که `IOStream` باید قبل از این که نوشته بر روی حافظه وارد شود، بسته شود:
 
 ```julia
 julia> close(f)
 ```
 
-Examining `hello.txt` again will show its contents have been changed.
+بررسی مجدد `hello.txt` نشان خواهد داد که محتوای آن تغییر کرده است.
 
-Opening a file, doing something to its contents, and closing it again is a very common pattern.
-To make this easier, there exists another invocation of `open` which takes a function
-as its first argument and filename as its second, opens the file, calls the function with the
-file as an argument, and then closes it again. For example, given a function:
+باز کردن یک فایل، اعمال یک سری تغییرات بر محتوای آن و سپس بستن آن یک الگوی بسیار مرسوم است. برای راحت‌تر کردن این کار فراخوانی دیگری از `open` وجود دارد که یک تابع را به عنوان ورودی اول خود و اسم فایل را به عنوان ورودی دوم می‌گیرد، فایل را باز می‌کند، تابع را با ورودی فایل مورد نظر فراخوانی می‌کند و سپس دوباره آن را می‌بندد. برای مثال، تابع داده شده:
 
 ```julia
 function read_and_capitalize(f::IOStream)
@@ -164,18 +145,17 @@ function read_and_capitalize(f::IOStream)
 end
 ```
 
-You can call:
+می‌توانید به این شکل فرخوانی کنید:
 
 ```julia
 julia> open(read_and_capitalize, "hello.txt")
 "HELLO AGAIN."
 ```
 
-to open `hello.txt`, call `read_and_capitalize` on it, close `hello.txt` and return the capitalized
-contents.
 
-To avoid even having to define a named function, you can use the `do` syntax, which creates an
-anonymous function on the fly:
+برای باز کردن `hello.txt` تابع `read_and_capitalize` را روی آن فراخوانی کنید، فایل `hello.txt` را ببندید و محتوایی را که حروف به حروف بزرگ تبدیل شدن را خروجی بگیرید.
+
+برای جلوگیری از تعریف یک تابع مشخص اسم‌دار، می‌توانید از دستور `do` استفاده کنید که یک تابع مخفی مجازی می‌سازد:
 
 ```julia
 julia> open("hello.txt") do f
@@ -184,11 +164,12 @@ julia> open("hello.txt") do f
 "HELLO AGAIN."
 ```
 
-## A simple TCP example
+## یک مثال ساده از TCP
 
-Let's jump right in with a simple example involving TCP sockets.
-This functionality is in a standard library package called `Sockets`.
-Let's first create a simple server:
+اجازه دهید سراغ یک مثال ساده از به‌کار‌گیری سوکت‌های TCP برویم.
+این ساختار در یک بسته‌ی کتابخانه‌‌ی استاندارد به نام `Sockets` موجود است.
+ابتدا بیایید یک سرور ساده بسازیم:
+
 
 ```
 julia> using Sockets
@@ -203,10 +184,9 @@ julia> @async begin
 Task (runnable) @0x00007fd31dc11ae0
 ```
 
-To those familiar with the Unix socket API, the method names will feel familiar, though their
-usage is somewhat simpler than the raw Unix socket API. The first call to `listen` will
-create a server waiting for incoming connections on the specified port (2000) in this case. The
-same function may also be used to create various other kinds of servers:
+برای کسانی که با API سوکت Unix آشنایی دارند، نام متد آشنا خواهد بود، اگر چه استفاده‌ی آن‌ها قدری ساده‌تر از API خام سوکت Unix است. فراخوانی اول `listen` سروری خواهد ساخت که آماده‌ی دریافت کانکشن ورودی روی یک پورت مشخص، (۲۰۰۰) در این مثال، 
+است. همچنین ممکن است همین تابع برای ساختن انواع مختلف سرور استفاده شود:
+
 
 ```julia
 julia> listen(2000) # Listens on localhost:2000 (IPv4)
@@ -230,11 +210,9 @@ Sockets.PipeServer(active)
 julia> listen("\\\\.\\pipe\\testsocket") # Listens on a Windows named pipe
 Sockets.PipeServer(active)
 ```
-
-Note that the return type of the last invocation is different. This is because this server does not
-listen on TCP, but rather on a named pipe (Windows) or UNIX domain socket. Also note that Windows
-named pipe format has to be a specific pattern such that the name prefix (`\\.\pipe\`) uniquely
-identifies the [file type](https://docs.microsoft.com/windows/desktop/ipc/pipe-names).
+توجه کنید که نوع خروجی فراخوانی آخر متفاوت است. این به خاطر این است که این سرور به TCP گوش نمی‌دهد. بلکه به یک سوکت تحت عنوان پایپ (ویندوز) یا UNIX گوش می‌دهد. همچنین توجه کنید که ویندوزی که تحت عنوان پایپ است یک الگوی مشخص دارد  مثل اسم پیشوند (`\\.\pipe\`) که به طور یکتا
+[نوع فایل](https://docs.microsoft.com/windows/desktop/ipc/pipe-names).
+را مشخص می‌کند.
 The difference between TCP and named pipes or
 UNIX domain sockets is subtle and has to do with the `accept` and `connect`
 methods. The `accept` method retrieves a connection to the client that is connecting on
