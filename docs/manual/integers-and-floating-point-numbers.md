@@ -1,24 +1,14 @@
-# Integers and Floating-Point Numbers
+# اعداد صحیح و ممیز شناور
 
-Integers and floating-point values are the basic building blocks of arithmetic and computation.
-Built-in representations of such values are called numeric primitives, while representations of
-integers and floating-point numbers as immediate values in code are known as numeric literals.
-For example, `1` is an integer literal, while `1.0` is a floating-point literal; their binary
-in-memory representations as objects are numeric primitives.
+اعداد صحیح و مقادیر ممیز شناور عناصر اصلی حساب و محاسبه هستند. نحوه نمایش داخلی این مقادیر،  مقدماتی عددی نامیده می‌شود و نمایش اعداد صحیح و اعداد شناور به عنوان مقادیر درجا در کد به عنوان عدد واقعی شناخته می‌شوند. به عنوان مثال، `1` یک عدد صحیح است، در حالی که `1.0` یک مقدار ممیز شناور است. نمایش‌های دودویی آنها در حافظه نیز به صورت اشیا مقدماتی عددی است.
 
-Julia provides a broad range of primitive numeric types, and a full complement of arithmetic and
-bitwise operators as well as standard mathematical functions are defined over them. These map
-directly onto numeric types and operations that are natively supported on modern computers, thus
-allowing Julia to take full advantage of computational resources. Additionally, Julia provides
-software support for Arbitrary Precision Arithmetic, which can handle operations on numeric
-values that cannot be represented effectively in native hardware representations, but at the cost
-of relatively slower performance.
+جولیا طیف گسترده ای از انواع عددی اولیه را فراهم می‌کند که بر روی آن‌ها یک مجموعه کامل از عملگرهای حسابی و بیتی و همچنین توابع استاندارد ریاضی نیز تعریف شده‌است. این انواع مستقیماً بر روی انواع عددی و عملیاتی که بطور مستقیم در رایانه‌های مدرن پشتیبانی می‌شوند نگاشته می‌شود و بنابراین به جولیا امکان استفاده کامل از منابع محاسباتی را می‌دهند. علاوه بر این، جولیا به صورت نرم‌افزاری از دقت اعشاری دلخواه پشتیبانی می‌کند. در نتیجه با هزینه نسبتاً کندتر شدن عملکرد، می‌تواند عملیات‌هایی را بر روی مقادیر عددی که نمی‌توانند به طور مناسب در نمایش‌های سخت‌افزاری قرار داده شوند، انجام دهد.
 
-The following are Julia's primitive numeric types:
+موارد زیر انواع عددی مقدامی جولیا هستند:
 
-  * **Integer types:**
+  * **انواع اعداد صحیح:**
 
-| Type              | Signed? | Number of bits | Smallest value | Largest value |
+| نوع              | علامت‌دار? | تعداد بیت | کمترین مقدار | بیشترین مقدار |
 |:----------------- |:------- |:-------------- |:-------------- |:------------- |
 | `Int8`    | ✓       | 8              | -2^7           | 2^7 - 1       |
 | `UInt8`   |         | 8              | 0              | 2^8 - 1       |
@@ -32,21 +22,19 @@ The following are Julia's primitive numeric types:
 | `UInt128` |         | 128            | 0              | 2^128 - 1     |
 | `Bool`    | N/A     | 8              | `false` (0)    | `true` (1)    |
 
-  * **Floating-point types:**
+  * **انواع ممیز شناور:**
 
-| Type              | Precision                                                                      | Number of bits |
+| نوع              | دقت                                                                      | تعداد بیت‌ها |
 |:----------------- |:------------------------------------------------------------------------------ |:-------------- |
 | `Float16` | [half](https://en.wikipedia.org/wiki/Half-precision_floating-point_format)     | 16             |
 | `Float32` | [single](https://en.wikipedia.org/wiki/Single_precision_floating-point_format) | 32             |
 | `Float64` | [double](https://en.wikipedia.org/wiki/Double_precision_floating-point_format) | 64             |
 
-Additionally, full support for Complex and Rational Numbers is built on top of these primitive
-numeric types. All numeric types interoperate naturally without explicit casting, thanks to a
-flexible, user-extensible [type promotion system](@ref conversion-and-promotion).
+علاوه بر این، پشتیبانی کامل از اعداد مختلط و کسری نیز با استفاده از این انواع عددی اولیه فراهم شده‌است. به لطف وجود یک سیستم ارتقا نوع انعطاف‌پذیر، همه اعداد بدون تغییر نوع صریح، می‌توانند در کنار یک‌دیگر استفاده شوند.
 
-## Integers
+## اعداد صحیح
 
-Literal integers are represented in the standard manner:
+اعداد صحیح به صورت استاندارد نشان داده می‌شوند:
 
 ```julia
 julia> 1
@@ -56,8 +44,7 @@ julia> 1234
 1234
 ```
 
-The default type for an integer literal depends on whether the target system has a 32-bit architecture
-or a 64-bit architecture:
+نوع پیش فرض برای یک عدد صحیح به این بستگی دارد که سیستم هدف معماری 32 بیتی یا معماری 64 بیتی دارد:
 
 ```julia
 # 32-bit system:
@@ -69,8 +56,7 @@ julia> typeof(1)
 Int64
 ```
 
-The Julia internal variable `Sys.WORD_SIZE` indicates whether the target system is 32-bit
-or 64-bit:
+متغیر داخلی `Sys.WORD_SIZE` نشان می دهد که آیا سیستم هدف 32 بیتی است یا 64 بیتی:
 
 ```julia
 # 32-bit system:
@@ -82,8 +68,7 @@ julia> Sys.WORD_SIZE
 64
 ```
 
-Julia also defines the types `Int` and `UInt`, which are aliases for the system's signed and unsigned
-native integer types respectively:
+جولیا همچنین انواع `Int` و `UInt` را تعریف می‌کند که به ترتیب مستعاری برای انواع صحیح علامت‌دار و بدون علامت سیستم هستند:
 
 ```julia
 # 32-bit system:
@@ -99,18 +84,14 @@ julia> UInt
 UInt64
 ```
 
-Larger integer literals that cannot be represented using only 32 bits but can be represented in
-64 bits always create 64-bit integers, regardless of the system type:
-
+عددهای صحیح بزرگت که با استفاده از 32 بیت قابل نمایش نیستند اما می‌توانند در 64 بیت نشان داده شوند، بدون در نظر گرفتن نوع سیستم، همیشه عدد صحیح 64 بیتی ایجاد می‌کنند:
 ```julia
 # 32-bit or 64-bit system:
 julia> typeof(3000000000)
 Int64
 ```
 
-Unsigned integers are input and output using the `0x` prefix and hexadecimal (base 16) digits
-`0-9a-f` (the capitalized digits `A-F` also work for input). The size of the unsigned value is
-determined by the number of hex digits used:
+اعداد صحیح بدون علامت با استفاده از پیشوند `0x` و ارقام مبنا 16 `0-9a-f` ورودی و خروجی می‌شوند (رقم‌های بزرگ ‍‍`A-F` نیز برای ورودی کار می‌کنند). اندازه مقدار متغیر بدون علامت، با تعداد ارقام استفاده شده مشخص می‌شود:
 
 ```julia
 julia> x = 0x1
@@ -144,11 +125,9 @@ julia> typeof(x)
 UInt128
 ```
 
-This behavior is based on the observation that when one uses unsigned hex literals for integer
-values, one typically is using them to represent a fixed numeric byte sequence, rather than just
-an integer value.
+این رفتار بر این اساس استوار است که وقتی کسی از اعداد بدون علامت برای مقادیر صحیح استفاده می‌کند، معمولاً از آنها برای نشان دادن یک دنباله بایت عددی ثابت استفاده می‌کند، نه فقط یک مقدار صحیح.
 
-Binary and octal literals are also supported:
+از اعداد دودویی و مبنا ۸ نیز پشتیبانی می‌شود:
 
 ```julia
 julia> x = 0b10
@@ -170,16 +149,9 @@ julia> typeof(x)
 UInt128
 ```
 
-As for hexadecimal literals, binary and octal literals produce unsigned integer types. The size
-of the binary data item is the minimal needed size, if the leading digit of the literal is not
-`0`. In the case of leading zeros, the size is determined by the minimal needed size for a
-literal, which has the same length but leading digit `1`. That allows the user to control
-the size.
-Values which cannot be stored in `UInt128` cannot be written as such literals.
+مقادیر دودویی، مبنا ۸ و مبنا ۱۶ انواع صحیح بدون علامت را تولید می‌کنند. اگر رقم اول مقدار `0` نباشد، اندازه داده دودویی حداقل اندازه مورد نیاز است. در مورد صفرهای اول عدد، اندازه با حداقل اندازه مورد نیاز برای یک عدد که به جای آن `0`ها، `1` دارد تعیین می‌شود. به این شکل به کاربر اجازه داده می‌شود تا اندازه را کنترل کند. مقادیری را که نمی‌توان در `UInt128` ذخیره کرد، نمی‌توان به صورت چنین مقادیری نوشت.
 
-Binary, octal, and hexadecimal literals may be signed by a `-` immediately preceding the
-unsigned literal. They produce an unsigned integer of the same size as the unsigned literal
-would do, with the two's complement of the value:
+مقادیر دودویی، مبنا ۸ و مبنا ۱۶ می‌توانند با "-" بلافاصله قبل از مقدار عددی، به صورت علامت‌دار در نظر گرفته شوند. به این صورت یک عدد صحیح بدون علامت و هم‌اندازه با عدد اصلی ایجاد می‌شود که مقدار آن متمم دودویی مقدار اصلی است:
 
 ```julia
 julia> -0x2
@@ -189,8 +161,7 @@ julia> -0x0002
 0xfffe
 ```
 
-The minimum and maximum representable values of primitive numeric types such as integers are given
-by the `typemin` and `typemax` functions:
+حداقل و حداکثر مقادیر قابل نمایش از انواع عددی اولیه مانند اعداد صحیح توسط توابع `typemin` و `typemax` به دست می‌آیند:
 
 ```julia
 julia> (typemin(Int32), typemax(Int32))
@@ -211,14 +182,11 @@ julia> for T in [Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt12
 UInt128: [0,340282366920938463463374607431768211455]
 ```
 
-The values returned by `typemin` and `typemax` are always of the given argument
-type. (The above expression uses several features that have yet to be introduced, including [for loops](@ref man-loops),
-[Strings](@ref man-strings), and [Interpolation](@ref string-interpolation), but should be easy enough to understand for users
-with some existing programming experience.)
+مقادیر برگشتی توسط `typemin` و `typemax` همیشه از نوع آرگومان داده شده هستند. (عبارت فوق از چندین ویژگی استفاده می‌کند که هنوز معرفی نشده‌اند، از جمله حلقه‌ها و رشته‌ها، اما درک آن برای کاربران با کمی تجربه برنامه‌نویسی باید به آسان باشد.)
 
-### Overflow behavior
+### رفتار سرریز
 
-In Julia, exceeding the maximum representable value of a given type results in a wraparound behavior:
+در جولیا، عبور از حداکثر مقدار قابل نمایش برای یک نوع خاص منجر به یک رفتار پیچیده می‌شود:
 
 ```julia
 julia> x = typemax(Int64)
@@ -231,13 +199,9 @@ julia> x + 1 == typemin(Int64)
 true
 ```
 
-Thus, arithmetic with Julia integers is actually a form of [modular arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic).
-This reflects the characteristics of the underlying arithmetic of integers as implemented on modern
-computers. In applications where overflow is possible, explicit checking for wraparound produced
-by overflow is essential; otherwise, the `BigInt` type in Arbitrary Precision Arithmetic
-is recommended instead.
+بنابراین حساب با اعداد صحیح در جولیا در واقع نوعی [حساب پیمانه‌ای](https://en.wikipedia.org/wiki/Modular_arithmetic)  است. این نشان دهنده خصوصیات محاسبات اعداد صحیحی است که در رایانه‌های مدرن اجرا می‌شود. در برنامه‌هایی که امکان سرریز وجود دارد، بررسی برای وقوع سرریز ضروری است. در غیر این صورت، استفاده از نوع `BigInt` در محاسبات پیشنهاد می‌شود.
 
-An example of overflow behavior and how to potentially resolve it is as follows:
+نمونه ای از رفتار سرریز و نحوه حل شدن آن به شرح زیر است:
 
 ```julia
 julia> 10^19
@@ -247,17 +211,13 @@ julia> big(10)^19
 10000000000000000000
 ```
 
-### Division errors
+### خطاهای تقسیم
 
-Integer division (the `div` function) has two exceptional cases: dividing by zero, and dividing
-the lowest negative number (`typemin`) by -1. Both of these cases throw a `DivideError`.
-The remainder and modulus functions (`rem` and `mod`) throw a `DivideError` when their
-second argument is zero.
+تقسیم عدد صحیح (تابع `div`) دارای دو حالت استثنایی است: تقسیم بر صفر و تقسیم کمترین عدد منفی (`typemin`) بر 1. هر دوی این موارد یک `DivideError` ایجاد می‌کنند. توابع باقیمانده و پیمانه (`rem` و `mod`) نیز هنگامی که آرگومان دوم آنها صفر باشد، یک `DivideError` ایجاد می‌کنند.
 
-## Floating-Point Numbers
+## اعداد ممیز شناور
 
-Literal floating-point numbers are represented in the standard formats, using
-[E-notation](https://en.wikipedia.org/wiki/Scientific_notation#E_notation) when necessary:
+در صورت لزوم با استفاده از [نماد E](https://en.wikipedia.org/wiki/Sniversity_notation#E_notation) اعداد متغیر شناور در قالب‌های استاندارد نشان داده می‌شوند:
 
 ```julia
 julia> 1.0
@@ -282,8 +242,7 @@ julia> 2.5e-4
 0.00025
 ```
 
-The above results are all `Float64` values. Literal `Float32` values can be
-entered by writing an `f` in place of `e`:
+نتایج فوق همه مقادیر `Float64` هستند. مقادیر `Float32` را می‌توان با نوشتن`f` به جای `e` وارد کرد:
 
 ```julia
 julia> x = 0.5f0
@@ -296,7 +255,7 @@ julia> 2.5f-4
 0.00025f0
 ```
 
-Values can be converted to `Float32` easily:
+مقادیر را می‌توان به راحتی به `Float32` تبدیل کرد:
 
 ```julia
 julia> x = Float32(-1.5)
@@ -306,8 +265,7 @@ julia> typeof(x)
 Float32
 ```
 
-Hexadecimal floating-point literals are also valid, but only as `Float64` values,
-with `p` preceding the base-2 exponent:
+اعداد ممیز شناور مبنا ۱۶ نیز (فقط به عنوان مقادیر `Float64` با `p` قبل از نما در مبنا ۲) معتبر هستند:
 
 ```julia
 julia> 0x1p0
@@ -323,8 +281,7 @@ julia> typeof(x)
 Float64
 ```
 
-Half-precision floating-point numbers are also supported (`Float16`), but they are
-implemented in software and use `Float32` for calculations.
+اعداد ممیز شناور `Half-precision` نیز پشتیبانی می‌شوند (`Float16`)، اما آنها در نرم افزار پیاده سازی می‌شوند و برای محاسبات از`Float32` استفاده می‌کنند.
 
 ```julia
 julia> sizeof(Float16(4.))
@@ -334,18 +291,16 @@ julia> 2*Float16(4.)
 Float16(8.0)
 ```
 
-The underscore `_` can be used as digit separator:
+زیر خط `_` می‌تواند به عنوان جدا کننده رقم نیز استفاده شود:
 
 ```julia
 julia> 10_000, 0.000_000_005, 0xdead_beef, 0b1011_0010
 (10000, 5.0e-9, 0xdeadbeef, 0xb2)
 ```
 
-### Floating-point zero
+### ممیز شناور صفر
 
-Floating-point numbers have [two zeros](https://en.wikipedia.org/wiki/Signed_zero), positive zero
-and negative zero. They are equal to each other but have different binary representations, as
-can be seen using the `bitstring` function:
+اعداد ممیز شناور [دو صفر (صفر مثبت و صفر منفی)](https://en.wikipedia.org/wiki/Signed_zero) دارند. آنها با یکدیگر برابر هستند اما نمایش دودویی متفاوتی دارند، همانطور که با استفاده از تابع `bitstring` مشاهده می‌شود:
 
 ```julia
 julia> 0.0 == -0.0
@@ -358,20 +313,17 @@ julia> bitstring(-0.0)
 "1000000000000000000000000000000000000000000000000000000000000000"
 ```
 
-### Special floating-point values
+### مقادیر ممیز شناور خاص
 
-There are three specified standard floating-point values that do not correspond to any point on
-the real number line:
+سه مقدار استاندارد ممیز شناور مشخص وجود دارند که با هیچ نقطه‌ای از محور اعداد حقیقی مطابقت ندارند:
 
 | `Float16` | `Float32` | `Float64` | Name              | Description                                                     |
 |:--------- |:--------- |:--------- |:----------------- |:--------------------------------------------------------------- |
-| `Inf16`   | `Inf32`   | `Inf`     | positive infinity | a value greater than all finite floating-point values           |
-| `-Inf16`  | `-Inf32`  | `-Inf`    | negative infinity | a value less than all finite floating-point values              |
-| `NaN16`   | `NaN32`   | `NaN`     | not a number      | a value not `==` to any floating-point value (including itself) |
+| `Inf16`   | `Inf32`   | `Inf`     | مثبت بی‌نهایت | مقداری بزرگتر از تمام مقادیر متناهی ممیز شناور       |
+| `-Inf16`  | `-Inf32`  | `-Inf`    | منفی بی‌نهایت | مقداری کوچکتر از تمام مقادیر متناهی ممیز شناور|
+| `NaN16`   | `NaN32`   | `NaN`     | عدد نیست      | مقداری نابرابر با تمام اعداد ممیز شناور(از جمله خودش) |
 
-For further discussion of how these non-finite floating-point values are ordered with respect
-to each other and other floats, see Numeric Comparisons. By the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008),
-these floating-point values are the results of certain arithmetic operations:
+برای مطالعه بیشتر در مورد چگونگی ترتیب این مقادیر نقطه شناور نامحدود نسبت به یکدیگر و سایر مقادیر، به بخش مقایسه عددی مراجعه کنید. با توجه به [استاندارد IEEE 754](https://en.wikipedia.org/wiki/IEEE_754-2008)، این مقادیر شناور نتایج برخی از محاسبات هستند:
 
 ```julia
 julia> 1/Inf
@@ -411,7 +363,7 @@ julia> 0 * Inf
 NaN
 ```
 
-The `typemin` and `typemax` functions also apply to floating-point types:
+توابع `typemin` و `typemax` نیز بر روی اعداد ممیز شناور قابل استفاده هستند:
 
 ```julia
 julia> (typemin(Float16),typemax(Float16))
@@ -424,14 +376,11 @@ julia> (typemin(Float64),typemax(Float64))
 (-Inf, Inf)
 ```
 
-### Machine epsilon
+### اپسیلون ماشین
 
-Most real numbers cannot be represented exactly with floating-point numbers, and so for many purposes
-it is important to know the distance between two adjacent representable floating-point numbers,
-which is often known as [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon).
+اکثر اعداد واقعی را نمی‌توان دقیقاً با اعداد ممیز شناور نشان داد و بنابراین برای بسیاری از اهداف، دانستن فاصله بین دو عدد نقطه شناور قابل نمایش مجاور، که اغلب به عنوان [اپسیلون ماشین](https://en.wikipedia.org/wiki/Mapine_epsilon) شناخته می‌شود، مهم است.
 
-Julia provides `eps`, which gives the distance between `1.0` and the next larger representable
-floating-point value:
+جولیا تابع `eps` را ارائه می‌دهد که فاصله بین ‍`1.0` و مقدار بعدی بزرگتر ممیز شناور آن را نشان می‌دهد:
 
 ```julia
 julia> eps(Float32)
@@ -444,11 +393,7 @@ julia> eps() # same as eps(Float64)
 2.220446049250313e-16
 ```
 
-These values are `2.0^-23` and `2.0^-52` as `Float32` and `Float64` values,
-respectively. The `eps` function can also take a floating-point value as an
-argument, and gives the absolute difference between that value and the next representable
-floating point value. That is, `eps(x)` yields a value of the same type as `x` such that
-`x + eps(x)` is the next representable floating-point value larger than `x`:
+تابع `eps` همچنین می‌تواند یک مقدار ممیز شناور را به عنوان آرگومان بگیرد و تفاوت مطلق بین آن و مقدار بعدی شناور را نشان می‌دهد. یعنی `eps(x)` مقداری از همان نوع `x` خروجی می‌دهد به طوری که`x+eps(x)`مقدار بعدی شناور قابل نمایش بزرگتر از`x` است:
 
 ```julia
 julia> eps(1.0)
@@ -464,14 +409,9 @@ julia> eps(0.0)
 5.0e-324
 ```
 
-The distance between two adjacent representable floating-point numbers is not constant, but is
-smaller for smaller values and larger for larger values. In other words, the representable floating-point
-numbers are densest in the real number line near zero, and grow sparser exponentially as one moves
-farther away from zero. By definition, `eps(1.0)` is the same as `eps(Float64)` since `1.0` is
-a 64-bit floating-point value.
+فاصله بین دو عدد ممیز شناور قابل نمایش مجاور ثابت نیست اما برای مقادیر کوچکتر، کوچکتر و برای مقادیر بزرگتر، بزرگتر است. به عبارت دیگر، اعداد قابل نمایش به صورت ممیز شناور در نزدیکی صفر بیشترین تراکم را دارند و با فاصله گرفتن از صفر، به صورت نمایی پراکنده می‌شوند. طبق تعریف، `eps(1.0)` همان `eps(Float64)` است زیرا `1.0` یک مقدار شناور 64 بیتی است.
 
-Julia also provides the `nextfloat` and `prevfloat` functions which return
-the next largest or smallest representable floating-point number to the argument respectively:
+جولیا همچنین توابع `nextfloat` و `prevfloat` را ارائه می‌کند که به ترتیب کوچکترین عدد قابل نمایش ممیز شناور بزرگتر از ورودی و  بزرگترین عدد قابل نمایش ممیز شناور کوچکتر از ورودی را برمی گردانند:
 
 ```julia
 julia> x = 1.25f0
@@ -493,40 +433,24 @@ julia> bitstring(nextfloat(x))
 "00111111101000000000000000000001"
 ```
 
-This example highlights the general principle that the adjacent representable floating-point numbers
-also have adjacent binary integer representations.
+این مثال این اصل کلی را برجسته می‌کند که اعداد ممیز شناور قابل نمایش مجاور نیز دارای نمایش‌های دودویی مجاور هستند.
 
-### Rounding modes
+### حالتهای گردکردن
 
-If a number doesn't have an exact floating-point representation, it must be rounded to an
-appropriate representable value. However, the manner in which this rounding is done can be
-changed if required according to the rounding modes presented in the [IEEE 754
-standard](https://en.wikipedia.org/wiki/IEEE_754-2008).
+اگر عددی نمایش دقیق ممیز شناور نداشته باشد، باید آنرا گرد کرده و به یک مقدار نمایشی مناسب رساند. با این وجود، در صورت نیاز می‌توان نحوه انجام این گردکردن را با توجه به حالت‌های گردکردن ارائه شده در [استاندارد IEEE 754](https://en.wikipedia.org/wiki/IEEE_754-2008) تغییر داد.
 
-The default mode used is always `RoundNearest`, which rounds to the nearest representable
-value, with ties rounded towards the nearest value with an even least significant bit.
+حالت پیش فرض مورد استفاده همیشه گرد کردن به نزدیکترین مقدار قابل نمایش است و مقادیری که فاصله مساوی از دو طرف دارند، به سمت عددی که کوچکترین بیتش `0` است گرد می‌شوند.
 
-### Background and References
+### پیش‌زمینه و منابع
 
-Floating-point arithmetic entails many subtleties which can be surprising to users who are unfamiliar
-with the low-level implementation details. However, these subtleties are described in detail in
-most books on scientific computation, and also in the following references:
+محاسبات ممیز شناور ظرافت‌های بسیاری را به همراه دارد که می‌تواند برای کاربرانی که با جزئیات اجرای سطح پایین آشنا نیستند تعجب آور باشد. با این حال، این ظرافت ها در اکثر کتابهای مربوط به محاسبات علمی و همچنین در منابع زیر به تفصیل شرح داده شده‌است:
 
-  * The definitive guide to floating point arithmetic is the [IEEE 754-2008 Standard](https://standards.ieee.org/standard/754-2008.html);
-    however, it is not available for free online.
-  * For a brief but lucid presentation of how floating-point numbers are represented, see John D.
-    Cook's [article](https://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/)
-    on the subject as well as his [introduction](https://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/)
-    to some of the issues arising from how this representation differs in behavior from the idealized
-    abstraction of real numbers.
-  * Also recommended is Bruce Dawson's [series of blog posts on floating-point numbers](https://randomascii.wordpress.com/2012/05/20/thats-not-normalthe-performance-of-odd-floats/).
-  * For an excellent, in-depth discussion of floating-point numbers and issues of numerical accuracy
-    encountered when computing with them, see David Goldberg's paper [What Every Computer Scientist Should Know About Floating-Point Arithmetic](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf).
-  * For even more extensive documentation of the history of, rationale for, and issues with floating-point
-    numbers, as well as discussion of many other topics in numerical computing, see the [collected writings](https://people.eecs.berkeley.edu/~wkahan/)
-    of [William Kahan](https://en.wikipedia.org/wiki/William_Kahan), commonly known as the "Father
-    of Floating-Point". Of particular interest may be [An Interview with the Old Man of Floating-Point](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html).
-
+  * راهنمای صریح محاسبات ممیز شناور [استاندارد IEEE 754-2008](https://standards.ieee.org/standard/754-2008.html) است. که البته به صورت آنلاین رایگان در دسترس نیست.
+  * برای ارائه مختصر اما شفاف نحوه نمایش اعداد ممیز شناور، به [مقاله John D. Cook](https://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/) یا [مقدمه](https://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/) نوشته شده توسط او که به بعضی از مسائل نمایش این اعداد و تفاوتشان با ایده انتزاعی که از اعداد حقیقی وجود دارد می‌پردازد، مراجعه کنید.  
+  * همچنین [مجموعه پستهای وبلاگ بروس داوسون در مورد اعداد شناور](https://randomascii.wordpress.com/2012/05/20/thats-normalthe-performance-of-dd-floats/) نیز توصیه می شود.
+  * برای یک بحث عالی و عمیق در مورد اعداد ممیز شناور و مسائل مربوط به صحت عددی هنگام محاسبه با آنها، به مقاله دیوید گلدبرگ [آنچه دانشمندان کامپیوتر باید درباره حساب‌های ممیز شناور بدانند](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.22.6768&rep=rep1&type=pdf) مراجعه کنید.
+  * برای به دست آوردن مستندات گسترده تر تاریخچه، منطق و مسائل مربوط به اعداد با ممیز شناور و همچنین بحث درباره بسیاری از موضوعات دیگر در محاسبات عددی، به [نوشته‌های جمع آوری شده](https://people.eecs.berkeley.edu/~wkahan/) [William Kahan](https://en.wikipedia.org/wiki/William_Kahan)  که معمولاً به عنوان "پدر ممیز شناور" شناخته می‌شود مراجعه کنید.  [مصاحبه ای با پیرمرد نقطه شناور](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html) به صورت خاص ممکن است مورد توجه باشد.
+  
 ## دقت دلخواه محاسبات
 
 برای انجام محاسبات با دقت دلخواه اعداد صحیح و ممیز شناور، جولیا به ترتیب از کتابخانه‌های [دقت محاسبات چندگانه GNU](https://gmplib.org) و [GNU MPFR](https://www.mpfr.org) استفاده می‌کند. در زبان برنامه نویسی جولیا انواع‌های `BigInt` و `Big Float` به ترتیب برای دقت دلخواه اعداد صحیح و اعشاری در دسترس هستند.

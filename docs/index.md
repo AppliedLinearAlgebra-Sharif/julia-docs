@@ -45,83 +45,47 @@
    manual/unicode-input
    manual/command-line-options
 ```
+# مستندات جولیا 1.6
 
-# Julia 1.6 Documentation
+به مستندات جولیا 1.6 خوش آمدید.
 
-Welcome to the documentation for Julia 1.6.
+## مقدمه
 
-### Introduction
+محاسبات علمی از گذشته نیاز به بیشترین کارایی داشتند، با این وجود متخصصان این زمینه عمدتا به سمت استفاده از زبان‌های کندتر پویا برای کارهای روزمره حرکت کرده‌اند.
+ما معتقدیم دلایل خوب زیادی برای ترجیح زبان‌های پویا برای این کاربردها وجود دارد و انتظار نداریم که کاربرد آنها کم شود.
+خوشبختانه، طراحی زبان مدرن و تکنیک‌های کامپایلر این امکان را فراهم می‌کند که تقریبا مبادله کارایی برای پویایی را از بین ببریم و یک محیط یکپارچه به اندازه کافی توانا برای ‌نمونه‌سازی و به اندازه کافی کارآمد برای استقرار برنامه‌هایی که نیازمند کارایی بالا هستند، فراهم کنیم. زبان برنامه نویسی جولیا این خواسته‌ها را برآورده می‌کند: یک زبان پویای انعطاف‌پذیر، مناسب برای محاسبات علمی و عددی، با عملکردی قابل مقایسه با زبان‌های سنتی غیر پویا است.
 
-Scientific computing has traditionally required the highest performance, yet domain experts have
-largely moved to slower dynamic languages for daily work. We believe there are many good reasons
-to prefer dynamic languages for these applications, and we do not expect their use to diminish.
-Fortunately, modern language design and compiler techniques make it possible to mostly eliminate
-the performance trade-off and provide a single environment productive enough for prototyping and
-efficient enough for deploying performance-intensive applications. The Julia programming language
-fills this role: it is a flexible dynamic language, appropriate for scientific and numerical computing,
-with performance comparable to traditional statically-typed languages.
+از آنجا که کامپایلر جولیا با مفسران مورد استفاده برای زبان‌هایی مانند Python یا R متفاوت است، ممکن است در ابتدا کارایی جولیا برای‌تان غیرمشهود باشد. اگر‌ احساس کردید سرعت اجرای برنامه‌ای که نوشتید کند است، توصیه می‌کنیم قبل از هر چیز دیگری، قسمت 
+[نکات عملکرد](manual/performance-tips.html)
+ را مطالعه کنید. زمانی که نحوه کار جولیا را درک کنید، نوشتن کدی که تقریباً سرعتی برابر C داشته باشد، آسان است.
 
-Because Julia's compiler is different from the interpreters used for languages like Python or
-R, you may find that Julia's performance is unintuitive at first. If you find that something is
-slow, we highly recommend reading through the [Performance Tips](@ref man-performance-tips) section before trying anything
-else. Once you understand how Julia works, it's easy to write code that's nearly as fast as C.
+جولیا دارای امکان تخصیص اختیاری نوع به متغیرها، ارسال چندتایی و کارایی خوب است که با استفاده از استنباط نوع(type inference)
+و [کامپایل در لحظه (JIT)](https://en.wikipedia.org/wiki/Just-in-time_compilation)‌ به دست آمده و با استفاده از [LLVM](https://en.wikipedia.org/wiki/Low_Level_Virtual_Machine) پیاده‌سازی شده‌است. جولیا چندین پارادایم را پشتیبانی می‌کند که باعث به دست آوردن ترکیبی از امکانات برنامه‌نویسی دستوری، تابعی و شی‌گرا می‌شود. جولیا سهولت و رسایی را برای محاسبات عددی سطح بالا، به همان روشی که زبان‌هایی مانند R، MATLAB و Python فراهم می‌کنند، فراهم می‌کند؛ اما از برنامه نویسی عمومی نیز پشتیبانی می‌کند. برای فراهم شدن این مهم، جولیا از اساس زبان‌های برنامه‌نویسی ریاضی‌محور پیروی می‌کند اما از زبان‌های پویای معروف از جمله [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), [Perl](https://en.wikipedia.org/wiki/Perl_(programming_language)), [Python](https://en.wikipedia.org/wiki/Python_(programming_language)), [Lua](https://en.wikipedia.org/wiki/Lua_(programming_language)) و [Ruby](https://en.wikipedia.org/wiki/Ruby_(programming_language)) نیز کمک می‌گیرد.
 
-Julia features optional typing, multiple dispatch, and good performance, achieved using type inference
-and [just-in-time (JIT) compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation),
-implemented using [LLVM](https://en.wikipedia.org/wiki/Low_Level_Virtual_Machine). It is multi-paradigm,
-combining features of imperative, functional, and object-oriented programming. Julia provides
-ease and expressiveness for high-level numerical computing, in the same way as languages such
-as R, MATLAB, and Python, but also supports general programming. To achieve this, Julia builds
-upon the lineage of mathematical programming languages, but also borrows much from popular dynamic
-languages, including [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), [Perl](https://en.wikipedia.org/wiki/Perl_(programming_language)),
-[Python](https://en.wikipedia.org/wiki/Python_(programming_language)), [Lua](https://en.wikipedia.org/wiki/Lua_(programming_language)),
-and [Ruby](https://en.wikipedia.org/wiki/Ruby_(programming_language)).
+مهمترین عوامل جداکننده جولیا از زبان‌های پویا معمولی عبارتند از:
 
-The most significant departures of Julia from typical dynamic languages are:
+  * از آنجا که توابع پایه، کتاب‌خانه‌های استاندارد و حتی اعمال مقدماتی مانند محاسبات عددی صحیح به زبان خود جولیا نوشته شده‌اند، زبان اصلی تحمیل و تاثیرگذاری کمی دارد. 
+  * یک زبان غنی از نوع‌های قابل استفاده برای ساخت و توصیف اشیا، که می‌توانند به صورت اختیاری برای تعریف نوع‌های دیگر نیز استفاده شوند
+  * توانایی تعریف رفتار تابع در هنگام دریافت ترکیبات متفاوتی از آرگومان‌ها با استفاده از [ارسال چندتایی](https://en.wikipedia.org/wiki/Multiple_dispatch)
+  * تولید خودکار کد کارآمد و تخصصی برای انواع مختلف آرگومان‌ها
+  * کارایی خوب، در حد نزدیک به کدهای کامپایل‌شده به صورت ایستا مانند C
 
-  * The core language imposes very little; Julia Base and the standard library are written in Julia itself, including
-    primitive operations like integer arithmetic
-  * A rich language of types for constructing and describing objects, that can also optionally be
-    used to make type declarations
-  * The ability to define function behavior across many combinations of argument types via [multiple dispatch](https://en.wikipedia.org/wiki/Multiple_dispatch)
-  * Automatic generation of efficient, specialized code for different argument types
-  * Good performance, approaching that of statically-compiled languages like C
+اگرچه گاهی اوقات از زبان‌های پویا به‌عنوان "بی نوع" نیز یاد می‌شود، اما لزوما اینگونه نیستند: هر شی، چه مقدماتی و چه تعریف شده توسط کاربر، دارای نوعی است. فقدان مشخص کردن نوع در بیشتر زبان‌های پویا به این معناست که شخص نمی‌تواند درمورد نوع مقادیر به کامپایلر دستور دهد و غالباً به طور صریح نمی‌توان در مورد نوع صحبت کرد. از طرف دیگر، در زبان‌های ایستا، اگرچه می‌توان - و معمولاً باید - نوع مقادیر را برای کامپایلر شرح داد، اما نوع فقط در زمان کامپایل وجود دارد و نمی‌توان آنها را در زمان اجرا دستکاری یا مشخص کرد. در جولیا، نوع‌ها خود اشیایی در زمان اجرا هستند و همچنین می‌توانند برای انتقال اطلاعات به کامپایلر مورد استفاده قرار گیرند.
 
-Although one sometimes speaks of dynamic languages as being "typeless", they are definitely not:
-every object, whether primitive or user-defined, has a type. The lack of type declarations in
-most dynamic languages, however, means that one cannot instruct the compiler about the types of
-values, and often cannot explicitly talk about types at all. In static languages, on the other
-hand, while one can -- and usually must -- annotate types for the compiler, types exist only at
-compile time and cannot be manipulated or expressed at run time. In Julia, types are themselves
-run-time objects, and can also be used to convey information to the compiler.
+در حالی که برنامه نویس معمولی نیازی به استفاده صریح از نوع یا اعزام چندگانه ندارد، آنها ویژگی‌های اصلی یک‌پارچه‌کننده جولیا هستند: توابع با ترکیبات مختلفی از انواع آرگومان‌های ورودی تعریف می‌شوند و با ارسال به منطبق‌ترین تعریف اعمال می‌شوند. این مدل برای برنامه‌نویسی ریاضی مناسب است، زیرا برخلاف اعزام شی‌گرا در آن طبیعی نیست آرگومان ورودی اول مشخص کننده یک عملگر باشد. عملگرها تنها توابعی با علامت‌گذاری خاص هستند. برای مثال برای توسعه عملگر جمع برای انواع داده‌های جدید تعریف شده توسط کاربر، می‌توانید تعریف‌های جدیدی برای تابع `+` تعریف کنید. سپس کد موجود به طور یکپارچه برای انواع داده‌های جدید اعمال می‌شود.
 
-While the casual programmer need not explicitly use types or multiple dispatch, they are the core
-unifying features of Julia: functions are defined on different combinations of argument types,
-and applied by dispatching to the most specific matching definition. This model is a good fit
-for mathematical programming, where it is unnatural for the first argument to "own" an operation
-as in traditional object-oriented dispatch. Operators are just functions with special notation
--- to extend addition to new user-defined data types, you define new methods for the `+` function.
-Existing code then seamlessly applies to the new data types.
+ بازده محاسباتی جولیا به دلیل تشخیص نوع در زمان اجرا (که با نشانه‌گذاری اختیاری ممکن شده‌است)، و تمرکز بالا بر کارایی از ابتدای پروژه، بیش از سایر زبان‌های پویا و حتی بعضی زبان‌های ایستا است. برای مسائل عددی در مقیاس بزرگ، سرعت همیشه مهم بوده و هست، و احتمالاً همیشه نیز مهم خواهد بود. اندازه داده‌های پردازش‌شده در دهه‌های گذشته همواره با قانون مور همگام بوده‌است.
 
-Partly because of run-time type inference (augmented by optional type annotations), and partly
-because of a strong focus on performance from the inception of the project, Julia's computational
-efficiency exceeds that of other dynamic languages, and even rivals that of statically-compiled
-languages. For large scale numerical problems, speed always has been, continues to be, and probably
-always will be crucial: the amount of data being processed has easily kept pace with Moore's Law
-over the past decades.
+جولیا قصد دارد ترکیبی بی‌سابقه از سهولت استفاده، قدرت و کارایی را در یک زبان واحد ایجاد کند. علاوه بر موارد ذکر شده، برخی از مزایای جولیا نسبت به سیستم‌های دیگر عبارتند از:
 
-Julia aims to create an unprecedented combination of ease-of-use, power, and efficiency in a single
-language. In addition to the above, some advantages of Julia over comparable systems include:
-
-  * Free and open source ([MIT licensed](https://github.com/JuliaLang/julia/blob/master/LICENSE.md))
-  * User-defined types are as fast and compact as built-ins
-  * No need to vectorize code for performance; devectorized code is fast
-  * Designed for parallelism and distributed computation
-  * Lightweight "green" threading ([coroutines](https://en.wikipedia.org/wiki/Coroutine))
-  * Unobtrusive yet powerful type system
-  * Elegant and extensible conversions and promotions for numeric and other types
-  * Efficient support for [Unicode](https://en.wikipedia.org/wiki/Unicode), including but not limited
-    to [UTF-8](https://en.wikipedia.org/wiki/UTF-8)
-  * Call C functions directly (no wrappers or special APIs needed)
-  * Powerful shell-like capabilities for managing other processes
-  * Lisp-like macros and other metaprogramming facilities
+  * رایگان و کد باز ([MIT licensed](https://github.com/JuliaLang/julia/blob/master/LICENSE.md))
+  * انواع داده تعریف شده توسط کاربر به اندازه دیگر انواع سریع و فشرده هستند.
+  * نیازی به vectorize کردن کد برای بهبود کارایی نیست.
+  * برای برنامه‌نویسی موازی و توزیع‌شده طراحی شده‌است.
+  * چندنخی‌سازی سبک سبز ([کوروتین](https://en.wikipedia.org/wiki/Coroutine))
+  * سیستم نوع‌گذاری نامشهود اما پرقدرت
+  * تبدیلات و گسترش ظریف و منعطف برای انواع عددی و انواع دیگر
+  * پشتیبانی کارآمد از [Unicode](https://en.wikipedia.org/wiki/Unicode)، از جمله [UTF-8](https://en.wikipedia.org/wiki/UTF-8)
+  * امکان فراخوانی توابع `C` به صورت مستقیم (بدون wrapper یا `API`)
+  * قابلیت‌های قدرمتند برای مدیریت دیگر پردازه‌ها
+  * وجود ماکروهای مانند ماکروهای موجود در `Lisp` و سایر امکانات فرابرنامه‌نویسی
