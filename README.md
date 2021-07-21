@@ -25,17 +25,5 @@
 برای شروع می‌توانید به [این لینک](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/blob/v1.6.0/CONTRIBUTING.md) مراجعه کنید.
 
 همچنین اگر خطایی در ترجمه فعلی دیدید نیز می‌توانید آن را با ایجاد یک موضوع به اطلاع ما برسانید. [ایجاد موضوع!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
-
-## مشارکت‌کنندگان
-
-این پروژه مدیون انرژی و وقت این افراد است:
-
-<table>
-  <tr>
-    
-  </tr>
-</table>
-
-اسم شما فراموش شده‌است؟‌[به ما تذکر دهید!](https://github.com/AppliedLinearAlgebra-Sharif/julia-docs/issues/new)
-
+  
 </div>
