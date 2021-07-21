@@ -1,64 +1,29 @@
-# Strings
+# رشته‌ها
+رشته‌ها دنباله‌های محدودی از کاراکترها هستند، اما مشکل اصلی هنگامی است که بخواهیم یک کاراکتر را تعریف کنیم. کاراکترهایی که انگلیسی‌زبان‌ها با آن آشنا هستند حروفی مثل `A` و `B` و حروف عددی و علائم نگارشی هستند. این کاراکترها توسط [ASCII](https://en.wikipedia.org/wiki/ASCII) به صورت یک نگاشت از مقادیر صحیح بین ۰ تا ۱۲۷ هستند و البته تعداد زیادی کاراکتر که در زبان‌های غیر انگلیسی استفاده می‌شود (مانند حروف یونانی، عربی، چینی و غیره)  نیز در ASCII پشتیبانی می‌شود.
+استاندارد [Unicode](https://en.wikipedia.org/wiki/Unicode) پیچیدگی‌های تعریف یک کاراکتر را برطرف می‌کند و به طور کلی به عنوان یک استاندارد برای حل این مشکل پذیرفته شده است. بسته به نوع نیاز شما، یا می‌ توانید به طور کامل این پیچیدگی‌ها را نادیده می‌گیرید و فرض می‌کنید که فقط کاراکترهای ASCII وجود دارد یا اینکه می‌توانید کدی طراحی کنید که هر نوع کاراکتر (بسته به نیاز شما) را و یا کدگذاری را که ممکن است در هنگام مواجه با متن‌های غیر ACSII برخورد کنید را پشتیبانی کند.
+جولیا کار با متن ASCII را ساده و کارآمد می‌کند و مدیریت Unicode تا حد امکان ساده شده است. به طور خاص می‌تواند برای پردازش رشته‌های ASCII کد رشته به صورت فرمت زبان C بنویسید و آن‌ها دقیقا به همان صورت که انتظار دارید عمل خواهند کرد. حال اگر با متنی با فرمت غیر ASCII برخورد داشته باشید، خطایی با پیام واضح برگردانده خواهد شد تا ایراد کار را متوجه شوید.
 
-Strings are finite sequences of characters. Of course, the real trouble comes when one asks what
-a character is. The characters that English speakers are familiar with are the letters `A`, `B`,
-`C`, etc., together with numerals and common punctuation symbols. These characters are standardized
-together with a mapping to integer values between 0 and 127 by the [ASCII](https://en.wikipedia.org/wiki/ASCII)
-standard. There are, of course, many other characters used in non-English languages, including
-variants of the ASCII characters with accents and other modifications, related scripts such as
-Cyrillic and Greek, and scripts completely unrelated to ASCII and English, including Arabic, Chinese,
-Hebrew, Hindi, Japanese, and Korean. The [Unicode](https://en.wikipedia.org/wiki/Unicode) standard
-tackles the complexities of what exactly a character is, and is generally accepted as the definitive
-standard addressing this problem. Depending on your needs, you can either ignore these complexities
-entirely and just pretend that only ASCII characters exist, or you can write code that can handle
-any of the characters or encodings that one may encounter when handling non-ASCII text. Julia
-makes dealing with plain ASCII text simple and efficient, and handling Unicode is as simple and
-efficient as possible. In particular, you can write C-style string code to process ASCII strings,
-and they will work as expected, both in terms of performance and semantics. If such code encounters
-non-ASCII text, it will gracefully fail with a clear error message, rather than silently introducing
-corrupt results. When this happens, modifying the code to handle non-ASCII data is straightforward.
+درمورد رشته‌ها در جولیا چند ویژگی سطح بالای قابل توجه وجود دارد:
++ تایپ درون-ساختی که برای استفاده از رشته‌ها در جولیا وجود دارد `String` است که دامنه‌ی کامل کاراکترهای  [Unicode](https://en.wikipedia.org/wiki/Unicode) را از طریق کدگذاری UTF-8 پشتیبانی می‌کند (تابع `transcode`  نیز وجود دارد که که امکان تبدیل به کدگذاری‌های دیگر را امکان‌پذیر کند).
++ همه‌ی انواع تایپ‌های رشته‌ (String). در جولیا، درواقع زیرگروهی از نوع گروه انتزاعی (abstract type) `AbstractString` هستند و کتابخانه‌‌های خارجی زیرگروه‌های اضافی `AbstractString` را برای تعریف کدگذاری خود، تعریف می‌کنند. اگر تابعی پیاده سازی کرده‌اید که در ورودی بخواهد رشته بگیرد، باید نوع آن را `AbstractString` بگذارید تا همه‌ی نوع رشته‌های موجود پذیرفته شوند.
++ مانند C و Java، اما برخلاف زبان‌های برنامه‌‌نویسی پویا، جولیا کلاسی مجزا برای نمایش صرفا یک کاراکتر دارد که به آن `AbstractChar` گفته می‌شود. درواقع تایپ درون‌ساخت `Char` زیرگروهی از `AbstractString` است که ۳۲ بیتی است و می‌تواند هر کاراکتر Unicodeای را نمایش دهد.
++ مانند Java، رشته‌ها در جولیا نیز immutable هستند. مقدار `AbstractString` نمی‌تواند تغییر کند. 
++ به صورت مفهومی، یک رشته یک *partial function* از اندیس‌ها به کاراکترها است، به ازای بعضی اندیس‌ها ممکن است هیچ کاراکتری برگردانه نمی‌شود و در این صورت exception برگردانده می‌شود.
 
-There are a few noteworthy high-level features about Julia's strings:
+## کاراکتر ها
 
-  * The built-in concrete type used for strings (and string literals) in Julia is `String`.
-    This supports the full range of [Unicode](https://en.wikipedia.org/wiki/Unicode) characters via
-    the UTF-8](https://en.wikipedia.org/wiki/UTF-8) encoding. (A [`transcode` function is
-    provided to convert to/from other Unicode encodings.)
-  * All string types are subtypes of the abstract type `AbstractString`, and external packages define
-    additional `AbstractString` subtypes (e.g. for other encodings).  If you define a function expecting
-    a string argument, you should declare the type as `AbstractString` in order to accept any string
-    type.
-  * Like C and Java, but unlike most dynamic languages, Julia has a first-class type for representing
-    a single character, called `AbstractChar`. The built-in `Char` subtype of `AbstractChar`
-    is a 32-bit primitive type that can represent any Unicode character (and which is based
-    on the UTF-8 encoding).
-  * As in Java, strings are immutable: the value of an `AbstractString` object cannot be changed.
-    To construct a different string value, you construct a new string from parts of other strings.
-  * Conceptually, a string is a *partial function* from indices to characters: for some index values,
-    no character value is returned, and instead an exception is thrown. This allows for efficient
-    indexing into strings by the byte index of an encoded representation rather than by a character
-    index, which cannot be implemented both efficiently and simply for variable-width encodings of
-    Unicode strings.
+یک `Char`	نشان‌دهنده یک کاراکتر است،یک تایپ اصلی ۳۲ بیتی که توسط یک حرف به‌ خصوص نمایش داده می‌شود و می‌تواند به مقدار عددی تبدیل شود تا مقدار Unicode خود را نشان دهد. (برخی کتابخانه‌های جولیا ممکن است زیرگروه دیگری از `AbstractChar` برای نمایش کاراکترها تعریف کنند که این بسته به نوع نیاز آن‌ها است.)
+در مثال زیر می‌بینیم که این متغیرها به چه صورت نمایش داده می‌شوند:
 
-## Characters
-
-A `Char` value represents a single character: it is just a 32-bit primitive type with a special literal
-representation and appropriate arithmetic behaviors, and which can be converted
-to a numeric value representing a
-[Unicode code point](https://en.wikipedia.org/wiki/Code_point).  (Julia packages may define
-other subtypes of `AbstractChar`, e.g. to optimize operations for other
-[text encodings](https://en.wikipedia.org/wiki/Character_encoding).) Here is how `Char` values are
-input and shown:
-
-```julia
+```ulia
 julia> c = 'x'
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 
 julia> typeof(c)
 Char
 ```
-
-You can easily convert a `Char` to its integer value, i.e. code point:
+در معماری ۳۲بیتی، تابع بالا `Int32` برمی‌گرداند.
+همانطور که گفته شد، می‌توانید آن‌ها را به آسانی به مقادیر صحیح نیز تبدیل کنید:
 
 ```julia
 julia> c = Int('x')
@@ -67,18 +32,13 @@ julia> c = Int('x')
 julia> typeof(c)
 Int64
 ```
-
-On 32-bit architectures, `typeof(c)` will be `Int32`. You can convert an
-integer value back to a `Char` just as easily:
+یا به صورت عکس، می‌تواند عدد صحیح را به کاراکتر متناظر آن تبدیل کنید:
 
 ```julia
 julia> Char(120)
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 ```
-
-Not all integer values are valid Unicode code points, but for performance, the `Char` conversion
-does not check that every character value is valid. If you want to check that each converted value
-is a valid code point, use the `isvalid` function:
+قاعدتا تمام مقادیر صحیح قابل قبول نیستند، اما به جهت عملکرد `Char` معتبر بودن یا نبود هر مقدار را چک نمی‌کند. اگر می‌خواهید معتبر بودن یا نبودن را چک کنید می‌توانید از تابع `isvalid` استفاده کنید:
 
 ```julia
 julia> Char(0x110000)
@@ -87,14 +47,9 @@ julia> Char(0x110000)
 julia> isvalid(Char, 0x110000)
 false
 ```
+می‌دانیم که کدهای معتبر برای Unicode، از `U+0000` تا `U+D7FF` و از `U+E000` تا `U+10FFFF` هستند. البته هنوز برای تمام مقادیر این بازه، مقداردهی‌های معنادار داده نشده‌است و لزوما توسط همه‌ی برنامه‌ها قابل تفسیر نیستند اما همه‌ی مقادیر این بازه از نظر استاندارد Unicode معتبر هستند.
 
-As of this writing, the valid Unicode code points are `U+0000` through `U+D7FF` and `U+E000` through
-`U+10FFFF`. These have not all been assigned intelligible meanings yet, nor are they necessarily
-interpretable by applications, but all of these values are considered to be valid Unicode characters.
-
-You can input any Unicode character in single quotes using `\u` followed by up to four hexadecimal
-digits or `\U` followed by up to eight hexadecimal digits (the longest valid value only requires
-six):
+شما می‌تواند هرکاراکتر Unicodeای را با استفاده از ' توسط `\u` تا ۴ رقم hex یا با `\U` تا ۸ رقم hex ورودی بگیرید:
 
 ```julia
 julia> '\u0'
@@ -110,10 +65,8 @@ julia> '\U10ffff'
 '\U10ffff': Unicode U+10FFFF (category Cn: Other, not assigned)
 ```
 
-Julia uses your system's locale and language settings to determine which characters can be printed
-as-is and which must be output using the generic, escaped `\u` or `\U` input forms. In addition
-to these Unicode escape forms, all of [C's traditional escaped input forms](https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes)
-can also be used:
+جولیا از تنظیمات محلی و زبان سیستم شما استفاده می‌کند تا مشخص کند کدام کاراکترها می‌توانند به صورت موجود چاپ شوند و کدام یک باید به صورت نسخه عمومی چاپ شوند. .
+ همچنین از فرمت دهی مشابه زبان C نیز می‌توانید استفاده کنید:
 
 ```julia
 julia> Int('\0')
@@ -134,8 +87,7 @@ julia> Int('\x7f')
 julia> Int('\177')
 127
 ```
-
-You can do comparisons and a limited amount of arithmetic with `Char` values:
+شما می‌تواند تمام عملیات‌های حسابی و مقایسه‌ ای را روی تایپ `Char` نیز انجام دهید:
 
 ```julia
 julia> 'A' < 'a'
@@ -154,9 +106,9 @@ julia> 'A' + 1
 'B': ASCII/Unicode U+0042 (category Lu: Letter, uppercase)
 ```
 
-## String Basics
+## مبانی رشته‌
 
-String literals are delimited by double quotes or triple double quotes:
+حروف یک رشته با استفاده از double quotes یا triple double quotes مشخص می‌شوند:
 
 ```julia
 julia> str = "Hello, world.\n"
@@ -166,7 +118,7 @@ julia> """Contains "quote" characters"""
 "Contains \"quote\" characters"
 ```
 
-If you want to extract a character from a string, you index into it:
+اگر بخواهید کاراکتر خاصی از رشته‌ را جدا کنید، می‌توانید با اندیس آن کاراکتر، این کار را انجام دهید:
 
 ```julia
 julia> str[begin]
@@ -182,16 +134,9 @@ julia> str[end]
 '\n': ASCII/Unicode U+000A (category Cc: Other, control)
 ```
 
-Many Julia objects, including strings, can be indexed with integers. The index of the first
-element (the first character of a string) is returned by `firstindex(str)`, and the index of the last element (character)
-with `lastindex(str)`. The keywords `begin` and `end` can be used inside an indexing
-operation as shorthand for the first and last indices, respectively, along the given dimension.
-String indexing, like most indexing in Julia, is 1-based: `firstindex` always returns `1` for any `AbstractString`.
-As we will see below, however, `lastindex(str)` is *not* in general the same as `length(str)` for a string,
-because some Unicode characters can occupy multiple "code units".
-
-You can perform arithmetic and other operations with `end`, just like
-a normal value:
+بسیاری از اشیا جولیا، از جمله رشته‌‌ها می‌توانند توسط اعداد صحیح اندیس گذاری شوند. اندیس اولین المان‌ (در اینجا اولین کاراکتر)‌ با استفاده از دستور `firstindex(str)` و اندیس آخرین المان با استفاده از دستور  `lastindex(str)` برگردانده می‌شوند.
+کلیدواژه‌های `begin` و `end` نیز می‌توانند به عنوان اولین اندیس و آخرین اندیس استفاده شوند.
+اندیس‌گذاری رشته‌ها مانند بیشتر اشیا در جولیا، از 1 شروع می‌شود، به عبارت دیگر `firstindex(str)`  برای تمام زیرگروه‌های `AbstractString` همواره مقدار 1 برمی‌گرداند. حال نکته‌ی مهم در رشته‌ها این است که به صورت کلی `lastindex(str)` با `length(str)` برابر نیست. دلیل نیز این است که بعضی کاراکترها ممکن است بیشتر از یک واحد از کد مورد استفاده شده اشغال کرده باشند.
 
 ```julia
 julia> str[end-1]
@@ -201,7 +146,7 @@ julia> str[end÷2]
 ' ': ASCII/Unicode U+0020 (category Zs: Separator, space)
 ```
 
-Using an index less than `begin` (`1`) or greater than `end` raises an error:
+استفاده از اندیسی بزرگتر از `end` یا کوچکتر از `begin` یا همان `1` منجر به خطا می‌شود:
 
 ```julia
 julia> str[begin-1]
@@ -213,14 +158,14 @@ ERROR: BoundsError: attempt to access 14-codeunit String at index [15]
 [...]
 ```
 
-You can also extract a substring using range indexing:
+همچنین می‌توانید با استفاده از اندیس گذاری بازه‌ای، یک زیررشته از رشته‌ی موردنظر را استخراج کنید:
 
 ```julia
 julia> str[4:9]
 "lo, wo"
 ```
 
-Notice that the expressions `str[k]` and `str[k:k]` do not give the same result:
+دقت کنید که عبارات `str[k]` و `str[k:k]` مقدار یکسانی را برنمی‌گردانند:
 
 ```julia
 julia> str[6]
@@ -229,13 +174,9 @@ julia> str[6]
 julia> str[6:6]
 ","
 ```
+اولی یک کاراکتر از نوع `Char` است و دومی یک رشته است که مقدار آن یک تک کاراکتر است. در جولیا این دو چیز متفاوت هستند و به صورت متفاوت رفتار خواهند کرد.
 
-The former is a single character value of type `Char`, while the latter is a string value that
-happens to contain only a single character. In Julia these are very different things.
-
-Range indexing makes a copy of the selected part of the original string.
-Alternatively, it is possible to create a view into a string using the type `SubString`,
-for example:
+اندیس گذاری بازه‌ای یک کپی از آن بازه برمی‌گرداند. برای جداکردن زیررشته از `SubString` هم می‌توان استفاده کرد:
 
 ```julia
 julia> str = "long string"
@@ -248,31 +189,18 @@ julia> typeof(substr)
 SubString{String}
 ```
 
-Several standard functions like `chop`, `chomp` or `strip`
-return a `SubString`.
 
-## Unicode and UTF-8
+## استفاده از  Unicode and UTF-8 در جولیا
 
-Julia fully supports Unicode characters and strings. As [discussed above](@ref man-characters), in character
-literals, Unicode code points can be represented using Unicode `\u` and `\U` escape sequences,
-as well as all the standard C escape sequences. These can likewise be used to write string literals:
+
+همانطور که قبلتر نیز بحث کردیم، حروف کاراکترها می‌توانند توسط Unicode یعنی `\u` و `\U`  و یا روش‌های سنتی‌تر مبتنی بر C نمایش داده شوند:
 
 ```julia
 julia> s = "\u2200 x \u2203 y"
 "∀ x ∃ y"
 ```
-
-Whether these Unicode characters are displayed as escapes or shown as special characters depends
-on your terminal's locale settings and its support for Unicode. String literals are encoded using
-the UTF-8 encoding. UTF-8 is a variable-width encoding, meaning that not all characters are encoded
-in the same number of bytes ("code units"). In UTF-8, ASCII characters — i.e. those with code points less than
-0x80 (128) -- are encoded as they are in ASCII, using a single byte, while code points 0x80 and
-above are encoded using multiple bytes — up to four per character.
-
-String indices in Julia refer to code units (= bytes for UTF-8), the fixed-width building blocks that
-are used to encode arbitrary characters (code points). This means that not every
-index into a `String` is necessarily a valid index for a character. If you index into
-a string at such an invalid byte index, an error is thrown:
+حال بسته به تنظیمات شخصیتان، این کاراکترها می‌توانند به صورتی که انتظار دارید نمایش داده شوند و یا آن به صورت حالت خام آن‌ها. حروف رشته‌ها توسط UTF-8 کدگذاری شده‌اند. درواقع UTF-8 یک کدگذاری با طول متغیر است، به این معنا که طول کد همه‌ی کاراکترها با هم برابر نیستند. در کدگذاری UTF-8 کاراکترهای ASCII (یا به بیان دیگر آن‌هایی که کد آن‌ها کمتر از ۱۲۸ یعنی `0x80` است) توسط یک بایت کدگذاری می‌شوند، اما کدهای بیشتر از `0x80` بیشتر از یک بایت اشغال می‌کنند و حتی ممکن است تا ۴ بایت نیز اشغال کنند.
+حال نکته‌ی بالا سبب می‌شود که اندیس‌گذاری در جولیا نیاز به دقت بیشتری داشته باشد. اندیس رشته‌ها در جولیا مطابق با واحد کدهای استفاده شده است که در UTF-8 این واحد، بایت است. پس این نکته سبب می‌شود که هر اندیسی یک اندیس معتبر برای رشته‌ها در جولیا تلقی نشود. اگر از اندیس نامعتبر استفاده شود، خطا برگردانده می‌شود:
 
 ```julia
 julia> s[1]
@@ -291,13 +219,8 @@ Stacktrace:
 julia> s[4]
 ' ': ASCII/Unicode U+0020 (category Zs: Separator, space)
 ```
-
-In this case, the character `∀` is a three-byte character, so the indices 2 and 3 are invalid
-and the next character's index is 4; this next valid index can be computed by `nextind(s,1)`,
-and the next index after that by `nextind(s,4)` and so on.
-
-Since `end` is always the last valid index into a collection, `end-1` references an invalid
-byte index if the second-to-last character is multibyte.
+به عنوان مثال، کاراکتر `∀` یک کاراکتر ۳ بایتی است و پس استفاده از اندیس‌های ۲ و ۳ نامعتبر هستند و اندیس کاراکتر بعدی از ۴ است. اندیس معتبر بعدی با استفاده از `nextind(s,1)` قابل دریافت است. می‌دانیم در مثال بالا این مقدار ۴ است. پس اندیس معتبر بعدی با دستور `nextind(s,4)` گرفته می‌شود الی آخر.
+از آنجا که `end` همواره به آخرین اندیس یک مجموعه اشاره می‌کند، اگر کاراکتر یکی مانده با آخر کاراکتری باشد که چندین بایت را اشغال کرده باشد، قاعدتا  `end-1`  یک اندیس‌گذاری نامعتبر است.
 
 ```julia
 julia> s[end-1]
@@ -311,14 +234,9 @@ Stacktrace:
 julia> s[prevind(s, end, 2)]
 '∃': Unicode U+2203 (category Sm: Symbol, math)
 ```
+اولین مورد بالا کار می‌کند زیرا کاراکتر `y` و فاصله کاراکترهای یک بایتی هستند. اما از آنجا که کاراکتر `∃` یک کاراکتر چندین بایتی است، استفاده از دستور `end-2` منجر به خطا شده است. روش درست برای اینکار استفاده از `prevind(s, lastindex(s), 2)` است که به جای `lastindex(s)` می‌توان از `end` نیز استفاده کرد.
 
-The first case works, because the last character `y` and the space are one-byte characters,
-whereas `end-2` indexes into the middle of the `∃` multibyte representation. The correct
-way for this case is using `prevind(s, lastindex(s), 2)` or, if you're using that value to index
-into `s` you can write `s[prevind(s, end, 2)]` and `end` expands to `lastindex(s)`.
-
-Extraction of a substring using range indexing also expects valid byte indices or an error is thrown:
-
+قاعدتا برای استخراج یک زیررشته با استفاده از اندیس‌گذاری بازه‌ای نیز باید از اندیس‌های معتبر استفاده کنیم، در غیر این صورت خطا برگردانده می‌شود:
 ```julia
 julia> s[1:1]
 "∀"
@@ -332,13 +250,8 @@ julia> s[1:4]
 "∀ "
 ```
 
-Because of variable-length encodings, the number of characters in a string (given by `length(s)`)
-is not always the same as the last index. If you iterate through the indices 1 through `lastindex(s)`
-and index into `s`, the sequence of characters returned when errors aren't thrown is the sequence
-of characters comprising the string `s`. Thus we have the identity that `length(s) <= lastindex(s)`,
-since each character in a string must have its own index. The following is an inefficient and
-verbose way to iterate through the characters of `s`:
-
+پس بخاطر نوع کدگذاری گفته شده، تعداد کاراکترهای یک رشته (که توسط `length(s)` محاسبه می‌شود) لزوما با عدد اخرین اندیس آن برابر نیست. اگر حول اندیس ۱ تا  `lastindex(s)` پیمایش انجام دهید، دنباله‌‌ی کاراکترهایی که از `s` (در صورت درنظر نگرفتن و چشم پوشی از خطاها) برگردانده می‌شوند، همان کاراکترهای `s` هستند. پس مشخص است که `length(s) <= lastindex(s)` است.
+درواقع روش گفته‌ شده یک روش ناکارآمد برای پیمایش حول `s` آمده است:
 ```julia
 julia> for i = firstindex(s):lastindex(s)
            try
@@ -355,11 +268,7 @@ x
 
 y
 ```
-
-The blank lines actually have spaces on them. Fortunately, the above awkward idiom is unnecessary
-for iterating through the characters in a string, since you can just use the string as an iterable
-object, no exception handling required:
-
+خط های خالی درواقع شامل حرف فاصله هستند. خوشبختانه روش‌های بسیار کارآمدتری نسبت به روش عجیب بالا برای پیشمایش حول رشته وجود دارد. در یکی از ساده‌ترین آن‌ها با رشته می‌توانیم به صورت یک شی برخورد کنیم که در زیر مثالی از آن آمده است. یک مزیت مهم روش زیر نسبت به بالا این است که دیگر نیازی به مدیریت خطای برگردانده شده نیست.
 ```julia
 julia> for c in s
            println(c)
@@ -373,9 +282,8 @@ x
 y
 ```
 
-If you need to obtain valid indices for a string, you can use the `nextind` and
-`prevind` functions to increment/decrement to the next/previous valid index, as mentioned above.
-You can also use the `eachindex` function to iterate over the valid character indices:
+یک روش دیگر برای پیدا کردن اندیس‌های معتبر در رشته‌ها استفاده از `nextind` و `prevind` است تا اندیس معتبر بعدی یا قبلی را با استفاده از اندیس معتبر فعلی بدهد و با استفاده از آن بتوان پیمایش را انجام داد.
+همچین می‌توان از تابع `eachindex(s)` برای پیمایش حول اندیس‌های معبتر یک رشته استفاده کرد:
 
 ```julia
 julia> collect(eachindex(s))
@@ -388,27 +296,17 @@ julia> collect(eachindex(s))
  10
  11
 ```
+اگر بخواهید به کدهای خام دسترسی داشته باشید، می‌توانید از تابع `codeunit(s,i)` استفاده کنید که `i`  از ۱ تا  `ncodeunits(s)` به صورت پشت سرهم اجرا می‌شود. تابع `codeunits(s)` نیز wrapper از نوع `AbstractVector{UInt8}` خروجی می‌دهد تا به این کدهای خام به صورت یک آرایه دسترسی داشته باشید.
 
-To access the raw code units (bytes for UTF-8) of the encoding, you can use the `codeunit(s,i)`
-function, where the index `i` runs consecutively from `1` to `ncodeunits(s)`.  The `codeunits(s)`
-function returns an `AbstractVector{UInt8}` wrapper that lets you access these raw codeunits (bytes) as an array.
-
-Strings in Julia can contain invalid UTF-8 code unit sequences. This convention allows to
-treat any byte sequence as a `String`. In such situations a rule is that when parsing
-a sequence of code units from left to right characters are formed by the longest sequence of
-8-bit code units that matches the start of one of the following bit patterns
-(each `x` can be `0` or `1`):
-
+رشته‌ ها در جولیا می‌توانند شامل رشته کدهای نامعتبر UTF-8 نیز باشند. این تبدیل این امکان را به وجود می‌آورد که هر با هر دنباله‌ی بایتی به صورت یک رشته برخورد شود. در این موقعیت‌ها قانون این است که هنگام پردازش کردن دنباله‌ای از کدهای واحد از چپ به راست به صورت دنباله‌ی کد واحد ۸ بیتی که با شروع یکی از الگوهای زیر مطابق دارند تشکیل شوند ( هر `x` می‌تواند 0 یا 1 باشد):
 * `0xxxxxxx`;
 * `110xxxxx` `10xxxxxx`;
 * `1110xxxx` `10xxxxxx` `10xxxxxx`;
 * `11110xxx` `10xxxxxx` `10xxxxxx` `10xxxxxx`;
 * `10xxxxxx`;
 * `11111xxx`.
-
-In particular this means that overlong and too-high code unit sequences and prefixes thereof are treated
-as a single invalid character rather than multiple invalid characters.
-This rule may be best explained with an example:
+به طور کلی این قانون باعث می‌شود که رشته کدهای بسیار طولانی و پیشوندهای آن، به صورت یک کاراکتر نامعتبر تلقی شوند تا چندین کاراکتر نامعتبر.
+این قانون در زیر توسط یک مثال توضیح داده شده است:
 
 ```
 julia> s = "\xc0\xa0\xe2\x88\xe2|"
@@ -433,26 +331,13 @@ julia> s2 = "\xf7\xbf\xbf\xbf"
 julia> foreach(display, s2)
 '\U1fffff': Unicode U+1FFFFF (category In: Invalid, too high)
 ```
+در مثال بالا مشاهده می‌کنید که دو کد اول رشته‌ی `s`  یک کد بسیار طولانی برای کاراکتر فاصله هستند و نامعتبر است، اما در رشته به صورت صرفا یک کاراکتر پذیرفته شده است. دو کد بعدی،  یک آغاز کد معتبر برای  یک رشته‌ی ۳ بایتی معتبر (از نوع UTF-8)‌ هستند، هرچند کد پنجم یعنی `\xe2` یک ادامه‌ی معتبر برای این کد نمی‌باشد. پس کدهای سوم و چهارم به عنوان ناقص و ناهنجار در این رشته درنظر گرفته می‌شوند. به طریق مشابه کد پنجم نیز به همین صورت است زیر `|` یک ادامه‌ی معتبر برای آن نمی‌باشد. درنهایت رشته‌ی ۲ شامل یک کد بسیار طولانی است.
 
-We can see that the first two code units in the string `s` form an overlong encoding of
-space character. It is invalid, but is accepted in a string as a single character.
-The next two code units form a valid start of a three-byte UTF-8 sequence. However, the fifth
-code unit `\xe2` is not its valid continuation. Therefore code units 3 and 4 are also
-interpreted as malformed characters in this string. Similarly code unit 5 forms a malformed
-character because `|` is not a valid continuation to it. Finally the string `s2` contains
-one too high code point.
+جولیا به صورت پیش‌فرض از کدگذاری UTF-8 استفاده می‌کند و از کدگذاری‌هایی دیگر نیز به صورت اضافه کردن کتابخانه‌ی موردنظر پشتیبانی می‌کند. به طور مثال کتابخانه‌ی [LegacyStrings.jl](https://github.com/JuliaStrings/LegacyStrings.jl) `UTF16String` و `UTF32String` را پیاده‌سازی کرده است. توضیحات اضافه‌تر درمورد چگونگی پیاده‌سازی این کدگذاری‌ها از حوصله‌ی این بخش خارج است. تابع `transcode`  برای تبدیل داده به کدگذاری‌های مختلف ` UTF-xx` مورد استفاده قرار می‌گیرد که از آن در کتابخانه‌ها استفاده می‌شود.
 
-Julia uses the UTF-8 encoding by default, and support for new encodings can be added by packages.
-For example, the [LegacyStrings.jl](https://github.com/JuliaStrings/LegacyStrings.jl) package
-implements `UTF16String` and `UTF32String` types. Additional discussion of other encodings and
-how to implement support for them is beyond the scope of this document for the time being. For
-further discussion of UTF-8 encoding issues, see the section below on [byte array literals](@ref man-byte-array-literals).
-The `transcode` function is provided to convert data between the various UTF-xx encodings,
-primarily for working with external data and libraries.
+## الحاق
 
-## Concatenation
-
-One of the most common and useful string operations is concatenation:
+یکی از رایج‌ترین و مفیدترین عملیات‌هایی که روش رشته‌ها تعریف می‌شود، الحاق کردن (به هم چسباندن ) آن‌ها است:
 
 ```julia
 julia> greet = "Hello"
@@ -465,10 +350,7 @@ julia> string(greet, ", ", whom, ".\n")
 "Hello, world.\n"
 ```
 
-It's important to be aware of potentially dangerous situations such as concatenation of invalid UTF-8 strings.
-The resulting string may contain different characters than the input strings,
-and its number of characters may be lower than sum of numbers of characters
-of the concatenated strings, e.g.:
+لازم است که از خطرات الحاق کردن رشته‌های نامعتبر UTF-8 آگاه باشیم. رشته‌ی حالص ممکن است شامل کاراکترهایی متفاوت با کاراکترهای ورودی باشد و تعداد این کاراکترها ممکن است کمتر از جمع تعداد کاراکترهای ورودی شود:
 
 ```
 julia> a, b = "\xe2\x88", "\x80"
@@ -490,61 +372,39 @@ julia> length.([a, b, c])
  1
 ```
 
-This situation can happen only for invalid UTF-8 strings. For valid UTF-8 strings
-concatenation preserves all characters in strings and additivity of string lengths.
-
-Julia also provides `*` for string concatenation:
+این شرایط هنگامی رخ می‌دهد که این عملیات را روی رشته‌های UTF-8 نامعتبر اجرا کنیم و برای رشته‌های UTF-8 معتبر این خطا رخ نمی‌دهد و خروجی دقیقا مورد انتظار ما خواهد بود.
+جولیا همچنین `*` را برای عملیات الحاق پشتیبانی میکند:
 
 ```julia
 julia> greet * ", " * whom * ".\n"
 "Hello, world.\n"
 ```
 
-While `*` may seem like a surprising choice to users of languages that provide `+` for string
-concatenation, this use of `*` has precedent in mathematics, particularly in abstract algebra.
+درصورتی که `*` ممکن است برای این کار غافلگیرانه به نظر بیاید، زیرا در بسیاری از زبان‌ها از نماد `+` برای این منظور استفاده می‌شود اما  استفاده از آن در ریاضیات به خصوص در جبر سابقه دارد.
+در ریاضیات،  `+` معمولا به عنوان عملگر *جابه‌جایی* استفاده می‌شود و معمولا ترتیب عملوندها اهمیتی ندارد. به عنوان مثال در جمع ماتریس‌ها `A + B == B + A` برای هر نوع ماتریس `A` و `B` که ابعاد یکسان دارند برقرار است.
+اما `*` معمولا برای عملیات‌های *جابه‌‌جایی ناپذیر* به کار می‌رود و ترتیب عملوندها اهمیت پیدا می‌کند. به طور مثال در مثال ضرب ماتریس‌ها به طول کلی `A * B != B * A` برقرار نیست. همین مثال برای الحاق رشته‌ها نیز برقرار است `greet * whom != whom * greet` . پس استفاده از `*` به جای `+` از منظر دلایل گفته‌شده منطقی تر است.
+به طور دقیقتر و با ادبیات جبر، مجموعه‌ی همه‌ی رشته‌های با طول محدود با عملیات الحاق کردن (`*`)،  تشکیل یک [free monoid](https://en.wikipedia.org/wiki/Free_monoid) (*S*, `*`) می‌دهند که المان identity این مجموعه، قاعدتا رشته‌ی `""` است. 
 
-In mathematics, `+` usually denotes a *commutative* operation, where the order of the operands does
-not matter. An example of this is matrix addition, where `A + B == B + A` for any matrices `A` and `B`
-that have the same shape. In contrast, `*` typically denotes a *noncommutative* operation, where the
-order of the operands *does* matter. An example of this is matrix multiplication, where in general
-`A * B != B * A`. As with matrix multiplication, string concatenation is noncommutative:
-`greet * whom != whom * greet`. As such, `*` is a more natural choice for an infix string concatenation
-operator, consistent with common mathematical use.
 
-More precisely, the set of all finite-length strings *S* together with the string concatenation operator
-`*` forms a [free monoid](https://en.wikipedia.org/wiki/Free_monoid) (*S*, `*`). The identity element
-of this set is the empty string, `""`. Whenever a free monoid is not commutative, the operation is
-typically represented as `\cdot`, `*`, or a similar symbol, rather than `+`, which as stated usually
-implies commutativity.
+## درون‌یابی
 
-## Interpolation
-
-Constructing strings using concatenation can become a bit cumbersome, however. To reduce the need for these
-verbose calls to `string` or repeated multiplications, Julia allows interpolation into string literals
-using `$`, as in Perl:
+ساختن رشته‌های جدید توسط الحاق آن‌ها ممکن است به یک عملیت دست و پاگیر تبدیل شود، بنابراین برای راحتی در این موارد جولیا امکان درون‌یابی حروف رشته‌ها را توسط `$` (مانند Perl) مهیا کرده است:
 
 ```julia
 julia> "$greet, $whom.\n"
 "Hello, world.\n"
 ```
+این عملیات خواناتر و ساده‌تر است. به طور مثال روش سنتی مثال بالا برابر است با  `string(greet, ", ", whom, ".\n")`.
 
-This is more readable and convenient and equivalent to the above string concatenation -- the system
-rewrites this apparent single string literal into the call `string(greet, ", ", whom, ".\n")`.
-
-The shortest complete expression after the `$` is taken as the expression whose value is to be
-interpolated into the string. Thus, you can interpolate any expression into a string using parentheses:
+عبارت کاملی که بعد از `$`	می‌آید تحت عنوان عبارتی برداشت می‌شود که مقدار آن قرار است درون رشته قرار بگیرد. برای سادگی و خوانا تر شدن می‌توانید از پرانتز استفاده کنید:
 
 ```julia
 julia> "1 + 2 = $(1 + 2)"
 "1 + 2 = 3"
 ```
+هر  دو عملیات الحاق و درون‌یابی، درواقع `string` را برای تبدیل این اشیا به فرم رشته صدا می‌زنند. اما `string` صرفا خروجی تابع `print` را برمی‌گرداند. پس تایپ‌های جدید باید متد‌های `print` یا `show` را به جای `string` اضافه کنند.
 
-Both concatenation and string interpolation call `string` to convert objects into string
-form. However, `string` actually just returns the output of `print`, so new types
-should add methods to `print` or `show` instead of `string`.
-
-Most non-`AbstractString` objects are converted to strings closely corresponding to how
-they are entered as literal expressions:
+اکثر اشیا non-`AbstractString` به رشته‌هایی تبدیل می‌ شوند که نزدیک و مشابه حروف آن‌ها است:
 
 ```julia
 julia> v = [1,2,3]
@@ -557,10 +417,9 @@ julia> "v: $v"
 "v: [1, 2, 3]"
 ```
 
-`string` is the identity for `AbstractString` and `AbstractChar` values, so these are interpolated
-into strings as themselves, unquoted and unescaped:
+همچنین قاعدتا اگر از تایپ `string`  استفاده کنیم، همان مقدار آن‌ها وارد درون‌یابی می‌شود:
 
-```julia
+```jlia
 julia> c = 'x'
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 
@@ -568,69 +427,55 @@ julia> "hi, $c"
 "hi, x"
 ```
 
-To include a literal `$` in a string literal, escape it with a backslash:
+اگر بخواهیم از خود کاراکتر `%` استفاده کنیم باید از backslash استفاده کنیم:
 
 ```julia
 julia> print("I have \$100 in my account.\n")
 I have $100 in my account.
 ```
 
-## Triple-Quoted String Literals
+## رشته‌ها با استفاده Triple-Quoted
 
-When strings are created using triple-quotes (`"""..."""`) they have some special behavior that
-can be useful for creating longer blocks of text.
-
-First, triple-quoted strings are also dedented to the level of the least-indented line.
-This is useful for defining strings within code that is indented. For example:
+وقتی رشته‌ها توسط triple-quotes (`"""..."""`) ساخته می‌شوند، برخی عملیات‌های خاص بر رویشان تعریف می‌شود که سبب می‌شود برای متن‌ها و بلاک‌‌های متنی طولانی مورد استفاده قرار گیرند و بسیار مفید واقع شوند.
+ابتدا رشته‌های triple-quoted به خط با کمترین تورفتگی اختصاص یافته اند. این قابلیت برای رشته‌هایی که شامل تو رفتگی و یا به صورت بلوکی هستند، بسیار مفید است:
 
 ```julia
 julia> str = """
            Hello,
            world.
          """
-"  Hello,\n  world.\n"
+"  Hello,\nو  world.\n"
 ```
-
-In this case the final (empty) line before the closing `"""` sets the indentation level.
-
-The dedentation level is determined as the longest common starting sequence of spaces or
-tabs in all lines, excluding the line following the opening `"""` and lines containing
-only spaces or tabs (the line containing the closing `"""` is always included).
-Then for all lines, excluding the text following the opening `"""`, the common starting
-sequence is removed (including lines containing only spaces and tabs if they start with
-this sequence), e.g.:
+سطح indentation را آخرین خط قبل از بسته‌شدن `"""` تعیین می‌کند.
+برای تعیین سطح dedentation، از معیار طولانی‌ترین دنباله‌ی شروع فاصله‌ها یا تب‌ها در همه‌ی خط‌ها (به جز خط‌هایی که تنها شامل فاصله هستند) استفاده می‌شود.
+بنابراین برای همه‌ی خط‌ها (‌به جز خط ابتدایی آغازگر `"""` زیررشته‌ی توصیف شده در بالا حذف می‌شود:
 ```julia
 julia> """    This
          is
            a test"""
 "    This\nis\n  a test"
 ```
-
-Next, if the opening `"""` is followed by a newline,
-the newline is stripped from the resulting string.
-
+حال  اگر بلافاصله بعد از آغاز `"""` به خط جدید برویم، معادل است با حالتی که به خط جدید نرویم.
 ```julia
 """hello"""
 ```
-
-is equivalent to
+دو رشته‌ی بالا با هم معادل هستند.
 
 ```julia
 """
 hello"""
 ```
 
-but
+اما
 
-```julia
+```jula
 """
 
 hello"""
 ```
+شامل یک حرف معادل با خط جدید در آغاز خواهد بود.
 
-will contain a literal newline at the beginning.
-
-Stripping of the newline is performed after the dedentation. For example:
+حذف خط جدید بعد از dedentation انجام می‌شود، به عنوان مثال:
 
 ```julia
 julia> """
@@ -638,15 +483,11 @@ julia> """
          world."""
 "Hello,\nworld."
 ```
+فضای whitespace بدون تغییر باقی مانده است.
+رشته‌های Triple-quoted می‌توانند شامل `"` نیز باشند.
+دقت کنید که حرف معادل با رفتن به خط بعد، چه در حالت رشته‌ی عادی و یا در حالت Triple-quoted منجر به اضافه شدن کاراکتر `\n`  می‌شوند، حتی اگر ویرایشگر شما از `\r`  یا همان CR و یا از ترکیب این دو (CRLF) برای انتهای خط‌های خود استفاده کند.
+برای اضافه کردن CR می‌توانید از همان `\r` استفاده کنید. به طور مثال `"a CRLF line ending\r\n"`.
 
-Trailing whitespace is left unaltered.
-
-Triple-quoted string literals can contain `"` characters without escaping.
-
-Note that line breaks in literal strings, whether single- or triple-quoted, result in a newline
-(LF) character `\n` in the string, even if your editor uses a carriage return `\r` (CR) or CRLF
-combination to end lines. To include a CR in a string, use an explicit escape `\r`; for example,
-you can enter the literal string `"a CRLF line ending\r\n"`.
 
 ## Common Operations
 
