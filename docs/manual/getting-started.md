@@ -1,13 +1,11 @@
-# Getting Started
+# شروع به کار
 
-Julia installation is straightforward, whether using precompiled binaries or compiling from source.
-Download and install Julia by following the instructions at [https://julialang.org/downloads/](https://julialang.org/downloads/).
+نصب جولیا ساده است و می‌توانید این کار را با استفاده از باینری‌های از پیش کامپایل شده و یا با کامپایل کد انجام دهید.
+با دنبال کردن دستورالعمل‌های [این صفحه](https://julialang.org/downloads/) جولیا را بارگیری و نصب کنید.
 
-If you are coming to Julia from one of the following languages, then you should start by reading the section on noteworthy differences from [MATLAB](@ref Noteworthy-differences-from-MATLAB), [R](@ref Noteworthy-differences-from-R), [Python](@ref Noteworthy-differences-from-Python), [C/C++](@ref Noteworthy-differences-from-C/C) or [Common Lisp](@ref Noteworthy-differences-from-Common-Lisp). This will help you avoid some common pitfalls since Julia differs from those languages in many subtle ways.
+اگر از یکی از زبان‌هایی که در ادامه آمده است، به جولیا می‌آیید، بهتر است ابتدا بخش تفاوت‌های قابل توجه با آن زبان را از صفحات [MATLAB](https://julia-docs.readthedocs.io/fa/v1.6.0/manual/noteworthy-differences.html#noteworthy-differences-from-matlab)، [Python](https://julia-docs.readthedocs.io/fa/v1.6.0/manual/noteworthy-differences.html#Noteworthy-differences-from-Python), [C/C++](https://julia-docs.readthedocs.io/fa/v1.6.0/manual/noteworthy-differences.html#Noteworthy-differences-from-C/C) or [Common Lisp](https://julia-docs.readthedocs.io/fa/v1.6.0/manual/noteworthy-differences.html#Noteworthy-differences-from-Common-Lisp) بخوانید. با توجه به اینکه جولیا از بسیاری جهات با آن زبانها متفاوت است، این کار به شما کمک می‌کند تا از افتادن در برخی دام‌های متداول پیشگیری کنید.
 
-The easiest way to learn and experiment with Julia is by starting an interactive session (also
-known as a read-eval-print loop or "REPL") by double-clicking the Julia executable or running
-`julia` from the command line:
+ساده ترین راه برای یادگیری و آزمایش کار با جولیا، اجرای خود جولیا REPL (مخفف: read-eval-print loop) است. برای اجرای آن یا بر روی آن دوبار کلیک کنید و یا از خط فرمان سیستم `julia` را صدا بزنید.
 
 ```julia
 $ julia
@@ -29,29 +27,17 @@ julia> ans
 3
 ```
 
-To exit the interactive session, type `CTRL-D` (press the Control/`^` key together with the `d` key), or type
-`exit()`. When run in interactive mode, `julia` displays a banner and prompts the user for input.
-Once the user has entered a complete expression, such as `1 + 2`, and hits enter, the interactive
-session evaluates the expression and shows its value. If an expression is entered into an interactive
-session with a trailing semicolon, its value is not shown. The variable `ans` is bound to the
-value of the last evaluated expression whether it is shown or not. The `ans` variable is only
-bound in interactive sessions, not when Julia code is run in other ways.
+برای خروج از این محیط تعاملی می‌توانید از ترکیب `CTRL-D`(گرفتن کلید کنترل و سپس فشردن کلید `D`) یا فرمان `()exit` استفاده کنید. جولیا پس از اجرا شدن در محیط تعاملی یک بنر را نمایش می‌دهد و در پایین آن منتظر ورودی کاربر می‌شود. زمانی که کاربر یک دستور کامل را به جولیا بدهد(مثل `2+1`) و سپس کلید `enter` را فشار دهد، محیط تعاملی آن را بررسی کرده و مقدار آن را نمایش می‌دهد. اگر در محیط تعاملی پس از دستور خود سمیکالن `;` بگذارید و کلید `enter` را بفشارید، مقدار کد شما(خروجی بیان) نمایش داده نمی‌شود. متغیر `ans` مقدار آخرین دستور شما را نشان می‌دهد و فرقی ندارد که قبلا نمایش داده شده یا از نمایش آن بوسیله `;` جلوگیری شده‌است. متغیر `ans` فقط در محیط تعاملی کار می‌کند و در صورت‌های دیگری که کد جولیا را اجرا می‌کنید کارایی ندارد.
 
-To evaluate expressions written in a source file `file.jl`, write `include("file.jl")`.
+برای ارزیابی عملکرد یک سورس کد در فایلی با نام `file.jl` باید `include("file.jl")` را بنویسید.
 
-To run code in a file non-interactively, you can give it as the first argument to the `julia`
-command:
+اگر می‌خواهید کد درون فایل را به صورت غیر تعاملی اجرا کنید باید در خط فرمان خود فایل را به عنوان اولین آرگومان(ورودی) دستور `julia` قرار دهید:
 
 ```
 $ julia script.jl arg1 arg2...
 ```
 
-As the example implies, the following command-line arguments to `julia` are interpreted as
-command-line arguments to the program `script.jl`, passed in the global constant `ARGS`. The
-name of the script itself is passed in as the global `PROGRAM_FILE`. Note that `ARGS` is
-also set when a Julia expression is given using the `-e` option on the command line (see the
-`julia` help output below) but `PROGRAM_FILE` will be empty. For example, to just print the
-arguments given to a script, you could do this:
+همانطور که در مثال بالا مشاهده می‌کنید، آرگومان‌های بعدی خط فرمان به عنوان آرگومان‌های برنامه `script.jl` تفسیر می‌شوند و  به ثابت جهانی `ARGS` پاس داده می‌شوند. نام اسکریپت نیز خودش به عنوان ثابت جهانی `PROGRAM_FILE` پاس داده می‌شود. توجه داشته باشید زمانی که دستور `julia` در خط فرمان با عبارت `e-` اجرا می‌شود نیز `ARGS` مقداردهی می‌شود اما مقدار `PROGRAM_FILE` خالی می‌ماند. به عنوان مثال، برای فقط چاپ آرگومان‌های داده شده به یک اسکریپت، شما می‌توانید این کار را انجام دهید:
 
 ```
 $ julia -e 'println(PROGRAM_FILE); for x in ARGS; println(x); end' foo bar
@@ -60,7 +46,7 @@ foo
 bar
 ```
 
-Or you could put that code into a script and run it:
+یا می‌توانید کد را درون فایل اسکریپتی قرار داده سپس آن را اجرا کنید:
 
 ```
 $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
@@ -70,25 +56,17 @@ foo
 bar
 ```
 
-The `--` delimiter can be used to separate command-line arguments intended for the script file from arguments intended for Julia:
+نماد `--` می‌تواند میان آرگومان‌های اختصاص داده شده به اسکریپت و آرگومان‌های اختصاص داده شده به جولیا تفاوت ایجاد کند:
 
 ```
 $ julia --color=yes -O -- foo.jl arg1 arg2..
 ```
 
-See also [Scripting](@ref man-scripting) for more information on writing Julia scripts.
+برای اطلاعات بیشتر درباره نوشتن اسکریپت‌های جولیا به [اسکریپت نویسی](faq.html#scripting) مراجعه کنید.
 
-Julia can be started in parallel mode with either the `-p` or the `--machine-file` options. `-p n`
-will launch an additional `n` worker processes, while `--machine-file file` will launch a worker
-for each line in file `file`. The machines defined in `file` must be accessible via a password-less
-`ssh` login, with Julia installed at the same location as the current host. Each machine definition
-takes the form `[count*][user@]host[:port] [bind_addr[:port]]`. `user` defaults to current user,
-`port` to the standard ssh port. `count` is the number of workers to spawn on the node, and defaults
-to 1. The optional `bind-to bind_addr[:port]` specifies the IP address and port that other workers
-should use to connect to this worker.
+جولیا با هر دو آرگومان `p-` یا `machine-file--` می‌تواند در حالت پردازش موازی شروع به کار کند. `p n-` به اندازه `n‍` کارگر اضافه اجرا می‌کند در حالی که `machine-file file--` به ازای هر خط از فایل `file` یک کارگر را اجرا می‌کند. ماشین‌های تعریف شده برای `file` باید از طریق یک ورود `ssh` بدون نیاز به رمز در دسترس قرار داشته باشند که جولیا نیز باید در همان مکان به عنوان میزبان فعلی نصب شده باشد. هر ماشینی که تعریف می‌شود فرم `[count*][user@]host[:port] [bind_addr[:port]]` را می‌گیرد. پیش فرض `user` همان کاربر جاری سیستم و `port` همان پورت استاندارد ssh است. `count` میزان کارگرهایی است که بر روی گره ایجاد می‌شوند که مقدار پیشفرض آن یک است. آرگومان اختیاری `bind-to bind_addr[:port]` آدرس آی پی و پورت دیگر کارگرها برای ارتباط با این کارگر را مشخص می‌کند.
 
-If you have code that you want executed whenever Julia is run, you can put it in
-`~/.julia/config/startup.jl`:
+اگر کدی دارید که می‌خواهید هر زمان که جولیا اجرا می‌شود آن هم اجرا شود، کافیست آن را در `julia/config/startup.jl./~` قرار دهید:
 
 ```
 $ echo 'println("Greetings! 你好! 안녕하세요?")' > ~/.julia/config/startup.jl
@@ -97,21 +75,16 @@ Greetings! 你好! 안녕하세요?
 
 ...
 ```
+توجه داشته باشید که اگرچه زمانی که برای اولین بار جولیا را اجرا کنید باید یک پوشه `~/.julia` ایجاد شده باشد، ممکن است لازم باشد که پوشه `~/.julia/config` و فایل `~/.julia/config/startup.jl` را خودتان ایجاد کنید تا بتوانید از آن‌ها استفاده کنید.
 
-Note that although you should have a `~/.julia` directory once you've run Julia for the
-first time, you may need to create the `~/.julia/config` folder and the
-`~/.julia/config/startup.jl` file if you use it.
-
-There are various ways to run Julia code and provide options, similar to those available for the
-`perl` and `ruby` programs:
+راه‌های مختلفی برای اجرای کد جولیا وجود دارد و شبیه گزینه‌هایی هستند که برای برنامه‌های `perl` و `ruby` ارائه شده‌اند:
 
 ```
 julia [switches] -- [programfile] [args...]
 ```
 
-A detailed list of all the available switches can be found at [Command-line Options](@ref
-command-line-options).
+لیست مشروحی از تمام سوئیچ‌های موجود را می‌توانید در [گزینه‌های خط فرمان](https://julia-docs.readthedocs.io/fa/v1.6.0/manual/command-line-options.html) بیابید.
 
-## Resources
+## منابع
 
-A curated list of useful learning resources to help new users get started can be found on the [learning](https://julialang.org/learning/) page of the main Julia web site.
+لیستی از منابع یادگیری مفید برای کمک به کاربران جدید را می‌توانید در صفحه [یادگیری](https://julialang.org/learning/) وب سایت اصلی جولیا بیابید.
